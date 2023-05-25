@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.compose.rememberNavController
 import com.shadowflight.ui.navigation.AppNavHost
+import com.shadowflight.uicommons.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,9 +17,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            AppNavHost(
-                navController = rememberNavController()
-            )
+            AppTheme {
+                AppNavHost(
+                    navController = rememberNavController()
+                )
+            }
         }
     }
 }
