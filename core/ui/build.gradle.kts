@@ -1,5 +1,5 @@
 plugins {
-    id("shadowflight.android.library")
+    id("shadowflight.android.library.compose")
 }
 
 android {
