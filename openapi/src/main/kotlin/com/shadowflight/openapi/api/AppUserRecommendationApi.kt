@@ -13,7 +13,6 @@
 
 package com.shadowflight.openapi.api
 
-import com.skydoves.sandwich.ApiResponse
 import retrofit2.http.*
 import retrofit2.Response
 import okhttp3.RequestBody
@@ -38,7 +37,7 @@ interface AppUserRecommendationApi {
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
     @GET("api/v1/me/recommendations/explore/topics/{topicId}")
-    suspend fun exploreContentByTopic(@Path("topicId") topicId: kotlin.Int): ApiResponse<kotlin.collections.List<AppUserRecommendationDTO>>
+    suspend fun exploreContentByTopic(@Path("topicId") topicId: kotlin.Int): Response<kotlin.collections.List<AppUserRecommendationDTO>>
 
     /**
      * Get article.
@@ -51,7 +50,7 @@ interface AppUserRecommendationApi {
      * @return [AppUserArticleDTO]
      */
     @GET("api/v1/me/recommendations/articles/{recommendationId}")
-    suspend fun getArticle(@Path("recommendationId") recommendationId: kotlin.String): ApiResponse<AppUserArticleDTO>
+    suspend fun getArticle(@Path("recommendationId") recommendationId: kotlin.String): Response<AppUserArticleDTO>
 
     /**
      * Recommendations feed.
@@ -63,7 +62,7 @@ interface AppUserRecommendationApi {
      * @return [kotlin.collections.List<FeedSectionDTO>]
      */
     @GET("api/v1/me/recommendations/feed")
-    suspend fun getFeed(): ApiResponse<kotlin.collections.List<FeedSectionDTO>>
+    suspend fun getFeed(): Response<kotlin.collections.List<FeedSectionDTO>>
 
     /**
      * A list of most popular content.
@@ -75,7 +74,7 @@ interface AppUserRecommendationApi {
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
     @GET("api/v1/me/recommendations/most_popular")
-    suspend fun getMostPopularContent(): ApiResponse<kotlin.collections.List<AppUserRecommendationDTO>>
+    suspend fun getMostPopularContent(): Response<kotlin.collections.List<AppUserRecommendationDTO>>
 
     /**
      * A list of newest content.
@@ -87,7 +86,7 @@ interface AppUserRecommendationApi {
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
     @GET("api/v1/me/recommendations/newest")
-    suspend fun getNewestContent(): ApiResponse<kotlin.collections.List<AppUserRecommendationDTO>>
+    suspend fun getNewestContent(): Response<kotlin.collections.List<AppUserRecommendationDTO>>
 
     /**
      * A list of starting recommendations.
@@ -99,7 +98,7 @@ interface AppUserRecommendationApi {
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
     @GET("api/v1/me/recommendations/starting")
-    suspend fun getStartingRecommendations(): ApiResponse<kotlin.collections.List<AppUserRecommendationDTO>>
+    suspend fun getStartingRecommendations(): Response<kotlin.collections.List<AppUserRecommendationDTO>>
 
     /**
      * A list of tailored recommendations filtered by topic.
@@ -112,7 +111,7 @@ interface AppUserRecommendationApi {
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
     @GET("api/v1/me/recommendations/tailored/topics/{topicId}")
-    suspend fun getTailoredRecommendationsByTopic(@Path("topicId") topicId: kotlin.Int): ApiResponse<kotlin.collections.List<AppUserRecommendationDTO>>
+    suspend fun getTailoredRecommendationsByTopic(@Path("topicId") topicId: kotlin.Int): Response<kotlin.collections.List<AppUserRecommendationDTO>>
 
     /**
      * A list of recommendations which are improved by the preferences.
@@ -124,7 +123,7 @@ interface AppUserRecommendationApi {
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
     @GET("api/v1/me/recommendations/preferred")
-    suspend fun getUserPreferredRecommendations(): ApiResponse<kotlin.collections.List<AppUserRecommendationDTO>>
+    suspend fun getUserPreferredRecommendations(): Response<kotlin.collections.List<AppUserRecommendationDTO>>
 
     /**
      * Set recommendation rating.
@@ -137,7 +136,7 @@ interface AppUserRecommendationApi {
      * @return [Unit]
      */
     @PUT("api/v1/me/recommendations/rating")
-    suspend fun setRating(@Body updateRatingDTO: UpdateRatingDTO): ApiResponse<Unit>
+    suspend fun setRating(@Body updateRatingDTO: UpdateRatingDTO): Response<Unit>
 
     /**
      * Set recommendation status.
@@ -150,5 +149,5 @@ interface AppUserRecommendationApi {
      * @return [Unit]
      */
     @PUT("api/v1/me/recommendations/status")
-    suspend fun setStatus(@Body updateStatusDTO: UpdateStatusDTO): ApiResponse<Unit>
+    suspend fun setStatus(@Body updateStatusDTO: UpdateStatusDTO): Response<Unit>
 }

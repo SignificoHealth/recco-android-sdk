@@ -13,7 +13,6 @@
 
 package com.shadowflight.openapi.api
 
-import com.skydoves.sandwich.ApiResponse
 import retrofit2.http.*
 import retrofit2.Response
 import okhttp3.RequestBody
@@ -35,7 +34,7 @@ interface AppUserQuestionnaireApi {
      * @return [Unit]
      */
     @POST("api/v1/me/questionnaire/answers")
-    suspend fun answers(@Body questionnaireAnswersDTO: QuestionnaireAnswersDTO): ApiResponse<Unit>
+    suspend fun answers(@Body questionnaireAnswersDTO: QuestionnaireAnswersDTO): Response<Unit>
 
     /**
      * Return the associated questionnaire for a given topic.
@@ -48,7 +47,7 @@ interface AppUserQuestionnaireApi {
      * @return [QuestionnaireDTO]
      */
     @GET("api/v1/me/questionnaire/topics/{topicId}")
-    suspend fun getQuestionnaireByTopic(@Path("topicId") topicId: kotlin.Int): ApiResponse<QuestionnaireDTO>
+    suspend fun getQuestionnaireByTopic(@Path("topicId") topicId: kotlin.Int): Response<QuestionnaireDTO>
 
     /**
      * Return the onboarding questionnaires.
@@ -60,7 +59,7 @@ interface AppUserQuestionnaireApi {
      * @return [kotlin.collections.List<QuestionnaireDTO>]
      */
     @GET("api/v1/me/questionnaire/onboarding_questionnaires")
-    suspend fun onboarding(): ApiResponse<kotlin.collections.List<QuestionnaireDTO>>
+    suspend fun onboarding(): Response<kotlin.collections.List<QuestionnaireDTO>>
 
     /**
      * Set user app answers for the onboarding questionnaires.
@@ -73,5 +72,5 @@ interface AppUserQuestionnaireApi {
      * @return [Unit]
      */
     @POST("api/v1/me/questionnaire/onboarding_answers")
-    suspend fun onboardingAnswers(@Body questionnaireAnswersDTO: kotlin.collections.List<QuestionnaireAnswersDTO>): ApiResponse<Unit>
+    suspend fun onboardingAnswers(@Body questionnaireAnswersDTO: kotlin.collections.List<QuestionnaireAnswersDTO>): Response<Unit>
 }

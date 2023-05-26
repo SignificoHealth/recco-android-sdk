@@ -13,7 +13,6 @@
 
 package com.shadowflight.openapi.api
 
-import com.skydoves.sandwich.ApiResponse
 import retrofit2.http.*
 import retrofit2.Response
 import okhttp3.RequestBody
@@ -33,5 +32,5 @@ interface AppUserApi {
      * @return [AppUserDTO]
      */
     @GET("api/v1/me")
-    suspend fun get(): ApiResponse<AppUserDTO>
+    suspend fun get(): Response<AppUserDTO>
 }

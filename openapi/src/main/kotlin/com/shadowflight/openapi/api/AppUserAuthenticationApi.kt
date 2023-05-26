@@ -13,7 +13,6 @@
 
 package com.shadowflight.openapi.api
 
-import com.skydoves.sandwich.ApiResponse
 import retrofit2.http.*
 import retrofit2.Response
 import okhttp3.RequestBody
@@ -35,7 +34,7 @@ interface AppUserAuthenticationApi {
      * @return [ZitadelPATDTO]
      */
     @POST("api/v1/app_users/login")
-    suspend fun login(@Header("Client-User-Id") clientUserId: kotlin.String): ApiResponse<ZitadelPATDTO>
+    suspend fun login(@Header("Client-User-Id") clientUserId: kotlin.String): Response<ZitadelPATDTO>
 
     /**
      * Logout an app user supplying PAT&#39;s id and the associated user client id.
@@ -49,5 +48,5 @@ interface AppUserAuthenticationApi {
      * @return [Unit]
      */
     @POST("api/v1/app_users/logout")
-    suspend fun logout(@Header("Client-User-Id") clientUserId: kotlin.String, @Body paTReferenceDeleteDTO: PATReferenceDeleteDTO): ApiResponse<Unit>
+    suspend fun logout(@Header("Client-User-Id") clientUserId: kotlin.String, @Body paTReferenceDeleteDTO: PATReferenceDeleteDTO): Response<Unit>
 }
