@@ -31,7 +31,6 @@ moshi = "1.15.0"
 okhttp = "4.11.0"
 openapi = "6.6.0"
 retrofit = "2.9.0"
-sandwich = "1.3.6"
 
 [libraries]
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }

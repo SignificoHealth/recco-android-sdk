@@ -1,0 +1,13 @@
+{
+  "generatorName": "kotlin",
+  "useCoroutines": "true",
+  "library": "jvm-retrofit2",
+  "moshiCodeGen": "true",
+  "enumPropertyNaming": "UPPERCASE",
+  "sortModelPropertiesByRequiredFlag": "true",
+  "sortParamsByRequiredFlag": "true",
+  "packageName": "com.shadowflight.openapi",
+  "apiPackage": "com.shadowflight.openapi.api",
+  "modelPackage": "com.shadowflight.openapi.model",
+  "modelNameSuffix": "DTO"
+}

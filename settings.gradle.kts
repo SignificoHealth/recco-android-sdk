@@ -26,5 +26,6 @@ include(
     ":core:ui",
     ":feature:feed",
     ":feature:article",
-    ":feature:onboarding"
+    ":feature:onboarding",
+    ":openapi"
 )
