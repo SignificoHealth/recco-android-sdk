@@ -20,6 +20,7 @@ dependencies {
 }
 
 private val pathOpenAPI = "$rootDir/core/openapi"
+private val pathOpenAPIGeneratedContent = "$pathOpenAPI/src/main/kotlin/com/shadowflight/openapi"
 
 openApiGenerate {
     inputSpec.set("$pathOpenAPI/openapi.json")
@@ -38,15 +39,14 @@ openApiGenerate {
 }
 
 tasks.named("openApiGenerate") {
+    dependsOn("openApiClean")
+
+}
+
+tasks.register("openApiClean") {
     doFirst {
-        delete(
-            fileTree("$pathOpenAPI/src/main/kotlin/com/shadowflight/openapi/api"),
-            fileTree("$pathOpenAPI/src/main/kotlin/com/shadowflight/openapi/model")
-        )
-    }
-    doLast {
-        delete(
-            file("$pathOpenAPI/src/main/kotlin/com/shadowflight/openapi/model/java.time.LocalTime.kt")
+        project.delete(
+            fileTree("$pathOpenAPIGeneratedContent"),
         )
     }
 }
