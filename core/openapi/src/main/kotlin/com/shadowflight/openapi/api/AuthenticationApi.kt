@@ -18,8 +18,8 @@ import retrofit2.Response
 import okhttp3.RequestBody
 import com.squareup.moshi.Json
 import com.shadowflight.openapi.model.ApiErrorDTO
+import com.shadowflight.openapi.model.PATDTO
 import com.shadowflight.openapi.model.PATReferenceDeleteDTO
-import com.shadowflight.openapi.model.ZitadelPATDTO
 
 interface AuthenticationApi {
 
@@ -32,10 +32,10 @@ interface AuthenticationApi {
      *
      * @param authorization 
      * @param clientUserId 
-     * @return [ZitadelPATDTO]
+     * @return [PATDTO]
      */
     @POST("api/v1/app_users/login")
-    suspend fun login(@Header("Authorization") authorization: kotlin.String, @Header("Client-User-Id") clientUserId: kotlin.String): Response<ZitadelPATDTO>
+    suspend fun login(@Header("Authorization") authorization: kotlin.String, @Header("Client-User-Id") clientUserId: kotlin.String): Response<PATDTO>
 
     /**
      * Logout an app user supplying PAT&#39;s id and the associated user client id.

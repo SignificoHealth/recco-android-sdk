@@ -290,7 +290,7 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ZitadelPAT"
+                  "$ref": "#/components/schemas/PAT"
                 }
               }
             }
@@ -948,23 +948,15 @@
           }
         }
       },
-      "ZitadelPAT": {
+      "PAT": {
         "required": [
           "accessToken",
-          "creationDate",
-          "tokenId"
+          "expirationDate"
         ],
         "type": "object",
         "properties": {
-          "tokenId": {
-            "type": "string"
-          },
           "accessToken": {
             "type": "string"
-          },
-          "creationDate": {
-            "type": "string",
-            "format": "date-time"
           },
           "expirationDate": {
             "type": "string",

@@ -19,23 +19,15 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
- * @param tokenId 
  * @param accessToken 
- * @param creationDate 
  * @param expirationDate 
  */
 @JsonClass(generateAdapter = true)
-data class ZitadelPATDTO(
-
-    @Json(name = "tokenId")
-    val tokenId: kotlin.String,
+data class PATDTO(
 
     @Json(name = "accessToken")
     val accessToken: kotlin.String,
 
-    @Json(name = "creationDate")
-    val creationDate: java.time.OffsetDateTime,
-
     @Json(name = "expirationDate")
-    val expirationDate: java.time.OffsetDateTime? = null
+    val expirationDate: java.time.OffsetDateTime
 )

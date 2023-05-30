@@ -1,5 +1,7 @@
 plugins {
     id("shadowflight.android.feature")
+    id("shadowflight.android.hilt")
+
 }
 
 android {
@@ -7,6 +9,7 @@ android {
 }
 
 dependencies {
+    api(project(":core:model"))
     implementation(project(":feature:feed"))
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:article"))
