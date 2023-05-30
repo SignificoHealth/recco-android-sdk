@@ -13,7 +13,6 @@
 
 package com.shadowflight.openapi.model
 
-import com.shadowflight.openapi.model.AppUserRecommendationDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -21,7 +20,8 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param type 
- * @param recommendations 
+ * @param locked 
+ * @param topicId 
  */
 @JsonClass(generateAdapter = true)
 data class FeedSectionDTO(
@@ -29,20 +29,31 @@ data class FeedSectionDTO(
     @Json(name = "type")
     val type: FeedSectionDTO.Type,
 
-    @Json(name = "recommendations")
-    val recommendations: kotlin.collections.List<AppUserRecommendationDTO>
+    @Json(name = "locked")
+    val locked: kotlin.Boolean,
+
+    @Json(name = "topicId")
+    val topicId: kotlin.Int? = null
 ) {
     /**
      * 
      *
-     * Values: STARTING_RECOMMENDATION,TAILORED_RECOMMENDATION,TAILORED_NUTRITION_RECOMMENDATION,MOST_POPULAR
+     * Values: PHYSICAL_ACTIVITY_RECOMMENDATIONS,NUTRITION_RECOMMENDATIONS,PHYSICAL_WELLBEING_RECOMMENDATIONS,SLEEP_RECOMMENDATIONS,PREFERRED_RECOMMENDATIONS,MOST_POPULAR,NEW_CONTENT,PHYSICAL_ACTIVITY_EXPLORE,NUTRITION_EXPLORE,PHYSICAL_WELLBEING_EXPLORE,SLEEP_EXPLORE,STARTING_RECOMMENDATIONS
      */
     @JsonClass(generateAdapter = false)
     enum class Type(val value: kotlin.String) {
-        @Json(name = "STARTING_RECOMMENDATION") STARTING_RECOMMENDATION("STARTING_RECOMMENDATION"),
-        @Json(name = "TAILORED_RECOMMENDATION") TAILORED_RECOMMENDATION("TAILORED_RECOMMENDATION"),
-        @Json(name = "TAILORED_NUTRITION_RECOMMENDATION") TAILORED_NUTRITION_RECOMMENDATION("TAILORED_NUTRITION_RECOMMENDATION"),
-        @Json(name = "MOST_POPULAR") MOST_POPULAR("MOST_POPULAR");
+        @Json(name = "PHYSICAL_ACTIVITY_RECOMMENDATIONS") PHYSICAL_ACTIVITY_RECOMMENDATIONS("PHYSICAL_ACTIVITY_RECOMMENDATIONS"),
+        @Json(name = "NUTRITION_RECOMMENDATIONS") NUTRITION_RECOMMENDATIONS("NUTRITION_RECOMMENDATIONS"),
+        @Json(name = "PHYSICAL_WELLBEING_RECOMMENDATIONS") PHYSICAL_WELLBEING_RECOMMENDATIONS("PHYSICAL_WELLBEING_RECOMMENDATIONS"),
+        @Json(name = "SLEEP_RECOMMENDATIONS") SLEEP_RECOMMENDATIONS("SLEEP_RECOMMENDATIONS"),
+        @Json(name = "PREFERRED_RECOMMENDATIONS") PREFERRED_RECOMMENDATIONS("PREFERRED_RECOMMENDATIONS"),
+        @Json(name = "MOST_POPULAR") MOST_POPULAR("MOST_POPULAR"),
+        @Json(name = "NEW_CONTENT") NEW_CONTENT("NEW_CONTENT"),
+        @Json(name = "PHYSICAL_ACTIVITY_EXPLORE") PHYSICAL_ACTIVITY_EXPLORE("PHYSICAL_ACTIVITY_EXPLORE"),
+        @Json(name = "NUTRITION_EXPLORE") NUTRITION_EXPLORE("NUTRITION_EXPLORE"),
+        @Json(name = "PHYSICAL_WELLBEING_EXPLORE") PHYSICAL_WELLBEING_EXPLORE("PHYSICAL_WELLBEING_EXPLORE"),
+        @Json(name = "SLEEP_EXPLORE") SLEEP_EXPLORE("SLEEP_EXPLORE"),
+        @Json(name = "STARTING_RECOMMENDATIONS") STARTING_RECOMMENDATIONS("STARTING_RECOMMENDATIONS");
     }
 }
 

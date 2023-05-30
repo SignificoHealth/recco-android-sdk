@@ -18,19 +18,19 @@ import retrofit2.Response
 import okhttp3.RequestBody
 import com.squareup.moshi.Json
 import com.shadowflight.openapi.model.ApiErrorDTO
-import com.shadowflight.openapi.model.AppUserDTO
+import com.shadowflight.openapi.model.FeedSectionDTO
 
-interface AppUserApi {
+interface FeedApi {
 
     /**
-     * Return app user.
+     * Get feed sections.
      * 
      * Responses:
      *  - 401: Unauthorized
      *  - 200: OK
      *
-     * @return [AppUserDTO]
+     * @return [kotlin.collections.List<FeedSectionDTO>]
      */
-    @GET("api/v1/me")
-    suspend fun get(): Response<AppUserDTO>
+    @GET("api/v1/me/feed")
+    suspend fun getFeed(): Response<kotlin.collections.List<FeedSectionDTO>>
 }

@@ -20,18 +20,17 @@ import com.squareup.moshi.Json
 import com.shadowflight.openapi.model.ApiErrorDTO
 import com.shadowflight.openapi.model.AppUserArticleDTO
 import com.shadowflight.openapi.model.AppUserRecommendationDTO
-import com.shadowflight.openapi.model.FeedSectionDTO
 import com.shadowflight.openapi.model.UpdateRatingDTO
 import com.shadowflight.openapi.model.UpdateStatusDTO
 
-interface AppUserRecommendationApi {
+interface RecommendationApi {
 
     /**
      * A list of content filtered by topic.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @param topicId 
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
@@ -43,8 +42,8 @@ interface AppUserRecommendationApi {
      * Get article.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @param recommendationId 
      * @return [AppUserArticleDTO]
@@ -53,23 +52,11 @@ interface AppUserRecommendationApi {
     suspend fun getArticle(@Path("recommendationId") recommendationId: kotlin.String): Response<AppUserArticleDTO>
 
     /**
-     * Recommendations feed.
-     * 
-     * Responses:
-     *  - 200: OK
-     *  - 401: Unauthorized
-     *
-     * @return [kotlin.collections.List<FeedSectionDTO>]
-     */
-    @GET("api/v1/me/recommendations/feed")
-    suspend fun getFeed(): Response<kotlin.collections.List<FeedSectionDTO>>
-
-    /**
      * A list of most popular content.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -80,8 +67,8 @@ interface AppUserRecommendationApi {
      * A list of newest content.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -92,8 +79,8 @@ interface AppUserRecommendationApi {
      * A list of starting recommendations.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -104,8 +91,8 @@ interface AppUserRecommendationApi {
      * A list of tailored recommendations filtered by topic.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @param topicId 
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
@@ -117,8 +104,8 @@ interface AppUserRecommendationApi {
      * A list of recommendations which are improved by the preferences.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -129,8 +116,8 @@ interface AppUserRecommendationApi {
      * Set recommendation rating.
      * 
      * Responses:
-     *  - 204: No Content
      *  - 401: Unauthorized
+     *  - 204: No Content
      *
      * @param updateRatingDTO 
      * @return [Unit]
@@ -142,8 +129,8 @@ interface AppUserRecommendationApi {
      * Set recommendation status.
      * 
      * Responses:
-     *  - 204: No Content
      *  - 401: Unauthorized
+     *  - 204: No Content
      *
      * @param updateStatusDTO 
      * @return [Unit]

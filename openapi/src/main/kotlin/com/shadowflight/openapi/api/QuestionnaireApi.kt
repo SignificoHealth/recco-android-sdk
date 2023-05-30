@@ -21,14 +21,14 @@ import com.shadowflight.openapi.model.ApiErrorDTO
 import com.shadowflight.openapi.model.QuestionnaireAnswersDTO
 import com.shadowflight.openapi.model.QuestionnaireDTO
 
-interface AppUserQuestionnaireApi {
+interface QuestionnaireApi {
 
     /**
      * Set user app answers for a questionnaire.
      * 
      * Responses:
-     *  - 204: No Content
      *  - 401: Unauthorized
+     *  - 204: No Content
      *
      * @param questionnaireAnswersDTO 
      * @return [Unit]
@@ -40,8 +40,8 @@ interface AppUserQuestionnaireApi {
      * Return the associated questionnaire for a given topic.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @param topicId 
      * @return [QuestionnaireDTO]
@@ -53,8 +53,8 @@ interface AppUserQuestionnaireApi {
      * Return the onboarding questionnaires.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<QuestionnaireDTO>]
      */
@@ -65,8 +65,8 @@ interface AppUserQuestionnaireApi {
      * Set user app answers for the onboarding questionnaires.
      * 
      * Responses:
-     *  - 204: No Content
      *  - 401: Unauthorized
+     *  - 204: No Content
      *
      * @param questionnaireAnswersDTO 
      * @return [Unit]
