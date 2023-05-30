@@ -19,11 +19,13 @@ dependencies {
     implementation(libs.retrofit.converter.moshi)
 }
 
+private val pathOpenAPI = "$rootDir/core/openapi"
+
 openApiGenerate {
-    inputSpec.set("$rootDir/openapi/openapi.json")
-    outputDir.set("$rootDir/openapi")
-    configFile.set("$rootDir/openapi/openapi-generator-config.json")
-    templateDir.set("$rootDir/openapi/templates")
+    inputSpec.set("$pathOpenAPI/openapi.json")
+    outputDir.set(pathOpenAPI)
+    configFile.set("$pathOpenAPI/openapi-generator-config.json")
+    templateDir.set("$pathOpenAPI/templates")
     globalProperties.set(
         mapOf(
             "supportingFiles" to "false",
@@ -38,13 +40,13 @@ openApiGenerate {
 tasks.named("openApiGenerate") {
     doFirst {
         delete(
-            fileTree("$rootDir/openapi/src/main/kotlin/com/shadowflight/openapi/api"),
-            fileTree("$rootDir/openapi/src/main/kotlin/com/shadowflight/openapi/model")
+            fileTree("$pathOpenAPI/src/main/kotlin/com/shadowflight/openapi/api"),
+            fileTree("$pathOpenAPI/src/main/kotlin/com/shadowflight/openapi/model")
         )
     }
     doLast {
         delete(
-            file("$rootDir/openapi/src/main/kotlin/com/shadowflight/openapi/model/java.time.LocalTime.kt")
+            file("$pathOpenAPI/src/main/kotlin/com/shadowflight/openapi/model/java.time.LocalTime.kt")
         )
     }
 }

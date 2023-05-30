@@ -1,6 +1,6 @@
 open-api:
 	./gradlew showcase:openApiPreCodeGen
-	./gradlew openapi:openApiGenerate
+	./gradlew core:openapi:openApiGenerate
 
 nuke-environment:
 	./gradlew --stop
