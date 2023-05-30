@@ -7,6 +7,7 @@ minSdk = "24"
 targetSdk = "33"
 
 accompanist = "0.30.1" # Depends on Compose 1.4.x
+android-desugar = "2.0.3"
 android-gradle-plugin = "8.0.2"
 androidx-activity = "1.7.1"
 androidx-annotation = "1.6.0"
@@ -40,6 +41,8 @@ accompanist-navigation-material = { group = "com.google.accompanist", name = "ac
 accompanist-pager-indicators = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
+
+android-desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "android-desugar" }
 
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 
