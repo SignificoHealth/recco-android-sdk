@@ -22,10 +22,10 @@ include(
     ":ui",
     ":headless",
     ":showcase",
+    ":core:openapi",
     ":core:network",
     ":core:ui",
     ":feature:feed",
     ":feature:article",
     ":feature:onboarding",
-    ":openapi"
 )

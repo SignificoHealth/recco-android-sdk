@@ -12,27 +12,31 @@
   ],
   "tags": [
     {
+      "name": "Feed",
+      "description": "Expose recommendation related resources for an app user."
+    },
+    {
       "name": "App user",
       "description": "Expose app user related resources."
     },
     {
-      "name": "App user recommendation",
+      "name": "Recommendation",
       "description": "Expose recommendation related resources for an app user."
     },
     {
-      "name": "App user questionnaire",
-      "description": "Expose questionnaire related resources for an app user."
+      "name": "Authentication",
+      "description": "Expose authentication related resources for an app user."
     },
     {
-      "name": "App user authentication",
-      "description": "Expose authentication related resources for an app user."
+      "name": "Questionnaire",
+      "description": "Expose questionnaire related resources for an app user."
     }
   ],
   "paths": {
     "/api/v1/me/recommendations/status": {
       "put": {
         "tags": [
-          "App user recommendation"
+          "Recommendation"
         ],
         "summary": "Set recommendation status.",
         "operationId": "setStatus",
@@ -47,9 +51,6 @@
           "required": true
         },
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -59,6 +60,9 @@
                 }
               }
             }
+          },
+          "204": {
+            "description": "No Content"
           }
         },
         "security": [
@@ -71,7 +75,7 @@
     "/api/v1/me/recommendations/rating": {
       "put": {
         "tags": [
-          "App user recommendation"
+          "Recommendation"
         ],
         "summary": "Set recommendation rating.",
         "operationId": "setRating",
@@ -86,9 +90,6 @@
           "required": true
         },
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -98,6 +99,9 @@
                 }
               }
             }
+          },
+          "204": {
+            "description": "No Content"
           }
         },
         "security": [
@@ -110,7 +114,7 @@
     "/api/v1/me/questionnaire/onboarding_answers": {
       "post": {
         "tags": [
-          "App user questionnaire"
+          "Questionnaire"
         ],
         "summary": "Set user app answers for the onboarding questionnaires.",
         "operationId": "onboardingAnswers",
@@ -128,9 +132,6 @@
           "required": true
         },
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -140,6 +141,9 @@
                 }
               }
             }
+          },
+          "204": {
+            "description": "No Content"
           }
         },
         "security": [
@@ -152,7 +156,7 @@
     "/api/v1/me/questionnaire/answers": {
       "post": {
         "tags": [
-          "App user questionnaire"
+          "Questionnaire"
         ],
         "summary": "Set user app answers for a questionnaire.",
         "operationId": "answers",
@@ -167,9 +171,6 @@
           "required": true
         },
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -179,6 +180,9 @@
                 }
               }
             }
+          },
+          "204": {
+            "description": "No Content"
           }
         },
         "security": [
@@ -191,11 +195,19 @@
     "/api/v1/app_users/logout": {
       "post": {
         "tags": [
-          "App user authentication"
+          "Authentication"
         ],
         "summary": "Logout an app user supplying PAT's id and the associated user client id.",
         "operationId": "logout",
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "Client-User-Id",
             "in": "header",
@@ -216,9 +228,6 @@
           "required": true
         },
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -228,6 +237,9 @@
                 }
               }
             }
+          },
+          "204": {
+            "description": "No Content"
           }
         },
         "security": [
@@ -240,11 +252,19 @@
     "/api/v1/app_users/login": {
       "post": {
         "tags": [
-          "App user authentication"
+          "Authentication"
         ],
         "summary": "Authenticate an app user supplying an app PAT and the associated user client id.\n        If the user client id does not exist in the app, a new user will be registered on the fly.\n        This endpoint should be used also after the PAT expires to retrieve a new one.\n        ",
         "operationId": "login",
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "Client-User-Id",
             "in": "header",
@@ -255,22 +275,22 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ZitadelPAT"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
               "application/hal+json": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ZitadelPAT"
                 }
               }
             }
@@ -291,22 +311,22 @@
         "summary": "Return app user.",
         "operationId": "get",
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AppUser"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
               "application/hal+json": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppUser"
                 }
               }
             }
@@ -322,7 +342,7 @@
     "/api/v1/me/recommendations/tailored/topics/{topicId}": {
       "get": {
         "tags": [
-          "App user recommendation"
+          "Recommendation"
         ],
         "summary": "A list of tailored recommendations filtered by topic.",
         "operationId": "getTailoredRecommendationsByTopic",
@@ -338,6 +358,16 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -347,16 +377,6 @@
                   "items": {
                     "$ref": "#/components/schemas/AppUserRecommendation"
                   }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
                 }
               }
             }
@@ -372,11 +392,21 @@
     "/api/v1/me/recommendations/starting": {
       "get": {
         "tags": [
-          "App user recommendation"
+          "Recommendation"
         ],
         "summary": "A list of starting recommendations.",
         "operationId": "getStartingRecommendations",
         "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -386,16 +416,6 @@
                   "items": {
                     "$ref": "#/components/schemas/AppUserRecommendation"
                   }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
                 }
               }
             }
@@ -411,11 +431,21 @@
     "/api/v1/me/recommendations/preferred": {
       "get": {
         "tags": [
-          "App user recommendation"
+          "Recommendation"
         ],
         "summary": "A list of recommendations which are improved by the preferences.",
         "operationId": "getUserPreferredRecommendations",
         "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -425,16 +455,6 @@
                   "items": {
                     "$ref": "#/components/schemas/AppUserRecommendation"
                   }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
                 }
               }
             }
@@ -450,11 +470,21 @@
     "/api/v1/me/recommendations/newest": {
       "get": {
         "tags": [
-          "App user recommendation"
+          "Recommendation"
         ],
         "summary": "A list of newest content.",
         "operationId": "getNewestContent",
         "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -464,16 +494,6 @@
                   "items": {
                     "$ref": "#/components/schemas/AppUserRecommendation"
                   }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
                 }
               }
             }
@@ -489,11 +509,21 @@
     "/api/v1/me/recommendations/most_popular": {
       "get": {
         "tags": [
-          "App user recommendation"
+          "Recommendation"
         ],
         "summary": "A list of most popular content.",
         "operationId": "getMostPopularContent",
         "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -503,55 +533,6 @@
                   "items": {
                     "$ref": "#/components/schemas/AppUserRecommendation"
                   }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/me/recommendations/feed": {
-      "get": {
-        "tags": [
-          "App user recommendation"
-        ],
-        "summary": "Recommendations feed.",
-        "operationId": "getFeed",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/FeedSection"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
                 }
               }
             }
@@ -567,7 +548,7 @@
     "/api/v1/me/recommendations/explore/topics/{topicId}": {
       "get": {
         "tags": [
-          "App user recommendation"
+          "Recommendation"
         ],
         "summary": "A list of content filtered by topic.",
         "operationId": "exploreContentByTopic",
@@ -583,6 +564,16 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -592,16 +583,6 @@
                   "items": {
                     "$ref": "#/components/schemas/AppUserRecommendation"
                   }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
                 }
               }
             }
@@ -617,7 +598,7 @@
     "/api/v1/me/recommendations/articles/{recommendationId}": {
       "get": {
         "tags": [
-          "App user recommendation"
+          "Recommendation"
         ],
         "summary": "Get article.",
         "operationId": "getArticle",
@@ -632,22 +613,22 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AppUserArticle"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
               "application/hal+json": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppUserArticle"
                 }
               }
             }
@@ -663,7 +644,7 @@
     "/api/v1/me/questionnaire/topics/{topicId}": {
       "get": {
         "tags": [
-          "App user questionnaire"
+          "Questionnaire"
         ],
         "summary": "Return the associated questionnaire for a given topic.",
         "operationId": "getQuestionnaireByTopic",
@@ -679,22 +660,22 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Questionnaire"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized",
             "content": {
               "application/hal+json": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Questionnaire"
                 }
               }
             }
@@ -710,11 +691,21 @@
     "/api/v1/me/questionnaire/onboarding_questionnaires": {
       "get": {
         "tags": [
-          "App user questionnaire"
+          "Questionnaire"
         ],
         "summary": "Return the onboarding questionnaires.",
         "operationId": "onboarding",
         "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK",
             "content": {
@@ -727,13 +718,42 @@
                 }
               }
             }
-          },
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/me/feed": {
+      "get": {
+        "tags": [
+          "Feed"
+        ],
+        "summary": "Get feed sections.",
+        "operationId": "getFeed",
+        "responses": {
           "401": {
             "description": "Unauthorized",
             "content": {
               "application/hal+json": {
                 "schema": {
                   "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FeedSection"
+                  }
                 }
               }
             }
@@ -1016,30 +1036,6 @@
           }
         }
       },
-      "FeedSection": {
-        "required": [
-          "recommendations",
-          "type"
-        ],
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "STARTING_RECOMMENDATION",
-              "TAILORED_RECOMMENDATION",
-              "TAILORED_NUTRITION_RECOMMENDATION",
-              "MOST_POPULAR"
-            ]
-          },
-          "recommendations": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AppUserRecommendation"
-            }
-          }
-        }
-      },
       "AppUserArticle": {
         "required": [
           "headline",
@@ -1205,6 +1201,39 @@
             "items": {
               "$ref": "#/components/schemas/Question"
             }
+          }
+        }
+      },
+      "FeedSection": {
+        "required": [
+          "locked",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "PHYSICAL_ACTIVITY_RECOMMENDATIONS",
+              "NUTRITION_RECOMMENDATIONS",
+              "PHYSICAL_WELLBEING_RECOMMENDATIONS",
+              "SLEEP_RECOMMENDATIONS",
+              "PREFERRED_RECOMMENDATIONS",
+              "MOST_POPULAR",
+              "NEW_CONTENT",
+              "PHYSICAL_ACTIVITY_EXPLORE",
+              "NUTRITION_EXPLORE",
+              "PHYSICAL_WELLBEING_EXPLORE",
+              "SLEEP_EXPLORE",
+              "STARTING_RECOMMENDATIONS"
+            ]
+          },
+          "locked": {
+            "type": "boolean"
+          },
+          "topicId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       }

@@ -1,7 +1,8 @@
 src/main/kotlin/com/shadowflight/openapi/api/AppUserApi.kt
-src/main/kotlin/com/shadowflight/openapi/api/AppUserAuthenticationApi.kt
-src/main/kotlin/com/shadowflight/openapi/api/AppUserQuestionnaireApi.kt
-src/main/kotlin/com/shadowflight/openapi/api/AppUserRecommendationApi.kt
+src/main/kotlin/com/shadowflight/openapi/api/AuthenticationApi.kt
+src/main/kotlin/com/shadowflight/openapi/api/FeedApi.kt
+src/main/kotlin/com/shadowflight/openapi/api/QuestionnaireApi.kt
+src/main/kotlin/com/shadowflight/openapi/api/RecommendationApi.kt
 src/main/kotlin/com/shadowflight/openapi/model/ApiErrorDTO.kt
 src/main/kotlin/com/shadowflight/openapi/model/AppUserArticleDTO.kt
 src/main/kotlin/com/shadowflight/openapi/model/AppUserDTO.kt
