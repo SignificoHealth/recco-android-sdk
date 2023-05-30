@@ -30,7 +30,7 @@ object NetworkModule {
     fun provideApiEndpoint(sdkConfig: SDKConfig): ApiEndpoint = if (!sdkConfig.isDebug) {
         ApiEndpoint.PROD
     } else {
-        ApiEndpoint.STAGING
+        ApiEndpoint.LOCAL
     }
 
     @Singleton
