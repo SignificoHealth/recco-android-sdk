@@ -7,7 +7,6 @@ import com.shadowflight.model.feed.FeedSectionType.*
 import com.shadowflight.model.feed.*
 import com.shadowflight.repository.FeedRepository
 import com.shadowflight.repository.RecommendationRepository
-import com.shadowflight.uicommons.combine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +36,7 @@ class FeedViewModel @Inject constructor(
 
     private fun initialLoadSubscribe() {
         viewModelScope.launch {
-            combine(
+            com.shadowflight.uicommons.combine(
                 feedRepository.feedSections,
                 recommendationRepository.tailoredPhysicalActivity,
                 recommendationRepository.explorePhysicalActivity,
@@ -85,6 +84,8 @@ class FeedViewModel @Inject constructor(
                                 }
                             }
                         )
+                    }.filter {
+                        it.recommendations.isNotEmpty() || it.feedSection.locked
                     }
                 )
             }.catch {
