@@ -1,4 +1,4 @@
-package com.shadowflight.model
+package com.shadowflight.model.authentication
 
 import javax.inject.Singleton
 

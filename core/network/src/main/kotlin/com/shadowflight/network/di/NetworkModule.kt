@@ -2,13 +2,15 @@ package com.shadowflight.network.di
 
 import com.shadowflight.logger.Logger
 import com.shadowflight.model.SDKConfig
-import com.shadowflight.model.UserAuthCredentials
+import com.shadowflight.model.authentication.UserAuthCredentials
 import com.shadowflight.network.http.AddHeadersInterceptor
 import com.shadowflight.network.http.ApiEndpoint
 import com.shadowflight.network.http.AuthInterceptor
 import com.shadowflight.network.moshi.OffsetDateTimeAdapter
 import com.shadowflight.openapi.api.AppUserApi
 import com.shadowflight.openapi.api.AuthenticationApi
+import com.shadowflight.openapi.api.FeedApi
+import com.shadowflight.openapi.api.RecommendationApi
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -35,15 +37,23 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideAuthenticationApi(
-        @RetrofitBase retrofit: Retrofit
-    ): AuthenticationApi = retrofit.create(AuthenticationApi::class.java)
+    fun provideAuthenticationApi(@RetrofitBase retrofit: Retrofit): AuthenticationApi =
+        retrofit.create(AuthenticationApi::class.java)
 
     @Singleton
     @Provides
-    fun provideAppUserApi(
-        @RetrofitAuthentication retrofit: Retrofit
-    ): AppUserApi = retrofit.create(AppUserApi::class.java)
+    fun provideAppUserApi(@RetrofitAuthentication retrofit: Retrofit): AppUserApi =
+        retrofit.create(AppUserApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideFeedApi(@RetrofitAuthentication retrofit: Retrofit): FeedApi =
+        retrofit.create(FeedApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideRecommendationApi(@RetrofitAuthentication retrofit: Retrofit): RecommendationApi =
+        retrofit.create(RecommendationApi::class.java)
 
     @RetrofitBase
     @Provides
@@ -96,6 +106,8 @@ object NetworkModule {
         authInterceptor: AuthInterceptor? = null
     ): OkHttpClient {
         return OkHttpClient.Builder().apply {
+            authInterceptor?.let { addInterceptor(authInterceptor) }
+
             if (isDebug) {
                 addInterceptor(
                     HttpLoggingInterceptor { message ->
@@ -107,7 +119,6 @@ object NetworkModule {
             }
 
             addInterceptor(AddHeadersInterceptor())
-            authInterceptor?.let { addInterceptor(authInterceptor) }
 
             connectTimeout(TIMEOUT, TimeUnit.SECONDS)
             readTimeout(TIMEOUT, TimeUnit.SECONDS)

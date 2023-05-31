@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:model"))
+
     api(libs.androidx.activity.compose)
 
     debugApi(libs.androidx.compose.ui.tooling)

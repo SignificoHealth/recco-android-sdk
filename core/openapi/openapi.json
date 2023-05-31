@@ -977,7 +977,6 @@
       },
       "AppUserRecommendation": {
         "required": [
-          "categoriesIds",
           "headline",
           "id",
           "rating",
@@ -1018,13 +1017,6 @@
           },
           "imageUrl": {
             "type": "string"
-          },
-          "categoriesIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
           }
         }
       },
