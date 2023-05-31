@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
+    <!-- Feed -->
+    <string name="start_here">Start here</string>
+    <string name="trending">Trending</string>
+    <string name="recommended_for_you_topic">Recommended For You: %s</string>
+    <string name="explore_topic">Explore &amp; Improve Your: %s</string>
+    <string name="you_may_also_like">You May Also Like…</string>
+    <string name="news_for_your">New for You</string>
+    <string name="physical_activity">Physical activity</string>
+    <string name="nutrition">Nutrition</string>
+    <string name="physical_wellbeing">Physical wellbeing</string>
+    <string name="sleep">Sleep</string>
+    <string name="unlock">Unlock</string>
+</resources>

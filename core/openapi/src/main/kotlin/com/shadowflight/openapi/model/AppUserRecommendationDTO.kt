@@ -25,7 +25,6 @@ import com.squareup.moshi.JsonClass
  * @param rating 
  * @param status 
  * @param headline 
- * @param categoriesIds 
  * @param lead 
  * @param imageUrl 
  */
@@ -46,9 +45,6 @@ data class AppUserRecommendationDTO(
 
     @Json(name = "headline")
     val headline: kotlin.String,
-
-    @Json(name = "categoriesIds")
-    val categoriesIds: kotlin.collections.List<kotlin.Int>,
 
     @Json(name = "lead")
     val lead: kotlin.String? = null,
