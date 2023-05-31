@@ -1,18 +1,16 @@
 package com.shadowflight.network.http
 
-import com.shadowflight.model.SDKConfig
 import com.shadowflight.model.authentication.PAT
-import com.shadowflight.model.authentication.UserAuthCredentials
-import com.shadowflight.model.authentication.didTokenExpired
+import com.shadowflight.model.authentication.didTokenExpire
 import com.shadowflight.openapi.api.AuthenticationApi
+import com.shadowflight.persistence.AuthCredentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 
 class AuthInterceptor(
-    private val sdkConfig: SDKConfig,
-    private val userAuthCredentials: UserAuthCredentials,
+    private val authCredentials: AuthCredentials,
     private val authenticationApi: AuthenticationApi
 ) : Interceptor {
 
@@ -28,17 +26,24 @@ class AuthInterceptor(
 
     @Synchronized
     private fun getPat() = runBlocking(Dispatchers.IO) {
-        if (userAuthCredentials.pat == null
-            || userAuthCredentials.pat!!.didTokenExpired()
-        ) {
+        val pat = authCredentials.pat
+
+        if (pat == null || pat.didTokenExpire()) {
+            val userId =
+                authCredentials.userId ?: throw IllegalStateException("No userId has been found.")
             authenticationApi.login(
-                authorization = "Bearer ${sdkConfig.apiSecret}",
-                clientUserId = userAuthCredentials.id!!
+                authorization = "Bearer ${authCredentials.sdkConfig.apiSecret}",
+                clientUserId = userId
             ).unwrap()
-                .run { PAT(accessToken = accessToken, expirationDate = expirationDate) }
-                .also { pat -> userAuthCredentials.setPAT(pat) }
+                .run {
+                    PAT(
+                        accessToken = accessToken,
+                        expirationDate = expirationDate,
+                        tokenId = tokenId
+                    )
+                }.also { authCredentials.setPAT(it) }
         } else {
-            userAuthCredentials.pat!!
+            pat
         }
     }
 }

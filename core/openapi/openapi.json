@@ -951,7 +951,9 @@
       "PAT": {
         "required": [
           "accessToken",
-          "expirationDate"
+          "creationDate",
+          "expirationDate",
+          "tokenId"
         ],
         "type": "object",
         "properties": {
@@ -959,6 +961,13 @@
             "type": "string"
           },
           "expirationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tokenId": {
+            "type": "string"
+          },
+          "creationDate": {
             "type": "string",
             "format": "date-time"
           }

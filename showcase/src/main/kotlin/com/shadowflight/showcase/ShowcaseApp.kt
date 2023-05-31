@@ -14,9 +14,11 @@ class ShowcaseApp : Application() {
         // staging: YuJi02IHzJDxe-oiqT1QOptnh9mGMnulPPx5C3xoyBSe0dNha-m1qOjG9DopeSspqR9d6-Y
         UIApi.init(
             sdkConfig = SDKConfig(
+                appName = "Showcase",
                 apiSecret = "APEb8gSTiH6hoKgmxBx8-kGh27X3pvYXK-Fhn6HO9k7D4WYkMmntLsaPl9bwAlZYCmd8oJw",
                 isDebug = true
-            )
+            ),
+            application = this
         )
     }
 }
