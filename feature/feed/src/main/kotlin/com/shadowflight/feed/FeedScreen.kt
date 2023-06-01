@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -69,10 +70,36 @@ fun FeedScreen(
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
     ) {
-        Spacer(Modifier.padding(top = AppSpacing.dp_24))
+        Spacer(Modifier.height(AppSpacing.dp_24))
+        FeedHeader()
+        Spacer(Modifier.height(AppSpacing.dp_40))
+
         feedSectionAndRecommendations.forEach { feedSectionAndRecommendations ->
             FeedSection(feedSectionAndRecommendations)
             Spacer(Modifier.height(AppSpacing.dp_40))
+        }
+    }
+}
+
+@Composable
+private fun FeedHeader() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = AppSpacing.dp_24, end = AppSpacing.dp_12)
+            ) {
+                Text(text = stringResource(R.string.welcome_back), style = AppTheme.typography.h1)
+                Text(
+                    text = stringResource(R.string.lets_make_toda_better),
+                    style = AppTheme.typography.body1
+                )
+            }
+            Image(painter = painterResource(R.drawable.bg_plant), contentDescription = null)
         }
     }
 }
