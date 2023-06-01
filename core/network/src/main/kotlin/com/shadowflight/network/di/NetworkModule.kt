@@ -34,7 +34,7 @@ object NetworkModule {
         if (!authCredentials.sdkConfig.isDebug) {
             ApiEndpoint.PROD
         } else {
-            ApiEndpoint.LOCAL
+            ApiEndpoint.STAGING
         }
 
     @Singleton

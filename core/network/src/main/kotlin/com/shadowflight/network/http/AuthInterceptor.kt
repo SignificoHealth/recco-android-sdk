@@ -1,7 +1,7 @@
 package com.shadowflight.network.http
 
 import com.shadowflight.model.authentication.PAT
-import com.shadowflight.model.authentication.didTokenExpire
+import com.shadowflight.model.authentication.isTokenExpired
 import com.shadowflight.openapi.api.AuthenticationApi
 import com.shadowflight.persistence.AuthCredentials
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +28,7 @@ class AuthInterceptor(
     private fun getPat() = runBlocking(Dispatchers.IO) {
         val pat = authCredentials.pat
 
-        if (pat == null || pat.didTokenExpire()) {
+        if (pat == null || pat.isTokenExpired()) {
             val userId =
                 authCredentials.userId ?: throw IllegalStateException("No userId has been found.")
             authenticationApi.login(
