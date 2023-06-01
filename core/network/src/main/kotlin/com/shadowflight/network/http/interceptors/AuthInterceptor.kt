@@ -1,7 +1,8 @@
-package com.shadowflight.network.http
+package com.shadowflight.network.http.interceptors
 
 import com.shadowflight.model.authentication.PAT
 import com.shadowflight.model.authentication.isTokenExpired
+import com.shadowflight.network.http.unwrap
 import com.shadowflight.openapi.api.AuthenticationApi
 import com.shadowflight.persistence.AuthCredentials
 import kotlinx.coroutines.Dispatchers
