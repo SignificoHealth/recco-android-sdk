@@ -19,5 +19,6 @@ src/main/kotlin/com/shadowflight/openapi/model/QuestionDTO.kt
 src/main/kotlin/com/shadowflight/openapi/model/QuestionnaireAnswersDTO.kt
 src/main/kotlin/com/shadowflight/openapi/model/QuestionnaireDTO.kt
 src/main/kotlin/com/shadowflight/openapi/model/TopicDTO.kt
+src/main/kotlin/com/shadowflight/openapi/model/UpdateBookmarkDTO.kt
 src/main/kotlin/com/shadowflight/openapi/model/UpdateRatingDTO.kt
 src/main/kotlin/com/shadowflight/openapi/model/UpdateStatusDTO.kt

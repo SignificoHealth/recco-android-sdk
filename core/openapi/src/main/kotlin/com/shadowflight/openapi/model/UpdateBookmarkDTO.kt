@@ -22,19 +22,19 @@ import com.squareup.moshi.JsonClass
  *
  * @param contentId 
  * @param contentType 
- * @param rating 
+ * @param bookmarked 
  */
 @JsonClass(generateAdapter = true)
-data class UpdateRatingDTO(
+data class UpdateBookmarkDTO(
 
     @Json(name = "contentId")
     val contentId: ContentIdDTO,
 
     @Json(name = "contentType")
-    val contentType: UpdateRatingDTO.ContentType,
+    val contentType: UpdateBookmarkDTO.ContentType,
 
-    @Json(name = "rating")
-    val rating: UpdateRatingDTO.Rating
+    @Json(name = "bookmarked")
+    val bookmarked: kotlin.Boolean
 ) {
     /**
      * 
@@ -44,17 +44,6 @@ data class UpdateRatingDTO(
     @JsonClass(generateAdapter = false)
     enum class ContentType(val value: kotlin.String) {
         @Json(name = "articles") ARTICLES("articles");
-    }
-    /**
-     * 
-     *
-     * Values: LIKE,DISLIKE,NOT_RATED
-     */
-    @JsonClass(generateAdapter = false)
-    enum class Rating(val value: kotlin.String) {
-        @Json(name = "like") LIKE("like"),
-        @Json(name = "dislike") DISLIKE("dislike"),
-        @Json(name = "not_rated") NOT_RATED("not_rated");
     }
 }
 

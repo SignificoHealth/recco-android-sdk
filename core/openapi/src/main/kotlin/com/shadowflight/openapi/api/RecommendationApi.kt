@@ -21,6 +21,7 @@ import com.shadowflight.openapi.model.ApiErrorDTO
 import com.shadowflight.openapi.model.AppUserArticleDTO
 import com.shadowflight.openapi.model.AppUserRecommendationDTO
 import com.shadowflight.openapi.model.TopicDTO
+import com.shadowflight.openapi.model.UpdateBookmarkDTO
 import com.shadowflight.openapi.model.UpdateRatingDTO
 import com.shadowflight.openapi.model.UpdateStatusDTO
 
@@ -112,6 +113,19 @@ interface RecommendationApi {
      */
     @GET("api/v1/me/recommendations/preferred")
     suspend fun getUserPreferredRecommendations(): Response<kotlin.collections.List<AppUserRecommendationDTO>>
+
+    /**
+     * Set recommendation bookmark state.
+     * 
+     * Responses:
+     *  - 401: Unauthorized
+     *  - 204: No Content
+     *
+     * @param updateBookmarkDTO 
+     * @return [Unit]
+     */
+    @PUT("api/v1/me/recommendations/bookmark")
+    suspend fun setBookmark(@Body updateBookmarkDTO: UpdateBookmarkDTO): Response<Unit>
 
     /**
      * Set recommendation rating.

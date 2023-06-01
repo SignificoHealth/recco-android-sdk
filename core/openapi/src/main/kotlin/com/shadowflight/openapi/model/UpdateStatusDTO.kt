@@ -23,7 +23,6 @@ import com.squareup.moshi.JsonClass
  * @param contentId 
  * @param contentType 
  * @param status 
- * @param categoriesIds 
  */
 @JsonClass(generateAdapter = true)
 data class UpdateStatusDTO(
@@ -35,10 +34,7 @@ data class UpdateStatusDTO(
     val contentType: UpdateStatusDTO.ContentType,
 
     @Json(name = "status")
-    val status: UpdateStatusDTO.Status,
-
-    @Json(name = "categoriesIds")
-    val categoriesIds: kotlin.collections.List<kotlin.Int>
+    val status: UpdateStatusDTO.Status
 ) {
     /**
      * 
