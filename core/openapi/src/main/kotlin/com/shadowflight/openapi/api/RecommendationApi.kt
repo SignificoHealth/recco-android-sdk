@@ -20,6 +20,7 @@ import com.squareup.moshi.Json
 import com.shadowflight.openapi.model.ApiErrorDTO
 import com.shadowflight.openapi.model.AppUserArticleDTO
 import com.shadowflight.openapi.model.AppUserRecommendationDTO
+import com.shadowflight.openapi.model.TopicDTO
 import com.shadowflight.openapi.model.UpdateRatingDTO
 import com.shadowflight.openapi.model.UpdateStatusDTO
 
@@ -32,11 +33,11 @@ interface RecommendationApi {
      *  - 401: Unauthorized
      *  - 200: OK
      *
-     * @param topicId 
+     * @param topic 
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
-    @GET("api/v1/me/recommendations/explore/topics/{topicId}")
-    suspend fun exploreContentByTopic(@Path("topicId") topicId: kotlin.Int): Response<kotlin.collections.List<AppUserRecommendationDTO>>
+    @GET("api/v1/me/recommendations/explore/topics/{topic}")
+    suspend fun exploreContentByTopic(@Path("topic") topic: TopicDTO): Response<kotlin.collections.List<AppUserRecommendationDTO>>
 
     /**
      * Get article.
@@ -94,11 +95,11 @@ interface RecommendationApi {
      *  - 401: Unauthorized
      *  - 200: OK
      *
-     * @param topicId 
+     * @param topic 
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
-    @GET("api/v1/me/recommendations/tailored/topics/{topicId}")
-    suspend fun getTailoredRecommendationsByTopic(@Path("topicId") topicId: kotlin.Int): Response<kotlin.collections.List<AppUserRecommendationDTO>>
+    @GET("api/v1/me/recommendations/tailored/topics/{topic}")
+    suspend fun getTailoredRecommendationsByTopic(@Path("topic") topic: TopicDTO): Response<kotlin.collections.List<AppUserRecommendationDTO>>
 
     /**
      * A list of recommendations which are improved by the preferences.

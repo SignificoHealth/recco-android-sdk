@@ -13,6 +13,7 @@
 
 package com.shadowflight.openapi.model
 
+import com.shadowflight.openapi.model.TopicDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -21,7 +22,7 @@ import com.squareup.moshi.JsonClass
  *
  * @param type 
  * @param locked 
- * @param topicId 
+ * @param topic 
  */
 @JsonClass(generateAdapter = true)
 data class FeedSectionDTO(
@@ -32,8 +33,8 @@ data class FeedSectionDTO(
     @Json(name = "locked")
     val locked: kotlin.Boolean,
 
-    @Json(name = "topicId")
-    val topicId: kotlin.Int? = null
+    @Json(name = "topic")
+    val topic: TopicDTO? = null
 ) {
     /**
      * 
