@@ -8,4 +8,4 @@ data class PAT(
     val expirationDate: OffsetDateTime
 )
 
-fun PAT.didTokenExpire() = expirationDate.isBefore(OffsetDateTime.now())
+fun PAT.isTokenExpired() = expirationDate.isBefore(OffsetDateTime.now())
