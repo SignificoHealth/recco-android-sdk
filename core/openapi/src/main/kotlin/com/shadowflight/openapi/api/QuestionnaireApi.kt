@@ -20,6 +20,7 @@ import com.squareup.moshi.Json
 import com.shadowflight.openapi.model.ApiErrorDTO
 import com.shadowflight.openapi.model.QuestionnaireAnswersDTO
 import com.shadowflight.openapi.model.QuestionnaireDTO
+import com.shadowflight.openapi.model.TopicDTO
 
 interface QuestionnaireApi {
 
@@ -43,11 +44,11 @@ interface QuestionnaireApi {
      *  - 401: Unauthorized
      *  - 200: OK
      *
-     * @param topicId 
+     * @param topic 
      * @return [QuestionnaireDTO]
      */
-    @GET("api/v1/me/questionnaire/topics/{topicId}")
-    suspend fun getQuestionnaireByTopic(@Path("topicId") topicId: kotlin.Int): Response<QuestionnaireDTO>
+    @GET("api/v1/me/questionnaire/topics/{topic}")
+    suspend fun getQuestionnaireByTopic(@Path("topic") topic: TopicDTO): Response<QuestionnaireDTO>
 
     /**
      * Return the onboarding questionnaires.

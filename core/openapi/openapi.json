@@ -339,7 +339,7 @@
         ]
       }
     },
-    "/api/v1/me/recommendations/tailored/topics/{topicId}": {
+    "/api/v1/me/recommendations/tailored/topics/{topic}": {
       "get": {
         "tags": [
           "Recommendation"
@@ -348,12 +348,11 @@
         "operationId": "getTailoredRecommendationsByTopic",
         "parameters": [
           {
-            "name": "topicId",
+            "name": "topic",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "$ref": "#/components/schemas/Topic"
             }
           }
         ],
@@ -545,7 +544,7 @@
         ]
       }
     },
-    "/api/v1/me/recommendations/explore/topics/{topicId}": {
+    "/api/v1/me/recommendations/explore/topics/{topic}": {
       "get": {
         "tags": [
           "Recommendation"
@@ -554,12 +553,11 @@
         "operationId": "exploreContentByTopic",
         "parameters": [
           {
-            "name": "topicId",
+            "name": "topic",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "$ref": "#/components/schemas/Topic"
             }
           }
         ],
@@ -641,7 +639,7 @@
         ]
       }
     },
-    "/api/v1/me/questionnaire/topics/{topicId}": {
+    "/api/v1/me/questionnaire/topics/{topic}": {
       "get": {
         "tags": [
           "Questionnaire"
@@ -650,12 +648,11 @@
         "operationId": "getQuestionnaireByTopic",
         "parameters": [
           {
-            "name": "topicId",
+            "name": "topic",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "$ref": "#/components/schemas/Topic"
             }
           }
         ],
@@ -984,6 +981,15 @@
           }
         }
       },
+      "Topic": {
+        "type": "string",
+        "enum": [
+          "PHYSICAL_ACTIVITY",
+          "NUTRITION",
+          "PHYSICAL_WELLBEING",
+          "SLEEP"
+        ]
+      },
       "AppUserRecommendation": {
         "required": [
           "headline",
@@ -1224,9 +1230,8 @@
           "locked": {
             "type": "boolean"
           },
-          "topicId": {
-            "type": "integer",
-            "format": "int32"
+          "topic": {
+            "$ref": "#/components/schemas/Topic"
           }
         }
       }
