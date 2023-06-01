@@ -21,6 +21,8 @@ import com.squareup.moshi.JsonClass
  *
  * @param accessToken 
  * @param expirationDate 
+ * @param tokenId 
+ * @param creationDate 
  */
 @JsonClass(generateAdapter = true)
 data class PATDTO(
@@ -29,5 +31,11 @@ data class PATDTO(
     val accessToken: kotlin.String,
 
     @Json(name = "expirationDate")
-    val expirationDate: java.time.OffsetDateTime
+    val expirationDate: java.time.OffsetDateTime,
+
+    @Json(name = "tokenId")
+    val tokenId: kotlin.String,
+
+    @Json(name = "creationDate")
+    val creationDate: java.time.OffsetDateTime
 )

@@ -2,7 +2,6 @@ package com.shadowflight.network.di
 
 import com.shadowflight.logger.Logger
 import com.shadowflight.model.SDKConfig
-import com.shadowflight.model.authentication.UserAuthCredentials
 import com.shadowflight.network.http.AddHeadersInterceptor
 import com.shadowflight.network.http.ApiEndpoint
 import com.shadowflight.network.http.AuthInterceptor
@@ -11,6 +10,7 @@ import com.shadowflight.openapi.api.AppUserApi
 import com.shadowflight.openapi.api.AuthenticationApi
 import com.shadowflight.openapi.api.FeedApi
 import com.shadowflight.openapi.api.RecommendationApi
+import com.shadowflight.persistence.AuthCredentials
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -28,12 +28,14 @@ import javax.inject.Singleton
 object NetworkModule {
     private const val TIMEOUT = 30L
 
+    @Singleton
     @Provides
-    fun provideApiEndpoint(sdkConfig: SDKConfig): ApiEndpoint = if (!sdkConfig.isDebug) {
-        ApiEndpoint.PROD
-    } else {
-        ApiEndpoint.LOCAL
-    }
+    fun provideApiEndpoint(authCredentials: AuthCredentials): ApiEndpoint =
+        if (!authCredentials.sdkConfig.isDebug) {
+            ApiEndpoint.PROD
+        } else {
+            ApiEndpoint.STAGING
+        }
 
     @Singleton
     @Provides
@@ -56,17 +58,18 @@ object NetworkModule {
         retrofit.create(RecommendationApi::class.java)
 
     @RetrofitBase
+    @Singleton
     @Provides
     fun provideRetrofit(
         moshi: Moshi,
         apiEndpoint: ApiEndpoint,
-        sdkConfig: SDKConfig,
+        authCredentials: AuthCredentials,
         logger: Logger
     ): Retrofit = Retrofit.Builder()
         .baseUrl(apiEndpoint.baseUrl)
         .client(
             buildOkhttp(
-                isDebug = sdkConfig.isDebug,
+                isDebug = authCredentials.sdkConfig.isDebug,
                 logger = logger
             )
         )
@@ -74,24 +77,23 @@ object NetworkModule {
         .build()
 
     @RetrofitAuthentication
+    @Singleton
     @Provides
     fun provideRetrofitAuthentication(
         moshi: Moshi,
         apiEndpoint: ApiEndpoint,
-        sdkConfig: SDKConfig,
         logger: Logger,
-        userAuthCredentials: UserAuthCredentials,
+        authCredentials: AuthCredentials,
         authenticationApi: AuthenticationApi
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(apiEndpoint.baseUrl)
             .client(
                 buildOkhttp(
-                    isDebug = sdkConfig.isDebug,
+                    isDebug = authCredentials.sdkConfig.isDebug,
                     logger = logger,
                     authInterceptor = AuthInterceptor(
-                        sdkConfig,
-                        userAuthCredentials,
+                        authCredentials,
                         authenticationApi
                     )
                 )
@@ -127,6 +129,7 @@ object NetworkModule {
     }
 
     @Provides
+    @Singleton
     fun provideMoshi(): Moshi = Moshi.Builder()
         .add(OffsetDateTimeAdapter())
         .build()

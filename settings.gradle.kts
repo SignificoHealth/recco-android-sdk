@@ -25,6 +25,7 @@ include(
     ":core:logger",
     ":core:openapi",
     ":core:network",
+    ":core:persistence",
     ":core:ui",
     ":core:model",
     ":core:repository",
