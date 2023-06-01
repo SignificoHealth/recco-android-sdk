@@ -11,6 +11,7 @@ android {
 dependencies {
     api(project(":core:model"))
     implementation(project(":core:persistence"))
+    implementation(project(":core:ui"))
     implementation(project(":feature:feed"))
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:article"))
