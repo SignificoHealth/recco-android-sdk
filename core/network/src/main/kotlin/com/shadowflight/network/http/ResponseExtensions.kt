@@ -7,8 +7,5 @@ import retrofit2.Response
  * otherwise returns the response body.
  */
 fun <T> Response<T>.unwrap(): T {
-    errorBody()?.let { error ->
-        throw RuntimeException(error.string())
-    }
     return body()!!
 }

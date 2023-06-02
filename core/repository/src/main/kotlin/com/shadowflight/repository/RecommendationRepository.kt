@@ -1,7 +1,5 @@
 package com.shadowflight.repository
 
-import com.shadowflight.model.feed.Topic
-import com.shadowflight.model.recommendation.Recommendation
 import com.shadowflight.network.http.unwrap
 import com.shadowflight.openapi.api.RecommendationApi
 import com.shadowflight.openapi.model.AppUserRecommendationDTO
@@ -16,8 +14,7 @@ class RecommendationRepository @Inject constructor(
 ) {
     // Physical activity
     private val tailoredPhysicalActivityPipeline = Pipeline {
-        api
-            .getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_ACTIVITY).unwrap()
+        api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_ACTIVITY).unwrap()
             .map(AppUserRecommendationDTO::asEntity)
     }
     val tailoredPhysicalActivity = tailoredPhysicalActivityPipeline.state
@@ -38,8 +35,7 @@ class RecommendationRepository @Inject constructor(
 
     // Nutrition
     private val tailoredNutritionPipeline = Pipeline {
-        api
-            .getTailoredRecommendationsByTopic(TopicDTO.NUTRITION).unwrap()
+        api.getTailoredRecommendationsByTopic(TopicDTO.NUTRITION).unwrap()
             .map(AppUserRecommendationDTO::asEntity)
     }
     val tailoredNutrition = tailoredNutritionPipeline.state
@@ -60,8 +56,7 @@ class RecommendationRepository @Inject constructor(
 
     // Physical wellbeing
     private val tailoredPhysicalWellbeingPipeline = Pipeline {
-        api
-            .getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
+        api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
             .map(AppUserRecommendationDTO::asEntity)
     }
     val tailoredPhysicalWellbeing = tailoredPhysicalWellbeingPipeline.state
@@ -82,8 +77,7 @@ class RecommendationRepository @Inject constructor(
 
     // Sleep
     private val tailoredSleepPipeline = Pipeline {
-        api
-            .getTailoredRecommendationsByTopic(TopicDTO.SLEEP).unwrap()
+        api.getTailoredRecommendationsByTopic(TopicDTO.SLEEP).unwrap()
             .map(AppUserRecommendationDTO::asEntity)
     }
     val tailoredSleep = tailoredSleepPipeline.state
@@ -104,32 +98,28 @@ class RecommendationRepository @Inject constructor(
 
     // Preferred recommendations
     private val preferredRecommendationsPipeline = Pipeline {
-        api
-            .getUserPreferredRecommendations().unwrap()
+        api.getUserPreferredRecommendations().unwrap()
             .map(AppUserRecommendationDTO::asEntity)
     }
     val preferredRecommendations = preferredRecommendationsPipeline.state
 
     // Most popular
     private val mostPopularPipeline = Pipeline {
-        api
-            .getMostPopularContent().unwrap()
+        api.getMostPopularContent().unwrap()
             .map(AppUserRecommendationDTO::asEntity)
     }
     val mostPopular = mostPopularPipeline.state
 
     // Newest content
     private val newestContentPipeline = Pipeline {
-        api
-            .getNewestContent().unwrap()
+        api.getNewestContent().unwrap()
             .map(AppUserRecommendationDTO::asEntity)
     }
     val newestContent = newestContentPipeline.state
 
     // Starting
     private val startingPipeline = Pipeline {
-        api
-            .getStartingRecommendations().unwrap()
+        api.getStartingRecommendations().unwrap()
             .map(AppUserRecommendationDTO::asEntity)
     }
     val starting = startingPipeline.state
