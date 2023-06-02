@@ -5,10 +5,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.shadowflight.article.navigation.articleGraph
+import com.shadowflight.article.navigation.navigateToArticle
 import com.shadowflight.feed.navigation.FeedGraph
-import com.shadowflight.feed.navigation.FeedRoute
 import com.shadowflight.feed.navigation.feedGraph
 import com.shadowflight.onboarding.navigation.onboardingGraph
+import com.shadowflight.questionnaire.navigation.navigateToQuestionnaire
+import com.shadowflight.questionnaire.navigation.questionnaireGraph
 
 @Composable
 fun AppNavHost(
@@ -20,8 +22,12 @@ fun AppNavHost(
         navController = navController,
         startDestination = FeedGraph
     ) {
-        feedGraph()
         onboardingGraph()
-        articleGraph()
+        feedGraph(
+            navigateToArticle = navController::navigateToArticle,
+            navigateToQuestionnaire = navController::navigateToQuestionnaire
+        )
+        articleGraph(navigateUp = navController::navigateUp)
+        questionnaireGraph(navigateUp = navController::navigateUp)
     }
 }

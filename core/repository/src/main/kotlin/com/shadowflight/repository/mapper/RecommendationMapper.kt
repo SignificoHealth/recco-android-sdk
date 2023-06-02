@@ -7,7 +7,7 @@ import com.shadowflight.model.recommendation.Status
 import com.shadowflight.openapi.model.AppUserRecommendationDTO
 import com.shadowflight.openapi.model.ContentIdDTO
 
-fun AppUserRecommendationDTO.asEntity() = Recommendation(
+internal fun AppUserRecommendationDTO.asEntity() = Recommendation(
     id = id.asEntity(),
     rating = when (rating) {
         AppUserRecommendationDTO.Rating.LIKE -> Rating.LIKE

@@ -32,6 +32,7 @@ include(
     ":core:ui",
     ":core:model",
     ":core:repository",
+    ":feature:questionnaire",
     ":feature:feed",
     ":feature:article",
     ":feature:onboarding",

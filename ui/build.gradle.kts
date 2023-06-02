@@ -15,4 +15,5 @@ dependencies {
     implementation(project(":feature:feed"))
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:article"))
+    implementation(project(":feature:questionnaire"))
 }
