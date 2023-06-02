@@ -3,7 +3,6 @@ package com.shadowflight.network.http.interceptors
 import com.shadowflight.model.exceptions.ApiErrorException
 import com.shadowflight.model.exceptions.InternalServerErrorException
 import com.shadowflight.model.exceptions.NoConnectException
-import com.shadowflight.model.exceptions.NotFoundException
 import com.shadowflight.model.exceptions.ServiceUnavailableException
 import com.shadowflight.openapi.model.ApiErrorDTO
 import com.squareup.moshi.Moshi
@@ -35,9 +34,6 @@ class ErrorInterceptor : Interceptor {
                 throw ApiErrorException(response.getErrorMessage(responseBody, apiError))
             } else {
                 when (response.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        throw NotFoundException(response.getErrorMessage(responseBody))
-                    }
                     HttpURLConnection.HTTP_INTERNAL_ERROR -> {
                         throw InternalServerErrorException(response.getErrorMessage(responseBody))
                     }

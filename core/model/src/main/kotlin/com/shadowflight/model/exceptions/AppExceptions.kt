@@ -22,11 +22,6 @@ class NoConnectException(val description: String? = null) : AppException(
     msg = description ?: "Failed to connect to server"
 )
 
-class NotFoundException(val description: String? = null) : AppException(
-    code = HttpURLConnection.HTTP_NOT_FOUND,
-    msg = description ?: "Not Found"
-)
-
 class InternalServerErrorException(val description: String? = null) : AppException(
     code = HttpURLConnection.HTTP_INTERNAL_ERROR,
     msg = description ?: "Internal Server Error"
