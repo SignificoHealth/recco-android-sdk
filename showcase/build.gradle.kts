@@ -55,6 +55,9 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":headless"))
 
+    // implementation("com.significo:shadowflight-ui:0.0.1")
+    // implementation("com.significo:shadowflight-headless:0.0.1")
+
     implementation("com.google.dagger:hilt-android:2.46.1")
     kapt("com.google.dagger:hilt-android-compiler:2.46.1")
 
