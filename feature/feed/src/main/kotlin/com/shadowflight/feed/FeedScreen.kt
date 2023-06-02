@@ -116,6 +116,8 @@ private fun FeedHeader() {
     }
 }
 
+private const val LOCK_PLACEHOLDER_ELEMENTS = 5
+
 @Composable
 private fun FeedSection(
     feedSectionAndRecommendations: FeedSectionAndRecommendations,
@@ -138,7 +140,7 @@ private fun FeedSection(
             )
         ) {
             if (feedSectionAndRecommendations.feedSection.locked) {
-                items(5) {
+                items(LOCK_PLACEHOLDER_ELEMENTS) {
                     LockedCard(onClick = {
                         feedSectionAndRecommendations.feedSection.topic?.let {
                             navigateToQuestionnaire(it)
