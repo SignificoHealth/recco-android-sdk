@@ -4,6 +4,7 @@ import com.shadowflight.logger.Logger
 import com.shadowflight.network.http.interceptors.AddHeadersInterceptor
 import com.shadowflight.network.http.ApiEndpoint
 import com.shadowflight.network.http.interceptors.AuthInterceptor
+import com.shadowflight.network.http.interceptors.ErrorInterceptor
 import com.shadowflight.network.moshi.OffsetDateTimeAdapter
 import com.shadowflight.openapi.api.AppUserApi
 import com.shadowflight.openapi.api.AuthenticationApi
@@ -120,6 +121,7 @@ object NetworkModule {
             }
 
             addInterceptor(AddHeadersInterceptor())
+            addInterceptor(ErrorInterceptor())
 
             connectTimeout(TIMEOUT, TimeUnit.SECONDS)
             readTimeout(TIMEOUT, TimeUnit.SECONDS)
