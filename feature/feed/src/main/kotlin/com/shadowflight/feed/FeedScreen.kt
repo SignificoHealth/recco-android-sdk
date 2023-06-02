@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.shadowflight.model.feed.FeedSectionAndRecommendations
 import com.shadowflight.model.feed.Topic
+import com.shadowflight.model.recommendation.ContentId
 import com.shadowflight.model.recommendation.Recommendation
 import com.shadowflight.model.recommendation.Status
 import com.shadowflight.uicommons.R
@@ -50,7 +51,7 @@ import com.shadowflight.uicommons.viewedOverlay
 
 @Composable
 fun FeedRoute(
-    navigateToArticle: (id: String) -> Unit,
+    navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic) -> Unit,
     viewModel: FeedViewModel = hiltViewModel()
 ) {
@@ -70,7 +71,7 @@ fun FeedRoute(
 fun FeedScreen(
     feedSectionAndRecommendations: List<FeedSectionAndRecommendations>,
     navigateToQuestionnaire: (Topic) -> Unit,
-    navigateToArticle: (id: String) -> Unit
+    navigateToArticle: (ContentId) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -121,7 +122,7 @@ private const val LOCK_PLACEHOLDER_ELEMENTS = 5
 @Composable
 private fun FeedSection(
     feedSectionAndRecommendations: FeedSectionAndRecommendations,
-    navigateToArticle: (id: String) -> Unit,
+    navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -160,13 +161,13 @@ private fun FeedSection(
 
 @ExperimentalMaterialApi
 @Composable
-private fun Card(recommendation: Recommendation, onClick: (id: String) -> Unit) {
+private fun Card(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
     Card(
         modifier = Modifier
             .height(257.dp)
             .width(145.dp),
         elevation = AppTheme.elevation.card,
-        onClick = { onClick(recommendation.id.itemId) }
+        onClick = { onClick(recommendation.id) }
     ) {
         Box(
             modifier = Modifier.fillMaxSize()

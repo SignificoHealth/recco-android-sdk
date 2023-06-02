@@ -1,5 +1,7 @@
 package com.shadowflight.repository
 
+import com.shadowflight.model.recommendation.Article
+import com.shadowflight.model.recommendation.ContentId
 import com.shadowflight.network.http.unwrap
 import com.shadowflight.openapi.api.RecommendationApi
 import com.shadowflight.openapi.model.AppUserRecommendationDTO
@@ -123,4 +125,8 @@ class RecommendationRepository @Inject constructor(
             .map(AppUserRecommendationDTO::asEntity)
     }
     val starting = startingPipeline.state
+
+    suspend fun getArticle(contentId: ContentId): Article =
+        api.getArticle(itemId = contentId.itemId, catalogId = contentId.catalogId)
+            .unwrap().asEntity()
 }

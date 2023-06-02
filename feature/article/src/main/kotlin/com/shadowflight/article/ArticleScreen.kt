@@ -1,14 +1,28 @@
 package com.shadowflight.article
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.shadowflight.model.recommendation.Article
 import com.shadowflight.uicommons.components.AppTopBar
 
 @Composable
-internal fun ArticleRoute(articleId: String, navigateUp: () -> Unit) {
-    ArticleScreen(articleId, navigateUp)
+internal fun ArticleRoute(
+    navigateUp: () -> Unit,
+    viewModel: ArticleViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.viewState.collectAsStateWithLifecycle(
+        initialValue = ArticleViewUIState(
+            isLoading = true
+        )
+    )
+    uiState.article?.let { article ->
+        ArticleScreen(navigateUp, article)
+    }
 }
 
 @Composable
-fun ArticleScreen(articleId: String, navigateUp: () -> Unit) {
-    AppTopBar(title = "Article id: $articleId", navigateUp = navigateUp)
+fun ArticleScreen(navigateUp: () -> Unit, article: Article) {
+    AppTopBar(title = article.lead, navigateUp = navigateUp)
 }
