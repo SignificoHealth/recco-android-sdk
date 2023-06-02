@@ -13,4 +13,13 @@
     <string name="physical_wellbeing">Physical wellbeing</string>
     <string name="sleep">Sleep</string>
     <string name="unlock">Unlock</string>
+
+    <!-- Errors -->
+    <string name="retry">Retry</string>
+    <string name="common_error_title">Sorry!</string>
+    <string name="common_error_desc">Something went wrong</string>
+    <string name="no_network_connection_error_title">No connection</string>
+    <string name="no_network_connection_error_desc">Please check your network connection and try again.</string>
+    <string name="server_error">Service temporarily unavailable. Please try again later.</string>
+
 </resources>
