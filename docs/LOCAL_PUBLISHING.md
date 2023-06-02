@@ -6,11 +6,11 @@ This document aims to explain Shadowflight SDK publishing process using MavenLoc
 
 Couple of Gradle Tasks are now generated both for project and module level, these tasks are included under `publishing`folder.
 
-__IMPORTANT:__ Gradle task list is large and slow to populate in Android projects. This feature by default is disabled for performance reasons. You can re-enable it in: Settings -> Experimental -> Do not build Gradle task list during Gradle sync. Then, sync your project again.
+**IMPORTANT:** Gradle task list is large and slow to populate in Android projects. This feature by default is disabled for performance reasons. You can re-enable it in: Settings -> Experimental -> Do not build Gradle task list during Gradle sync. Then, sync your project again.
 
 All modules, are now provided with a gradle.properties file, so local publishing is flexible regarding the group, alias and version that will be set to the artifact. 
 
-Make sure these files contain the information you expect your plublications to attend to. The following snippet shows a possible attribute values configuration.
+Make sure these files contain the information you expect your publications to attend to. The following snippet shows a possible attribute values configuration.
 
 ```groovy
 # Convention configuration
@@ -23,15 +23,15 @@ moduleVersion=0.0.1
 
 In order for Shadowflight SDK to be published locally, you should focus on the following project level tasks:
 
-- __publishDebugPublicationToMavenLocal:__
+- **publishDebugPublicationToMavenLocal:** (INTERNAL ONLY)
 
   Meant to publish artifacts taking into account debug buildType configuration for all modules.
 
-- __publishReleasePublicationToMavenLocal:__
+- **publishReleasePublicationToMavenLocal:**
 
   Meant to publish artifacts taking into account release buildType configuration for all modules.
 
-- __publishToMavenLocal:__
+- **publishToMavenLocal:**
 
   Meant to publish artifacts taking into account all variants available (defaults to release if no flavors are specified).
 
@@ -40,7 +40,7 @@ In order for Shadowflight SDK to be published locally, you should focus on the f
 
 Once any of the tasks described above is executed, you may check results inside .m2 directory under your user home directory.
 
-You should expect to hace a folder for each published module, containing the following files:
+You should expect to have a folder for each published module, containing the following files:
 
 - *.sources.jar
 - *.module
@@ -49,7 +49,7 @@ You should expect to hace a folder for each published module, containing the fol
 
 ## Usage
 
-In order to sync artifacts previosly published in your local repository, you need to add mavenLocal() configuration as the first repository reference in your repository definitions inside settings.gradle file.
+In order to sync artifacts previously published in your local repository, you need to add mavenLocal() configuration as the first repository reference in your repository definitions inside settings.gradle file.
 
 ```kotlin
 repositories {
