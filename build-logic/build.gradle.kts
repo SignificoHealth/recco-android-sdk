@@ -41,5 +41,9 @@ gradlePlugin {
             id = "shadowflight.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
+        register("mavenPublish") {
+            id = "shadowflight.android.maven.publish"
+            implementationClass = "MavenPublishConventionPlugin"
+        }
     }
 }

@@ -11,6 +11,9 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        // Uncomment for artifacts to be resolved from .m2 directory
+        // mavenLocal()
+
         google()
         mavenCentral()
     }

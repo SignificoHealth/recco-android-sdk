@@ -43,7 +43,7 @@ import coil.size.Size
 import com.shadowflight.model.feed.FeedSectionAndRecommendations
 import com.shadowflight.model.recommendation.Recommendation
 import com.shadowflight.model.recommendation.Status
-import com.shadowflight.ui.R
+import com.shadowflight.uicommons.R
 import com.shadowflight.uicommons.preview.SectionAndRecommendationPreviewProvider
 import com.shadowflight.uicommons.theme.AppSpacing
 import com.shadowflight.uicommons.theme.AppTheme

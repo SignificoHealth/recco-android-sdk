@@ -5,6 +5,11 @@
 
 You can add new custom properties in the `openapi-generator-config.json` file to customize the output content through the `.mustache` files.
 
+## Maven Publishing
+
+- [__Local reference__](./docs/LOCAL_PUBLISHING.md)
+- __Remote reference__ (TBD)
+
 ### References:
 - [Kotlin generator](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/kotlin.md)
 - [Swagger Editor](https://editor.swagger.io/)
