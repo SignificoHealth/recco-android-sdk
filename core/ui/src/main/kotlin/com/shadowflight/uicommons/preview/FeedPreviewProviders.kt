@@ -4,6 +4,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.shadowflight.model.feed.FeedSection
 import com.shadowflight.model.feed.FeedSectionAndRecommendations
 import com.shadowflight.model.feed.FeedSectionType
+import com.shadowflight.model.feed.Topic
 
 class SectionAndRecommendationPreviewProvider :
     PreviewParameterProvider<List<FeedSectionAndRecommendations>> {
@@ -30,7 +31,8 @@ class SectionAndRecommendationPreviewProvider :
             recommendations = List(10) { RecommendationPreviewProvider.data },
             feedSection = FeedSection(
                 type = type,
-                locked = locked
+                locked = locked,
+                topic = Topic.PHYSICAL_ACTIVITY
             )
         )
     }

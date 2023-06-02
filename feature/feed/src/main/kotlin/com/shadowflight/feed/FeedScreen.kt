@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.shadowflight.feed
 
 import androidx.compose.foundation.Image
@@ -19,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -26,8 +29,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,14 +37,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.request.CachePolicy
-import coil.request.ImageRequest
-import coil.size.Size
 import com.shadowflight.model.feed.FeedSectionAndRecommendations
+import com.shadowflight.model.feed.Topic
 import com.shadowflight.model.recommendation.Recommendation
 import com.shadowflight.model.recommendation.Status
 import com.shadowflight.uicommons.R
+import com.shadowflight.uicommons.components.AppTopBar
 import com.shadowflight.uicommons.preview.SectionAndRecommendationPreviewProvider
 import com.shadowflight.uicommons.theme.AppSpacing
 import com.shadowflight.uicommons.theme.AppTheme
@@ -51,31 +50,44 @@ import com.shadowflight.uicommons.viewedOverlay
 
 @Composable
 fun FeedRoute(
-    viewModel: FeedViewModel = hiltViewModel(),
+    navigateToArticle: (id: String) -> Unit,
+    navigateToQuestionnaire: (Topic) -> Unit,
+    viewModel: FeedViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
         initialValue = FeedViewUIState(
             isLoading = true
         )
     )
-    FeedScreen(uiState.feedSectionAndRecommendations)
+    FeedScreen(
+        feedSectionAndRecommendations = uiState.feedSectionAndRecommendations,
+        navigateToArticle = navigateToArticle,
+        navigateToQuestionnaire = navigateToQuestionnaire
+    )
 }
 
 @Composable
 fun FeedScreen(
-    feedSectionAndRecommendations: List<FeedSectionAndRecommendations>
+    feedSectionAndRecommendations: List<FeedSectionAndRecommendations>,
+    navigateToQuestionnaire: (Topic) -> Unit,
+    navigateToArticle: (id: String) -> Unit
 ) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
     ) {
+        AppTopBar()
         Spacer(Modifier.height(AppSpacing.dp_24))
         FeedHeader()
         Spacer(Modifier.height(AppSpacing.dp_40))
 
         feedSectionAndRecommendations.forEach { feedSectionAndRecommendations ->
-            FeedSection(feedSectionAndRecommendations)
+            FeedSection(
+                feedSectionAndRecommendations = feedSectionAndRecommendations,
+                navigateToArticle = navigateToArticle,
+                navigateToQuestionnaire = navigateToQuestionnaire
+            )
             Spacer(Modifier.height(AppSpacing.dp_40))
         }
     }
@@ -105,7 +117,11 @@ private fun FeedHeader() {
 }
 
 @Composable
-private fun FeedSection(feedSectionAndRecommendations: FeedSectionAndRecommendations) {
+private fun FeedSection(
+    feedSectionAndRecommendations: FeedSectionAndRecommendations,
+    navigateToArticle: (id: String) -> Unit,
+    navigateToQuestionnaire: (Topic) -> Unit
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.padding(start = AppSpacing.dp_24),
@@ -122,25 +138,33 @@ private fun FeedSection(feedSectionAndRecommendations: FeedSectionAndRecommendat
             )
         ) {
             if (feedSectionAndRecommendations.feedSection.locked) {
-                items(5) { LockedCard() }
+                items(5) {
+                    LockedCard(onClick = {
+                        feedSectionAndRecommendations.feedSection.topic?.let {
+                            navigateToQuestionnaire(it)
+                        }
+                    })
+                }
             } else {
                 items(
                     items = feedSectionAndRecommendations.recommendations,
                     key = { it.id.itemId }) { recommendation ->
-                    Card(recommendation)
+                    Card(recommendation, navigateToArticle)
                 }
             }
         }
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
-private fun Card(recommendation: Recommendation) {
+private fun Card(recommendation: Recommendation, onClick: (id: String) -> Unit) {
     Card(
         modifier = Modifier
             .height(257.dp)
             .width(145.dp),
-        elevation = AppTheme.elevation.card
+        elevation = AppTheme.elevation.card,
+        onClick = { onClick(recommendation.id.itemId) }
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -175,12 +199,13 @@ private fun Card(recommendation: Recommendation) {
 }
 
 @Composable
-private fun LockedCard() {
+private fun LockedCard(onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .height(257.dp)
             .width(145.dp),
-        elevation = 0.dp
+        elevation = 0.dp,
+        onClick = onClick
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -222,5 +247,8 @@ private fun LockedCard() {
 private fun FeedScreenPreview(
     @PreviewParameter(SectionAndRecommendationPreviewProvider::class) data: List<FeedSectionAndRecommendations>
 ) {
-    FeedScreen(data)
+    FeedScreen(
+        feedSectionAndRecommendations = data,
+        navigateToArticle = {},
+        navigateToQuestionnaire = {})
 }

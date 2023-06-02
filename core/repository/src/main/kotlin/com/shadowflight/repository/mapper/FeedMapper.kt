@@ -3,8 +3,9 @@ package com.shadowflight.repository.mapper
 import com.shadowflight.model.feed.FeedSection
 import com.shadowflight.model.feed.FeedSectionType
 import com.shadowflight.openapi.model.FeedSectionDTO
+import com.shadowflight.openapi.model.TopicDTO
 
-fun FeedSectionDTO.asEntity() = FeedSection(
+internal fun FeedSectionDTO.asEntity() = FeedSection(
     type = when (type) {
         FeedSectionDTO.Type.PHYSICAL_ACTIVITY_RECOMMENDATIONS -> FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS
         FeedSectionDTO.Type.NUTRITION_RECOMMENDATIONS -> FeedSectionType.NUTRITION_RECOMMENDATIONS
@@ -19,6 +20,6 @@ fun FeedSectionDTO.asEntity() = FeedSection(
         FeedSectionDTO.Type.SLEEP_EXPLORE -> FeedSectionType.SLEEP_EXPLORE
         FeedSectionDTO.Type.STARTING_RECOMMENDATIONS -> FeedSectionType.STARTING_RECOMMENDATIONS
     },
-    locked = locked
+    locked = locked,
+    topic = topic?.asEntity()
 )
-        
