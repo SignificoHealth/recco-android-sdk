@@ -10,7 +10,12 @@ import java.net.HttpURLConnection
  * interceptors to your calling code.
  * OkHttp considers other exceptions like IllegalStateException to be application crashes.
  */
-sealed class AppException(val code: Int, var msg: String) : IOException("$code: $msg")
+sealed class AppException(val code: Int, var msg: String) : IOException("($code) $msg")
+
+class ApiErrorException(val description: String? = null) : AppException(
+    code = -1,
+    msg = description ?: "Api Error"
+)
 
 class NoConnectException(val description: String? = null) : AppException(
     code = -2,

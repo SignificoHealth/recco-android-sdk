@@ -18,7 +18,6 @@ fun Throwable?.asDescriptionRes(): Int = when (this) {
     is NoConnectException -> R.string.no_network_connection_error_desc
     is ServiceUnavailableException,
     is InternalServerErrorException -> R.string.server_error
-
     else -> R.string.common_error_desc
 }
 

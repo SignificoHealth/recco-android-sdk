@@ -1,9 +1,12 @@
 package com.shadowflight.network.http.interceptors
 
+import com.shadowflight.model.exceptions.ApiErrorException
 import com.shadowflight.model.exceptions.InternalServerErrorException
 import com.shadowflight.model.exceptions.NoConnectException
 import com.shadowflight.model.exceptions.NotFoundException
 import com.shadowflight.model.exceptions.ServiceUnavailableException
+import com.shadowflight.openapi.model.ApiErrorDTO
+import com.squareup.moshi.Moshi
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
@@ -24,17 +27,27 @@ class ErrorInterceptor : Interceptor {
             throw NoConnectException(e.message)
         }
 
-        when (response.code) {
-            HttpURLConnection.HTTP_NOT_FOUND -> {
-                throw NotFoundException(response.getErrorMessage())
-            }
+        if (!response.isSuccessful) {
+            val responseBody: String = response.body?.string().orEmpty()
+            val apiError = getApiError(responseBody)
 
-            HttpURLConnection.HTTP_INTERNAL_ERROR -> {
-                throw InternalServerErrorException(response.getErrorMessage())
-            }
-
-            HttpURLConnection.HTTP_UNAVAILABLE -> {
-                throw ServiceUnavailableException(response.getErrorMessage())
+            if (apiError != null) {
+                throw ApiErrorException(response.getErrorMessage(responseBody, apiError))
+            } else {
+                when (response.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        throw NotFoundException(response.getErrorMessage(responseBody))
+                    }
+                    HttpURLConnection.HTTP_INTERNAL_ERROR -> {
+                        throw InternalServerErrorException(response.getErrorMessage(responseBody))
+                    }
+                    HttpURLConnection.HTTP_UNAVAILABLE -> {
+                        throw ServiceUnavailableException(response.getErrorMessage(responseBody))
+                    }
+                    else -> {
+                        throw ApiErrorException(response.getErrorMessage(responseBody))
+                    }
+                }
             }
         }
 
@@ -42,6 +55,22 @@ class ErrorInterceptor : Interceptor {
     }
 }
 
-private fun Response.getErrorMessage(): String {
-    return this.request.method + " " + this.request.url.toString() + " -> " + this.body?.string()
+private fun Response.getErrorMessage(responseBody: String, apiError: ApiErrorDTO? = null): String {
+    val details = apiError?.let { apiError.string() } ?: responseBody
+    return "$code ${request.method} ${request.url} -> $details"
+}
+
+private fun ApiErrorDTO?.string(): String {
+    return this?.let { "$errorCode($traceId): $message" } ?: ""
+}
+
+private fun getApiError(responseBody: String): ApiErrorDTO? {
+    return try {
+        Moshi.Builder()
+            .build()
+            .adapter(ApiErrorDTO::class.java)
+            .fromJson(responseBody)
+    } catch (exception: java.lang.Exception) {
+        null
+    }
 }
