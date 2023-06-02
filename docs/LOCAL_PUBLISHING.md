@@ -8,16 +8,26 @@ Couple of Gradle Tasks are now generated both for project and module level, thes
 
 **IMPORTANT:** Gradle task list is large and slow to populate in Android projects. This feature by default is disabled for performance reasons. You can re-enable it in: Settings -> Experimental -> Do not build Gradle task list during Gradle sync. Then, sync your project again.
 
-All modules, are now provided with a gradle.properties file, so local publishing is flexible regarding the group, alias and version that will be set to the artifact. 
+- Module level gradle.properties file:
+  
+  All modules, are now provided with a gradle.properties file, so local publishing is flexible regarding its alias. 
+
+  ```groovy
+  # Convention configuration
+  moduleArtifactId=shadowflight-ui
+  ```
+
+- Project level gradle.properties file:
+
+  Since group and version is shared among all packages, it will be set in this properties file.
+
+  ```groovy
+  ...
+  moduleGroupId=com.significo
+  moduleVersion=0.0.1
+  ```
 
 Make sure these files contain the information you expect your publications to attend to. The following snippet shows a possible attribute values configuration.
-
-```groovy
-# Convention configuration
-moduleGroupId=com.significo
-moduleArtifactId=shadowflight-ui
-moduleVersion=0.0.1
-```
 
 ## Tasks
 
