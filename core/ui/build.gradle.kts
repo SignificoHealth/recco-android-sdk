@@ -3,7 +3,8 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.ui"
+    // Changed namespace due to inconsistency building release variant
+    namespace = "com.shadowflight.uicommons"
 }
 
 dependencies {
