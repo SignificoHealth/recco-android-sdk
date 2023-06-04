@@ -1,4 +1,4 @@
-package com.shadowflight.uicommons
+package com.shadowflight.uicommons.extensions
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache

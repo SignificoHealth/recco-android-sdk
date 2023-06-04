@@ -1,11 +1,9 @@
 package com.shadowflight.repository.mapper
 
-import com.shadowflight.model.recommendation.ContentId
 import com.shadowflight.model.recommendation.Rating
 import com.shadowflight.model.recommendation.Recommendation
 import com.shadowflight.model.recommendation.Status
 import com.shadowflight.openapi.model.AppUserRecommendationDTO
-import com.shadowflight.openapi.model.ContentIdDTO
 
 internal fun AppUserRecommendationDTO.asEntity() = Recommendation(
     id = id.asEntity(),
@@ -22,5 +20,3 @@ internal fun AppUserRecommendationDTO.asEntity() = Recommendation(
     lead = lead,
     imageUrl = imageUrl
 )
-
-private fun ContentIdDTO.asEntity() = ContentId(itemId = itemId, catalogId = catalogId)

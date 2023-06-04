@@ -47,11 +47,12 @@ interface RecommendationApi {
      *  - 401: Unauthorized
      *  - 200: OK
      *
-     * @param recommendationId 
+     * @param itemId 
+     * @param catalogId 
      * @return [AppUserArticleDTO]
      */
-    @GET("api/v1/me/recommendations/articles/{recommendationId}")
-    suspend fun getArticle(@Path("recommendationId") recommendationId: kotlin.String): Response<AppUserArticleDTO>
+    @GET("api/v1/me/recommendations/articles")
+    suspend fun getArticle(@Query("itemId") itemId: kotlin.String, @Query("catalogId") catalogId: kotlin.String): Response<AppUserArticleDTO>
 
     /**
      * A list of most popular content.

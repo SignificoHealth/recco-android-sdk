@@ -1,5 +1,6 @@
 plugins {
     id("shadowflight.android.library.compose")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -9,6 +10,7 @@ android {
 
 dependencies {
     implementation(project(":core:model"))
+    implementation(libs.kotlinx.serialization.json)
 
     api(libs.androidx.activity.compose)
 
@@ -29,4 +31,7 @@ dependencies {
     api(libs.lottie)
 
     api(libs.material)
+
+    api(libs.androidx.hilt.navigation.compose)
+    api(libs.androidx.navigation.compose)
 }

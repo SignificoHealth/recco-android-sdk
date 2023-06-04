@@ -5,12 +5,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.shadowflight.feed.FeedRoute
 import com.shadowflight.model.feed.Topic
+import com.shadowflight.model.recommendation.ContentId
 
 const val FeedGraph = "feed_graph"
 const val FeedRoute = "feed"
 
 fun NavGraphBuilder.feedGraph(
-    navigateToArticle: (id: String) -> Unit,
+    navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic) -> Unit
 ) {
     navigation(
