@@ -1,4 +1,4 @@
-package com.shadowflight.uicommons
+package com.shadowflight.uicommons.extensions
 
 import kotlinx.coroutines.flow.Flow
 

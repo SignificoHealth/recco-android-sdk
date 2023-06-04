@@ -47,7 +47,7 @@ import com.shadowflight.uicommons.components.AppTopBar
 import com.shadowflight.uicommons.preview.SectionAndRecommendationPreviewProvider
 import com.shadowflight.uicommons.theme.AppSpacing
 import com.shadowflight.uicommons.theme.AppTheme
-import com.shadowflight.uicommons.viewedOverlay
+import com.shadowflight.uicommons.extensions.viewedOverlay
 
 @Composable
 fun FeedRoute(

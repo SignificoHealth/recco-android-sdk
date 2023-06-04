@@ -2,16 +2,12 @@ package com.shadowflight.article.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.shadowflight.article.ArticleRoute
 import com.shadowflight.model.recommendation.ContentId
-import com.shadowflight.uicommons.asSerializable
 import com.shadowflight.uicommons.navigation.navigation.ContentIdNavType
-import com.shadowflight.uicommons.parcelable
 
 internal const val idArg = "id"
 const val ArticleGraph = "article_graph/{$idArg}"
