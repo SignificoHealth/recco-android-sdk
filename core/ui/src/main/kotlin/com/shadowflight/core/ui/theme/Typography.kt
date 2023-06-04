@@ -1,8 +1,14 @@
+@file:Suppress(
+    "DEPRECATION",
+    "unused"
+)
+
 package com.shadowflight.core.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -21,77 +27,93 @@ private val h1 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 28.sp,
-    color = primary
+    color = primary,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
 private val h2 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.Medium,
     fontSize = 24.sp,
-    color = primary
+    color = primary,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
 private val h3 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.Bold,
     fontSize = 17.sp,
-    color = primary
+    color = primary,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
 private val h4 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 17.sp,
-    color = primary
+    color = primary,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
 private val body1 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.Normal,
     fontSize = 17.sp,
-    color = primary
+    color = primary,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
+
+private val body1Bold = body1.copy(fontWeight = FontWeight.Bold)
 
 private val body2 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.Medium,
     fontSize = 15.sp,
-    color = primary
+    color = primary,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
+
+private val body2Bold = body2.copy(fontWeight = FontWeight.Bold)
+
 
 private val body3 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 12.sp,
-    color = primary
+    color = primary,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
 private val cta = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 16.sp,
-    color = primary
+    color = primary,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
 private val labelSmall = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 13.sp,
-    color = primary
+    color = primary,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
 private val contentTitle = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.Medium,
     fontSize = 12.sp,
-    color = primary
+    color = primary,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
 private val numberBig = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 22.sp,
-    color = primary
+    color = primary,
+    platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
 internal val typography = Typography(
@@ -118,7 +140,9 @@ data class ExtendedTypography(
     val h3: TextStyle,
     val h4: TextStyle,
     val body1: TextStyle,
+    val body1Bold: TextStyle,
     val body2: TextStyle,
+    val body2Bold: TextStyle,
     val body3: TextStyle,
     val cta: TextStyle,
     val labelSmall: TextStyle,
@@ -132,7 +156,9 @@ val extendedTypography = ExtendedTypography(
     h3 = h3,
     h4 = h4,
     body1 = body1,
+    body1Bold = body1Bold,
     body2 = body2,
+    body2Bold = body2Bold,
     body3 = body3,
     cta = cta,
     labelSmall = labelSmall,

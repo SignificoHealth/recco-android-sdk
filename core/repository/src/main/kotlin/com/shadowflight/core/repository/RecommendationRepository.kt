@@ -2,10 +2,16 @@ package com.shadowflight.core.repository
 
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.model.recommendation.ContentId
+import com.shadowflight.core.model.recommendation.Rating
+import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.network.http.unwrap
 import com.shadowflight.core.openapi.api.RecommendationApi
 import com.shadowflight.core.openapi.model.AppUserRecommendationDTO
 import com.shadowflight.core.openapi.model.TopicDTO
+import com.shadowflight.core.openapi.model.UpdateBookmarkDTO
+import com.shadowflight.core.openapi.model.UpdateRatingDTO
+import com.shadowflight.core.openapi.model.UpdateStatusDTO
+import com.shadowflight.core.repository.mapper.asDTO
 import com.shadowflight.core.repository.mapper.asEntity
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -145,4 +151,38 @@ class RecommendationRepository @Inject constructor(
     suspend fun getArticle(contentId: ContentId): Article =
         api.getArticle(itemId = contentId.itemId, catalogId = contentId.catalogId)
             .unwrap().asEntity()
+
+    suspend fun setBookmarkRecommendation(contentId: ContentId, bookmarked: Boolean) {
+        api.setBookmark(
+            UpdateBookmarkDTO(
+                contentId = contentId.asDTO(),
+                bookmarked = bookmarked,
+                contentType = UpdateBookmarkDTO.ContentType.ARTICLES
+            )
+        )
+    }
+
+    suspend fun setRecommendationRating(contentId: ContentId, rating: Rating) {
+        api.setRating(
+            UpdateRatingDTO(
+                contentId = contentId.asDTO(),
+                contentType = UpdateRatingDTO.ContentType.ARTICLES,
+                rating = when (rating) {
+                    Rating.LIKE -> UpdateRatingDTO.Rating.LIKE
+                    Rating.DISLIKE -> UpdateRatingDTO.Rating.DISLIKE
+                    Rating.NOT_RATED -> UpdateRatingDTO.Rating.NOT_RATED
+                }
+            )
+        )
+    }
+
+    suspend fun setRecommendationAsViewed(contentId: ContentId) {
+        api.setStatus(
+            UpdateStatusDTO(
+                contentId = contentId.asDTO(),
+                contentType = UpdateStatusDTO.ContentType.ARTICLES,
+                status = UpdateStatusDTO.Status.VIEWED
+            )
+        )
+    }
 }
