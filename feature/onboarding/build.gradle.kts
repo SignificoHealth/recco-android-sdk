@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.onboarding"
+    namespace = "com.shadowflight.core.onboarding"
 }

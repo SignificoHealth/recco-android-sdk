@@ -1,4 +1,4 @@
-package com.shadowflight.onboarding
+package com.shadowflight.core.onboarding
 
 import androidx.compose.runtime.Composable
 
