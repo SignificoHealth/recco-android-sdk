@@ -1,4 +1,4 @@
-package com.shadowflight.repository.mapper
+package com.shadowflight.core.repository.mapper
 
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.openapi.model.TopicDTO

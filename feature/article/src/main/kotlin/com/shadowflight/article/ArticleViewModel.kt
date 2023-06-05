@@ -7,7 +7,7 @@ import com.shadowflight.article.navigation.idArg
 import com.shadowflight.core.logger.Logger
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.model.recommendation.ContentId
-import com.shadowflight.repository.RecommendationRepository
+import com.shadowflight.core.repository.RecommendationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

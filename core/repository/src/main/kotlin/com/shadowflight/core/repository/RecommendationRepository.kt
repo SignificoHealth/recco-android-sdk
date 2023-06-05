@@ -1,4 +1,4 @@
-package com.shadowflight.repository
+package com.shadowflight.core.repository
 
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.model.recommendation.ContentId
@@ -6,7 +6,7 @@ import com.shadowflight.core.network.http.unwrap
 import com.shadowflight.core.openapi.api.RecommendationApi
 import com.shadowflight.core.openapi.model.AppUserRecommendationDTO
 import com.shadowflight.core.openapi.model.TopicDTO
-import com.shadowflight.repository.mapper.asEntity
+import com.shadowflight.core.repository.mapper.asEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -1,4 +1,4 @@
-package com.shadowflight.repository
+package com.shadowflight.core.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
