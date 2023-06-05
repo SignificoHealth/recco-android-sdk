@@ -1,4 +1,4 @@
-package com.shadowflight.network.http
+package com.shadowflight.core.network.http
 
 import retrofit2.Response
 

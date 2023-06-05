@@ -1,11 +1,11 @@
-package com.shadowflight.network.di
+package com.shadowflight.core.network.di
 
 import com.shadowflight.core.logger.Logger
-import com.shadowflight.network.http.interceptors.AddHeadersInterceptor
-import com.shadowflight.network.http.ApiEndpoint
-import com.shadowflight.network.http.interceptors.AuthInterceptor
-import com.shadowflight.network.http.interceptors.ErrorInterceptor
-import com.shadowflight.network.moshi.OffsetDateTimeAdapter
+import com.shadowflight.core.network.http.interceptors.AddHeadersInterceptor
+import com.shadowflight.core.network.http.ApiEndpoint
+import com.shadowflight.core.network.http.interceptors.AuthInterceptor
+import com.shadowflight.core.network.http.interceptors.ErrorInterceptor
+import com.shadowflight.core.network.moshi.OffsetDateTimeAdapter
 import com.shadowflight.openapi.api.AppUserApi
 import com.shadowflight.openapi.api.AuthenticationApi
 import com.shadowflight.openapi.api.FeedApi

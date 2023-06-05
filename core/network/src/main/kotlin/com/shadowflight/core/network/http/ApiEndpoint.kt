@@ -1,4 +1,4 @@
-package com.shadowflight.network.http
+package com.shadowflight.core.network.http
 
 enum class ApiEndpoint(
     val baseUrl: String

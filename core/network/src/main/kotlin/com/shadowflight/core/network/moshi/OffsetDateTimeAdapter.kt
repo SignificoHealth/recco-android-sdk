@@ -1,4 +1,4 @@
-package com.shadowflight.network.moshi
+package com.shadowflight.core.network.moshi
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson

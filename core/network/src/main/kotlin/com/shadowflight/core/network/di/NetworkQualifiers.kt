@@ -1,4 +1,4 @@
-package com.shadowflight.network.di
+package com.shadowflight.core.network.di
 
 import javax.inject.Qualifier
 

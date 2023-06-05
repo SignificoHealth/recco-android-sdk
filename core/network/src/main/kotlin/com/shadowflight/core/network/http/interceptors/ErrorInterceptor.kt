@@ -1,4 +1,4 @@
-package com.shadowflight.network.http.interceptors
+package com.shadowflight.core.network.http.interceptors
 
 import com.shadowflight.core.model.exceptions.ApiErrorException
 import com.shadowflight.core.model.exceptions.InternalServerErrorException

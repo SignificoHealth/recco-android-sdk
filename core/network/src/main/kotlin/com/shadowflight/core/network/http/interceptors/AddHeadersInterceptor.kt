@@ -1,4 +1,4 @@
-package com.shadowflight.network.http.interceptors
+package com.shadowflight.core.network.http.interceptors
 
 import okhttp3.Interceptor
 import okhttp3.Response
