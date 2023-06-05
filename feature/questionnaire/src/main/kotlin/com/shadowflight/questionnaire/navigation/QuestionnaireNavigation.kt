@@ -8,7 +8,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.questionnaire.QuestionnaireRoute
-import com.shadowflight.uicommons.extensions.asSerializable
+import com.shadowflight.core.ui.extensions.asSerializable
 
 private const val topicArg = "topic"
 

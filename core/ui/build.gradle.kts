@@ -5,7 +5,7 @@ plugins {
 
 android {
     // Changed namespace due to inconsistency building release variant
-    namespace = "com.shadowflight.uicommons"
+    namespace = "com.shadowflight.core.ui"
 }
 
 dependencies {

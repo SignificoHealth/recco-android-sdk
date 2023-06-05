@@ -7,7 +7,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.shadowflight.article.ArticleRoute
 import com.shadowflight.core.model.recommendation.ContentId
-import com.shadowflight.uicommons.navigation.navigation.ContentIdNavType
+import com.shadowflight.core.ui.navigation.ContentIdNavType
 
 internal const val idArg = "id"
 const val ArticleGraph = "article_graph/{$idArg}"

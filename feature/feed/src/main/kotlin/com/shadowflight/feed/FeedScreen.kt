@@ -42,12 +42,13 @@ import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Recommendation
 import com.shadowflight.core.model.recommendation.Status
-import com.shadowflight.uicommons.R
-import com.shadowflight.uicommons.components.AppTopBar
-import com.shadowflight.uicommons.preview.SectionAndRecommendationPreviewProvider
-import com.shadowflight.uicommons.theme.AppSpacing
-import com.shadowflight.uicommons.theme.AppTheme
-import com.shadowflight.uicommons.extensions.viewedOverlay
+import com.shadowflight.core.ui.components.AppTopBar
+import com.shadowflight.core.ui.R
+import com.shadowflight.core.ui.components.AppTopBar
+import com.shadowflight.core.ui.preview.SectionAndRecommendationPreviewProvider
+import com.shadowflight.core.ui.theme.AppSpacing
+import com.shadowflight.core.ui.theme.AppTheme
+import com.shadowflight.core.ui.extensions.viewedOverlay
 
 @Composable
 fun FeedRoute(
