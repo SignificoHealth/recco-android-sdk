@@ -105,7 +105,7 @@ fun ToastContent(
                 contentDescription = null
             )
 
-            Spacer(modifier = Modifier.width(AppSpacing.dp_18))
+            Spacer(modifier = Modifier.width(AppSpacing.dp_16))
 
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -115,7 +115,7 @@ fun ToastContent(
                     style = titleStyle
                 )
 
-                Spacer(modifier = Modifier.height(AppSpacing.dp_4))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
                     text = data.actionLabel ?: stringResource(R.string.common_error_desc),
