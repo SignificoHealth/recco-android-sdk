@@ -1,4 +1,4 @@
-package com.shadowflight.persistence
+package com.shadowflight.core.persistence
 
 import android.content.Context
 import androidx.core.content.edit

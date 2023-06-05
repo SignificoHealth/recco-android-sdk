@@ -10,7 +10,7 @@ import com.shadowflight.core.openapi.api.AppUserApi
 import com.shadowflight.core.openapi.api.AuthenticationApi
 import com.shadowflight.core.openapi.api.FeedApi
 import com.shadowflight.core.openapi.api.RecommendationApi
-import com.shadowflight.persistence.AuthCredentials
+import com.shadowflight.core.persistence.AuthCredentials
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides

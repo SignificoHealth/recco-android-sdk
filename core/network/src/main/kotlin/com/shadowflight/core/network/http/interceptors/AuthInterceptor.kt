@@ -4,7 +4,7 @@ import com.shadowflight.core.model.authentication.PAT
 import com.shadowflight.core.model.authentication.isTokenExpired
 import com.shadowflight.core.network.http.unwrap
 import com.shadowflight.core.openapi.api.AuthenticationApi
-import com.shadowflight.persistence.AuthCredentials
+import com.shadowflight.core.persistence.AuthCredentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
