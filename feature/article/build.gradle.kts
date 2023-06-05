@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.article"
+    namespace = "com.shadowflight.feature.article"
 }
 
 dependencies {

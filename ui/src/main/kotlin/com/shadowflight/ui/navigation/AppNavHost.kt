@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.shadowflight.article.navigation.articleGraph
-import com.shadowflight.article.navigation.navigateToArticle
+import com.shadowflight.core.article.navigation.articleGraph
+import com.shadowflight.core.article.navigation.navigateToArticle
 import com.shadowflight.feed.navigation.FeedGraph
 import com.shadowflight.feed.navigation.feedGraph
 import com.shadowflight.onboarding.navigation.onboardingGraph
