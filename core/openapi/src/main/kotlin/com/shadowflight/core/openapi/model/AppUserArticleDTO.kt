@@ -13,6 +13,7 @@
 
 package com.shadowflight.core.openapi.model
 
+import com.shadowflight.core.openapi.model.ContentIdDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -34,10 +35,10 @@ data class AppUserArticleDTO(
     val id: ContentIdDTO,
 
     @Json(name = "rating")
-    val rating: Rating,
+    val rating: AppUserArticleDTO.Rating,
 
     @Json(name = "status")
-    val status: Status,
+    val status: AppUserArticleDTO.Status,
 
     @Json(name = "headline")
     val headline: kotlin.String,

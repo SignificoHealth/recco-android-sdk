@@ -13,6 +13,7 @@
 
 package com.shadowflight.core.openapi.model
 
+import com.shadowflight.core.openapi.model.ContentIdDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -35,13 +36,13 @@ data class AppUserRecommendationDTO(
     val id: ContentIdDTO,
 
     @Json(name = "type")
-    val type: Type,
+    val type: AppUserRecommendationDTO.Type,
 
     @Json(name = "rating")
-    val rating: Rating,
+    val rating: AppUserRecommendationDTO.Rating,
 
     @Json(name = "status")
-    val status: Status,
+    val status: AppUserRecommendationDTO.Status,
 
     @Json(name = "bookmarked")
     val bookmarked: kotlin.Boolean,

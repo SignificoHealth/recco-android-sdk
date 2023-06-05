@@ -15,6 +15,9 @@ package com.shadowflight.core.openapi.api
 
 import retrofit2.http.*
 import retrofit2.Response
+import okhttp3.RequestBody
+import com.squareup.moshi.Json
+import com.shadowflight.core.openapi.model.ApiErrorDTO
 import com.shadowflight.core.openapi.model.QuestionnaireAnswersDTO
 import com.shadowflight.core.openapi.model.QuestionnaireDTO
 import com.shadowflight.core.openapi.model.TopicDTO

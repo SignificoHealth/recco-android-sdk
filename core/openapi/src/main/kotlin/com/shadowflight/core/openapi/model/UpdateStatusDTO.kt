@@ -13,6 +13,7 @@
 
 package com.shadowflight.core.openapi.model
 
+import com.shadowflight.core.openapi.model.ContentIdDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -30,10 +31,10 @@ data class UpdateStatusDTO(
     val contentId: ContentIdDTO,
 
     @Json(name = "contentType")
-    val contentType: ContentType,
+    val contentType: UpdateStatusDTO.ContentType,
 
     @Json(name = "status")
-    val status: Status
+    val status: UpdateStatusDTO.Status
 ) {
     /**
      * 

@@ -13,6 +13,7 @@
 
 package com.shadowflight.core.openapi.model
 
+import com.shadowflight.core.openapi.model.ContentIdDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -30,7 +31,7 @@ data class UpdateBookmarkDTO(
     val contentId: ContentIdDTO,
 
     @Json(name = "contentType")
-    val contentType: ContentType,
+    val contentType: UpdateBookmarkDTO.ContentType,
 
     @Json(name = "bookmarked")
     val bookmarked: kotlin.Boolean

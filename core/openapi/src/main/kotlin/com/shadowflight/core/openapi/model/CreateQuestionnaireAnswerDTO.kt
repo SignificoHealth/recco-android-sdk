@@ -31,7 +31,7 @@ data class CreateQuestionnaireAnswerDTO(
     val questionId: kotlin.String,
 
     @Json(name = "type")
-    val type: Type,
+    val type: CreateQuestionnaireAnswerDTO.Type,
 
     @Json(name = "multichoice")
     val multichoice: kotlin.collections.List<kotlin.Int>? = null,

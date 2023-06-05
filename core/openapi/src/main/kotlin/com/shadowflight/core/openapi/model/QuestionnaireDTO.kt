@@ -13,6 +13,7 @@
 
 package com.shadowflight.core.openapi.model
 
+import com.shadowflight.core.openapi.model.QuestionDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

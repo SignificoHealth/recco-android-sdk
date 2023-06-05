@@ -33,7 +33,7 @@ data class NumericQuestionDTO(
     val minValue: kotlin.Int,
 
     @Json(name = "format")
-    val format: Format
+    val format: NumericQuestionDTO.Format
 ) {
     /**
      * 

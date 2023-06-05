@@ -6,8 +6,8 @@
   "enumPropertyNaming": "UPPERCASE",
   "sortModelPropertiesByRequiredFlag": "true",
   "sortParamsByRequiredFlag": "true",
-  "packageName": "com.shadowflight.openapi",
-  "apiPackage": "com.shadowflight.openapi.api",
-  "modelPackage": "com.shadowflight.openapi.model",
+  "packageName": "com.shadowflight.core.openapi",
+  "apiPackage": "com.shadowflight.core.openapi.api",
+  "modelPackage": "com.shadowflight.core.openapi.model",
   "modelNameSuffix": "DTO"
 }

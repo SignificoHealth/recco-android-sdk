@@ -27,7 +27,7 @@ import com.squareup.moshi.JsonClass
 data class ApiErrorDTO(
 
     @Json(name = "errorCode")
-    val errorCode: ErrorCode,
+    val errorCode: ApiErrorDTO.ErrorCode,
 
     @Json(name = "message")
     val message: kotlin.String,
