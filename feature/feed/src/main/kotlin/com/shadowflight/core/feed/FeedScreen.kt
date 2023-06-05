@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -70,15 +69,17 @@ fun FeedRoute(
         isEmpty = uiState.feedSectionAndRecommendations.isEmpty(),
         retry = { viewModel.onUserInteract(FeedUserInteract.Retry) },
         emptyContent = {
-            AppEmptyContent(
-                emptyState = EmptyState(
-                    titleRes = R.string.no_content_available_title_default,
-                    drawableRes = R.drawable.bg_people_1,
-                    ctaIconRes = R.drawable.ic_retry,
-                    ctaTextRes = R.string.reload,
-                    onCtaClick = { viewModel.onUserInteract(FeedUserInteract.Retry) }
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center
+            ) {
+                AppEmptyContent(
+                    emptyState = EmptyState(
+                        titleRes = R.string.no_content_available_title_default,
+                        drawableRes = R.drawable.bg_people_1,
+                    )
                 )
-            )
+            }
         }
     ) {
         FeedScreen(
