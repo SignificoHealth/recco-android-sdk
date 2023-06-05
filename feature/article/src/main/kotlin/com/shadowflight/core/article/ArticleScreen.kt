@@ -1,4 +1,4 @@
-package com.shadowflight.article
+package com.shadowflight.core.article
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

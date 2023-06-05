@@ -1,4 +1,4 @@
-package com.shadowflight.feed
+package com.shadowflight.core.feed
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

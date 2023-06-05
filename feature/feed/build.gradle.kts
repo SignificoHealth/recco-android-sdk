@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.feed"
+    namespace = "com.shadowflight.feature.feed"
 }
 
 dependencies {

@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.shadowflight.feed
+package com.shadowflight.core.feed
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -44,7 +44,6 @@ import com.shadowflight.core.model.recommendation.Recommendation
 import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.ui.components.AppTopBar
 import com.shadowflight.core.ui.R
-import com.shadowflight.core.ui.components.AppTopBar
 import com.shadowflight.core.ui.preview.SectionAndRecommendationPreviewProvider
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme

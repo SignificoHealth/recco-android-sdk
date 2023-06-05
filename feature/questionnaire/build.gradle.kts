@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.questionnaire"
+    namespace = "com.shadowflight.core.questionnaire"
 }
 
 dependencies {
