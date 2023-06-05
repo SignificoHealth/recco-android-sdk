@@ -3,16 +3,28 @@ package com.shadowflight.core.feed
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.logger.Logger
-import com.shadowflight.core.model.feed.FeedSectionType.*
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
+import com.shadowflight.core.model.feed.FeedSectionType.MOST_POPULAR
+import com.shadowflight.core.model.feed.FeedSectionType.NEW_CONTENT
+import com.shadowflight.core.model.feed.FeedSectionType.NUTRITION_EXPLORE
+import com.shadowflight.core.model.feed.FeedSectionType.NUTRITION_RECOMMENDATIONS
+import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE
+import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS
+import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_WELLBEING_EXPLORE
+import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_WELLBEING_RECOMMENDATIONS
+import com.shadowflight.core.model.feed.FeedSectionType.PREFERRED_RECOMMENDATIONS
+import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_EXPLORE
+import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_RECOMMENDATIONS
+import com.shadowflight.core.model.feed.FeedSectionType.STARTING_RECOMMENDATIONS
 import com.shadowflight.core.repository.FeedRepository
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.extensions.combine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +34,7 @@ class FeedViewModel @Inject constructor(
     private val recommendationRepository: RecommendationRepository,
     private val logger: Logger
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(FeedViewUIState(isLoading = true))
+    private val _viewState = MutableStateFlow(FeedViewUIState())
     val viewState: Flow<FeedViewUIState> = _viewState
 
     init {
@@ -31,7 +43,33 @@ class FeedViewModel @Inject constructor(
 
     fun onUserInteract(userInteract: FeedUserInteract) {
         when (userInteract) {
-            FeedUserInteract.Retry -> initialLoadSubscribe()
+            FeedUserInteract.Retry -> retry()
+        }
+    }
+
+    private fun retry() {
+        viewModelScope.launch {
+            _viewState.value = _viewState.value.copy(error = null, isLoading = true)
+
+            runCatching {
+                feedRepository.reloadFeed()
+                recommendationRepository.reloadTailoredPhysicalActivity()
+                recommendationRepository.reloadExplorePhysicalActivity()
+                recommendationRepository.reloadTailoredNutrition()
+                recommendationRepository.reloadExploreNutrition()
+                recommendationRepository.reloadTailoredPhysicalWellbeing()
+                recommendationRepository.reloadExplorePhysicalWellbeing()
+                recommendationRepository.reloadTailoredSleep()
+                recommendationRepository.reloadExploreSleep()
+                recommendationRepository.reloadPreferredRecommendations()
+                recommendationRepository.reloadMostPopular()
+                recommendationRepository.reloadNewestContent()
+                recommendationRepository.reloadStarting()
+            }.onFailure {
+                _viewState.value = _viewState.value.copy(error = it, isLoading = false)
+            }.onSuccess {
+                _viewState.value = _viewState.value.copy(error = null, isLoading = false)
+            }
         }
     }
 
@@ -60,40 +98,44 @@ class FeedViewModel @Inject constructor(
                 mostPopular,
                 newestContent,
                 starting ->
-                FeedViewUIState(
-                    isLoading = false,
-                    isError = false,
-                    feedSectionAndRecommendations = feedSections.map { feedSection ->
-                        FeedSectionAndRecommendations(
-                            feedSection = feedSection,
-                            recommendations = if (feedSection.locked) {
-                                emptyList()
-                            } else {
-                                when (feedSection.type) {
-                                    PHYSICAL_ACTIVITY_RECOMMENDATIONS -> tailoredPhysicalActivity
-                                    NUTRITION_RECOMMENDATIONS -> tailoredNutrition
-                                    PHYSICAL_WELLBEING_RECOMMENDATIONS -> tailoredPhysicalWellbeing
-                                    SLEEP_RECOMMENDATIONS -> tailoredSleep
-                                    PREFERRED_RECOMMENDATIONS -> preferredRecommendations
-                                    MOST_POPULAR -> mostPopular
-                                    NEW_CONTENT -> newestContent
-                                    PHYSICAL_ACTIVITY_EXPLORE -> explorePhysicalActivity
-                                    NUTRITION_EXPLORE -> exploreNutrition
-                                    PHYSICAL_WELLBEING_EXPLORE -> explorePhysicalWellbeing
-                                    SLEEP_EXPLORE -> exploreSleep
-                                    STARTING_RECOMMENDATIONS -> starting
-                                }
+                feedSections.map { feedSection ->
+                    FeedSectionAndRecommendations(
+                        feedSection = feedSection,
+                        recommendations = if (feedSection.locked) {
+                            emptyList()
+                        } else {
+                            when (feedSection.type) {
+                                PHYSICAL_ACTIVITY_RECOMMENDATIONS -> tailoredPhysicalActivity
+                                NUTRITION_RECOMMENDATIONS -> tailoredNutrition
+                                PHYSICAL_WELLBEING_RECOMMENDATIONS -> tailoredPhysicalWellbeing
+                                SLEEP_RECOMMENDATIONS -> tailoredSleep
+                                PREFERRED_RECOMMENDATIONS -> preferredRecommendations
+                                MOST_POPULAR -> mostPopular
+                                NEW_CONTENT -> newestContent
+                                PHYSICAL_ACTIVITY_EXPLORE -> explorePhysicalActivity
+                                NUTRITION_EXPLORE -> exploreNutrition
+                                PHYSICAL_WELLBEING_EXPLORE -> explorePhysicalWellbeing
+                                SLEEP_EXPLORE -> exploreSleep
+                                STARTING_RECOMMENDATIONS -> starting
                             }
-                        )
-                    }.filter {
-                        it.recommendations.isNotEmpty() || it.feedSection.locked
-                    }
+                        }
+                    )
+                }.filter {
+                    it.recommendations.isNotEmpty() || it.feedSection.locked
+                }
+            }.onStart {
+                _viewState.value = _viewState.value.copy(error = null, isLoading = true)
+            }.onCompletion { error ->
+                _viewState.value = _viewState.value.copy(error = error, isLoading = false)
+                error?.let {
+                    logger.e(it)
+                }
+            }.collectLatest { feedSectionAndRecommendations ->
+                _viewState.value = _viewState.value.copy(
+                    isLoading = false,
+                    error = null,
+                    feedSectionAndRecommendations = feedSectionAndRecommendations
                 )
-            }.catch {
-                emit(FeedViewUIState(isError = true, isLoading = false))
-                logger.e(it)
-            }.collectLatest { uiState ->
-                _viewState.emit(uiState)
             }
         }
     }
@@ -101,6 +143,6 @@ class FeedViewModel @Inject constructor(
 
 data class FeedViewUIState(
     val isLoading: Boolean = false,
-    val isError: Boolean = false,
+    val error: Throwable? = null,
     val feedSectionAndRecommendations: List<FeedSectionAndRecommendations> = emptyList()
 )
