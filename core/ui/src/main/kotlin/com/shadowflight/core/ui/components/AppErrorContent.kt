@@ -1,6 +1,7 @@
 package com.shadowflight.core.ui.components
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.verticalScroll
@@ -27,7 +28,8 @@ internal fun AppErrorContent(
                 scrollState?.let { state ->
                     it.verticalScroll(state)
                 } ?: it
-            }
+            },
+        verticalArrangement = Arrangement.Center
     ) {
         AppEmptyContent(
             emptyState = EmptyState(
