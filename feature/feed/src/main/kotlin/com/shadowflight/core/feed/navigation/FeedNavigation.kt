@@ -1,9 +1,9 @@
-package com.shadowflight.feed.navigation
+package com.shadowflight.core.feed.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.shadowflight.feed.FeedRoute
+import com.shadowflight.core.feed.FeedRoute
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
 

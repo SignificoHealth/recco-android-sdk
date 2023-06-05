@@ -1,4 +1,4 @@
-package com.shadowflight.feed
+package com.shadowflight.core.feed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
