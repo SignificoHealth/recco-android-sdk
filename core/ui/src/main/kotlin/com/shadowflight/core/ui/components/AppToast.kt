@@ -114,7 +114,7 @@ fun ToastContent(
                     style = titleStyle
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(AppSpacing.dp_8))
 
                 Text(
                     text = data.actionLabel ?: stringResource(R.string.common_error_desc),
