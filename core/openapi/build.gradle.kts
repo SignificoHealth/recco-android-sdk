@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.openapi"
+    namespace = "com.shadowflight.core.openapi"
 }
 
 dependencies {
