@@ -1,6 +1,6 @@
 package com.shadowflight.network.di
 
-import com.shadowflight.logger.Logger
+import com.shadowflight.core.logger.Logger
 import com.shadowflight.network.http.interceptors.AddHeadersInterceptor
 import com.shadowflight.network.http.ApiEndpoint
 import com.shadowflight.network.http.interceptors.AuthInterceptor

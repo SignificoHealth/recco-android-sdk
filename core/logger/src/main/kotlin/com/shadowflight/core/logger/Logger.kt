@@ -1,4 +1,4 @@
-package com.shadowflight.logger
+package com.shadowflight.core.logger
 
 import android.util.Log
 import javax.inject.Inject
