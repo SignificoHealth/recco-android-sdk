@@ -22,6 +22,7 @@ import com.shadowflight.core.ui.extensions.combine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
@@ -43,32 +44,29 @@ class FeedViewModel @Inject constructor(
 
     fun onUserInteract(userInteract: FeedUserInteract) {
         when (userInteract) {
-            FeedUserInteract.Retry -> retry()
+            FeedUserInteract.Retry -> initialLoadSubscribe()
+            FeedUserInteract.Refresh -> refresh()
         }
     }
 
-    private fun retry() {
+    private fun refresh() {
         viewModelScope.launch {
             _viewState.value = _viewState.value.copy(error = null, isLoading = true)
 
-            runCatching {
-                feedRepository.reloadFeed()
-                recommendationRepository.reloadTailoredPhysicalActivity()
-                recommendationRepository.reloadExplorePhysicalActivity()
-                recommendationRepository.reloadTailoredNutrition()
-                recommendationRepository.reloadExploreNutrition()
-                recommendationRepository.reloadTailoredPhysicalWellbeing()
-                recommendationRepository.reloadExplorePhysicalWellbeing()
-                recommendationRepository.reloadTailoredSleep()
-                recommendationRepository.reloadExploreSleep()
-                recommendationRepository.reloadPreferredRecommendations()
-                recommendationRepository.reloadMostPopular()
-                recommendationRepository.reloadNewestContent()
-                recommendationRepository.reloadStarting()
-            }.onFailure {
-                _viewState.value = _viewState.value.copy(error = it, isLoading = false)
-            }.onSuccess {
-                _viewState.value = _viewState.value.copy(error = null, isLoading = false)
+            feedRepository.reloadFeed()
+            recommendationRepository.apply {
+                reloadTailoredPhysicalActivity()
+                reloadExplorePhysicalActivity()
+                reloadTailoredNutrition()
+                reloadExploreNutrition()
+                reloadTailoredPhysicalWellbeing()
+                reloadExplorePhysicalWellbeing()
+                reloadTailoredSleep()
+                reloadExploreSleep()
+                reloadPreferredRecommendations()
+                reloadMostPopular()
+                reloadNewestContent()
+                reloadStarting()
             }
         }
     }
@@ -125,11 +123,9 @@ class FeedViewModel @Inject constructor(
                 }
             }.onStart {
                 _viewState.value = _viewState.value.copy(error = null, isLoading = true)
-            }.onCompletion { error ->
+            }.catch { error ->
                 _viewState.value = _viewState.value.copy(error = error, isLoading = false)
-                error?.let {
-                    logger.e(it)
-                }
+                logger.e(error)
             }.collectLatest { feedSectionAndRecommendations ->
                 _viewState.value = _viewState.value.copy(
                     isLoading = false,

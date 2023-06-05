@@ -68,6 +68,7 @@ fun FeedRoute(
         throwable = uiState.error,
         isEmpty = uiState.feedSectionAndRecommendations.isEmpty(),
         retry = { viewModel.onUserInteract(FeedUserInteract.Retry) },
+        refresh = { viewModel.onUserInteract(FeedUserInteract.Refresh) },
         emptyContent = {
             Column(
                 modifier = Modifier.weight(1f),
