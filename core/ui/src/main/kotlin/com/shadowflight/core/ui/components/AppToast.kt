@@ -129,7 +129,7 @@ fun ToastContent(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewAppToastContent() {
+private fun Preview() {
     AppTheme {
         ToastContent(data = object : SnackbarData {
             override val actionLabel = "Something went wrong."
