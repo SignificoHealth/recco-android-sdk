@@ -2,9 +2,9 @@ package com.shadowflight.uicommons.extensions
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.shadowflight.model.exceptions.InternalServerErrorException
-import com.shadowflight.model.exceptions.NoConnectException
-import com.shadowflight.model.exceptions.ServiceUnavailableException
+import com.shadowflight.core.model.exceptions.InternalServerErrorException
+import com.shadowflight.core.model.exceptions.NoConnectException
+import com.shadowflight.core.model.exceptions.ServiceUnavailableException
 import com.shadowflight.uicommons.R
 
 @StringRes

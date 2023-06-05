@@ -1,4 +1,4 @@
-package com.shadowflight.model.feed
+package com.shadowflight.core.model.feed
 
 enum class Topic(val id: Int) {
     PHYSICAL_ACTIVITY(1),

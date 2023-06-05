@@ -1,4 +1,4 @@
-package com.shadowflight.model.authentication
+package com.shadowflight.core.model.authentication
 
 import java.time.OffsetDateTime
 

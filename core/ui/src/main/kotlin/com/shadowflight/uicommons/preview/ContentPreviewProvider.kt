@@ -1,6 +1,6 @@
 package com.shadowflight.uicommons.preview
 
-import com.shadowflight.model.recommendation.ContentId
+import com.shadowflight.core.model.recommendation.ContentId
 import java.util.UUID
 
 class ContentPreviewProvider {

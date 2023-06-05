@@ -1,8 +1,8 @@
 package com.shadowflight.repository.mapper
 
-import com.shadowflight.model.recommendation.Rating
-import com.shadowflight.model.recommendation.Recommendation
-import com.shadowflight.model.recommendation.Status
+import com.shadowflight.core.model.recommendation.Rating
+import com.shadowflight.core.model.recommendation.Recommendation
+import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.openapi.model.AppUserRecommendationDTO
 
 internal fun AppUserRecommendationDTO.asEntity() = Recommendation(

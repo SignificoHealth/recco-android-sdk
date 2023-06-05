@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.article.navigation.idArg
 import com.shadowflight.core.logger.Logger
-import com.shadowflight.model.recommendation.Article
-import com.shadowflight.model.recommendation.ContentId
+import com.shadowflight.core.model.recommendation.Article
+import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.repository.RecommendationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

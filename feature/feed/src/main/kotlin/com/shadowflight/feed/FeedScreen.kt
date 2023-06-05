@@ -37,11 +37,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.shadowflight.model.feed.FeedSectionAndRecommendations
-import com.shadowflight.model.feed.Topic
-import com.shadowflight.model.recommendation.ContentId
-import com.shadowflight.model.recommendation.Recommendation
-import com.shadowflight.model.recommendation.Status
+import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
+import com.shadowflight.core.model.feed.Topic
+import com.shadowflight.core.model.recommendation.ContentId
+import com.shadowflight.core.model.recommendation.Recommendation
+import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.uicommons.R
 import com.shadowflight.uicommons.components.AppTopBar
 import com.shadowflight.uicommons.preview.SectionAndRecommendationPreviewProvider

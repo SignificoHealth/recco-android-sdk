@@ -4,7 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.core.os.BundleCompat
 import androidx.navigation.NavType
-import com.shadowflight.model.recommendation.ContentId
+import com.shadowflight.core.model.recommendation.ContentId
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

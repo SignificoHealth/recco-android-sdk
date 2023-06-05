@@ -1,7 +1,7 @@
 package com.shadowflight.repository
 
-import com.shadowflight.model.recommendation.Article
-import com.shadowflight.model.recommendation.ContentId
+import com.shadowflight.core.model.recommendation.Article
+import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.network.http.unwrap
 import com.shadowflight.openapi.api.RecommendationApi
 import com.shadowflight.openapi.model.AppUserRecommendationDTO

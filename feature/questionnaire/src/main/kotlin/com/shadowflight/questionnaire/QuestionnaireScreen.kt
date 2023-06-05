@@ -1,7 +1,7 @@
 package com.shadowflight.questionnaire
 
 import androidx.compose.runtime.Composable
-import com.shadowflight.model.feed.Topic
+import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.uicommons.components.AppTopBar
 
 @Composable

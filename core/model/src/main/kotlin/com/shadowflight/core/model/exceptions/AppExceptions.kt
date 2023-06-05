@@ -1,4 +1,4 @@
-package com.shadowflight.model.exceptions
+package com.shadowflight.core.model.exceptions
 
 import java.io.IOException
 import java.net.HttpURLConnection

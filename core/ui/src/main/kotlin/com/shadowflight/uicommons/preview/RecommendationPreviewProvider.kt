@@ -1,9 +1,9 @@
 package com.shadowflight.uicommons.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.shadowflight.model.recommendation.Rating
-import com.shadowflight.model.recommendation.Recommendation
-import com.shadowflight.model.recommendation.Status
+import com.shadowflight.core.model.recommendation.Rating
+import com.shadowflight.core.model.recommendation.Recommendation
+import com.shadowflight.core.model.recommendation.Status
 
 class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
     override val values get() = sequenceOf(data)

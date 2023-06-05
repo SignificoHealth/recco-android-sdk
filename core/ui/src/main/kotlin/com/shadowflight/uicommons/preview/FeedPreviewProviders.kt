@@ -1,10 +1,10 @@
 package com.shadowflight.uicommons.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.shadowflight.model.feed.FeedSection
-import com.shadowflight.model.feed.FeedSectionAndRecommendations
-import com.shadowflight.model.feed.FeedSectionType
-import com.shadowflight.model.feed.Topic
+import com.shadowflight.core.model.feed.FeedSection
+import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
+import com.shadowflight.core.model.feed.FeedSectionType
+import com.shadowflight.core.model.feed.Topic
 
 class SectionAndRecommendationPreviewProvider :
     PreviewParameterProvider<List<FeedSectionAndRecommendations>> {

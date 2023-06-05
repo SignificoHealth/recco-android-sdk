@@ -1,4 +1,4 @@
-package com.shadowflight.model.recommendation
+package com.shadowflight.core.model.recommendation
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

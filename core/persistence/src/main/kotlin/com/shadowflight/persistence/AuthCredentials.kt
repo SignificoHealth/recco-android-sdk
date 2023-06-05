@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import com.shadowflight.model.SDKConfig
-import com.shadowflight.model.authentication.PAT
+import com.shadowflight.core.model.SDKConfig
+import com.shadowflight.core.model.authentication.PAT
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton

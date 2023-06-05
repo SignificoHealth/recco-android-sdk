@@ -1,4 +1,4 @@
-package com.shadowflight.model.recommendation
+package com.shadowflight.core.model.recommendation
 
 enum class Rating {
     LIKE,

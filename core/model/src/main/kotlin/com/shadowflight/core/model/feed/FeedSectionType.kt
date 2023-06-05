@@ -1,4 +1,4 @@
-package com.shadowflight.model.feed
+package com.shadowflight.core.model.feed
 
 enum class FeedSectionType {
     PHYSICAL_ACTIVITY_RECOMMENDATIONS, 

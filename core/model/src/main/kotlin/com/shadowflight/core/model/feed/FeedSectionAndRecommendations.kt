@@ -1,6 +1,6 @@
-package com.shadowflight.model.feed
+package com.shadowflight.core.model.feed
 
-import com.shadowflight.model.recommendation.Recommendation
+import com.shadowflight.core.model.recommendation.Recommendation
 
 data class FeedSectionAndRecommendations(
     val feedSection: FeedSection,

@@ -1,6 +1,6 @@
 package com.shadowflight.repository
 
-import com.shadowflight.model.feed.FeedSection
+import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.network.http.unwrap
 import com.shadowflight.openapi.api.FeedApi
 import com.shadowflight.openapi.model.FeedSectionDTO

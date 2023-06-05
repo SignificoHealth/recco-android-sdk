@@ -1,9 +1,8 @@
 package com.shadowflight.repository.mapper
 
-import com.shadowflight.model.feed.FeedSection
-import com.shadowflight.model.feed.FeedSectionType
+import com.shadowflight.core.model.feed.FeedSection
+import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.openapi.model.FeedSectionDTO
-import com.shadowflight.openapi.model.TopicDTO
 
 internal fun FeedSectionDTO.asEntity() = FeedSection(
     type = when (type) {

@@ -1,4 +1,4 @@
-package com.shadowflight.model.recommendation
+package com.shadowflight.core.model.recommendation
 
 data class Article(
     val id: ContentId,

@@ -3,8 +3,8 @@ package com.shadowflight.feed
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.logger.Logger
-import com.shadowflight.model.feed.FeedSectionType.*
-import com.shadowflight.model.feed.*
+import com.shadowflight.core.model.feed.FeedSectionType.*
+import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
 import com.shadowflight.repository.FeedRepository
 import com.shadowflight.repository.RecommendationRepository
 import com.shadowflight.uicommons.extensions.combine
