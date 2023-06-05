@@ -11,7 +11,7 @@
     "UnusedImport"
 )
 
-package com.shadowflight.openapi.model
+package com.shadowflight.core.openapi.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -33,7 +33,7 @@ data class NumericQuestionDTO(
     val minValue: kotlin.Int,
 
     @Json(name = "format")
-    val format: NumericQuestionDTO.Format
+    val format: Format
 ) {
     /**
      * 

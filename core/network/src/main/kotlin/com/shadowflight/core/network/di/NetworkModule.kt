@@ -6,10 +6,10 @@ import com.shadowflight.core.network.http.ApiEndpoint
 import com.shadowflight.core.network.http.interceptors.AuthInterceptor
 import com.shadowflight.core.network.http.interceptors.ErrorInterceptor
 import com.shadowflight.core.network.moshi.OffsetDateTimeAdapter
-import com.shadowflight.openapi.api.AppUserApi
-import com.shadowflight.openapi.api.AuthenticationApi
-import com.shadowflight.openapi.api.FeedApi
-import com.shadowflight.openapi.api.RecommendationApi
+import com.shadowflight.core.openapi.api.AppUserApi
+import com.shadowflight.core.openapi.api.AuthenticationApi
+import com.shadowflight.core.openapi.api.FeedApi
+import com.shadowflight.core.openapi.api.RecommendationApi
 import com.shadowflight.persistence.AuthCredentials
 import com.squareup.moshi.Moshi
 import dagger.Module

@@ -3,7 +3,7 @@ package com.shadowflight.core.network.http.interceptors
 import com.shadowflight.core.model.authentication.PAT
 import com.shadowflight.core.model.authentication.isTokenExpired
 import com.shadowflight.core.network.http.unwrap
-import com.shadowflight.openapi.api.AuthenticationApi
+import com.shadowflight.core.openapi.api.AuthenticationApi
 import com.shadowflight.persistence.AuthCredentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking

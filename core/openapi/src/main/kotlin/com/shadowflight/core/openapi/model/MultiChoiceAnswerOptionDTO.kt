@@ -11,7 +11,7 @@
     "UnusedImport"
 )
 
-package com.shadowflight.openapi.model
+package com.shadowflight.core.openapi.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -19,12 +19,15 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
- * @param tokenId PAT's id
+ * @param id 
+ * @param text 
  */
 @JsonClass(generateAdapter = true)
-data class PATReferenceDeleteDTO(
+data class MultiChoiceAnswerOptionDTO(
 
-    /* PAT's id */
-    @Json(name = "tokenId")
-    val tokenId: kotlin.String
+    @Json(name = "id")
+    val id: kotlin.Int,
+
+    @Json(name = "text")
+    val text: kotlin.String
 )

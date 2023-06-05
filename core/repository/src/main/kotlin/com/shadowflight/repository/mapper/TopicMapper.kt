@@ -1,7 +1,7 @@
 package com.shadowflight.repository.mapper
 
 import com.shadowflight.core.model.feed.Topic
-import com.shadowflight.openapi.model.TopicDTO
+import com.shadowflight.core.openapi.model.TopicDTO
 
 
 internal fun TopicDTO.asEntity() = when (this) {

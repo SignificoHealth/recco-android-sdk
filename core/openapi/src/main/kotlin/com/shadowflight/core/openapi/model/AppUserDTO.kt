@@ -11,9 +11,8 @@
     "UnusedImport"
 )
 
-package com.shadowflight.openapi.model
+package com.shadowflight.core.openapi.model
 
-import com.shadowflight.openapi.model.QuestionDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -21,18 +20,10 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param id 
- * @param categoriesIds 
- * @param questions 
  */
 @JsonClass(generateAdapter = true)
-data class QuestionnaireDTO(
+data class AppUserDTO(
 
     @Json(name = "id")
-    val id: kotlin.String,
-
-    @Json(name = "categoriesIds")
-    val categoriesIds: kotlin.collections.List<kotlin.Int>,
-
-    @Json(name = "questions")
-    val questions: kotlin.collections.List<QuestionDTO>
+    val id: kotlin.String
 )

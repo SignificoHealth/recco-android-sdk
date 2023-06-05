@@ -2,8 +2,8 @@ package com.shadowflight.repository
 
 import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.network.http.unwrap
-import com.shadowflight.openapi.api.FeedApi
-import com.shadowflight.openapi.model.FeedSectionDTO
+import com.shadowflight.core.openapi.api.FeedApi
+import com.shadowflight.core.openapi.model.FeedSectionDTO
 import com.shadowflight.repository.mapper.asEntity
 import javax.inject.Inject
 import javax.inject.Singleton

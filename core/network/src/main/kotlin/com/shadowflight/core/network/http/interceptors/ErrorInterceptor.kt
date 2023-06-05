@@ -4,7 +4,7 @@ import com.shadowflight.core.model.exceptions.ApiErrorException
 import com.shadowflight.core.model.exceptions.InternalServerErrorException
 import com.shadowflight.core.model.exceptions.NoConnectException
 import com.shadowflight.core.model.exceptions.ServiceUnavailableException
-import com.shadowflight.openapi.model.ApiErrorDTO
+import com.shadowflight.core.openapi.model.ApiErrorDTO
 import com.squareup.moshi.Moshi
 import okhttp3.Interceptor
 import okhttp3.Response

@@ -11,43 +11,33 @@
     "UnusedImport"
 )
 
-package com.shadowflight.openapi.model
+package com.shadowflight.core.openapi.model
 
-import com.shadowflight.openapi.model.MultiChoiceQuestionDTO
-import com.shadowflight.openapi.model.NumericQuestionDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
  * 
  *
- * @param id 
- * @param index 
- * @param text 
+ * @param questionId 
  * @param type 
- * @param multiChoice 
+ * @param multichoice 
  * @param numeric 
  */
 @JsonClass(generateAdapter = true)
-data class QuestionDTO(
+data class CreateQuestionnaireAnswerDTO(
 
-    @Json(name = "id")
-    val id: kotlin.String,
-
-    @Json(name = "index")
-    val index: kotlin.Int,
-
-    @Json(name = "text")
-    val text: kotlin.String,
+    @Json(name = "questionId")
+    val questionId: kotlin.String,
 
     @Json(name = "type")
-    val type: QuestionDTO.Type,
+    val type: Type,
 
-    @Json(name = "multiChoice")
-    val multiChoice: MultiChoiceQuestionDTO? = null,
+    @Json(name = "multichoice")
+    val multichoice: kotlin.collections.List<kotlin.Int>? = null,
 
     @Json(name = "numeric")
-    val numeric: NumericQuestionDTO? = null
+    val numeric: kotlin.Double? = null
 ) {
     /**
      * 

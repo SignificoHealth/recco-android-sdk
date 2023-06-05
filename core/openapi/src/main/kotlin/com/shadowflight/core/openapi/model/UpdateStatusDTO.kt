@@ -11,9 +11,8 @@
     "UnusedImport"
 )
 
-package com.shadowflight.openapi.model
+package com.shadowflight.core.openapi.model
 
-import com.shadowflight.openapi.model.ContentIdDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -31,10 +30,10 @@ data class UpdateStatusDTO(
     val contentId: ContentIdDTO,
 
     @Json(name = "contentType")
-    val contentType: UpdateStatusDTO.ContentType,
+    val contentType: ContentType,
 
     @Json(name = "status")
-    val status: UpdateStatusDTO.Status
+    val status: Status
 ) {
     /**
      * 

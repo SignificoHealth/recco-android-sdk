@@ -11,19 +11,16 @@
     "UnusedImport"
 )
 
-package com.shadowflight.openapi.api
+package com.shadowflight.core.openapi.api
 
 import retrofit2.http.*
 import retrofit2.Response
-import okhttp3.RequestBody
-import com.squareup.moshi.Json
-import com.shadowflight.openapi.model.ApiErrorDTO
-import com.shadowflight.openapi.model.AppUserArticleDTO
-import com.shadowflight.openapi.model.AppUserRecommendationDTO
-import com.shadowflight.openapi.model.TopicDTO
-import com.shadowflight.openapi.model.UpdateBookmarkDTO
-import com.shadowflight.openapi.model.UpdateRatingDTO
-import com.shadowflight.openapi.model.UpdateStatusDTO
+import com.shadowflight.core.openapi.model.AppUserArticleDTO
+import com.shadowflight.core.openapi.model.AppUserRecommendationDTO
+import com.shadowflight.core.openapi.model.TopicDTO
+import com.shadowflight.core.openapi.model.UpdateBookmarkDTO
+import com.shadowflight.core.openapi.model.UpdateRatingDTO
+import com.shadowflight.core.openapi.model.UpdateStatusDTO
 
 interface RecommendationApi {
 

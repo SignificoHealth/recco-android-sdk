@@ -11,9 +11,8 @@
     "UnusedImport"
 )
 
-package com.shadowflight.openapi.model
+package com.shadowflight.core.openapi.model
 
-import com.shadowflight.openapi.model.ContentIdDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -21,24 +20,31 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param id 
+ * @param type 
  * @param rating 
  * @param status 
+ * @param bookmarked 
  * @param headline 
  * @param lead 
  * @param imageUrl 
- * @param articleBodyHtml 
  */
 @JsonClass(generateAdapter = true)
-data class AppUserArticleDTO(
+data class AppUserRecommendationDTO(
 
     @Json(name = "id")
     val id: ContentIdDTO,
 
+    @Json(name = "type")
+    val type: Type,
+
     @Json(name = "rating")
-    val rating: AppUserArticleDTO.Rating,
+    val rating: Rating,
 
     @Json(name = "status")
-    val status: AppUserArticleDTO.Status,
+    val status: Status,
+
+    @Json(name = "bookmarked")
+    val bookmarked: kotlin.Boolean,
 
     @Json(name = "headline")
     val headline: kotlin.String,
@@ -47,11 +53,17 @@ data class AppUserArticleDTO(
     val lead: kotlin.String? = null,
 
     @Json(name = "imageUrl")
-    val imageUrl: kotlin.String? = null,
-
-    @Json(name = "articleBodyHtml")
-    val articleBodyHtml: kotlin.String? = null
+    val imageUrl: kotlin.String? = null
 ) {
+    /**
+     * 
+     *
+     * Values: ARTICLES
+     */
+    @JsonClass(generateAdapter = false)
+    enum class Type(val value: kotlin.String) {
+        @Json(name = "articles") ARTICLES("articles");
+    }
     /**
      * 
      *

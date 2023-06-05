@@ -11,15 +11,12 @@
     "UnusedImport"
 )
 
-package com.shadowflight.openapi.api
+package com.shadowflight.core.openapi.api
 
 import retrofit2.http.*
 import retrofit2.Response
-import okhttp3.RequestBody
-import com.squareup.moshi.Json
-import com.shadowflight.openapi.model.ApiErrorDTO
-import com.shadowflight.openapi.model.PATDTO
-import com.shadowflight.openapi.model.PATReferenceDeleteDTO
+import com.shadowflight.core.openapi.model.PATDTO
+import com.shadowflight.core.openapi.model.PATReferenceDeleteDTO
 
 interface AuthenticationApi {
 

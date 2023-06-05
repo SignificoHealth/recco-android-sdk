@@ -11,7 +11,7 @@
     "UnusedImport"
 )
 
-package com.shadowflight.openapi.model
+package com.shadowflight.core.openapi.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -27,7 +27,7 @@ import com.squareup.moshi.JsonClass
 data class ApiErrorDTO(
 
     @Json(name = "errorCode")
-    val errorCode: ApiErrorDTO.ErrorCode,
+    val errorCode: ErrorCode,
 
     @Json(name = "message")
     val message: kotlin.String,

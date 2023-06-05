@@ -11,9 +11,8 @@
     "UnusedImport"
 )
 
-package com.shadowflight.openapi.model
+package com.shadowflight.core.openapi.model
 
-import com.shadowflight.openapi.model.TopicDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -28,7 +27,7 @@ import com.squareup.moshi.JsonClass
 data class FeedSectionDTO(
 
     @Json(name = "type")
-    val type: FeedSectionDTO.Type,
+    val type: Type,
 
     @Json(name = "locked")
     val locked: kotlin.Boolean,

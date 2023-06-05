@@ -3,7 +3,7 @@ package com.shadowflight.repository.mapper
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.model.recommendation.Rating
 import com.shadowflight.core.model.recommendation.Status
-import com.shadowflight.openapi.model.AppUserArticleDTO
+import com.shadowflight.core.openapi.model.AppUserArticleDTO
 
 fun AppUserArticleDTO.asEntity() = Article(
     id = id.asEntity(),
