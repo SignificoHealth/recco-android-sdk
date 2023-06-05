@@ -17,6 +17,7 @@ dependencies {
     debugApi(libs.androidx.compose.ui.tooling)
     api(libs.androidx.compose.ui.tooling.preview)
     api(libs.androidx.compose.ui.util)
+    api(libs.androidx.compose.paging)
 
     api(libs.androidx.compose.material)
     api(libs.androidx.compose.material.icons.extended)
@@ -25,6 +26,7 @@ dependencies {
     api(libs.accompanist.insets.ui)
     api(libs.accompanist.pager.indicators)
     api(libs.accompanist.systemuicontroller)
+    api(libs.accompanist.swiperefresh)
 
     api(libs.coil.compose)
 

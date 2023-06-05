@@ -16,6 +16,7 @@
 
     <!-- Errors -->
     <string name="retry">Retry</string>
+    <string name="reload">Reload</string>
     <string name="common_error_title">Sorry!</string>
     <string name="common_error_desc">Something went wrong</string>
     <string name="no_network_connection_error_title">No connection</string>

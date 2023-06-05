@@ -14,6 +14,7 @@ androidx-annotation = "1.6.0"
 androidx-benchmark = "1.1.1"
 androidx-compose-bom = "2023.05.00"
 androidx-compose-compiler = "1.4.7" # Support for Kotlin 1.8.21
+androidx-compose-paging = "1.0.0-alpha20"
 androidx-core = "1.10.1"
 androidx-hilt = "1.0.0"
 androidx-lifecycle = "2.6.1"
@@ -42,6 +43,7 @@ accompanist-navigation-material = { group = "com.google.accompanist", name = "ac
 accompanist-pager-indicators = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
+accompanist-swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "accompanist" }
 
 android-desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "android-desugar" }
 
@@ -60,6 +62,7 @@ androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
+androidx-compose-paging = { group = "androidx.paging", name = "paging-compose", version.ref = "androidx-compose-paging" }
 
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
 
