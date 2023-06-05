@@ -1,4 +1,4 @@
-package com.shadowflight.questionnaire.navigation
+package com.shadowflight.core.questionnaire.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.shadowflight.core.model.feed.Topic
-import com.shadowflight.questionnaire.QuestionnaireRoute
+import com.shadowflight.core.questionnaire.QuestionnaireRoute
 import com.shadowflight.core.ui.extensions.asSerializable
 
 private const val topicArg = "topic"

@@ -1,4 +1,4 @@
-package com.shadowflight.questionnaire
+package com.shadowflight.core.questionnaire
 
 import androidx.compose.runtime.Composable
 import com.shadowflight.core.model.feed.Topic

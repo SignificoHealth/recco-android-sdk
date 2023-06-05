@@ -9,8 +9,8 @@ import com.shadowflight.core.article.navigation.navigateToArticle
 import com.shadowflight.core.feed.navigation.FeedGraph
 import com.shadowflight.core.feed.navigation.feedGraph
 import com.shadowflight.core.onboarding.navigation.onboardingGraph
-import com.shadowflight.questionnaire.navigation.navigateToQuestionnaire
-import com.shadowflight.questionnaire.navigation.questionnaireGraph
+import com.shadowflight.core.questionnaire.navigation.navigateToQuestionnaire
+import com.shadowflight.core.questionnaire.navigation.questionnaireGraph
 
 @Composable
 fun AppNavHost(
