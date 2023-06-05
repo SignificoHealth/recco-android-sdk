@@ -1,7 +1,7 @@
 package com.shadowflight.showcase
 
 import android.app.Application
-import com.shadowflight.model.SDKConfig
+import com.shadowflight.core.model.SDKConfig
 import com.shadowflight.ui.UIApi
 import dagger.hilt.android.HiltAndroidApp
 

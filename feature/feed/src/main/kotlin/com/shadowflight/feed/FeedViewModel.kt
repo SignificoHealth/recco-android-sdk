@@ -2,12 +2,12 @@ package com.shadowflight.feed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shadowflight.logger.Logger
-import com.shadowflight.model.feed.FeedSectionType.*
-import com.shadowflight.model.feed.*
-import com.shadowflight.repository.FeedRepository
-import com.shadowflight.repository.RecommendationRepository
-import com.shadowflight.uicommons.extensions.combine
+import com.shadowflight.core.logger.Logger
+import com.shadowflight.core.model.feed.FeedSectionType.*
+import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
+import com.shadowflight.core.repository.FeedRepository
+import com.shadowflight.core.repository.RecommendationRepository
+import com.shadowflight.core.ui.extensions.combine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

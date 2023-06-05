@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.persistence"
+    namespace = "com.shadowflight.core.persistence"
 }
 
 dependencies {

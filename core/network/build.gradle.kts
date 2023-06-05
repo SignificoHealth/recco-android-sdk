@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.network"
+    namespace = "com.shadowflight.core.network"
 }
 
 dependencies {

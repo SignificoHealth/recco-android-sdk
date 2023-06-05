@@ -6,8 +6,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.compose.rememberNavController
 import com.shadowflight.ui.navigation.AppNavHost
-import com.shadowflight.uicommons.components.AppStatusBar
-import com.shadowflight.uicommons.theme.AppTheme
+import com.shadowflight.core.ui.components.AppStatusBar
+import com.shadowflight.core.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

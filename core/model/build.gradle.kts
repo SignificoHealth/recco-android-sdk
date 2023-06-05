@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.model"
+    namespace = "com.shadowflight.core.model"
 }
 
 dependencies {

@@ -4,5 +4,5 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.logger"
+    namespace = "com.shadowflight.core.logger"
 }

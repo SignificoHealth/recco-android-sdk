@@ -3,8 +3,8 @@ package com.shadowflight.ui
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import com.shadowflight.model.SDKConfig
-import com.shadowflight.persistence.AuthCredentials
+import com.shadowflight.core.model.SDKConfig
+import com.shadowflight.core.persistence.AuthCredentials
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn

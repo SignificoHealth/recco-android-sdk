@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.shadowflight.model.recommendation.Article
-import com.shadowflight.uicommons.components.AppTopBar
+import com.shadowflight.core.model.recommendation.Article
+import com.shadowflight.core.ui.components.AppTopBar
 
 @Composable
 internal fun ArticleRoute(

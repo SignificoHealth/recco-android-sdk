@@ -2,9 +2,9 @@ package com.shadowflight.feed
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.shadowflight.uicommons.R
-import com.shadowflight.model.feed.FeedSectionType
-import com.shadowflight.model.feed.FeedSectionType.*
+import com.shadowflight.core.ui.R
+import com.shadowflight.core.model.feed.FeedSectionType
+import com.shadowflight.core.model.feed.FeedSectionType.*
 
 @Composable
 fun FeedSectionType.asSectionTitle(): String = when (this) {

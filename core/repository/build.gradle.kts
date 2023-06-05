@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.repository"
+    namespace = "com.shadowflight.core.repository"
 }
 
 dependencies {
