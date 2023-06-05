@@ -100,7 +100,6 @@ fun ToastContent(
         ) {
 
             Image(
-                modifier = Modifier.size(20.dp),
                 painter = painterResource(id = resIcon),
                 contentDescription = null
             )
