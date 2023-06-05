@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,12 +38,12 @@ class FeedViewModel @Inject constructor(
     val viewState: Flow<FeedViewUIState> = _viewState
 
     init {
-        initialLoadSubscribe()
+        initialLoadOrRetry()
     }
 
     fun onUserInteract(userInteract: FeedUserInteract) {
         when (userInteract) {
-            FeedUserInteract.Retry -> initialLoadSubscribe()
+            FeedUserInteract.Retry -> initialLoadOrRetry()
             FeedUserInteract.Refresh -> refresh()
         }
     }
@@ -71,7 +70,7 @@ class FeedViewModel @Inject constructor(
         }
     }
 
-    private fun initialLoadSubscribe() {
+    private fun initialLoadOrRetry() {
         viewModelScope.launch {
             combine(
                 feedRepository.feedSections,
