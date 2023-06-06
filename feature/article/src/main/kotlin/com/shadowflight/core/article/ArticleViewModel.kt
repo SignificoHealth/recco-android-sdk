@@ -30,6 +30,7 @@ class ArticleViewModel @Inject constructor(
     val viewState: Flow<ArticleViewUIState> = _viewState
 
     init {
+        setArticleAsSeen()
         initialLoadSubscribe()
     }
 
@@ -47,24 +48,32 @@ class ArticleViewModel @Inject constructor(
         }
     }
 
+    private fun setArticleAsSeen() {
+        viewModelScope.launch {
+            recommendationRepository.setRecommendationAsViewed(
+                articleId
+            )
+        }
+    }
+
     private fun initialLoadSubscribe() {
         viewModelScope.launch {
-            runCatching {
-                val article = recommendationRepository.getArticle(articleId)
-                _viewState.emit(
-                    ArticleViewUIState(
-                        isLoading = false,
-                        article = recommendationRepository.getArticle(articleId),
-                        userInteraction = UserInteractionRecommendation(
-                            rating = article.rating,
-                            isBookmarked = article.isBookmarked
+            runCatching { recommendationRepository.getArticle(articleId) }
+                .onSuccess { article ->
+                    _viewState.emit(
+                        ArticleViewUIState(
+                            isLoading = false,
+                            article = recommendationRepository.getArticle(articleId),
+                            userInteraction = UserInteractionRecommendation(
+                                rating = article.rating,
+                                isBookmarked = article.isBookmarked
+                            )
                         )
                     )
-                )
-            }.onFailure {
-                _viewState.emit(ArticleViewUIState(isError = true, isLoading = false))
-                logger.e(it)
-            }
+                }.onFailure {
+                    _viewState.emit(ArticleViewUIState(isError = true, isLoading = false))
+                    logger.e(it)
+                }
         }
     }
 
