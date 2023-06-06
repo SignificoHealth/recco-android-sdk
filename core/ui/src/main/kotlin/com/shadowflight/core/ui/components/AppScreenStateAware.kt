@@ -59,6 +59,7 @@ fun AppScreenStateAware(
     avoidClickingWhenRefreshing: Boolean = true,
     isEmpty: Boolean = false,
     retry: () -> Unit,
+    refresh: () -> Unit,
     colorStatusBar: Color = Color.White,
     backgroundContent: @Composable (() -> Unit)? = null,
     animatedContentShapeContent: @Composable (() -> Unit)? = null,
@@ -94,6 +95,7 @@ fun AppScreenStateAware(
                     isError = isError,
                     throwable = throwable,
                     retry = retry,
+                    refresh = refresh,
                     emptyContent = emptyContent,
                     enablePullToRefresh = enablePullToRefresh,
                     avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
@@ -142,6 +144,7 @@ fun AppScreenStateAware(
                         isError = isError,
                         throwable = throwable,
                         retry = retry,
+                        refresh = refresh,
                         emptyContent = emptyContent,
                         enablePullToRefresh = enablePullToRefresh,
                         avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
@@ -227,6 +230,7 @@ private fun AppScreenStateAwareContent(
     isError: Boolean,
     throwable: Throwable?,
     retry: () -> Unit,
+    refresh: () -> Unit,
     enablePullToRefresh: Boolean,
     avoidClickingWhenRefreshing: Boolean,
     colorStatusBar: Color,
@@ -246,6 +250,7 @@ private fun AppScreenStateAwareContent(
                 AppProgressLoadingCircled()
             }
         }
+
         isError -> {
             HeaderAwareContent(isFloatingHeader) {
                 AppErrorContent(
@@ -255,12 +260,13 @@ private fun AppScreenStateAwareContent(
                 )
             }
         }
+
         isEmpty -> {
             SwipeRefreshContent(
                 swipeRefreshState = swipeRefreshState,
                 enablePullToRefresh = enablePullToRefresh,
                 avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                retry = retry,
+                refresh = refresh,
                 colorStatusBar = colorStatusBar
             ) {
                 Column(
@@ -272,6 +278,7 @@ private fun AppScreenStateAwareContent(
                 }
             }
         }
+
         else -> {
             LaunchedEffect(Unit) {
                 isFirstLoading.value = false
@@ -280,7 +287,7 @@ private fun AppScreenStateAwareContent(
                 swipeRefreshState = swipeRefreshState,
                 enablePullToRefresh = enablePullToRefresh,
                 avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                retry = retry,
+                refresh = refresh,
                 colorStatusBar = colorStatusBar,
             ) {
                 Column(modifier = modifier.fillMaxSize()) {
@@ -363,6 +370,7 @@ fun AppScreenStateAwarePaginatedList(
     isEmpty: Boolean? = null,
     emptyState: EmptyState? = null,
     retry: () -> Unit,
+    refresh: () -> Unit,
     colorStatusBar: Color = Color.White,
     headerContent: @Composable (() -> Unit)? = null,
     content: LazyListScope.() -> Unit
@@ -380,7 +388,7 @@ fun AppScreenStateAwarePaginatedList(
             swipeRefreshState = swipeRefreshState,
             enablePullToRefresh = enablePullToRefresh,
             avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-            retry = retry,
+            refresh = refresh,
             colorStatusBar = colorStatusBar
         ) {
             LazyColumn(
@@ -423,7 +431,7 @@ fun AppScreenStateAwarePaginatedGrid(
     avoidClickingWhenRefreshing: Boolean = true,
     isEmpty: Boolean? = null,
     emptyState: EmptyState? = null,
-    retry: () -> Unit,
+    refresh: () -> Unit,
     colorStatusBar: Color = Color.White,
     headerContent: @Composable (() -> Unit)? = null,
     content: LazyGridScope.() -> Unit
@@ -434,7 +442,7 @@ fun AppScreenStateAwarePaginatedGrid(
         swipeRefreshState = swipeRefreshState,
         enablePullToRefresh = enablePullToRefresh,
         avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-        retry = retry,
+        refresh = refresh,
         colorStatusBar = colorStatusBar
     ) {
         Column(
@@ -475,7 +483,7 @@ fun AppScreenStateAwarePaginatedGrid(
 private fun SwipeRefreshContent(
     enablePullToRefresh: Boolean,
     swipeRefreshState: SwipeRefreshState,
-    retry: () -> Unit,
+    refresh: () -> Unit,
     avoidClickingWhenRefreshing: Boolean,
     colorStatusBar: Color,
     content: @Composable () -> Unit
@@ -484,7 +492,7 @@ private fun SwipeRefreshContent(
         SwipeRefresh(
             swipeEnabled = enablePullToRefresh,
             state = swipeRefreshState,
-            onRefresh = { retry() },
+            onRefresh = { refresh() },
             indicator = { state, refreshTrigger ->
                 when {
                     !enablePullToRefresh -> {
@@ -494,6 +502,7 @@ private fun SwipeRefreshContent(
                             elevation = 0.dp
                         )
                     }
+
                     avoidClickingWhenRefreshing && state.isRefreshing -> {
                         Box(
                             modifier = Modifier
@@ -504,6 +513,7 @@ private fun SwipeRefreshContent(
                             AppSwipeRefreshLoadingIndicator(state, refreshTrigger)
                         }
                     }
+
                     else -> {
                         AppSwipeRefreshLoadingIndicator(state, refreshTrigger)
                     }
@@ -521,6 +531,7 @@ private fun LoadingPreview() {
         scrollState = rememberScrollState(),
         isLoading = true,
         retry = { },
+        refresh = { },
     ) {
         Text(text = "Some content")
     }
@@ -534,6 +545,7 @@ private fun ErrorNavBarPreview() {
         isLoading = false,
         throwable = RuntimeException(),
         retry = { },
+        refresh = { },
     ) {
         Text(text = "Some content")
     }
@@ -547,6 +559,7 @@ private fun ErrorNoNavBarPreview() {
         isLoading = false,
         throwable = RuntimeException(),
         retry = { },
+        refresh = { },
     ) {
         Text(text = "Some content")
     }
@@ -570,6 +583,7 @@ private fun PreviewEmptyState() {
             )
         },
         retry = { },
+        refresh = { },
     ) {
         Text(text = "Some content")
     }
@@ -583,6 +597,7 @@ private fun Preview() {
         isLoading = false,
         throwable = null,
         retry = { },
+        refresh = { },
     ) {
         Text(text = "Some content")
     }
@@ -594,6 +609,7 @@ private fun PaginatedPreview() {
     AppScreenStateAwarePaginatedList(
         items = flowOf(PagingData.from(listOf("Item"))).collectAsLazyPagingItems(),
         retry = { },
+        refresh = { }
     ) {
         item {
             Text(text = "Some content")

@@ -13,6 +13,7 @@
     <string name="physical_wellbeing">Physical wellbeing</string>
     <string name="sleep">Sleep</string>
     <string name="unlock">Unlock</string>
+    <string name="no_content_available_title_default">No content available</string>
 
     <!-- Errors -->
     <string name="retry">Retry</string>

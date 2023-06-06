@@ -52,7 +52,7 @@ class RecommendationRepository @Inject constructor(
     }
     val exploreNutrition = exploreNutritionPipeline.state
 
-    suspend fun reloadNutrition() {
+    suspend fun reloadExploreNutrition() {
         exploreNutritionPipeline.update()
     }
 
@@ -105,12 +105,20 @@ class RecommendationRepository @Inject constructor(
     }
     val preferredRecommendations = preferredRecommendationsPipeline.state
 
+    suspend fun reloadPreferredRecommendations() {
+        preferredRecommendationsPipeline.update()
+    }
+
     // Most popular
     private val mostPopularPipeline = Pipeline {
         api.getMostPopularContent().unwrap()
             .map(AppUserRecommendationDTO::asEntity)
     }
     val mostPopular = mostPopularPipeline.state
+
+    suspend fun reloadMostPopular() {
+        mostPopularPipeline.update()
+    }
 
     // Newest content
     private val newestContentPipeline = Pipeline {
@@ -119,12 +127,20 @@ class RecommendationRepository @Inject constructor(
     }
     val newestContent = newestContentPipeline.state
 
+    suspend fun reloadNewestContent() {
+        newestContentPipeline.update()
+    }
+
     // Starting
     private val startingPipeline = Pipeline {
         api.getStartingRecommendations().unwrap()
             .map(AppUserRecommendationDTO::asEntity)
     }
     val starting = startingPipeline.state
+
+    suspend fun reloadStarting() {
+        startingPipeline.update()
+    }
 
     suspend fun getArticle(contentId: ContentId): Article =
         api.getArticle(itemId = contentId.itemId, catalogId = contentId.catalogId)
