@@ -137,7 +137,7 @@ class FeedViewModel @Inject constructor(
 }
 
 data class FeedViewUIState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val error: Throwable? = null,
     val feedSectionAndRecommendations: List<FeedSectionAndRecommendations> = emptyList()
 )
