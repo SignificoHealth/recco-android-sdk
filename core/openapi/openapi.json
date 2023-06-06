@@ -1094,6 +1094,7 @@
       },
       "AppUserArticle": {
         "required": [
+          "bookmarked",
           "headline",
           "id",
           "rating",
@@ -1118,6 +1119,9 @@
               "no_interaction",
               "viewed"
             ]
+          },
+          "bookmarked": {
+            "type": "boolean"
           },
           "headline": {
             "type": "string"

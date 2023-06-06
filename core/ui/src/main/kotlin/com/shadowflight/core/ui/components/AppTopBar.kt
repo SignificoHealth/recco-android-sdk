@@ -19,7 +19,7 @@ fun AppTopBar(
     val context = LocalContext.current
     Row {
         title?.let {
-            Text(modifier = Modifier.weight(1f), text = title)
+            Text(modifier = Modifier.weight(1f), text = title, maxLines = 1)
         }
         navigateUp?.let {
             Button(onClick = navigateUp) {

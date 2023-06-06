@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
  * @param id 
  * @param rating 
  * @param status 
+ * @param bookmarked 
  * @param headline 
  * @param lead 
  * @param imageUrl 
@@ -39,6 +40,9 @@ data class AppUserArticleDTO(
 
     @Json(name = "status")
     val status: AppUserArticleDTO.Status,
+
+    @Json(name = "bookmarked")
+    val bookmarked: kotlin.Boolean,
 
     @Json(name = "headline")
     val headline: kotlin.String,

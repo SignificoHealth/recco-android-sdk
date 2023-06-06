@@ -19,5 +19,6 @@ fun AppUserArticleDTO.asEntity() = Article(
     headline = headline,
     lead = lead,
     imageUrl = imageUrl,
-    articleBodyHtml = articleBodyHtml
+    articleBodyHtml = articleBodyHtml,
+    isBookmarked = bookmarked
 )

@@ -36,4 +36,6 @@ dependencies {
 
     api(libs.androidx.hilt.navigation.compose)
     api(libs.androidx.navigation.compose)
+
+    api(libs.compose.html)
 }

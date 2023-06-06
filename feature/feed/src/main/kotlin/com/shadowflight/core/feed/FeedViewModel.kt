@@ -1,5 +1,6 @@
 package com.shadowflight.core.feed
 
+import android.view.Display.HdrCapabilities
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.logger.Logger
