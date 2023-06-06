@@ -8,6 +8,7 @@ import com.shadowflight.core.logger.Logger
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Rating
+import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.pipelines.Pipelines
@@ -30,7 +31,6 @@ class ArticleViewModel @Inject constructor(
     val viewState: Flow<ArticleViewUIState> = _viewState
 
     init {
-        setArticleAsSeen()
         initialLoadSubscribe()
     }
 
@@ -60,6 +60,9 @@ class ArticleViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching { recommendationRepository.getArticle(articleId) }
                 .onSuccess { article ->
+                    if (article.status == Status.NO_INTERACTION) {
+                        setArticleAsSeen()
+                    }
                     _viewState.emit(
                         ArticleViewUIState(
                             isLoading = false,

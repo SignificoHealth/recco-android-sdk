@@ -1,8 +1,12 @@
 package com.shadowflight.core.repository
 
+import com.shadowflight.core.model.feed.FeedSection
+import com.shadowflight.core.model.feed.FeedSectionType
+import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Rating
+import com.shadowflight.core.model.recommendation.Recommendation
 import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.network.http.unwrap
 import com.shadowflight.core.openapi.api.RecommendationApi
@@ -13,6 +17,7 @@ import com.shadowflight.core.openapi.model.UpdateRatingDTO
 import com.shadowflight.core.openapi.model.UpdateStatusDTO
 import com.shadowflight.core.repository.mapper.asDTO
 import com.shadowflight.core.repository.mapper.asEntity
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,132 +25,88 @@ import javax.inject.Singleton
 class RecommendationRepository @Inject constructor(
     private val api: RecommendationApi
 ) {
-    // Physical activity
-    private val tailoredPhysicalActivityPipeline = Pipeline {
-        api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_ACTIVITY).unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val tailoredPhysicalActivity = tailoredPhysicalActivityPipeline.state
+    private val sectionsPipelines = mapOf(
+        FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS to Pipeline {
+            api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_ACTIVITY).unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        },
+        FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE to Pipeline {
+            api.exploreContentByTopic(TopicDTO.PHYSICAL_ACTIVITY).unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        },
+        FeedSectionType.NUTRITION_RECOMMENDATIONS to Pipeline {
+            api.getTailoredRecommendationsByTopic(TopicDTO.NUTRITION).unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        },
+        FeedSectionType.NUTRITION_EXPLORE to Pipeline {
+            api.exploreContentByTopic(TopicDTO.NUTRITION).unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        },
+        FeedSectionType.PHYSICAL_WELLBEING_RECOMMENDATIONS to Pipeline {
+            api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        },
+        FeedSectionType.PHYSICAL_WELLBEING_EXPLORE to Pipeline {
+            api.exploreContentByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        },
+        FeedSectionType.SLEEP_RECOMMENDATIONS to Pipeline {
+            api.getTailoredRecommendationsByTopic(TopicDTO.SLEEP).unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        },
+        FeedSectionType.SLEEP_EXPLORE to Pipeline {
+            api.exploreContentByTopic(TopicDTO.SLEEP).unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        },
+        FeedSectionType.PREFERRED_RECOMMENDATIONS to Pipeline {
+            api.getUserPreferredRecommendations().unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        },
+        FeedSectionType.MOST_POPULAR to Pipeline {
+            api.getMostPopularContent().unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        },
+        FeedSectionType.NEW_CONTENT to Pipeline {
+            api.getNewestContent().unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        },
+        FeedSectionType.STARTING_RECOMMENDATIONS to Pipeline {
+            api.getStartingRecommendations().unwrap()
+                .map(AppUserRecommendationDTO::asEntity)
+        }
+    )
 
-    suspend fun reloadTailoredPhysicalActivity() {
-        tailoredPhysicalActivityPipeline.update()
-    }
+    val tailoredPhysicalActivity =
+        sectionsPipelines[FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS]!!.state
 
-    private val explorePhysicalActivityPipeline = Pipeline {
-        api.exploreContentByTopic(TopicDTO.PHYSICAL_ACTIVITY).unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val explorePhysicalActivity = explorePhysicalActivityPipeline.state
+    val explorePhysicalActivity =
+        sectionsPipelines[FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE]!!.state
 
-    suspend fun reloadExplorePhysicalActivity() {
-        explorePhysicalActivityPipeline.update()
-    }
+    val tailoredNutrition = sectionsPipelines[FeedSectionType.NUTRITION_RECOMMENDATIONS]!!.state
 
-    // Nutrition
-    private val tailoredNutritionPipeline = Pipeline {
-        api.getTailoredRecommendationsByTopic(TopicDTO.NUTRITION).unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val tailoredNutrition = tailoredNutritionPipeline.state
+    val exploreNutrition = sectionsPipelines[FeedSectionType.NUTRITION_EXPLORE]!!.state
 
-    suspend fun reloadTailoredNutrition() {
-        tailoredNutritionPipeline.update()
-    }
+    val tailoredPhysicalWellbeing =
+        sectionsPipelines[FeedSectionType.PHYSICAL_WELLBEING_RECOMMENDATIONS]!!.state
 
-    private val exploreNutritionPipeline = Pipeline {
-        api.exploreContentByTopic(TopicDTO.NUTRITION).unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val exploreNutrition = exploreNutritionPipeline.state
+    val explorePhysicalWellbeing =
+        sectionsPipelines[FeedSectionType.PHYSICAL_WELLBEING_EXPLORE]!!.state
 
-    suspend fun reloadExploreNutrition() {
-        exploreNutritionPipeline.update()
-    }
+    val tailoredSleep = sectionsPipelines[FeedSectionType.SLEEP_RECOMMENDATIONS]!!.state
 
-    // Physical wellbeing
-    private val tailoredPhysicalWellbeingPipeline = Pipeline {
-        api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val tailoredPhysicalWellbeing = tailoredPhysicalWellbeingPipeline.state
+    val exploreSleep = sectionsPipelines[FeedSectionType.SLEEP_EXPLORE]!!.state
 
-    suspend fun reloadTailoredPhysicalWellbeing() {
-        tailoredPhysicalWellbeingPipeline.update()
-    }
+    val preferredRecommendations =
+        sectionsPipelines[FeedSectionType.PREFERRED_RECOMMENDATIONS]!!.state
 
-    private val explorePhysicalWellbeingPipeline = Pipeline {
-        api.exploreContentByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val explorePhysicalWellbeing = explorePhysicalWellbeingPipeline.state
+    val mostPopular = sectionsPipelines[FeedSectionType.MOST_POPULAR]!!.state
 
-    suspend fun reloadExplorePhysicalWellbeing() {
-        explorePhysicalWellbeingPipeline.update()
-    }
+    val newestContent = sectionsPipelines[FeedSectionType.NEW_CONTENT]!!.state
 
-    // Sleep
-    private val tailoredSleepPipeline = Pipeline {
-        api.getTailoredRecommendationsByTopic(TopicDTO.SLEEP).unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val tailoredSleep = tailoredSleepPipeline.state
+    val starting = sectionsPipelines[FeedSectionType.STARTING_RECOMMENDATIONS]!!.state
 
-    suspend fun reloadTailoredSleep() {
-        tailoredSleepPipeline.update()
-    }
-
-    private val exploreSleepPipeline = Pipeline {
-        api.exploreContentByTopic(TopicDTO.SLEEP).unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val exploreSleep = exploreSleepPipeline.state
-
-    suspend fun reloadExploreSleep() {
-        exploreSleepPipeline.update()
-    }
-
-    // Preferred recommendations
-    private val preferredRecommendationsPipeline = Pipeline {
-        api.getUserPreferredRecommendations().unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val preferredRecommendations = preferredRecommendationsPipeline.state
-
-    suspend fun reloadPreferredRecommendations() {
-        preferredRecommendationsPipeline.update()
-    }
-
-    // Most popular
-    private val mostPopularPipeline = Pipeline {
-        api.getMostPopularContent().unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val mostPopular = mostPopularPipeline.state
-
-    suspend fun reloadMostPopular() {
-        mostPopularPipeline.update()
-    }
-
-    // Newest content
-    private val newestContentPipeline = Pipeline {
-        api.getNewestContent().unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val newestContent = newestContentPipeline.state
-
-    suspend fun reloadNewestContent() {
-        newestContentPipeline.update()
-    }
-
-    // Starting
-    private val startingPipeline = Pipeline {
-        api.getStartingRecommendations().unwrap()
-            .map(AppUserRecommendationDTO::asEntity)
-    }
-    val starting = startingPipeline.state
-
-    suspend fun reloadStarting() {
-        startingPipeline.update()
+    suspend fun reloadAllSections() {
+        sectionsPipelines.forEach { (_, pipeline) -> pipeline.update() }
     }
 
     suspend fun getArticle(contentId: ContentId): Article =
@@ -160,6 +121,7 @@ class RecommendationRepository @Inject constructor(
                 contentType = UpdateBookmarkDTO.ContentType.ARTICLES
             )
         )
+        reloadSectionBasedOnContentId(contentId)
     }
 
     suspend fun setRecommendationRating(contentId: ContentId, rating: Rating) {
@@ -174,6 +136,7 @@ class RecommendationRepository @Inject constructor(
                 }
             )
         )
+        reloadSectionBasedOnContentId(contentId)
     }
 
     suspend fun setRecommendationAsViewed(contentId: ContentId) {
@@ -184,5 +147,12 @@ class RecommendationRepository @Inject constructor(
                 status = UpdateStatusDTO.Status.VIEWED
             )
         )
+        reloadSectionBasedOnContentId(contentId)
+    }
+
+    private suspend fun reloadSectionBasedOnContentId(contentId: ContentId) {
+        sectionsPipelines
+            .filter { (_, pipeline) -> pipeline.value?.any { it.id == contentId } == true }
+            .forEach { (_, pipeline) -> pipeline.update()  }
     }
 }
