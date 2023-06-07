@@ -254,7 +254,7 @@ private fun AppScreenStateAwareContent(
     when {
         isLoading && isFirstLoading.value -> {
             HeaderAwareContent(isFloatingHeader) {
-                AppProgressLoadingCircled()
+                AppProgressLoadingCircled(modifier = modifier)
             }
         }
 
@@ -270,6 +270,7 @@ private fun AppScreenStateAwareContent(
 
         isEmpty -> {
             SwipeRefreshContent(
+                modifier = modifier,
                 swipeRefreshState = swipeRefreshState,
                 enablePullToRefresh = enablePullToRefresh,
                 avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
@@ -291,13 +292,14 @@ private fun AppScreenStateAwareContent(
                 isFirstLoading.value = false
             }
             SwipeRefreshContent(
+                modifier = modifier,
                 swipeRefreshState = swipeRefreshState,
                 enablePullToRefresh = enablePullToRefresh,
                 avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
                 refresh = refresh,
                 colorStatusBar = colorStatusBar,
             ) {
-                Column(modifier = modifier.fillMaxSize()) {
+                Column(modifier = Modifier.fillMaxSize()) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -479,6 +481,7 @@ fun AppScreenStateAwarePaginatedGrid(
 
 @Composable
 private fun SwipeRefreshContent(
+    modifier: Modifier = Modifier,
     enablePullToRefresh: Boolean,
     swipeRefreshState: SwipeRefreshState,
     refresh: () -> Unit,
@@ -488,6 +491,7 @@ private fun SwipeRefreshContent(
 ) {
     AppTheme(colorStatusBar = colorStatusBar) {
         SwipeRefresh(
+            modifier = modifier,
             swipeEnabled = enablePullToRefresh,
             state = swipeRefreshState,
             onRefresh = { refresh() },

@@ -22,11 +22,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,8 +48,8 @@ import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.AppEmptyContent
 import com.shadowflight.core.ui.components.AppScreenStateAware
-import com.shadowflight.core.ui.components.AppTopBarClosable
-import com.shadowflight.core.ui.components.AppTopBarDefaults
+import com.shadowflight.core.ui.components.AppTopBar
+import com.shadowflight.core.ui.components.CloseIconButton
 import com.shadowflight.core.ui.components.EmptyState
 import com.shadowflight.core.ui.extensions.viewedOverlay
 import com.shadowflight.core.ui.preview.SectionAndRecommendationPreviewProvider
@@ -70,46 +68,38 @@ fun FeedRoute(
     )
 
     Scaffold(
-        topBar = { AppTopBarClosable() },
-        backgroundColor = AppTheme.colors.primary,
+        topBar = { AppTopBar() },
+        backgroundColor = AppTheme.colors.background,
         contentPadding = contentPadding
     ) { innerPadding ->
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = AppTopBarDefaults.OffsetY),
-            color = AppTheme.colors.background,
-            shape = RoundedCornerShape(topStart = AppSpacing.dp_16, topEnd = AppSpacing.dp_16),
-            elevation = 0.dp
-        ) {
-            AppScreenStateAware(
-                scrollState = rememberScrollState(),
-                enablePullToRefresh = true,
-                isLoading = uiState.isLoading,
-                throwable = uiState.error,
-                isEmpty = uiState.feedSectionAndRecommendations.isEmpty(),
-                retry = { viewModel.onUserInteract(FeedUserInteract.Retry) },
-                refresh = { viewModel.onUserInteract(FeedUserInteract.Refresh) },
-                emptyContent = {
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        AppEmptyContent(
-                            emptyState = EmptyState(
-                                titleRes = R.string.no_content_available_title_default,
-                                drawableRes = R.drawable.bg_people_1,
-                            )
+        AppScreenStateAware(
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+            scrollState = rememberScrollState(),
+            enablePullToRefresh = true,
+            isLoading = uiState.isLoading,
+            throwable = uiState.error,
+            isEmpty = uiState.feedSectionAndRecommendations.isEmpty(),
+            retry = { viewModel.onUserInteract(FeedUserInteract.Retry) },
+            refresh = { viewModel.onUserInteract(FeedUserInteract.Refresh) },
+            emptyContent = {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    AppEmptyContent(
+                        emptyState = EmptyState(
+                            titleRes = R.string.no_content_available_title_default,
+                            drawableRes = R.drawable.bg_people_1,
                         )
-                    }
+                    )
                 }
-            ) {
-                FeedScreen(
-                    feedSectionAndRecommendations = uiState.feedSectionAndRecommendations,
-                    navigateToArticle = navigateToArticle,
-                    navigateToQuestionnaire = navigateToQuestionnaire
-                )
             }
+        ) {
+            FeedScreen(
+                feedSectionAndRecommendations = uiState.feedSectionAndRecommendations,
+                navigateToArticle = navigateToArticle,
+                navigateToQuestionnaire = navigateToQuestionnaire
+            )
         }
     }
 }
@@ -296,7 +286,6 @@ private fun LockedCard(onClick: () -> Unit) {
         }
     }
 }
-
 
 @Preview(showBackground = true, backgroundColor = 0xFFF)
 @Composable
