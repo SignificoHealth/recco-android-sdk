@@ -16,7 +16,7 @@ class FeedRepository @Inject constructor(
     val feedSections = feedSectionsPipeline.state
 
     suspend fun reloadFeed() {
-        feedSectionsPipeline.update()
+        feedSectionsPipeline.reloadRemoteDatasource()
     }
 
     private suspend fun getFeedSections(): List<FeedSection> =

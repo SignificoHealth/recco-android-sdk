@@ -18,5 +18,6 @@ internal fun AppUserRecommendationDTO.asEntity() = Recommendation(
     },
     headline = headline,
     lead = lead,
-    imageUrl = imageUrl
+    imageUrl = imageUrl,
+    bookmarked = bookmarked
 )
