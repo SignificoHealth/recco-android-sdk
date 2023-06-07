@@ -14,10 +14,10 @@ import com.shadowflight.core.openapi.model.UpdateRatingDTO
 import com.shadowflight.core.openapi.model.UpdateStatusDTO
 import com.shadowflight.core.repository.mapper.asDTO
 import com.shadowflight.core.repository.mapper.asEntity
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@ActivityRetainedScoped
 class RecommendationRepository @Inject constructor(
     private val api: RecommendationApi
 ) {

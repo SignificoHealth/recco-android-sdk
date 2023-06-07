@@ -5,10 +5,10 @@ import com.shadowflight.core.network.http.unwrap
 import com.shadowflight.core.openapi.api.FeedApi
 import com.shadowflight.core.openapi.model.FeedSectionDTO
 import com.shadowflight.core.repository.mapper.asEntity
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@ActivityRetainedScoped
 class FeedRepository @Inject constructor(
     private val api: FeedApi
 ) {
