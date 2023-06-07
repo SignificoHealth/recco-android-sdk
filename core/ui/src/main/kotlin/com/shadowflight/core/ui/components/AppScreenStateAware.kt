@@ -4,17 +4,32 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -60,7 +75,7 @@ fun AppScreenStateAware(
     isEmpty: Boolean = false,
     retry: () -> Unit,
     refresh: () -> Unit,
-    colorStatusBar: Color = Color.White,
+    colorStatusBar: Color = AppTheme.colors.primary,
     backgroundContent: @Composable (() -> Unit)? = null,
     animatedContentShapeContent: @Composable (() -> Unit)? = null,
     animatedContent: @Composable (() -> Unit)? = null,
@@ -75,11 +90,7 @@ fun AppScreenStateAware(
 
     AppTheme(colorStatusBar = colorStatusBar) {
         if (isFloatingHeader) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White)
-            ) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 backgroundContent?.invoke()
 
                 AppScreenStateAwareContent(
@@ -114,11 +125,7 @@ fun AppScreenStateAware(
                 }
             }
         } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White)
-            ) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 backgroundContent?.invoke()
 
                 Column(modifier = Modifier.fillMaxSize()) {
@@ -326,8 +333,7 @@ private fun AppScreenStateAwareContent(
                                                     1f,
                                                     1f - ((scrollValue / height)) * 1.3f
                                                 )
-                                                isAnimatedContentCollapsed.value =
-                                                    alpha <= 0
+                                                isAnimatedContentCollapsed.value = alpha <= 0
                                                 translationY = 0.5f * scrollState.value
                                             }
                                         }
@@ -377,11 +383,7 @@ fun AppScreenStateAwarePaginatedList(
 ) {
     val swipeRefreshState = rememberSwipeRefreshState(false)
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         headerContent?.invoke()
 
         SwipeRefreshContent(
@@ -445,11 +447,7 @@ fun AppScreenStateAwarePaginatedGrid(
         refresh = refresh,
         colorStatusBar = colorStatusBar
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             headerContent?.invoke()
 
             LazyVerticalGrid(
