@@ -32,6 +32,7 @@ import com.ireward.htmlcompose.HtmlText
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.ui.ASPECT_RATIO_4_3
 import com.shadowflight.core.ui.components.AppTopBar
+import com.shadowflight.core.ui.components.BackIconButton
 import com.shadowflight.core.ui.extensions.isEndReached
 import com.shadowflight.core.ui.extensions.openUrlInBrowser
 import com.shadowflight.core.ui.preview.ArticlePreviewProvider
@@ -76,7 +77,13 @@ fun ArticleScreen(
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        AppTopBar(title = article.lead, navigateUp = navigateUp)
+        AppTopBar(
+            title = article.lead.orEmpty(),
+            elevation = 0.dp,
+            navigationIcon = {
+                BackIconButton(onClick = navigateUp)
+            }
+        )
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier

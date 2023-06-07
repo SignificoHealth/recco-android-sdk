@@ -16,7 +16,7 @@ fun AppTheme(
 ) {
     val colors = if (darkTheme) darkColors else lightColors
 
-    AppStatusBar(colorStatusBar)
+    AppStatusBar(color = colorStatusBar, darkIcons = false)
 
     CompositionLocalProvider(
         LocalExtendedColors provides if (darkTheme) extendedDarkColors else extendedLightColors,

@@ -27,7 +27,7 @@ private val DEFAULT_ELEVATION = 4.dp
 fun AppElevatedTopContent(
     scrollState: LazyListState,
     modifier: Modifier = Modifier,
-    color: Color = Color.White,
+    color: Color = Color.Transparent,
     showElevationCondition: () -> Boolean = { !scrollState.isTopReached() },
     content: @Composable () -> Unit
 ) {
@@ -50,7 +50,7 @@ fun AppElevatedTopContent(
 fun AppElevatedTopContent(
     scrollState: ScrollState,
     modifier: Modifier = Modifier,
-    color: Color = Color.White,
+    color: Color = Color.Transparent,
     showElevationCondition: () -> Boolean = { !scrollState.isTopReached() },
     content: @Composable () -> Unit
 ) {
@@ -72,7 +72,7 @@ fun AppElevatedTopContent(
 @Composable
 fun AppElevatedTopContent(
     modifier: Modifier = Modifier,
-    color: Color = Color.White,
+    color: Color = Color.Transparent,
     content: @Composable () -> Unit
 ) {
     ElevatedContent(

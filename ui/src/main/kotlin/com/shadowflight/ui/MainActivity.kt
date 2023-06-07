@@ -5,9 +5,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.compose.rememberNavController
-import com.shadowflight.ui.navigation.AppNavHost
-import com.shadowflight.core.ui.components.AppStatusBar
 import com.shadowflight.core.ui.theme.AppTheme
+import com.shadowflight.ui.navigation.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,7 +18,6 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             AppTheme {
-                AppStatusBar()
                 AppNavHost(
                     navController = rememberNavController()
                 )
