@@ -24,7 +24,7 @@ rootProject.name = "android-shadowflight-sdk"
 
 include(
     ":ui",
-    ":headless",
+    //":headless",
     ":showcase",
     ":core:logger",
     ":core:openapi",
