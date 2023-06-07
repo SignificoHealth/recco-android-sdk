@@ -74,7 +74,7 @@ fun AppScreenStateAware(
     avoidClickingWhenRefreshing: Boolean = true,
     isEmpty: Boolean = false,
     retry: () -> Unit,
-    refresh: () -> Unit,
+    refresh: (() -> Unit)? = null,
     colorStatusBar: Color = AppTheme.colors.primary,
     backgroundContent: @Composable (() -> Unit)? = null,
     animatedContentShapeContent: @Composable (() -> Unit)? = null,
@@ -82,6 +82,7 @@ fun AppScreenStateAware(
     emptyContent: @Composable (ColumnScope.() -> Unit)? = null,
     headerContent: @Composable ((isAnimatedContentCollapsed: Boolean) -> Unit)? = null,
     footerContent: @Composable (() -> Unit)? = null,
+    isFloatingFooter: Boolean = false,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val isFirstLoading = remember { mutableStateOf(true) }
@@ -106,12 +107,13 @@ fun AppScreenStateAware(
                     isError = isError,
                     throwable = throwable,
                     retry = retry,
-                    refresh = refresh,
+                    refresh = refresh ?: {},
                     emptyContent = emptyContent,
                     enablePullToRefresh = enablePullToRefresh,
                     avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
                     colorStatusBar = colorStatusBar,
                     footerContent = footerContent,
+                    isFloatingFooter = isFloatingFooter,
                     content = content
                 )
 
@@ -122,6 +124,17 @@ fun AppScreenStateAware(
                         isFloatingHeader = true,
                         content = it
                     )
+                }
+
+                if (isFloatingFooter) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        footerContent?.invoke()
+                    }
                 }
             }
         } else {
@@ -151,14 +164,26 @@ fun AppScreenStateAware(
                         isError = isError,
                         throwable = throwable,
                         retry = retry,
-                        refresh = refresh,
+                        refresh = refresh ?: {},
                         emptyContent = emptyContent,
                         enablePullToRefresh = enablePullToRefresh,
                         avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
                         colorStatusBar = colorStatusBar,
                         footerContent = footerContent,
+                        isFloatingFooter = isFloatingFooter,
                         content = content
                     )
+                }
+
+                if (isFloatingFooter) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        footerContent?.invoke()
+                    }
                 }
             }
         }
@@ -246,6 +271,7 @@ private fun AppScreenStateAwareContent(
     emptyContent: @Composable (ColumnScope.() -> Unit)?,
     content: @Composable ColumnScope.() -> Unit,
     footerContent: @Composable (() -> Unit)? = null,
+    isFloatingFooter: Boolean = false,
 ) {
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
     swipeRefreshState.isRefreshing = isLoading
@@ -350,12 +376,10 @@ private fun AppScreenStateAwareContent(
                         content()
                     }
 
-                    if (scrollState != null) {
+                    if (scrollState != null && !isFloatingFooter) {
                         AppElevatedBottomContent(scrollState = scrollState) {
                             footerContent?.invoke()
                         }
-                    } else {
-                        footerContent?.invoke()
                     }
                 }
             }
