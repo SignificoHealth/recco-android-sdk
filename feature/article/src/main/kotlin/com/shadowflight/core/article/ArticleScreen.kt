@@ -59,7 +59,7 @@ internal fun ArticleRoute(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = uiState.article?.lead.orEmpty(),
+                title = uiState.article?.headline.orEmpty(),
                 navigationIcon = { BackIconButton(onClick = navigateUp) }
             )
         },
