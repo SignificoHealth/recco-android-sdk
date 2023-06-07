@@ -1,8 +1,9 @@
 package com.shadowflight.core.network.di
 
 import com.shadowflight.core.logger.Logger
-import com.shadowflight.core.network.http.interceptors.AddHeadersInterceptor
+import com.shadowflight.core.network.BuildConfig
 import com.shadowflight.core.network.http.ApiEndpoint
+import com.shadowflight.core.network.http.interceptors.AddHeadersInterceptor
 import com.shadowflight.core.network.http.interceptors.AuthInterceptor
 import com.shadowflight.core.network.http.interceptors.ErrorInterceptor
 import com.shadowflight.core.network.moshi.OffsetDateTimeAdapter
@@ -30,8 +31,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideApiEndpoint(authCredentials: AuthCredentials): ApiEndpoint =
-        if (!authCredentials.sdkConfig.isDebug) {
+    fun provideApiEndpoint(): ApiEndpoint =
+        if (!BuildConfig.DEBUG) {
             ApiEndpoint.PROD
         } else {
             ApiEndpoint.STAGING
@@ -63,13 +64,11 @@ object NetworkModule {
     fun provideRetrofit(
         moshi: Moshi,
         apiEndpoint: ApiEndpoint,
-        authCredentials: AuthCredentials,
         logger: Logger
     ): Retrofit = Retrofit.Builder()
         .baseUrl(apiEndpoint.baseUrl)
         .client(
             buildOkhttp(
-                isDebug = authCredentials.sdkConfig.isDebug,
                 logger = logger
             )
         )
@@ -90,7 +89,6 @@ object NetworkModule {
             .baseUrl(apiEndpoint.baseUrl)
             .client(
                 buildOkhttp(
-                    isDebug = authCredentials.sdkConfig.isDebug,
                     logger = logger,
                     authInterceptor = AuthInterceptor(
                         authCredentials,
@@ -103,14 +101,13 @@ object NetworkModule {
     }
 
     private fun buildOkhttp(
-        isDebug: Boolean,
         logger: Logger,
         authInterceptor: AuthInterceptor? = null
     ): OkHttpClient {
         return OkHttpClient.Builder().apply {
             authInterceptor?.let { addInterceptor(authInterceptor) }
 
-            if (isDebug) {
+            if (BuildConfig.DEBUG) {
                 addInterceptor(
                     HttpLoggingInterceptor { message ->
                         logger.d(message, "OkHttp")
