@@ -27,7 +27,7 @@ class ArticleViewModel @Inject constructor(
     private val logger: Logger
 ) : ViewModel() {
     private val articleId by lazy { checkNotNull(savedStateHandle.get<ContentId>(idArg)) }
-    private val _viewState = MutableStateFlow(ArticleViewUIState(isLoading = true))
+    private val _viewState = MutableStateFlow(ArticleViewUIState())
     val viewState: Flow<ArticleViewUIState> = _viewState
 
     init {
@@ -74,7 +74,7 @@ class ArticleViewModel @Inject constructor(
                         )
                     )
                 }.onFailure {
-                    _viewState.emit(ArticleViewUIState(isError = true, isLoading = false))
+                    _viewState.emit(ArticleViewUIState(error = it, isLoading = false))
                     logger.e(it)
                 }
         }
@@ -175,8 +175,8 @@ class ArticleViewModel @Inject constructor(
 }
 
 data class ArticleViewUIState(
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
+    val isLoading: Boolean = true,
+    val error: Throwable? = null,
     val article: Article? = null,
     val userInteraction: UserInteractionRecommendation? = null
 )
