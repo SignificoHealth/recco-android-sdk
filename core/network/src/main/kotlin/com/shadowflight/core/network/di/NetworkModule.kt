@@ -10,6 +10,7 @@ import com.shadowflight.core.network.moshi.OffsetDateTimeAdapter
 import com.shadowflight.core.openapi.api.AppUserApi
 import com.shadowflight.core.openapi.api.AuthenticationApi
 import com.shadowflight.core.openapi.api.FeedApi
+import com.shadowflight.core.openapi.api.QuestionnaireApi
 import com.shadowflight.core.openapi.api.RecommendationApi
 import com.shadowflight.core.persistence.AuthCredentials
 import com.squareup.moshi.Moshi
@@ -57,6 +58,11 @@ object NetworkModule {
     @Provides
     fun provideRecommendationApi(@RetrofitAuthentication retrofit: Retrofit): RecommendationApi =
         retrofit.create(RecommendationApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideQuestionnaireApi(@RetrofitAuthentication retrofit: Retrofit): QuestionnaireApi =
+        retrofit.create(QuestionnaireApi::class.java)
 
     @RetrofitBase
     @Singleton
