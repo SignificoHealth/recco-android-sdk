@@ -29,6 +29,8 @@ internal val onSurface = Color(0xFF383B45)
 internal val error: Color = Color(0xFFB00020)
 internal val onError: Color = Color.White
 internal val shadow06: Color = Color(0xFF000000).copy(alpha = .06f)
+internal val lightGrey: Color = Color(0xFFD8D8D8)
+
 
 @Immutable
 data class ExtendedColors(
@@ -56,6 +58,7 @@ data class ExtendedColors(
     val error: Color,
     val onError: Color,
     val shadow: Color,
+    val lightGrey: Color,
 )
 
 internal val lightColors = lightColors(
@@ -98,7 +101,8 @@ internal val extendedColors = ExtendedColors(
     onSurface = onSurface,
     error = error,
     onError = onError,
-    shadow = shadow06
+    shadow = shadow06,
+    lightGrey = lightGrey
 )
 
 internal val extendedLightColors = extendedColors
