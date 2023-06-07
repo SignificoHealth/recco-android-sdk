@@ -66,7 +66,7 @@ class ArticleViewModel @Inject constructor(
                     _viewState.emit(
                         ArticleViewUIState(
                             isLoading = false,
-                            article = recommendationRepository.getArticle(articleId),
+                            article = article,
                             userInteraction = UserInteractionRecommendation(
                                 rating = article.rating,
                                 isBookmarked = article.isBookmarked
