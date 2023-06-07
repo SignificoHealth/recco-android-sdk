@@ -10,18 +10,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.google.accompanist.insets.ui.Scaffold
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
@@ -44,7 +50,8 @@ import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.AppEmptyContent
 import com.shadowflight.core.ui.components.AppScreenStateAware
-import com.shadowflight.core.ui.components.AppTopBar
+import com.shadowflight.core.ui.components.AppTopBarClosable
+import com.shadowflight.core.ui.components.AppTopBarDefaults
 import com.shadowflight.core.ui.components.EmptyState
 import com.shadowflight.core.ui.extensions.viewedOverlay
 import com.shadowflight.core.ui.preview.SectionAndRecommendationPreviewProvider
@@ -55,39 +62,55 @@ import com.shadowflight.core.ui.theme.AppTheme
 fun FeedRoute(
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic) -> Unit,
-    viewModel: FeedViewModel = hiltViewModel()
+    viewModel: FeedViewModel = hiltViewModel(),
+    contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues(),
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
         initialValue = FeedViewUIState()
     )
-    AppScreenStateAware(
-        modifier = Modifier.fillMaxSize(),
-        scrollState = rememberScrollState(),
-        enablePullToRefresh = true,
-        isLoading = uiState.isLoading,
-        throwable = uiState.error,
-        isEmpty = uiState.feedSectionAndRecommendations.isEmpty(),
-        retry = { viewModel.onUserInteract(FeedUserInteract.Retry) },
-        refresh = { viewModel.onUserInteract(FeedUserInteract.Refresh) },
-        emptyContent = {
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Center
+
+    Scaffold(
+        topBar = { AppTopBarClosable() },
+        backgroundColor = AppTheme.colors.primary,
+        contentPadding = contentPadding
+    ) { innerPadding ->
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = AppTopBarDefaults.OffsetY),
+            color = AppTheme.colors.background,
+            shape = RoundedCornerShape(topStart = AppSpacing.dp_16, topEnd = AppSpacing.dp_16),
+            elevation = 0.dp
+        ) {
+            AppScreenStateAware(
+                scrollState = rememberScrollState(),
+                enablePullToRefresh = true,
+                isLoading = uiState.isLoading,
+                throwable = uiState.error,
+                isEmpty = uiState.feedSectionAndRecommendations.isEmpty(),
+                retry = { viewModel.onUserInteract(FeedUserInteract.Retry) },
+                refresh = { viewModel.onUserInteract(FeedUserInteract.Refresh) },
+                emptyContent = {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        AppEmptyContent(
+                            emptyState = EmptyState(
+                                titleRes = R.string.no_content_available_title_default,
+                                drawableRes = R.drawable.bg_people_1,
+                            )
+                        )
+                    }
+                }
             ) {
-                AppEmptyContent(
-                    emptyState = EmptyState(
-                        titleRes = R.string.no_content_available_title_default,
-                        drawableRes = R.drawable.bg_people_1,
-                    )
+                FeedScreen(
+                    feedSectionAndRecommendations = uiState.feedSectionAndRecommendations,
+                    navigateToArticle = navigateToArticle,
+                    navigateToQuestionnaire = navigateToQuestionnaire
                 )
             }
         }
-    ) {
-        FeedScreen(
-            feedSectionAndRecommendations = uiState.feedSectionAndRecommendations,
-            navigateToArticle = navigateToArticle,
-            navigateToQuestionnaire = navigateToQuestionnaire
-        )
     }
 }
 
@@ -98,10 +121,11 @@ fun FeedScreen(
     navigateToArticle: (ContentId) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppTheme.colors.background)
     ) {
-        AppTopBar()
-        Spacer(Modifier.height(AppSpacing.dp_24))
+        Spacer(Modifier.height(AppSpacing.dp_40))
         FeedHeader()
         Spacer(Modifier.height(AppSpacing.dp_40))
 
@@ -128,13 +152,19 @@ private fun FeedHeader() {
                     .weight(1f)
                     .padding(start = AppSpacing.dp_24, end = AppSpacing.dp_12)
             ) {
-                Text(text = stringResource(R.string.welcome_back), style = AppTheme.typography.h1)
+                Text(
+                    text = stringResource(R.string.welcome_back),
+                    style = AppTheme.typography.h1
+                )
                 Text(
                     text = stringResource(R.string.lets_make_toda_better),
                     style = AppTheme.typography.body1
                 )
             }
-            Image(painter = painterResource(R.drawable.bg_plant), contentDescription = null)
+            Image(
+                painter = painterResource(R.drawable.bg_plant),
+                contentDescription = null
+            )
         }
     }
 }
@@ -267,7 +297,8 @@ private fun LockedCard(onClick: () -> Unit) {
     }
 }
 
-@Preview(heightDp = 1100)
+
+@Preview(showBackground = true, backgroundColor = 0xFFF)
 @Composable
 private fun FeedScreenPreview(
     @PreviewParameter(SectionAndRecommendationPreviewProvider::class) data: List<FeedSectionAndRecommendations>
