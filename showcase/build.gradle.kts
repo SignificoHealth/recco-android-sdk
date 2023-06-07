@@ -24,6 +24,15 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = "release"
+            keyPassword = "password"
+            storeFile = file("${project.projectDir}/keys/release.keystore")
+            storePassword = "password"
+        }
+    }
+
     buildTypes {
         named("release") {
             isMinifyEnabled = false
@@ -33,6 +42,7 @@ android {
                     "proguard-rules.pro"
                 )
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -53,8 +63,6 @@ android {
 
 dependencies {
     implementation(project(":ui"))
-    implementation(project(":headless"))
-
     // implementation("com.significo:shadowflight-ui:0.0.1")
     // implementation("com.significo:shadowflight-headless:0.0.1")
 
