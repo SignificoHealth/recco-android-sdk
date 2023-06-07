@@ -1,12 +1,9 @@
 package com.shadowflight.core.repository
 
-import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.model.feed.FeedSectionType
-import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Rating
-import com.shadowflight.core.model.recommendation.Recommendation
 import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.network.http.unwrap
 import com.shadowflight.core.openapi.api.RecommendationApi
@@ -17,7 +14,6 @@ import com.shadowflight.core.openapi.model.UpdateRatingDTO
 import com.shadowflight.core.openapi.model.UpdateStatusDTO
 import com.shadowflight.core.repository.mapper.asDTO
 import com.shadowflight.core.repository.mapper.asEntity
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -106,7 +102,7 @@ class RecommendationRepository @Inject constructor(
     val starting = sectionsPipelines[FeedSectionType.STARTING_RECOMMENDATIONS]!!.state
 
     suspend fun reloadAllSections() {
-        sectionsPipelines.forEach { (_, pipeline) -> pipeline.update() }
+        sectionsPipelines.forEach { (_, pipeline) -> pipeline.reloadRemoteDatasource() }
     }
 
     suspend fun getArticle(contentId: ContentId): Article =
@@ -121,7 +117,7 @@ class RecommendationRepository @Inject constructor(
                 contentType = UpdateBookmarkDTO.ContentType.ARTICLES
             )
         )
-        reloadSectionBasedOnContentId(contentId)
+        updateSections(contentId = contentId, bookmarked = bookmarked)
     }
 
     suspend fun setRecommendationRating(contentId: ContentId, rating: Rating) {
@@ -136,7 +132,7 @@ class RecommendationRepository @Inject constructor(
                 }
             )
         )
-        reloadSectionBasedOnContentId(contentId)
+        updateSections(contentId = contentId, rating = rating)
     }
 
     suspend fun setRecommendationAsViewed(contentId: ContentId) {
@@ -147,12 +143,32 @@ class RecommendationRepository @Inject constructor(
                 status = UpdateStatusDTO.Status.VIEWED
             )
         )
-        reloadSectionBasedOnContentId(contentId)
+        updateSections(contentId = contentId, status = Status.VIEWED)
     }
 
-    private suspend fun reloadSectionBasedOnContentId(contentId: ContentId) {
+    private suspend fun updateSections(
+        contentId: ContentId,
+        status: Status? = null,
+        bookmarked: Boolean? = null,
+        rating: Rating? = null
+    ) {
         sectionsPipelines
-            .filter { (_, pipeline) -> pipeline.value?.any { it.id == contentId } == true }
-            .forEach { (_, pipeline) -> pipeline.update()  }
+            .filter { (_, pipeline) -> pipeline.value != null }
+            .filter { (_, pipeline) -> pipeline.value!!.any { it.id == contentId } }
+            .forEach { (_, pipeline) ->
+                pipeline.replaceWithLocal(
+                    pipeline.value!!.map { recommendation ->
+                        if (recommendation.id == contentId) {
+                            recommendation.copy(
+                                status = status ?: recommendation.status,
+                                bookmarked = bookmarked ?: recommendation.bookmarked,
+                                rating = rating ?: recommendation.rating,
+                            )
+                        } else {
+                            recommendation
+                        }
+                    }
+                )
+            }
     }
 }

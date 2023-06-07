@@ -16,6 +16,7 @@ class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
                 status = Status.VIEWED,
                 headline = "Some headline",
                 lead = "Some lead",
+                bookmarked = true,
                 imageUrl = null
             )
     }
