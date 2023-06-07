@@ -1,6 +1,5 @@
 package com.shadowflight.core.feed
 
-import android.view.Display.HdrCapabilities
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.logger.Logger
@@ -54,20 +53,7 @@ class FeedViewModel @Inject constructor(
             _viewState.value = _viewState.value.copy(error = null, isLoading = true)
 
             feedRepository.reloadFeed()
-            recommendationRepository.apply {
-                reloadTailoredPhysicalActivity()
-                reloadExplorePhysicalActivity()
-                reloadTailoredNutrition()
-                reloadExploreNutrition()
-                reloadTailoredPhysicalWellbeing()
-                reloadExplorePhysicalWellbeing()
-                reloadTailoredSleep()
-                reloadExploreSleep()
-                reloadPreferredRecommendations()
-                reloadMostPopular()
-                reloadNewestContent()
-                reloadStarting()
-            }
+            recommendationRepository.reloadAllSections()
         }
     }
 
