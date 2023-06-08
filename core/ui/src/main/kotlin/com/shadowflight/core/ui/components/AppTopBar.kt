@@ -13,6 +13,7 @@ import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +39,7 @@ import com.shadowflight.core.ui.theme.AppTheme
 fun AppTopBar(
     modifier: Modifier = Modifier,
     title: String? = null,
+    titleAlign: TextAlign = TextAlign.Center,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = { CloseIconButton() },
     backgroundColor: Color = AppTheme.colors.background,
@@ -75,10 +77,10 @@ fun AppTopBar(
                         LocalContentAlpha provides 1f,
                         content = @Composable {
                             Text(
-                                modifier = Modifier.padding(start = AppSpacing.dp_24),
+                                modifier = Modifier.padding(horizontal = AppSpacing.dp_8),
                                 text = title.orEmpty(),
                                 style = AppTheme.typography.h4,
-                                textAlign = TextAlign.Start,
+                                textAlign = titleAlign,
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1
                             )
