@@ -39,7 +39,7 @@ import com.shadowflight.core.ui.theme.AppTheme
 fun AppTopBar(
     modifier: Modifier = Modifier,
     title: String? = null,
-    titleAlign: TextAlign = TextAlign.Center,
+    titleAlign: TextAlign = TextAlign.Start,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = { CloseIconButton() },
     backgroundColor: Color = AppTheme.colors.background,
