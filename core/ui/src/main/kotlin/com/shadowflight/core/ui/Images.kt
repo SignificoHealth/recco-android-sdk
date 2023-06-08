@@ -47,6 +47,71 @@ fun AppTintedImageNoConnection(
 }
 
 @Composable
+fun AppTintedImagePeopleDigital(
+    modifier: Modifier = Modifier,
+    tint: Color = AppTheme.colors.illustration
+) {
+    AppTintedImage(
+        modifier = modifier,
+        drawableRes = R.drawable.ic_people_digital_tint, // FIXME
+        drawableResTint = R.drawable.ic_people_digital_tint,
+        tint = tint,
+    )
+}
+
+@Composable
+fun AppTintedImageRidingBike(
+    modifier: Modifier = Modifier,
+    tint: Color = AppTheme.colors.illustration
+) {
+    AppTintedImage(
+        modifier = modifier,
+        drawableRes = R.drawable.ic_riding_bike_tint, // FIXME
+        drawableResTint = R.drawable.ic_riding_bike_tint,
+        tint = tint,
+    )
+}
+
+@Composable
+fun AppTintedImageAboutYou(
+    modifier: Modifier = Modifier,
+    tint: Color = AppTheme.colors.illustration
+) {
+    AppTintedImage(
+        modifier = modifier,
+        drawableRes = R.drawable.ic_about_you_tint, // FIXME
+        drawableResTint = R.drawable.ic_about_you_tint,
+        tint = tint,
+    )
+}
+
+@Composable
+fun AppTintedImagePortrait1(
+    modifier: Modifier = Modifier,
+    tint: Color = AppTheme.colors.illustration
+) {
+    AppTintedImage(
+        modifier = modifier,
+        drawableRes = R.drawable.ic_portrait_1_tint, // FIXME
+        drawableResTint = R.drawable.ic_portrait_1_tint,
+        tint = tint,
+    )
+}
+
+@Composable
+fun AppTintedImagePortrait2(
+    modifier: Modifier = Modifier,
+    tint: Color = AppTheme.colors.illustration
+) {
+    AppTintedImage(
+        modifier = modifier,
+        drawableRes = R.drawable.ic_portrait_2_tint, // FIXME
+        drawableResTint = R.drawable.ic_portrait_2_tint,
+        tint = tint,
+    )
+}
+
+@Composable
 private fun AppTintedImage(
     modifier: Modifier = Modifier,
     @DrawableRes drawableRes: Int,
