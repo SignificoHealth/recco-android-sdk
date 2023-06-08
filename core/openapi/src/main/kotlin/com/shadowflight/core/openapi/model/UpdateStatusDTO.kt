@@ -14,6 +14,8 @@
 package com.shadowflight.core.openapi.model
 
 import com.shadowflight.core.openapi.model.ContentIdDTO
+import com.shadowflight.core.openapi.model.ContentTypeDTO
+import com.shadowflight.core.openapi.model.StatusDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -31,29 +33,8 @@ data class UpdateStatusDTO(
     val contentId: ContentIdDTO,
 
     @Json(name = "contentType")
-    val contentType: UpdateStatusDTO.ContentType,
+    val contentType: ContentTypeDTO,
 
     @Json(name = "status")
-    val status: UpdateStatusDTO.Status
-) {
-    /**
-     * 
-     *
-     * Values: ARTICLES
-     */
-    @JsonClass(generateAdapter = false)
-    enum class ContentType(val value: kotlin.String) {
-        @Json(name = "articles") ARTICLES("articles");
-    }
-    /**
-     * 
-     *
-     * Values: NO_INTERACTION,VIEWED
-     */
-    @JsonClass(generateAdapter = false)
-    enum class Status(val value: kotlin.String) {
-        @Json(name = "no_interaction") NO_INTERACTION("no_interaction"),
-        @Json(name = "viewed") VIEWED("viewed");
-    }
-}
-
+    val status: StatusDTO
+)

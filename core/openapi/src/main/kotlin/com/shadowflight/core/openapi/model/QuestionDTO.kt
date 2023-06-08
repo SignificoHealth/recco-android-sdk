@@ -15,6 +15,7 @@ package com.shadowflight.core.openapi.model
 
 import com.shadowflight.core.openapi.model.MultiChoiceQuestionDTO
 import com.shadowflight.core.openapi.model.NumericQuestionDTO
+import com.shadowflight.core.openapi.model.QuestionAnswerTypeDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -41,23 +42,11 @@ data class QuestionDTO(
     val text: kotlin.String,
 
     @Json(name = "type")
-    val type: QuestionDTO.Type,
+    val type: QuestionAnswerTypeDTO,
 
     @Json(name = "multiChoice")
     val multiChoice: MultiChoiceQuestionDTO? = null,
 
     @Json(name = "numeric")
     val numeric: NumericQuestionDTO? = null
-) {
-    /**
-     * 
-     *
-     * Values: MULTICHOICE,NUMERIC
-     */
-    @JsonClass(generateAdapter = false)
-    enum class Type(val value: kotlin.String) {
-        @Json(name = "multichoice") MULTICHOICE("multichoice"),
-        @Json(name = "numeric") NUMERIC("numeric");
-    }
-}
-
+)

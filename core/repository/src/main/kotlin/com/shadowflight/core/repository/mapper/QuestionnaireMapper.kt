@@ -13,6 +13,7 @@ import com.shadowflight.core.openapi.model.CreateQuestionnaireAnswerDTO
 import com.shadowflight.core.openapi.model.MultiChoiceAnswerOptionDTO
 import com.shadowflight.core.openapi.model.MultiChoiceQuestionDTO
 import com.shadowflight.core.openapi.model.NumericQuestionDTO
+import com.shadowflight.core.openapi.model.QuestionAnswerTypeDTO
 import com.shadowflight.core.openapi.model.QuestionDTO
 import com.shadowflight.core.openapi.model.QuestionnaireAnswersDTO
 import com.shadowflight.core.openapi.model.QuestionnaireDTO
@@ -31,9 +32,9 @@ private fun QuestionDTO.asEntity() = Question(
     numeric = numeric?.asEntity()
 )
 
-private fun QuestionDTO.Type.asEntity() = when (this) {
-    QuestionDTO.Type.MULTICHOICE -> QuestionType.MULTI_CHOICE
-    QuestionDTO.Type.NUMERIC -> QuestionType.NUMERIC
+private fun QuestionAnswerTypeDTO.asEntity() = when (this) {
+    QuestionAnswerTypeDTO.MULTICHOICE -> QuestionType.MULTI_CHOICE
+    QuestionAnswerTypeDTO.NUMERIC -> QuestionType.NUMERIC
 }
 
 private fun MultiChoiceQuestionDTO.asEntity() = MultiChoiceQuestion(
@@ -73,6 +74,6 @@ private fun QuestionnaireAnswer.asDTO() = CreateQuestionnaireAnswerDTO(
 )
 
 private fun QuestionType.asDTO() = when (this) {
-    QuestionType.MULTI_CHOICE -> CreateQuestionnaireAnswerDTO.Type.MULTICHOICE
-    QuestionType.NUMERIC -> CreateQuestionnaireAnswerDTO.Type.NUMERIC
+    QuestionType.MULTI_CHOICE -> QuestionAnswerTypeDTO.MULTICHOICE
+    QuestionType.NUMERIC -> QuestionAnswerTypeDTO.NUMERIC
 }

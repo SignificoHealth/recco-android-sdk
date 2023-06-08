@@ -13,6 +13,7 @@
 
 package com.shadowflight.core.openapi.model
 
+import com.shadowflight.core.openapi.model.QuestionAnswerTypeDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -31,23 +32,11 @@ data class CreateQuestionnaireAnswerDTO(
     val questionId: kotlin.String,
 
     @Json(name = "type")
-    val type: CreateQuestionnaireAnswerDTO.Type,
+    val type: QuestionAnswerTypeDTO,
 
     @Json(name = "multichoice")
     val multichoice: kotlin.collections.List<kotlin.Int>? = null,
 
     @Json(name = "numeric")
     val numeric: kotlin.Double? = null
-) {
-    /**
-     * 
-     *
-     * Values: MULTICHOICE,NUMERIC
-     */
-    @JsonClass(generateAdapter = false)
-    enum class Type(val value: kotlin.String) {
-        @Json(name = "multichoice") MULTICHOICE("multichoice"),
-        @Json(name = "numeric") NUMERIC("numeric");
-    }
-}
-
+)

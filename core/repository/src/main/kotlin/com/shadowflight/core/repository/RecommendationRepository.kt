@@ -8,6 +8,8 @@ import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.network.http.unwrap
 import com.shadowflight.core.openapi.api.RecommendationApi
 import com.shadowflight.core.openapi.model.AppUserRecommendationDTO
+import com.shadowflight.core.openapi.model.ContentTypeDTO
+import com.shadowflight.core.openapi.model.StatusDTO
 import com.shadowflight.core.openapi.model.TopicDTO
 import com.shadowflight.core.openapi.model.UpdateBookmarkDTO
 import com.shadowflight.core.openapi.model.UpdateRatingDTO
@@ -114,7 +116,7 @@ class RecommendationRepository @Inject constructor(
             UpdateBookmarkDTO(
                 contentId = contentId.asDTO(),
                 bookmarked = bookmarked,
-                contentType = UpdateBookmarkDTO.ContentType.ARTICLES
+                contentType = ContentTypeDTO.ARTICLES
             )
         )
         updateSections(contentId = contentId, bookmarked = bookmarked)
@@ -124,12 +126,8 @@ class RecommendationRepository @Inject constructor(
         api.setRating(
             UpdateRatingDTO(
                 contentId = contentId.asDTO(),
-                contentType = UpdateRatingDTO.ContentType.ARTICLES,
-                rating = when (rating) {
-                    Rating.LIKE -> UpdateRatingDTO.Rating.LIKE
-                    Rating.DISLIKE -> UpdateRatingDTO.Rating.DISLIKE
-                    Rating.NOT_RATED -> UpdateRatingDTO.Rating.NOT_RATED
-                }
+                contentType = ContentTypeDTO.ARTICLES,
+                rating = rating.asDTO()
             )
         )
         updateSections(contentId = contentId, rating = rating)
@@ -139,8 +137,8 @@ class RecommendationRepository @Inject constructor(
         api.setStatus(
             UpdateStatusDTO(
                 contentId = contentId.asDTO(),
-                contentType = UpdateStatusDTO.ContentType.ARTICLES,
-                status = UpdateStatusDTO.Status.VIEWED
+                contentType = ContentTypeDTO.ARTICLES,
+                status = StatusDTO.VIEWED
             )
         )
         updateSections(contentId = contentId, status = Status.VIEWED)

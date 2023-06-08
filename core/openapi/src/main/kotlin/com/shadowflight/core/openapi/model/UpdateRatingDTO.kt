@@ -14,6 +14,8 @@
 package com.shadowflight.core.openapi.model
 
 import com.shadowflight.core.openapi.model.ContentIdDTO
+import com.shadowflight.core.openapi.model.ContentTypeDTO
+import com.shadowflight.core.openapi.model.RatingDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -31,30 +33,8 @@ data class UpdateRatingDTO(
     val contentId: ContentIdDTO,
 
     @Json(name = "contentType")
-    val contentType: UpdateRatingDTO.ContentType,
+    val contentType: ContentTypeDTO,
 
     @Json(name = "rating")
-    val rating: UpdateRatingDTO.Rating
-) {
-    /**
-     * 
-     *
-     * Values: ARTICLES
-     */
-    @JsonClass(generateAdapter = false)
-    enum class ContentType(val value: kotlin.String) {
-        @Json(name = "articles") ARTICLES("articles");
-    }
-    /**
-     * 
-     *
-     * Values: LIKE,DISLIKE,NOT_RATED
-     */
-    @JsonClass(generateAdapter = false)
-    enum class Rating(val value: kotlin.String) {
-        @Json(name = "like") LIKE("like"),
-        @Json(name = "dislike") DISLIKE("dislike"),
-        @Json(name = "not_rated") NOT_RATED("not_rated");
-    }
-}
-
+    val rating: RatingDTO
+)
