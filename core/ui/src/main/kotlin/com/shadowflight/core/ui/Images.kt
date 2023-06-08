@@ -19,12 +19,13 @@ const val ASPECT_RATIO_16_9 = 16f / 9f // 0.56
 const val ASPECT_RATIO_10_5 = 10f / 5f // 0.5
 const val ASPECT_RATIO_10_4 = 10f / 4f // 0.4
 
+
 @Composable
-fun AppImagePottedPlant2(
+fun AppTintedImagePottedPlant2(
     modifier: Modifier = Modifier,
     tint: Color = AppTheme.colors.illustration
 ) {
-    AppImageTinted(
+    AppTintedImage(
         modifier = modifier,
         drawableRes = R.drawable.ic_potted_plant_2,
         drawableResTint = R.drawable.ic_potted_plant_2_tint,
@@ -33,7 +34,7 @@ fun AppImagePottedPlant2(
 }
 
 @Composable
-private fun AppImageTinted(
+private fun AppTintedImage(
     modifier: Modifier = Modifier,
     @DrawableRes drawableRes: Int,
     @DrawableRes drawableResTint: Int,
