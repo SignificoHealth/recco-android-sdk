@@ -15,8 +15,7 @@ class ShowcaseApp : Application() {
         UIApi.init(
             sdkConfig = SDKConfig(
                 appName = "Showcase",
-                apiSecret = "YuJi02IHzJDxe-oiqT1QOptnh9mGMnulPPx5C3xoyBSe0dNha-m1qOjG9DopeSspqR9d6-Y",
-                isDebug = true
+                apiSecret = "YuJi02IHzJDxe-oiqT1QOptnh9mGMnulPPx5C3xoyBSe0dNha-m1qOjG9DopeSspqR9d6-Y"
             ),
             application = this
         )
