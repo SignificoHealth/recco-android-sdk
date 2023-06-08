@@ -21,7 +21,6 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param id 
- * @param categoriesIds 
  * @param answers 
  */
 @JsonClass(generateAdapter = true)
@@ -29,9 +28,6 @@ data class QuestionnaireAnswersDTO(
 
     @Json(name = "id")
     val id: kotlin.String,
-
-    @Json(name = "categoriesIds")
-    val categoriesIds: kotlin.collections.List<kotlin.Int>,
 
     @Json(name = "answers")
     val answers: kotlin.collections.List<CreateQuestionnaireAnswerDTO>
