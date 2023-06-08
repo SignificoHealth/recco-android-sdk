@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.shadowflight.core.ui.extensions.asCtaIconRes
 import com.shadowflight.core.ui.extensions.asCtaTextRes
 import com.shadowflight.core.ui.extensions.asDescriptionRes
+import com.shadowflight.core.ui.extensions.asDrawableComposable
 import com.shadowflight.core.ui.extensions.asDrawableRes
 import com.shadowflight.core.ui.extensions.asTitleRes
 
@@ -36,6 +37,7 @@ internal fun AppErrorContent(
                 titleRes = throwable.asTitleRes(),
                 description = stringResource(id = throwable.asDescriptionRes()),
                 drawableRes = throwable.asDrawableRes(),
+                drawableComposable = throwable.asDrawableComposable(),
                 ctaIconRes = throwable.asCtaIconRes(),
                 ctaTextRes = throwable.asCtaTextRes(),
                 onCtaClick = retry

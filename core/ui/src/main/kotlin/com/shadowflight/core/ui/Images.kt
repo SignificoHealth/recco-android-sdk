@@ -34,6 +34,19 @@ fun AppTintedImagePottedPlant2(
 }
 
 @Composable
+fun AppTintedImageNoConnection(
+    modifier: Modifier = Modifier,
+    tint: Color = AppTheme.colors.illustration
+) {
+    AppTintedImage(
+        modifier = modifier,
+        drawableRes = R.drawable.ic_no_connection,
+        drawableResTint = R.drawable.ic_no_connection_tint,
+        tint = tint,
+    )
+}
+
+@Composable
 private fun AppTintedImage(
     modifier: Modifier = Modifier,
     @DrawableRes drawableRes: Int,
