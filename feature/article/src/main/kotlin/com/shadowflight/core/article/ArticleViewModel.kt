@@ -11,6 +11,9 @@ import com.shadowflight.core.model.recommendation.Rating
 import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.R
+import com.shadowflight.core.ui.models.article.ArticleUI
+import com.shadowflight.core.ui.models.UiState
+import com.shadowflight.core.ui.models.article.UserInteractionRecommendation
 import com.shadowflight.core.ui.pipelines.Pipelines
 import com.shadowflight.core.ui.pipelines.ToastMessageType
 import com.shadowflight.core.ui.pipelines.ViewEvent
@@ -27,8 +30,8 @@ class ArticleViewModel @Inject constructor(
     private val logger: Logger
 ) : ViewModel() {
     private val articleId by lazy { checkNotNull(savedStateHandle.get<ContentId>(idArg)) }
-    private val _viewState = MutableStateFlow(ArticleViewUIState())
-    val viewState: Flow<ArticleViewUIState> = _viewState
+    private val _viewState = MutableStateFlow(UiState<ArticleUI>())
+    val viewState: Flow<UiState<ArticleUI>> = _viewState
 
     init {
         initialLoadSubscribe()
@@ -64,17 +67,19 @@ class ArticleViewModel @Inject constructor(
                         setArticleAsSeen()
                     }
                     _viewState.emit(
-                        ArticleViewUIState(
+                        UiState(
                             isLoading = false,
-                            article = article,
-                            userInteraction = UserInteractionRecommendation(
-                                rating = article.rating,
-                                isBookmarked = article.isBookmarked
+                            data = ArticleUI(
+                                article = article,
+                                userInteraction = UserInteractionRecommendation(
+                                    rating = article.rating,
+                                    isBookmarked = article.isBookmarked
+                                )
                             )
                         )
                     )
                 }.onFailure {
-                    _viewState.emit(ArticleViewUIState(error = it, isLoading = false))
+                    _viewState.emit(UiState(error = it, isLoading = false))
                     logger.e(it)
                 }
         }
@@ -83,11 +88,16 @@ class ArticleViewModel @Inject constructor(
     private fun toggleBookmarkState() {
         viewModelScope.launch {
             val uiState = _viewState.value
-            val article = checkNotNull(uiState.article)
-            val userInteraction = checkNotNull(uiState.userInteraction)
+            val articleView = checkNotNull(uiState.data)
+            val article = articleView.article
+            val userInteraction = articleView.userInteraction
 
             _viewState.emit(
-                uiState.copy(userInteraction = userInteraction.copy(isBookmarkLoading = true))
+                uiState.copy(
+                    data = articleView.copy(
+                        userInteraction = userInteraction
+                    )
+                )
             )
 
             val newBookmarkedState = !userInteraction.isBookmarked
@@ -99,9 +109,11 @@ class ArticleViewModel @Inject constructor(
             }.onSuccess {
                 _viewState.emit(
                     uiState.copy(
-                        userInteraction = userInteraction.copy(
-                            isBookmarkLoading = false,
-                            isBookmarked = newBookmarkedState
+                        data = articleView.copy(
+                            userInteraction = userInteraction.copy(
+                                isBookmarkLoading = false,
+                                isBookmarked = newBookmarkedState
+                            )
                         )
                     )
                 )
@@ -124,14 +136,17 @@ class ArticleViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             val uiState = _viewState.value
-            val article = checkNotNull(uiState.article)
-            val userInteraction = checkNotNull(uiState.userInteraction)
+            val articleView = checkNotNull(uiState.data)
+            val article = articleView.article
+            val userInteraction = articleView.userInteraction
 
             _viewState.emit(
                 uiState.copy(
-                    userInteraction = userInteraction.copy(
-                        isDislikeLoading = isDislikeLoading,
-                        isLikeLoading = isLikeLoading
+                    data = articleView.copy(
+                        userInteraction = userInteraction.copy(
+                            isDislikeLoading = isDislikeLoading,
+                            isLikeLoading = isLikeLoading
+                        )
                     )
                 )
             )
@@ -154,10 +169,12 @@ class ArticleViewModel @Inject constructor(
             }.onSuccess {
                 _viewState.emit(
                     uiState.copy(
-                        userInteraction = userInteraction.copy(
-                            isDislikeLoading = false,
-                            isLikeLoading = false,
-                            rating = newRatingState
+                        data = articleView.copy(
+                            userInteraction = userInteraction.copy(
+                                isDislikeLoading = false,
+                                isLikeLoading = false,
+                                rating = newRatingState
+                            )
                         )
                     )
                 )

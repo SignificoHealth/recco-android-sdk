@@ -1,4 +1,4 @@
-package com.shadowflight.core.article
+package com.shadowflight.core.ui.models.article
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.fadeIn

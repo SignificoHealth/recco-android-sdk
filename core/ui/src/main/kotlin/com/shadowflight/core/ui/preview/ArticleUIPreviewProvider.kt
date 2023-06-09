@@ -4,11 +4,26 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.model.recommendation.Rating
 import com.shadowflight.core.model.recommendation.Status
+import com.shadowflight.core.ui.models.UiState
+import com.shadowflight.core.ui.models.article.ArticleUI
+import com.shadowflight.core.ui.models.article.UserInteractionRecommendation
 
-class ArticlePreviewProvider :
-    PreviewParameterProvider<Article> {
+class ArticleUIPreviewProvider :
+    PreviewParameterProvider<UiState<ArticleUI>> {
     override val values
-        get() = sequenceOf(data())
+        get() = sequenceOf(
+            UiState(
+                isLoading = false,
+                data = ArticleUI(
+                    article = data(),
+                    userInteraction = UserInteractionRecommendation(
+                        rating = Rating.LIKE
+                    )
+                )
+            ),
+            UiState(isLoading = true),
+            UiState(isLoading = false, error = Throwable())
+        )
 
     companion object {
         fun data(

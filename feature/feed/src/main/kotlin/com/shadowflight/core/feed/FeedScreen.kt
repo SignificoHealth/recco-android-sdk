@@ -49,10 +49,10 @@ import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.AppEmptyContent
 import com.shadowflight.core.ui.components.AppScreenStateAware
 import com.shadowflight.core.ui.components.AppTopBar
-import com.shadowflight.core.ui.components.CloseIconButton
 import com.shadowflight.core.ui.components.EmptyState
 import com.shadowflight.core.ui.extensions.viewedOverlay
-import com.shadowflight.core.ui.preview.SectionAndRecommendationPreviewProvider
+import com.shadowflight.core.ui.models.UiState
+import com.shadowflight.core.ui.preview.FeedUIPreviewProvider
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 
@@ -61,12 +61,27 @@ fun FeedRoute(
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic) -> Unit,
     viewModel: FeedViewModel = hiltViewModel(),
-    contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues(),
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
-        initialValue = FeedViewUIState()
+        initialValue = UiState()
     )
 
+    FeedScreen(
+        uiState = uiState,
+        onUserInteract = { viewModel.onUserInteract(it) },
+        navigateToQuestionnaire = navigateToQuestionnaire,
+        navigateToArticle = navigateToArticle
+    )
+}
+
+@Composable
+private fun FeedScreen(
+    uiState: UiState<List<FeedSectionAndRecommendations>>,
+    onUserInteract: (FeedUserInteract) -> Unit,
+    navigateToQuestionnaire: (Topic) -> Unit,
+    navigateToArticle: (ContentId) -> Unit,
+    contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues(),
+) {
     Scaffold(
         topBar = { AppTopBar() },
         backgroundColor = AppTheme.colors.background,
@@ -76,11 +91,10 @@ fun FeedRoute(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
             scrollState = rememberScrollState(),
             enablePullToRefresh = true,
-            isLoading = uiState.isLoading,
-            throwable = uiState.error,
-            isEmpty = uiState.feedSectionAndRecommendations.isEmpty(),
-            retry = { viewModel.onUserInteract(FeedUserInteract.Retry) },
-            refresh = { viewModel.onUserInteract(FeedUserInteract.Refresh) },
+            uiState = uiState,
+            isEmpty = uiState.data.orEmpty().isEmpty(),
+            retry = { onUserInteract(FeedUserInteract.Retry) },
+            refresh = { onUserInteract(FeedUserInteract.Refresh) },
             emptyContent = {
                 Column(
                     modifier = Modifier.weight(1f),
@@ -94,9 +108,9 @@ fun FeedRoute(
                     )
                 }
             }
-        ) {
-            FeedScreen(
-                feedSectionAndRecommendations = uiState.feedSectionAndRecommendations,
+        ) { data ->
+            FeedContent(
+                feedSectionAndRecommendations = data,
                 navigateToArticle = navigateToArticle,
                 navigateToQuestionnaire = navigateToQuestionnaire
             )
@@ -105,7 +119,7 @@ fun FeedRoute(
 }
 
 @Composable
-fun FeedScreen(
+private fun FeedContent(
     feedSectionAndRecommendations: List<FeedSectionAndRecommendations>,
     navigateToQuestionnaire: (Topic) -> Unit,
     navigateToArticle: (ContentId) -> Unit
@@ -289,11 +303,12 @@ private fun LockedCard(onClick: () -> Unit) {
 
 @Preview(showBackground = true, backgroundColor = 0xFFF)
 @Composable
-private fun FeedScreenPreview(
-    @PreviewParameter(SectionAndRecommendationPreviewProvider::class) data: List<FeedSectionAndRecommendations>
+private fun Preview(
+    @PreviewParameter(FeedUIPreviewProvider::class) uiState: UiState<List<FeedSectionAndRecommendations>>
 ) {
     FeedScreen(
-        feedSectionAndRecommendations = data,
-        navigateToArticle = {},
-        navigateToQuestionnaire = {})
+        uiState = uiState,
+        onUserInteract = {},
+        navigateToQuestionnaire = {},
+        navigateToArticle = {})
 }

@@ -19,6 +19,7 @@ import com.shadowflight.core.model.feed.FeedSectionType.STARTING_RECOMMENDATIONS
 import com.shadowflight.core.repository.FeedRepository
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.extensions.combine
+import com.shadowflight.core.ui.models.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,8 +35,8 @@ class FeedViewModel @Inject constructor(
     private val recommendationRepository: RecommendationRepository,
     private val logger: Logger
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(FeedViewUIState())
-    val viewState: Flow<FeedViewUIState> = _viewState
+    private val _viewState = MutableStateFlow(UiState<List<FeedSectionAndRecommendations>>())
+    val viewState: Flow<UiState<List<FeedSectionAndRecommendations>>> = _viewState
 
     init {
         initialLoadOrRetry()
@@ -116,15 +117,9 @@ class FeedViewModel @Inject constructor(
                 _viewState.value = _viewState.value.copy(
                     isLoading = false,
                     error = null,
-                    feedSectionAndRecommendations = feedSectionAndRecommendations
+                    data = feedSectionAndRecommendations
                 )
             }
         }
     }
 }
-
-data class FeedViewUIState(
-    val isLoading: Boolean = true,
-    val error: Throwable? = null,
-    val feedSectionAndRecommendations: List<FeedSectionAndRecommendations> = emptyList()
-)

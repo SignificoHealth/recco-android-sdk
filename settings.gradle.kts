@@ -21,8 +21,12 @@ dependencyResolutionManagement {
             name = "GithubPackages"
             url = uri("https://maven.pkg.github.com/viluahealthcare/android-shadowflight-sdk")
             credentials {
-                username = extra["gpr.user"].toString()
-                password = extra["gpr.key"].toString()
+                if (extra.properties.keys.contains("gpr.user")
+                    && extra.properties.keys.contains("gpr.key")
+                ) {
+                    username = extra["gpr.user"].toString()
+                    password = extra["gpr.key"].toString()
+                }
             }
         }
     }
