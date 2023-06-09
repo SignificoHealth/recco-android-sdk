@@ -77,7 +77,9 @@ fun AppTopBar(
                         LocalContentAlpha provides 1f,
                         content = @Composable {
                             Text(
-                                modifier = Modifier.padding(horizontal = AppSpacing.dp_8),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = AppSpacing.dp_8),
                                 text = title.orEmpty(),
                                 style = AppTheme.typography.h4,
                                 textAlign = titleAlign,
