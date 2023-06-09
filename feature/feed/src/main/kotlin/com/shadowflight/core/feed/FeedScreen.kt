@@ -50,9 +50,8 @@ import com.shadowflight.core.ui.components.AppEmptyContent
 import com.shadowflight.core.ui.components.AppScreenStateAware
 import com.shadowflight.core.ui.components.AppTopBar
 import com.shadowflight.core.ui.components.EmptyState
+import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.viewedOverlay
-import com.shadowflight.core.ui.models.UiState
-import com.shadowflight.core.ui.preview.FeedUIPreviewProvider
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 

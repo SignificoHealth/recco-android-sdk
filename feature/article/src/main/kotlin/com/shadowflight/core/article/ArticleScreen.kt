@@ -35,12 +35,9 @@ import com.shadowflight.core.ui.ASPECT_RATIO_4_3
 import com.shadowflight.core.ui.components.AppScreenStateAware
 import com.shadowflight.core.ui.components.AppTopBar
 import com.shadowflight.core.ui.components.BackIconButton
+import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.isEndReached
 import com.shadowflight.core.ui.extensions.openUrlInBrowser
-import com.shadowflight.core.ui.models.UiState
-import com.shadowflight.core.ui.models.article.ArticleUI
-import com.shadowflight.core.ui.models.article.UserInteractionRecommendationCard
-import com.shadowflight.core.ui.preview.ArticleUIPreviewProvider
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 
@@ -89,7 +86,7 @@ private fun ArticleScreen(
             retry = { onUserInteract(ArticleUserInteract.Retry) },
             animatedContent = {
                 AsyncImage(
-                    model = uiState.data?.article?.imageUrl,
+                    model = it.article.imageUrl,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()

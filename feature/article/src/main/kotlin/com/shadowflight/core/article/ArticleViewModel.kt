@@ -11,9 +11,7 @@ import com.shadowflight.core.model.recommendation.Rating
 import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.R
-import com.shadowflight.core.ui.models.article.ArticleUI
-import com.shadowflight.core.ui.models.UiState
-import com.shadowflight.core.ui.models.article.UserInteractionRecommendation
+import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.pipelines.Pipelines
 import com.shadowflight.core.ui.pipelines.ToastMessageType
 import com.shadowflight.core.ui.pipelines.ViewEvent

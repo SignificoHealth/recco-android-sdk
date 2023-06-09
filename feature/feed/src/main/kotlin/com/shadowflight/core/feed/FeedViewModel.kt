@@ -18,8 +18,8 @@ import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.STARTING_RECOMMENDATIONS
 import com.shadowflight.core.repository.FeedRepository
 import com.shadowflight.core.repository.RecommendationRepository
+import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.combine
-import com.shadowflight.core.ui.models.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

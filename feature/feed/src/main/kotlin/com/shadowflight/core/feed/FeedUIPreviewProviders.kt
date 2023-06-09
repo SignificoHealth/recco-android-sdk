@@ -1,11 +1,10 @@
-package com.shadowflight.core.ui.preview
+package com.shadowflight.core.feed
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
 import com.shadowflight.core.model.feed.FeedSectionType
-import com.shadowflight.core.model.feed.Topic
-import com.shadowflight.core.ui.models.UiState
+import com.shadowflight.core.ui.components.UiState
+import com.shadowflight.core.ui.preview.FeedPreviewProvider
 
 class FeedUIPreviewProvider :
     PreviewParameterProvider<UiState<List<FeedSectionAndRecommendations>>> {
@@ -15,15 +14,15 @@ class FeedUIPreviewProvider :
             UiState(
                 isLoading = false,
                 data = listOf(
-                    data(
+                    FeedPreviewProvider.data(
                         type = FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS,
                         locked = false
                     ),
-                    data(
+                    FeedPreviewProvider.data(
                         type = FeedSectionType.NUTRITION_EXPLORE,
                         locked = false
                     ),
-                    data(
+                    FeedPreviewProvider.data(
                         type = FeedSectionType.SLEEP_RECOMMENDATIONS,
                         locked = true
                     )
@@ -32,15 +31,4 @@ class FeedUIPreviewProvider :
             UiState(isLoading = true),
             UiState(isLoading = false, error = Throwable())
         )
-
-    companion object {
-        fun data(type: FeedSectionType, locked: Boolean) = FeedSectionAndRecommendations(
-            recommendations = List(10) { RecommendationPreviewProvider.data },
-            feedSection = FeedSection(
-                type = type,
-                locked = locked,
-                topic = Topic.PHYSICAL_ACTIVITY
-            )
-        )
-    }
 }

@@ -1,4 +1,4 @@
-package com.shadowflight.core.ui.models.article
+package com.shadowflight.core.article
 
 import com.shadowflight.core.model.recommendation.Article
 
