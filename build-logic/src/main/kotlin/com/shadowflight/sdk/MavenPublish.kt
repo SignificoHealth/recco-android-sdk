@@ -26,6 +26,18 @@ internal fun Project.configureMavenPublish(extension: PublishingExtension) {
     val moduleVersion: String by project
 
     extension.apply {
+
+        repositories {
+            maven {
+                name = "GithubPackages"
+                url = uri("https://maven.pkg.github.com/viluahealthcare/android-shadowflight-sdk")
+                credentials {
+                    username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+                }
+            }
+        }
+
         afterEvaluate {
             publications {
 
@@ -73,4 +85,3 @@ internal fun configureDocsAndSources(extension: LibraryExtension) {
         }
     }
 }
-

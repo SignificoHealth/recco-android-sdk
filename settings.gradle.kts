@@ -17,6 +17,14 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven(url = "https://jitpack.io")
+        maven {
+            name = "GithubPackages"
+            url = uri("https://maven.pkg.github.com/viluahealthcare/android-shadowflight-sdk")
+            credentials {
+                username = extra["gpr.user"].toString()
+                password = extra["gpr.key"].toString()
+            }
+        }
     }
 }
 
