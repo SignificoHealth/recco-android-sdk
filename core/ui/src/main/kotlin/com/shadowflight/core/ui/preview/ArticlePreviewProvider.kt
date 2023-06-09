@@ -1,15 +1,10 @@
 package com.shadowflight.core.ui.preview
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.model.recommendation.Rating
 import com.shadowflight.core.model.recommendation.Status
 
-class ArticlePreviewProvider :
-    PreviewParameterProvider<Article> {
-    override val values
-        get() = sequenceOf(data())
-
+class ArticlePreviewProvider {
     companion object {
         fun data(
             rating: Rating = Rating.NOT_RATED,

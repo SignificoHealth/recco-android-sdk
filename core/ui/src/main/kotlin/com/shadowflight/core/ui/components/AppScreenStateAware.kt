@@ -1,8 +1,5 @@
 package com.shadowflight.core.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,6 +49,12 @@ import com.shadowflight.core.ui.theme.AppTheme
 import kotlinx.coroutines.flow.flowOf
 import java.lang.Float.min
 
+data class UiState<T>(
+    val isLoading: Boolean = true,
+    val error: Throwable? = null,
+    val data: T? = null
+)
+
 /**
  * Extracted from [SwipeRefresh] documentation:
  * A layout which implements the swipe-to-refresh pattern, allowing the user to refresh content via
@@ -64,12 +67,11 @@ import java.lang.Float.min
  * [androidx.compose.foundation.verticalScroll] modifier to that content.
  */
 @Composable
-fun AppScreenStateAware(
+fun <T> AppScreenStateAware(
     modifier: Modifier = Modifier,
     scrollState: ScrollState? = null,
     isFloatingHeader: Boolean = false,
-    isLoading: Boolean,
-    throwable: Throwable? = null,
+    uiState: UiState<T>,
     enablePullToRefresh: Boolean = false,
     avoidClickingWhenRefreshing: Boolean = true,
     isEmpty: Boolean = false,
@@ -78,16 +80,14 @@ fun AppScreenStateAware(
     colorStatusBar: Color = AppTheme.colors.primary,
     backgroundContent: @Composable (() -> Unit)? = null,
     animatedContentShapeContent: @Composable (() -> Unit)? = null,
-    animatedContent: @Composable (() -> Unit)? = null,
+    animatedContent: @Composable ((uiStateData: T) -> Unit)? = null,
     emptyContent: @Composable (ColumnScope.() -> Unit)? = null,
-    headerContent: @Composable ((isAnimatedContentCollapsed: Boolean) -> Unit)? = null,
-    footerContent: @Composable (() -> Unit)? = null,
+    footerContent: @Composable ((uiStateData: T) -> Unit)? = null,
     isFloatingFooter: Boolean = false,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.(uiStateData: T) -> Unit
 ) {
     val isFirstLoading = remember { mutableStateOf(true) }
     val isAnimatedContentCollapsed = remember { mutableStateOf(true) }
-    val isError = throwable != null
 
     AppTheme(colorStatusBar = colorStatusBar) {
         if (isFloatingHeader) {
@@ -95,17 +95,15 @@ fun AppScreenStateAware(
                 backgroundContent?.invoke()
 
                 AppScreenStateAwareContent(
+                    uiState = uiState,
                     isAnimatedContentCollapsed = isAnimatedContentCollapsed,
                     modifier = modifier,
                     isFloatingHeader = true,
                     scrollState = scrollState,
                     animatedContentShapeContent = animatedContentShapeContent,
                     animatedContent = animatedContent,
-                    isLoading = isLoading,
                     isFirstLoading = isFirstLoading,
                     isEmpty = isEmpty,
-                    isError = isError,
-                    throwable = throwable,
                     retry = retry,
                     refresh = refresh ?: {},
                     emptyContent = emptyContent,
@@ -116,16 +114,6 @@ fun AppScreenStateAware(
                     isFloatingFooter = isFloatingFooter,
                     content = content
                 )
-
-                headerContent?.let {
-                    HeaderContent(
-                        isFirstLoading = isFirstLoading.value || isEmpty || isError,
-                        isAnimatedContentCollapsed = isAnimatedContentCollapsed.value,
-                        isFloatingHeader = true,
-                        content = it
-                    )
-                }
-
                 if (isFloatingFooter) {
                     Box(
                         modifier = Modifier
@@ -133,7 +121,7 @@ fun AppScreenStateAware(
                             .align(Alignment.BottomCenter),
                         contentAlignment = Alignment.Center
                     ) {
-                        footerContent?.invoke()
+                        uiState.data?.let { footerContent?.invoke(it) }
                     }
                 }
             }
@@ -142,15 +130,6 @@ fun AppScreenStateAware(
                 backgroundContent?.invoke()
 
                 Column(modifier = Modifier.fillMaxSize()) {
-                    headerContent?.let {
-                        HeaderContent(
-                            isFirstLoading = isFirstLoading.value,
-                            isAnimatedContentCollapsed = isAnimatedContentCollapsed.value,
-                            isFloatingHeader = false,
-                            content = it
-                        )
-                    }
-
                     AppScreenStateAwareContent(
                         isAnimatedContentCollapsed = isAnimatedContentCollapsed,
                         modifier = modifier,
@@ -158,11 +137,9 @@ fun AppScreenStateAware(
                         scrollState = scrollState,
                         animatedContentShapeContent = animatedContentShapeContent,
                         animatedContent = animatedContent,
-                        isLoading = isLoading,
                         isFirstLoading = isFirstLoading,
                         isEmpty = isEmpty,
-                        isError = isError,
-                        throwable = throwable,
+                        uiState = uiState,
                         retry = retry,
                         refresh = refresh ?: {},
                         emptyContent = emptyContent,
@@ -182,49 +159,9 @@ fun AppScreenStateAware(
                             .align(Alignment.BottomCenter),
                         contentAlignment = Alignment.Center
                     ) {
-                        footerContent?.invoke()
+                        uiState.data?.let { footerContent?.invoke(it) }
                     }
                 }
-            }
-        }
-    }
-}
-
-@Composable
-private fun HeaderContent(
-    isFirstLoading: Boolean,
-    isAnimatedContentCollapsed: Boolean,
-    isFloatingHeader: Boolean,
-    content: @Composable (isAnimatedContentCollapsed: Boolean) -> Unit,
-) {
-    if (isFirstLoading) {
-        content(isAnimatedContentCollapsed = true)
-    } else {
-        if (isFloatingHeader) {
-            AnimatedVisibility(
-                visible = isAnimatedContentCollapsed,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                AppElevatedTopContent {
-                    content(isAnimatedContentCollapsed = true)
-                }
-            }
-
-            AnimatedVisibility(
-                visible = !isAnimatedContentCollapsed,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                content(isAnimatedContentCollapsed = false)
-            }
-        } else {
-            if (isAnimatedContentCollapsed) {
-                AppElevatedTopContent {
-                    content(isAnimatedContentCollapsed = true)
-                }
-            } else {
-                content(isAnimatedContentCollapsed = false)
             }
         }
     }
@@ -251,43 +188,41 @@ private fun HeaderAwareContent(
 }
 
 @Composable
-private fun AppScreenStateAwareContent(
+private fun <T> AppScreenStateAwareContent(
     modifier: Modifier,
     isAnimatedContentCollapsed: MutableState<Boolean>,
     isFloatingHeader: Boolean,
     scrollState: ScrollState?,
-    isLoading: Boolean,
     isFirstLoading: MutableState<Boolean>,
     isEmpty: Boolean,
-    isError: Boolean,
-    throwable: Throwable?,
+    uiState: UiState<T>,
     retry: () -> Unit,
     refresh: () -> Unit,
     enablePullToRefresh: Boolean,
     avoidClickingWhenRefreshing: Boolean,
     colorStatusBar: Color,
     animatedContentShapeContent: @Composable (() -> Unit)?,
-    animatedContent: @Composable (() -> Unit)?,
+    animatedContent: @Composable ((uiStateData: T) -> Unit)?,
     emptyContent: @Composable (ColumnScope.() -> Unit)?,
-    content: @Composable ColumnScope.() -> Unit,
-    footerContent: @Composable (() -> Unit)? = null,
+    content: @Composable ColumnScope.(data: T) -> Unit,
+    footerContent: @Composable ((uiStateData: T) -> Unit)? = null,
     isFloatingFooter: Boolean = false,
 ) {
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
-    swipeRefreshState.isRefreshing = isLoading
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = uiState.isLoading)
+    swipeRefreshState.isRefreshing = uiState.isLoading
     val animatedContentHeight = remember { mutableStateOf(0f) }
 
     when {
-        isLoading && isFirstLoading.value -> {
+        uiState.isLoading && isFirstLoading.value -> {
             HeaderAwareContent(isFloatingHeader) {
                 AppProgressLoadingCircled(modifier = modifier)
             }
         }
 
-        isError -> {
+        uiState.error != null -> {
             HeaderAwareContent(isFloatingHeader) {
                 AppErrorContent(
-                    throwable = throwable,
+                    throwable = uiState.error,
                     retry = retry,
                     scrollState = rememberScrollState()
                 )
@@ -366,19 +301,18 @@ private fun AppScreenStateAwareContent(
                                             }
                                         }
                                 ) {
-                                    animatedContent?.invoke()
+                                    uiState.data?.let { animatedContent?.invoke(it) }
                                 }
-
                                 animatedContentShapeContent?.invoke()
                             }
                         }
 
-                        content()
+                        uiState.data?.let { content(it) }
                     }
 
                     if (scrollState != null && !isFloatingFooter) {
                         AppElevatedBottomContent(scrollState = scrollState) {
-                            footerContent?.invoke()
+                            uiState.data?.let { footerContent?.invoke(it) }
                         }
                     }
                 }
@@ -555,7 +489,7 @@ private fun SwipeRefreshContent(
 private fun LoadingPreview() {
     AppScreenStateAware(
         scrollState = rememberScrollState(),
-        isLoading = true,
+        uiState = UiState<Unit>(isLoading = true),
         retry = { },
         refresh = { },
     ) {
@@ -568,8 +502,7 @@ private fun LoadingPreview() {
 private fun ErrorNavBarPreview() {
     AppScreenStateAware(
         scrollState = rememberScrollState(),
-        isLoading = false,
-        throwable = RuntimeException(),
+        uiState = UiState<Unit>(isLoading = false, error = RuntimeException()),
         retry = { },
         refresh = { },
     ) {
@@ -582,8 +515,7 @@ private fun ErrorNavBarPreview() {
 private fun ErrorNoNavBarPreview() {
     AppScreenStateAware(
         scrollState = rememberScrollState(),
-        isLoading = false,
-        throwable = RuntimeException(),
+        uiState = UiState<Unit>(isLoading = false, error = RuntimeException()),
         retry = { },
         refresh = { },
     ) {
@@ -596,8 +528,7 @@ private fun ErrorNoNavBarPreview() {
 private fun PreviewEmptyState() {
     AppScreenStateAware(
         scrollState = rememberScrollState(),
-        isLoading = false,
-        throwable = null,
+        uiState = UiState<Unit>(isLoading = false),
         isEmpty = true,
         emptyContent = {
             AppEmptyContent(
@@ -620,8 +551,7 @@ private fun PreviewEmptyState() {
 private fun Preview() {
     AppScreenStateAware(
         scrollState = rememberScrollState(),
-        isLoading = false,
-        throwable = null,
+        uiState = UiState<Unit>(isLoading = false),
         retry = { },
         refresh = { },
     ) {

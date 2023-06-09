@@ -1,7 +1,5 @@
 package com.shadowflight.core.article
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -21,9 +19,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,27 +35,44 @@ import com.shadowflight.core.ui.ASPECT_RATIO_4_3
 import com.shadowflight.core.ui.components.AppScreenStateAware
 import com.shadowflight.core.ui.components.AppTopBar
 import com.shadowflight.core.ui.components.BackIconButton
+import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.isEndReached
 import com.shadowflight.core.ui.extensions.openUrlInBrowser
-import com.shadowflight.core.ui.preview.ArticlePreviewProvider
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 
 @Composable
 internal fun ArticleRoute(
     navigateUp: () -> Unit,
-    viewModel: ArticleViewModel = hiltViewModel(),
-    contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues(),
+    viewModel: ArticleViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
-        initialValue = ArticleViewUIState()
+        initialValue = UiState()
     )
+    val context = LocalContext.current
+
+    ArticleScreen(
+        linkClicked = { context.openUrlInBrowser(it) },
+        uiState = uiState,
+        navigateUp = navigateUp,
+        onUserInteract = { viewModel.onUserInteract(it) }
+    )
+}
+
+@Composable
+private fun ArticleScreen(
+    linkClicked: (String) -> Unit,
+    uiState: UiState<ArticleUI>,
+    navigateUp: () -> Unit,
+    onUserInteract: (ArticleUserInteract) -> Unit,
+    contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
+) {
     val scrollState = rememberScrollState()
 
     Scaffold(
         topBar = {
             AppTopBar(
-                title = uiState.article?.headline.orEmpty(),
+                title = uiState.data?.article?.headline.orEmpty(),
                 navigationIcon = { BackIconButton(onClick = navigateUp) }
             )
         },
@@ -69,12 +82,11 @@ internal fun ArticleRoute(
         AppScreenStateAware(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
             scrollState = scrollState,
-            isLoading = uiState.isLoading,
-            throwable = uiState.error,
-            retry = { viewModel.onUserInteract(ArticleUserInteract.Retry) },
+            uiState = uiState,
+            retry = { onUserInteract(ArticleUserInteract.Retry) },
             animatedContent = {
                 AsyncImage(
-                    model = uiState.article?.imageUrl,
+                    model = it.article.imageUrl,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -84,30 +96,26 @@ internal fun ArticleRoute(
             },
             isFloatingFooter = true,
             footerContent = {
-                uiState.userInteraction?.let { userInteraction ->
-                    UserInteractionRecommendationCard(
-                        modifier = Modifier.padding(bottom = AppSpacing.dp_24),
-                        isScrollEndReached = scrollState.isEndReached(),
-                        userInteraction = userInteraction,
-                        toggleBookmarkState = { viewModel.onUserInteract(ArticleUserInteract.ToggleBookmarkState) },
-                        toggleLikeState = { viewModel.onUserInteract(ArticleUserInteract.ToggleLikeState) },
-                        toggleDislikeState = { viewModel.onUserInteract(ArticleUserInteract.ToggleDislikeState) }
-                    )
-                }
+                UserInteractionRecommendationCard(
+                    modifier = Modifier.padding(bottom = AppSpacing.dp_24),
+                    isScrollEndReached = scrollState.isEndReached(),
+                    userInteraction = it.userInteraction,
+                    toggleBookmarkState = { onUserInteract(ArticleUserInteract.ToggleBookmarkState) },
+                    toggleLikeState = { onUserInteract(ArticleUserInteract.ToggleLikeState) },
+                    toggleDislikeState = { onUserInteract(ArticleUserInteract.ToggleDislikeState) }
+                )
             }
         ) {
-            val context = LocalContext.current
-
-            ArticleScreen(
-                linkClicked = { context.openUrlInBrowser(it) },
-                article = uiState.article!!,
+            ArticleContent(
+                linkClicked = linkClicked,
+                article = it.article,
             )
         }
     }
 }
 
 @Composable
-fun ArticleScreen(
+private fun ArticleContent(
     linkClicked: (String) -> Unit,
     article: Article,
 ) {
@@ -162,26 +170,7 @@ fun ArticleScreen(
 @Preview
 @Composable
 private fun Preview(
-    @PreviewParameter(ArticlePreviewProvider::class) data: Article
+    @PreviewParameter(ArticleUIPreviewProvider::class) uiState: UiState<ArticleUI>
 ) {
-    Box(modifier = Modifier.background(Color.White)) {
-        ArticleScreen(
-            linkClicked = { },
-            article = data,
-        )
-
-        UserInteractionRecommendationCard(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = AppSpacing.dp_24),
-            isScrollEndReached = rememberScrollState().isEndReached(),
-            userInteraction = UserInteractionRecommendation(
-                rating = data.rating,
-                isBookmarked = data.isBookmarked
-            ),
-            toggleBookmarkState = { },
-            toggleLikeState = { },
-            toggleDislikeState = {}
-        )
-    }
+    ArticleScreen(linkClicked = {}, uiState = uiState, navigateUp = { }, onUserInteract = {})
 }
