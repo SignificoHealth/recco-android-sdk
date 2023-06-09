@@ -828,6 +828,19 @@
           }
         }
       },
+      "ContentType": {
+        "type": "string",
+        "enum": [
+          "articles"
+        ]
+      },
+      "Status": {
+        "type": "string",
+        "enum": [
+          "no_interaction",
+          "viewed"
+        ]
+      },
       "UpdateStatus": {
         "required": [
           "contentId",
@@ -840,17 +853,10 @@
             "$ref": "#/components/schemas/ContentId"
           },
           "contentType": {
-            "type": "string",
-            "enum": [
-              "articles"
-            ]
+            "$ref": "#/components/schemas/ContentType"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "no_interaction",
-              "viewed"
-            ]
+            "$ref": "#/components/schemas/Status"
           }
         }
       },
@@ -881,6 +887,14 @@
           }
         }
       },
+      "Rating": {
+        "type": "string",
+        "enum": [
+          "like",
+          "dislike",
+          "not_rated"
+        ]
+      },
       "UpdateRating": {
         "required": [
           "contentId",
@@ -893,18 +907,10 @@
             "$ref": "#/components/schemas/ContentId"
           },
           "contentType": {
-            "type": "string",
-            "enum": [
-              "articles"
-            ]
+            "$ref": "#/components/schemas/ContentType"
           },
           "rating": {
-            "type": "string",
-            "enum": [
-              "like",
-              "dislike",
-              "not_rated"
-            ]
+            "$ref": "#/components/schemas/Rating"
           }
         }
       },
@@ -920,10 +926,7 @@
             "$ref": "#/components/schemas/ContentId"
           },
           "contentType": {
-            "type": "string",
-            "enum": [
-              "articles"
-            ]
+            "$ref": "#/components/schemas/ContentType"
           },
           "bookmarked": {
             "type": "boolean"
@@ -952,13 +955,16 @@
             "type": "string"
           },
           "type": {
-            "type": "string",
-            "enum": [
-              "multichoice",
-              "numeric"
-            ]
+            "$ref": "#/components/schemas/QuestionAnswerType"
           }
         }
+      },
+      "QuestionAnswerType": {
+        "type": "string",
+        "enum": [
+          "multichoice",
+          "numeric"
+        ]
       },
       "QuestionnaireAnswers": {
         "required": [
@@ -1050,25 +1056,13 @@
             "$ref": "#/components/schemas/ContentId"
           },
           "type": {
-            "type": "string",
-            "enum": [
-              "articles"
-            ]
+            "$ref": "#/components/schemas/ContentType"
           },
           "rating": {
-            "type": "string",
-            "enum": [
-              "like",
-              "dislike",
-              "not_rated"
-            ]
+            "$ref": "#/components/schemas/Rating"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "no_interaction",
-              "viewed"
-            ]
+            "$ref": "#/components/schemas/Status"
           },
           "bookmarked": {
             "type": "boolean"
@@ -1098,19 +1092,10 @@
             "$ref": "#/components/schemas/ContentId"
           },
           "rating": {
-            "type": "string",
-            "enum": [
-              "like",
-              "dislike",
-              "not_rated"
-            ]
+            "$ref": "#/components/schemas/Rating"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "no_interaction",
-              "viewed"
-            ]
+            "$ref": "#/components/schemas/Status"
           },
           "bookmarked": {
             "type": "boolean"
@@ -1216,11 +1201,7 @@
             "type": "string"
           },
           "type": {
-            "type": "string",
-            "enum": [
-              "multichoice",
-              "numeric"
-            ]
+            "$ref": "#/components/schemas/QuestionAnswerType"
           },
           "multiChoice": {
             "$ref": "#/components/schemas/MultiChoiceQuestion"
@@ -1256,21 +1237,7 @@
         "type": "object",
         "properties": {
           "type": {
-            "type": "string",
-            "enum": [
-              "PHYSICAL_ACTIVITY_RECOMMENDATIONS",
-              "NUTRITION_RECOMMENDATIONS",
-              "PHYSICAL_WELLBEING_RECOMMENDATIONS",
-              "SLEEP_RECOMMENDATIONS",
-              "PREFERRED_RECOMMENDATIONS",
-              "MOST_POPULAR",
-              "NEW_CONTENT",
-              "PHYSICAL_ACTIVITY_EXPLORE",
-              "NUTRITION_EXPLORE",
-              "PHYSICAL_WELLBEING_EXPLORE",
-              "SLEEP_EXPLORE",
-              "STARTING_RECOMMENDATIONS"
-            ]
+            "$ref": "#/components/schemas/FeedSectionType"
           },
           "locked": {
             "type": "boolean"
@@ -1279,6 +1246,23 @@
             "$ref": "#/components/schemas/Topic"
           }
         }
+      },
+      "FeedSectionType": {
+        "type": "string",
+        "enum": [
+          "PHYSICAL_ACTIVITY_RECOMMENDATIONS",
+          "NUTRITION_RECOMMENDATIONS",
+          "PHYSICAL_WELLBEING_RECOMMENDATIONS",
+          "SLEEP_RECOMMENDATIONS",
+          "PREFERRED_RECOMMENDATIONS",
+          "MOST_POPULAR",
+          "NEW_CONTENT",
+          "PHYSICAL_ACTIVITY_EXPLORE",
+          "NUTRITION_EXPLORE",
+          "PHYSICAL_WELLBEING_EXPLORE",
+          "SLEEP_EXPLORE",
+          "STARTING_RECOMMENDATIONS"
+        ]
       }
     },
     "securitySchemes": {

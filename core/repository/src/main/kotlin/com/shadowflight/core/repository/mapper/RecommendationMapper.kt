@@ -7,15 +7,8 @@ import com.shadowflight.core.openapi.model.AppUserRecommendationDTO
 
 internal fun AppUserRecommendationDTO.asEntity() = Recommendation(
     id = id.asEntity(),
-    rating = when (rating) {
-        AppUserRecommendationDTO.Rating.LIKE -> Rating.LIKE
-        AppUserRecommendationDTO.Rating.DISLIKE -> Rating.DISLIKE
-        AppUserRecommendationDTO.Rating.NOT_RATED -> Rating.NOT_RATED
-    },
-    status = when (status) {
-        AppUserRecommendationDTO.Status.NO_INTERACTION -> Status.NO_INTERACTION
-        AppUserRecommendationDTO.Status.VIEWED -> Status.VIEWED
-    },
+    rating = rating.asEntity(),
+    status = status.asEntity(),
     headline = headline,
     lead = lead,
     imageUrl = imageUrl,

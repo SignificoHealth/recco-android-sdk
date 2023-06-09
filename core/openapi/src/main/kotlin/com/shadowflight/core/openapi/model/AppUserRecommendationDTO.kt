@@ -14,6 +14,9 @@
 package com.shadowflight.core.openapi.model
 
 import com.shadowflight.core.openapi.model.ContentIdDTO
+import com.shadowflight.core.openapi.model.ContentTypeDTO
+import com.shadowflight.core.openapi.model.RatingDTO
+import com.shadowflight.core.openapi.model.StatusDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -36,13 +39,13 @@ data class AppUserRecommendationDTO(
     val id: ContentIdDTO,
 
     @Json(name = "type")
-    val type: AppUserRecommendationDTO.Type,
+    val type: ContentTypeDTO,
 
     @Json(name = "rating")
-    val rating: AppUserRecommendationDTO.Rating,
+    val rating: RatingDTO,
 
     @Json(name = "status")
-    val status: AppUserRecommendationDTO.Status,
+    val status: StatusDTO,
 
     @Json(name = "bookmarked")
     val bookmarked: kotlin.Boolean,
@@ -55,36 +58,4 @@ data class AppUserRecommendationDTO(
 
     @Json(name = "imageUrl")
     val imageUrl: kotlin.String? = null
-) {
-    /**
-     * 
-     *
-     * Values: ARTICLES
-     */
-    @JsonClass(generateAdapter = false)
-    enum class Type(val value: kotlin.String) {
-        @Json(name = "articles") ARTICLES("articles");
-    }
-    /**
-     * 
-     *
-     * Values: LIKE,DISLIKE,NOT_RATED
-     */
-    @JsonClass(generateAdapter = false)
-    enum class Rating(val value: kotlin.String) {
-        @Json(name = "like") LIKE("like"),
-        @Json(name = "dislike") DISLIKE("dislike"),
-        @Json(name = "not_rated") NOT_RATED("not_rated");
-    }
-    /**
-     * 
-     *
-     * Values: NO_INTERACTION,VIEWED
-     */
-    @JsonClass(generateAdapter = false)
-    enum class Status(val value: kotlin.String) {
-        @Json(name = "no_interaction") NO_INTERACTION("no_interaction"),
-        @Json(name = "viewed") VIEWED("viewed");
-    }
-}
-
+)
