@@ -69,7 +69,7 @@ fun AppProgressLoadingCircled(
 @Composable
 fun AppLinearProgress(
     modifier: Modifier = Modifier,
-    color: Color = AppTheme.colors.primary,
+    color: Color = AppTheme.colors.accent,
     progress: Float? = null,
     animDuration: Int? = null,
     shape: Shape = RoundedCornerShape(0.dp)
@@ -80,8 +80,9 @@ fun AppLinearProgress(
         LinearProgressIndicator(
             modifier = modifier
                 .clip(shape = shape)
+                .height(5.dp)
                 .fillMaxWidth(),
-            backgroundColor = AppTheme.colors.background,
+            backgroundColor = AppTheme.colors.primary20,
             color = color,
             progress = if (animDuration != null && !firstLoad.value) {
                 val progressAnimated by animateFloatAsState(

@@ -5,8 +5,4 @@ enum class Topic(val id: Int) {
     NUTRITION(2),
     PHYSICAL_WELLBEING(3),
     SLEEP(4);
-
-    companion object {
-        fun findById(id: Int): Topic = Topic.values().first { it.id == id }
-    }
 }
