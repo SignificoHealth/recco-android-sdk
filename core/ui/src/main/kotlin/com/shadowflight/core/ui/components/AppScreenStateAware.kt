@@ -392,8 +392,12 @@ private fun <T> AppScreenStateAwareContent(
                         uiState.data?.let { content(it) }
                     }
 
-                    if (scrollState != null && !isFloatingFooter) {
-                        AppElevatedBottomContent(scrollState = scrollState) {
+                    if (!isFloatingFooter) {
+                        if (scrollState != null) {
+                            AppElevatedBottomContent(scrollState = scrollState) {
+                                uiState.data?.let { footerContent?.invoke(it) }
+                            }
+                        } else {
                             uiState.data?.let { footerContent?.invoke(it) }
                         }
                     }
