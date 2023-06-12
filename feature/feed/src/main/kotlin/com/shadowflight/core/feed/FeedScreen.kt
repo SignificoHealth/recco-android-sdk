@@ -141,7 +141,7 @@ private fun FeedContent(
 
         feedUI.sections.forEach { sections ->
             FeedSection(
-                sections = sections,
+                section = sections,
                 navigateToArticle = navigateToArticle,
                 navigateToQuestionnaire = navigateToQuestionnaire,
                 resetScrollPosition = feedUI.resetScrollPosition
@@ -185,14 +185,14 @@ private const val LOCK_PLACEHOLDER_ELEMENTS = 5
 @Composable
 private fun FeedSection(
     resetScrollPosition: StateEvent,
-    sections: FeedSectionAndRecommendations,
+    section: FeedSectionAndRecommendations,
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.padding(start = AppSpacing.dp_24),
-            text = sections.feedSection.type.asSectionTitle(),
+            text = section.feedSection.type.asSectionTitle(),
             style = AppTheme.typography.h4
         )
         Spacer(Modifier.height(AppSpacing.dp_16))
@@ -212,17 +212,17 @@ private fun FeedSection(
                 end = AppSpacing.dp_24
             )
         ) {
-            if (sections.feedSection.locked) {
+            if (section.feedSection.locked) {
                 items(LOCK_PLACEHOLDER_ELEMENTS) {
                     LockedCard(onClick = {
-                        sections.feedSection.topic?.let {
+                        section.feedSection.topic?.let {
                             navigateToQuestionnaire(it)
                         }
                     })
                 }
             } else {
                 items(
-                    items = sections.recommendations,
+                    items = section.recommendations,
                     key = { it.id.itemId }) { recommendation ->
                     Card(recommendation, navigateToArticle)
                 }
