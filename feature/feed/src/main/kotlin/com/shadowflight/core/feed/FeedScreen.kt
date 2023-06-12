@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -28,7 +29,12 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -56,7 +62,7 @@ import com.shadowflight.core.ui.extensions.viewedOverlay
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 import de.palm.composestateevents.EventEffect
-import de.palm.composestateevents.StateEvent
+import kotlinx.coroutines.launch
 
 @Composable
 fun FeedRoute(
@@ -82,6 +88,7 @@ private fun FeedScreen(
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
     val scrollState = rememberScrollState()
+    val triggerResetScroll = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = { AppTopBar() },
@@ -112,13 +119,17 @@ private fun FeedScreen(
         ) { data ->
             EventEffect(
                 event = data.resetScrollPosition,
-                onConsumed = { onUserInteract(FeedUserInteract.ScrollConsumed) }
+                onConsumed = {
+                    triggerResetScroll.value = true
+                    onUserInteract(FeedUserInteract.ScrollConsumed)
+                }
             ) { scrollState.scrollTo(0) }
 
             FeedContent(
                 feedUI = data,
                 navigateToArticle = navigateToArticle,
-                navigateToQuestionnaire = navigateToQuestionnaire
+                navigateToQuestionnaire = navigateToQuestionnaire,
+                triggerResetScroll = triggerResetScroll
             )
         }
     }
@@ -128,8 +139,11 @@ private fun FeedScreen(
 private fun FeedContent(
     feedUI: FeedUI,
     navigateToQuestionnaire: (Topic) -> Unit,
-    navigateToArticle: (ContentId) -> Unit
+    navigateToArticle: (ContentId) -> Unit,
+    triggerResetScroll: MutableState<Boolean>,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -139,12 +153,24 @@ private fun FeedContent(
         FeedHeader()
         Spacer(Modifier.height(AppSpacing.dp_40))
 
-        feedUI.sections.forEach { sections ->
+        feedUI.sections.forEachIndexed { index, section ->
             FeedSection(
-                section = sections,
+                section = section,
                 navigateToArticle = navigateToArticle,
                 navigateToQuestionnaire = navigateToQuestionnaire,
-                resetScrollPosition = feedUI.resetScrollPosition
+                resetScrollPosition = { scrollState ->
+                    SideEffect {
+                        coroutineScope.launch {
+                            if (triggerResetScroll.value) {
+                                scrollState.scrollToItem(0)
+
+                                if (index == feedUI.sections.size - 1) {
+                                    triggerResetScroll.value = false
+                                }
+                            }
+                        }
+                    }
+                }
             )
             Spacer(Modifier.height(AppSpacing.dp_40))
         }
@@ -184,7 +210,7 @@ private const val LOCK_PLACEHOLDER_ELEMENTS = 5
 
 @Composable
 private fun FeedSection(
-    resetScrollPosition: StateEvent,
+    resetScrollPosition: @Composable (LazyListState) -> Unit,
     section: FeedSectionAndRecommendations,
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic) -> Unit
@@ -199,10 +225,7 @@ private fun FeedSection(
 
         val scrollState = rememberLazyListState()
 
-        EventEffect(
-            event = resetScrollPosition,
-            onConsumed = {}
-        ) { scrollState.scrollToItem(0) }
+        resetScrollPosition(scrollState)
 
         LazyRow(
             state = scrollState,
