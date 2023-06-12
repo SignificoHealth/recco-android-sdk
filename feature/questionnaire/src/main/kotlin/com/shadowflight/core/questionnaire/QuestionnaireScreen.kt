@@ -116,35 +116,33 @@ fun QuestionnaireScreen(
             scrollState = scrollState,
             uiState = uiState,
             retry = { onUserInteract(Retry) },
-            headerContent = {
-                uiState.data?.let { data ->
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        AppLinearProgress(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = AppSpacing.dp_24),
-                            progress = data.progress,
-                            shape = CircleShape,
-                            animDuration = 250
-                        )
-                        Spacer(Modifier.height(AppSpacing.dp_8))
+            headerContent = { data, _ ->
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AppLinearProgress(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = AppSpacing.dp_24),
+                        progress = data.progress,
+                        shape = CircleShape,
+                        animDuration = 250
+                    )
+                    Spacer(Modifier.height(AppSpacing.dp_8))
 
-                        Text(
-                            text = buildAnnotatedString {
-                                withStyle(style = SpanStyle(color = AppTheme.colors.accent)) {
-                                    append((data.currentPage + 1).toString())
-                                }
-                                withStyle(style = SpanStyle(color = AppTheme.colors.primary)) {
-                                    append("/${data.questionnaire.questions.size}")
-                                }
-                            },
-                            style = AppTheme.typography.h4
-                        )
-                        Spacer(Modifier.height(AppSpacing.dp_24))
-                    }
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(color = AppTheme.colors.accent)) {
+                                append((data.currentPage + 1).toString())
+                            }
+                            withStyle(style = SpanStyle(color = AppTheme.colors.primary)) {
+                                append("/${data.questionnaire.questions.size}")
+                            }
+                        },
+                        style = AppTheme.typography.h4
+                    )
+                    Spacer(Modifier.height(AppSpacing.dp_24))
                 }
             },
             footerContent = { data ->

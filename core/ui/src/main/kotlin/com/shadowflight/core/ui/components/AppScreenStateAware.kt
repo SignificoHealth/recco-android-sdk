@@ -86,7 +86,7 @@ fun <T> AppScreenStateAware(
     animatedContentShapeContent: @Composable (() -> Unit)? = null,
     animatedContent: @Composable ((uiStateData: T) -> Unit)? = null,
     emptyContent: @Composable (ColumnScope.() -> Unit)? = null,
-    headerContent: @Composable ((isAnimatedContentCollapsed: Boolean) -> Unit)? = null,
+    headerContent: @Composable ((uiStateData: T, isAnimatedContentCollapsed: Boolean) -> Unit)? = null,
     footerContent: @Composable ((uiStateData: T) -> Unit)? = null,
     isFloatingFooter: Boolean = false,
     content: @Composable ColumnScope.(uiStateData: T) -> Unit
@@ -130,7 +130,11 @@ fun <T> AppScreenStateAware(
                         isFirstLoading = isFirstLoading.value || isEmpty || isError,
                         isAnimatedContentCollapsed = isAnimatedContentCollapsed.value,
                         isFloatingHeader = true,
-                        content = it
+                        content = { isAnimatedContentCollapsed ->
+                            uiState.data?.let { data ->
+                                headerContent.invoke(data, isAnimatedContentCollapsed)
+                            }
+                        }
                     )
                 }
 
@@ -155,11 +159,16 @@ fun <T> AppScreenStateAware(
 
                 Column(modifier = Modifier.fillMaxSize()) {
                     headerContent?.let {
+
                         HeaderContent(
                             isFirstLoading = isFirstLoading.value,
                             isAnimatedContentCollapsed = isAnimatedContentCollapsed.value,
                             isFloatingHeader = false,
-                            content = it
+                            content = { isAnimatedContentCollapsed ->
+                                uiState.data?.let { data ->
+                                    headerContent.invoke(data, isAnimatedContentCollapsed)
+                                }
+                            }
                         )
                     }
 
