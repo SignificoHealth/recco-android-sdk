@@ -5,16 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.article.navigation.idArg
 import com.shadowflight.core.logger.Logger
-import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Rating
 import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.UiState
-import com.shadowflight.core.ui.pipelines.Pipelines
+import com.shadowflight.core.ui.pipelines.GlobalViewEvent
 import com.shadowflight.core.ui.pipelines.ToastMessageType
-import com.shadowflight.core.ui.pipelines.ViewEvent
+import com.shadowflight.core.ui.pipelines.globalViewEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -117,8 +116,8 @@ class ArticleViewModel @Inject constructor(
                 )
             }.onFailure {
                 logger.e(it)
-                Pipelines.viewEvents.emit(
-                    ViewEvent.ShowToast(
+                globalViewEvents.emit(
+                    GlobalViewEvent.ShowToast(
                         titleRes = R.string.common_error_desc,
                         type = ToastMessageType.Error
                     )
@@ -178,8 +177,8 @@ class ArticleViewModel @Inject constructor(
                 )
             }.onFailure {
                 logger.e(it)
-                Pipelines.viewEvents.emit(
-                    ViewEvent.ShowToast(
+                globalViewEvents.emit(
+                    GlobalViewEvent.ShowToast(
                         titleRes = R.string.common_error_desc,
                         type = ToastMessageType.Error
                     )
@@ -188,10 +187,3 @@ class ArticleViewModel @Inject constructor(
         }
     }
 }
-
-data class ArticleViewUIState(
-    val isLoading: Boolean = true,
-    val error: Throwable? = null,
-    val article: Article? = null,
-    val userInteraction: UserInteractionRecommendation? = null
-)

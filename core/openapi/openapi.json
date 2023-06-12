@@ -936,6 +936,7 @@
       "CreateQuestionnaireAnswer": {
         "required": [
           "questionId",
+          "questionnaireId",
           "type"
         ],
         "type": "object",
@@ -950,6 +951,9 @@
           "numeric": {
             "type": "number",
             "format": "double"
+          },
+          "questionnaireId": {
+            "type": "string"
           },
           "questionId": {
             "type": "string"

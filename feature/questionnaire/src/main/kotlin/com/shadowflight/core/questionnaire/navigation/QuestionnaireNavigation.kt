@@ -10,8 +10,7 @@ import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.questionnaire.QuestionnaireRoute
 import com.shadowflight.core.ui.extensions.asSerializable
 
-private const val topicArg = "topic"
-
+internal const val topicArg = "topic"
 const val QuestionnaireGraph = "questionnaire_graph/{$topicArg}"
 private const val QuestionnaireRoute = "questionnaire/{$topicArg}"
 

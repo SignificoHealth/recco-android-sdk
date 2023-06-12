@@ -4,14 +4,10 @@ import com.shadowflight.core.model.questionnaire.MultiChoiceAnswerOption
 import com.shadowflight.core.model.questionnaire.MultiChoiceQuestion
 import com.shadowflight.core.model.questionnaire.NumericQuestion
 import com.shadowflight.core.model.questionnaire.NumericQuestionFormat
-import com.shadowflight.core.model.questionnaire.Question
-import com.shadowflight.core.model.questionnaire.QuestionType
 import com.shadowflight.core.model.questionnaire.Questionnaire
-import com.shadowflight.core.model.questionnaire.QuestionnaireAnswer
-import com.shadowflight.core.model.questionnaire.QuestionnaireAnswers
+import com.shadowflight.core.model.questionnaire.Question
 import com.shadowflight.core.openapi.model.CreateQuestionnaireAnswerDTO
 import com.shadowflight.core.openapi.model.MultiChoiceAnswerOptionDTO
-import com.shadowflight.core.openapi.model.MultiChoiceQuestionDTO
 import com.shadowflight.core.openapi.model.NumericQuestionDTO
 import com.shadowflight.core.openapi.model.QuestionAnswerTypeDTO
 import com.shadowflight.core.openapi.model.QuestionDTO
@@ -23,35 +19,31 @@ fun QuestionnaireDTO.asEntity() = Questionnaire(
     questions = questions.map(QuestionDTO::asEntity)
 )
 
-private fun QuestionDTO.asEntity() = Question(
-    id = id,
-    index = index,
-    text = text,
-    type = type.asEntity(),
-    multiChoice = multiChoice?.asEntity(),
-    numeric = numeric?.asEntity()
-)
+private fun QuestionDTO.asEntity() = when (type) {
+    QuestionAnswerTypeDTO.MULTICHOICE -> MultiChoiceQuestion(
+        id = id,
+        index = index,
+        text = text,
+        maxOptions = multiChoice!!.maxOptions,
+        minOptions = multiChoice!!.minOptions,
+        options = multiChoice!!.options.map(MultiChoiceAnswerOptionDTO::asEntity)
+    )
 
-private fun QuestionAnswerTypeDTO.asEntity() = when (this) {
-    QuestionAnswerTypeDTO.MULTICHOICE -> QuestionType.MULTI_CHOICE
-    QuestionAnswerTypeDTO.NUMERIC -> QuestionType.NUMERIC
+    QuestionAnswerTypeDTO.NUMERIC -> NumericQuestion(
+        id = id,
+        index = index,
+        text = text,
+        maxValue = numeric!!.maxValue,
+        minValue = numeric!!.minValue,
+        selectedValue = null,
+        format = numeric!!.format.asEntity()
+    )
 }
-
-private fun MultiChoiceQuestionDTO.asEntity() = MultiChoiceQuestion(
-    maxOptions = maxOptions,
-    minOptions = minOptions,
-    options = options.map(MultiChoiceAnswerOptionDTO::asEntity)
-)
 
 private fun MultiChoiceAnswerOptionDTO.asEntity() = MultiChoiceAnswerOption(
     id = id,
-    text = text
-)
-
-private fun NumericQuestionDTO.asEntity() = NumericQuestion(
-    maxValue = maxValue,
-    minValue = minValue,
-    format = format.asEntity()
+    text = text,
+    isSelected = false
 )
 
 private fun NumericQuestionDTO.Format.asEntity() = when (this) {
@@ -61,19 +53,24 @@ private fun NumericQuestionDTO.Format.asEntity() = when (this) {
     NumericQuestionDTO.Format.DECIMAL -> NumericQuestionFormat.DECIMAL
 }
 
-fun QuestionnaireAnswers.asDTO() = QuestionnaireAnswersDTO(
+fun Questionnaire.asAnswersDTO() = QuestionnaireAnswersDTO(
     id = id,
-    answers = answers.map(QuestionnaireAnswer::asDTO)
+    answers = questions.map { it.asDTO(questionnaireId = id) }
 )
 
-private fun QuestionnaireAnswer.asDTO() = CreateQuestionnaireAnswerDTO(
-    questionId = questionId,
-    type = type.asDTO(),
-    multichoice = multiChoice,
-    numeric = numeric
+private fun Question.asDTO(questionnaireId: String) = CreateQuestionnaireAnswerDTO(
+    questionnaireId = questionnaireId,
+    questionId = id,
+    type = when (this) {
+        is MultiChoiceQuestion -> QuestionAnswerTypeDTO.MULTICHOICE
+        is NumericQuestion -> QuestionAnswerTypeDTO.NUMERIC
+    },
+    multichoice = when (this) {
+        is MultiChoiceQuestion -> options.filter { it.isSelected }.map { it.id }
+        is NumericQuestion -> null
+    },
+    numeric = when (this) {
+        is MultiChoiceQuestion -> null
+        is NumericQuestion -> this.selectedValue
+    }
 )
-
-private fun QuestionType.asDTO() = when (this) {
-    QuestionType.MULTI_CHOICE -> QuestionAnswerTypeDTO.MULTICHOICE
-    QuestionType.NUMERIC -> QuestionAnswerTypeDTO.NUMERIC
-}

@@ -24,4 +24,9 @@
     <string name="no_network_connection_error_desc">Please check your network connection and try again.</string>
     <string name="server_error">Service temporarily unavailable. Please try again later.</string>
 
+
+    <!-- Questionnaire -->
+    <string name="multiple_answers_possible">Multiple answers possible</string>
+    <string name="next">Continue</string>
+    <string name="finish">Finish</string>
 </resources>

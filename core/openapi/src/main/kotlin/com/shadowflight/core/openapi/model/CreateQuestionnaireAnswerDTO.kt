@@ -20,6 +20,7 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
+ * @param questionnaireId 
  * @param questionId 
  * @param type 
  * @param multichoice 
@@ -27,6 +28,9 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class CreateQuestionnaireAnswerDTO(
+
+    @Json(name = "questionnaireId")
+    val questionnaireId: kotlin.String,
 
     @Json(name = "questionId")
     val questionId: kotlin.String,

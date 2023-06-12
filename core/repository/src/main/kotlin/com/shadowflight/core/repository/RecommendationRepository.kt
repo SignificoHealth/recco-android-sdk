@@ -1,6 +1,8 @@
 package com.shadowflight.core.repository
 
+import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.model.feed.FeedSectionType
+import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Rating
@@ -105,6 +107,16 @@ class RecommendationRepository @Inject constructor(
 
     suspend fun reloadAllSections() {
         sectionsPipelines.forEach { (_, pipeline) -> pipeline.reloadRemoteDatasource() }
+    }
+
+    suspend fun reloadSection(topic: Topic) {
+        val sectionType = when (topic) {
+            Topic.PHYSICAL_ACTIVITY -> FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS
+            Topic.NUTRITION -> FeedSectionType.NUTRITION_RECOMMENDATIONS
+            Topic.PHYSICAL_WELLBEING -> FeedSectionType.PHYSICAL_WELLBEING_RECOMMENDATIONS
+            Topic.SLEEP -> FeedSectionType.SLEEP_RECOMMENDATIONS
+        }
+        sectionsPipelines[sectionType]?.reloadRemoteDatasource()
     }
 
     suspend fun getArticle(contentId: ContentId): Article =
