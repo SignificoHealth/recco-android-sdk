@@ -3,6 +3,7 @@ package com.shadowflight.core.ui.components
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -101,7 +103,7 @@ private fun ElevatedContent(
 }
 
 @Composable
-fun AppTopShadow(scrollState: ScrollState) {
+fun BoxScope.AppTopShadow(scrollState: ScrollState) {
     val animateElevation = animateDpAsState(
         targetValue = if (scrollState.isTopReached()) 0.dp else DEFAULT_ELEVATION
     )
@@ -110,7 +112,7 @@ fun AppTopShadow(scrollState: ScrollState) {
 }
 
 @Composable
-fun AppTopShadow(scrollState: LazyListState) {
+fun BoxScope.AppTopShadow(scrollState: LazyListState) {
     val animateElevation = animateDpAsState(
         targetValue = if (scrollState.isTopReached()) 0.dp else DEFAULT_ELEVATION
     )
@@ -119,11 +121,13 @@ fun AppTopShadow(scrollState: LazyListState) {
 }
 
 @Composable
-private fun TopShadow(elevation: Dp) {
+private fun BoxScope.TopShadow(elevation: Dp) {
     Spacer(
         modifier = Modifier
+            .zIndex(4f)
             .fillMaxWidth()
             .height(elevation)
+            .align(Alignment.TopCenter)
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(

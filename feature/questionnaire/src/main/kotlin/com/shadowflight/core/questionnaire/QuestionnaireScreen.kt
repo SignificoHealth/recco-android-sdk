@@ -3,6 +3,7 @@ package com.shadowflight.core.questionnaire
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,9 +45,11 @@ import com.shadowflight.core.questionnaire.QuestionnaireViewEvent.*
 import com.shadowflight.core.questionnaire.multichoice.MultiChoiceInput
 import com.shadowflight.core.questionnaire.numeric.NumericInput
 import com.shadowflight.core.ui.R
+import com.shadowflight.core.ui.components.AppBottomShadow
 import com.shadowflight.core.ui.components.AppLinearProgress
 import com.shadowflight.core.ui.components.AppScreenStateAware
 import com.shadowflight.core.ui.components.AppTopBar
+import com.shadowflight.core.ui.components.AppTopShadow
 import com.shadowflight.core.ui.components.BackIconButton
 import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.asTitle
@@ -85,7 +89,6 @@ fun QuestionnaireScreen(
 ) {
     val pagerState = rememberPagerState()
     val focusManager = LocalFocusManager.current
-    val scrollState = rememberScrollState()
 
     LaunchedEffect(key1 = Unit) {
         viewEvents.collectLatest { event ->
@@ -113,7 +116,6 @@ fun QuestionnaireScreen(
         AppScreenStateAware(
             modifier = Modifier,
             contentPadding = innerPadding,
-            scrollState = scrollState,
             uiState = uiState,
             retry = { onUserInteract(Retry) },
             headerContent = { data, _ ->
@@ -200,63 +202,70 @@ private fun QuestionnaireContent(
             userScrollEnabled = false
         ) { page ->
             val question = questions[page]
+            val scrollState = rememberScrollState()
 
-            Column(
-                modifier = Modifier
-                    //.verticalScroll(rememberScrollState())
-                    .padding(horizontal = AppSpacing.dp_24)
-                    .fillMaxSize()
-            ) {
-                Spacer(Modifier.height(AppSpacing.dp_32))
-                Text(text = question.text, style = AppTheme.typography.cta)
+            Box {
+                AppTopShadow(scrollState)
 
-                when (question) {
-                    is MultiChoiceQuestion -> {
-                        if (!question.isSingleChoice) {
-                            Spacer(Modifier.height(AppSpacing.dp_16))
-                            Text(
-                                text = stringResource(R.string.multiple_answers_possible),
-                                style = AppTheme.typography.body3.copy(color = AppTheme.colors.primary20)
-                            )
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(scrollState)
+                        .padding(horizontal = AppSpacing.dp_24)
+                        .fillMaxSize()
+                ) {
+                    Spacer(Modifier.height(AppSpacing.dp_32))
+                    Text(text = question.text, style = AppTheme.typography.cta)
+
+                    when (question) {
+                        is MultiChoiceQuestion -> {
+                            if (!question.isSingleChoice) {
+                                Spacer(Modifier.height(AppSpacing.dp_16))
+                                Text(
+                                    text = stringResource(R.string.multiple_answers_possible),
+                                    style = AppTheme.typography.body3.copy(color = AppTheme.colors.primary20)
+                                )
+                            }
+                            Spacer(Modifier.height(AppSpacing.dp_32))
+
+                            question.options.forEach { option ->
+                                MultiChoiceInput(
+                                    selected = option.isSelected,
+                                    text = option.text,
+                                    singleChoice = question.isSingleChoice,
+                                    onClick = {
+                                        onUserInteract(
+                                            ClickOnMultiChoiceAnswerOption(
+                                                question = question,
+                                                option = option
+                                            )
+                                        )
+                                    }
+                                )
+                                Spacer(Modifier.height(AppSpacing.dp_8))
+                            }
                         }
-                        Spacer(Modifier.height(AppSpacing.dp_32))
 
-                        question.options.forEach { option ->
-                            MultiChoiceInput(
-                                selected = option.isSelected,
-                                text = option.text,
-                                singleChoice = question.isSingleChoice,
-                                onClick = {
+                        is NumericQuestion -> {
+                            Spacer(Modifier.height(AppSpacing.dp_32))
+                            NumericInput(
+                                onValueChange = {
                                     onUserInteract(
-                                        ClickOnMultiChoiceAnswerOption(
+                                        WriteOnNumericQuestion(
                                             question = question,
-                                            option = option
+                                            value = it
                                         )
                                     )
-                                }
+                                },
+                                format = question.format,
+                                maxValue = question.maxValue
                             )
-                            Spacer(Modifier.height(AppSpacing.dp_8))
                         }
                     }
 
-                    is NumericQuestion -> {
-                        Spacer(Modifier.height(AppSpacing.dp_32))
-                        NumericInput(
-                            onValueChange = {
-                                onUserInteract(
-                                    WriteOnNumericQuestion(
-                                        question = question,
-                                        value = it
-                                    )
-                                )
-                            },
-                            format = question.format,
-                            maxValue = question.maxValue
-                        )
-                    }
+                    Spacer(Modifier.height(AppSpacing.dp_40))
                 }
 
-                Spacer(Modifier.height(AppSpacing.dp_40))
+                AppBottomShadow(scrollState)
             }
         }
     }
