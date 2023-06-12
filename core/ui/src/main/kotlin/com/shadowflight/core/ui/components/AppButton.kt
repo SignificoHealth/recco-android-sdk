@@ -20,8 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 
-val appButtonHeight = 48.dp
-
 @Composable
 internal fun AppButton(
     modifier: Modifier = Modifier,
@@ -43,7 +41,7 @@ internal fun AppButton(
     Button(
         modifier = modifier
             .defaultMinSize(minHeight = 40.dp)
-            .height(appButtonHeight)
+            .height(48.dp)
             .clip(cornerShape),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundColor,

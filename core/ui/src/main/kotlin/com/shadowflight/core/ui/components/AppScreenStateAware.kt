@@ -1,5 +1,8 @@
 package com.shadowflight.core.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -69,6 +72,7 @@ data class UiState<T>(
 @Composable
 fun <T> AppScreenStateAware(
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     scrollState: ScrollState? = null,
     isFloatingHeader: Boolean = false,
     uiState: UiState<T>,
@@ -82,16 +86,22 @@ fun <T> AppScreenStateAware(
     animatedContentShapeContent: @Composable (() -> Unit)? = null,
     animatedContent: @Composable ((uiStateData: T) -> Unit)? = null,
     emptyContent: @Composable (ColumnScope.() -> Unit)? = null,
+    headerContent: @Composable ((uiStateData: T, isAnimatedContentCollapsed: Boolean) -> Unit)? = null,
     footerContent: @Composable ((uiStateData: T) -> Unit)? = null,
     isFloatingFooter: Boolean = false,
     content: @Composable ColumnScope.(uiStateData: T) -> Unit
 ) {
     val isFirstLoading = remember { mutableStateOf(true) }
-    val isAnimatedContentCollapsed = remember { mutableStateOf(true) }
+    val isAnimatedContentCollapsed = remember { mutableStateOf(false) }
+    val isError = uiState.error != null
 
     AppTheme(colorStatusBar = colorStatusBar) {
         if (isFloatingHeader) {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = contentPadding.calculateTopPadding())
+            ) {
                 backgroundContent?.invoke()
 
                 AppScreenStateAwareContent(
@@ -114,6 +124,20 @@ fun <T> AppScreenStateAware(
                     isFloatingFooter = isFloatingFooter,
                     content = content
                 )
+
+                headerContent?.let {
+                    HeaderContent(
+                        isFirstLoading = isFirstLoading.value || isEmpty || isError,
+                        isAnimatedContentCollapsed = isAnimatedContentCollapsed.value,
+                        isFloatingHeader = true,
+                        content = { isAnimatedContentCollapsed ->
+                            uiState.data?.let { data ->
+                                headerContent.invoke(data, isAnimatedContentCollapsed)
+                            }
+                        }
+                    )
+                }
+
                 if (isFloatingFooter) {
                     Box(
                         modifier = Modifier
@@ -126,10 +150,28 @@ fun <T> AppScreenStateAware(
                 }
             }
         } else {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = contentPadding.calculateTopPadding())
+            ) {
                 backgroundContent?.invoke()
 
                 Column(modifier = Modifier.fillMaxSize()) {
+                    headerContent?.let {
+
+                        HeaderContent(
+                            isFirstLoading = isFirstLoading.value,
+                            isAnimatedContentCollapsed = isAnimatedContentCollapsed.value,
+                            isFloatingHeader = false,
+                            content = { isAnimatedContentCollapsed ->
+                                uiState.data?.let { data ->
+                                    headerContent.invoke(data, isAnimatedContentCollapsed)
+                                }
+                            }
+                        )
+                    }
+
                     AppScreenStateAwareContent(
                         isAnimatedContentCollapsed = isAnimatedContentCollapsed,
                         modifier = modifier,
@@ -162,6 +204,46 @@ fun <T> AppScreenStateAware(
                         uiState.data?.let { footerContent?.invoke(it) }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HeaderContent(
+    isFirstLoading: Boolean,
+    isAnimatedContentCollapsed: Boolean,
+    isFloatingHeader: Boolean,
+    content: @Composable (isAnimatedContentCollapsed: Boolean) -> Unit,
+) {
+    if (isFirstLoading) {
+        content(isAnimatedContentCollapsed = true)
+    } else {
+        if (isFloatingHeader) {
+            AnimatedVisibility(
+                visible = isAnimatedContentCollapsed,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                AppElevatedTopContent {
+                    content(isAnimatedContentCollapsed = true)
+                }
+            }
+
+            AnimatedVisibility(
+                visible = !isAnimatedContentCollapsed,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                content(isAnimatedContentCollapsed = false)
+            }
+        } else {
+            if (isAnimatedContentCollapsed) {
+                AppElevatedTopContent {
+                    content(isAnimatedContentCollapsed = true)
+                }
+            } else {
+                content(isAnimatedContentCollapsed = false)
             }
         }
     }
@@ -310,8 +392,12 @@ private fun <T> AppScreenStateAwareContent(
                         uiState.data?.let { content(it) }
                     }
 
-                    if (scrollState != null && !isFloatingFooter) {
-                        AppElevatedBottomContent(scrollState = scrollState) {
+                    if (!isFloatingFooter) {
+                        if (scrollState != null) {
+                            AppElevatedBottomContent(scrollState = scrollState) {
+                                uiState.data?.let { footerContent?.invoke(it) }
+                            }
+                        } else {
                             uiState.data?.let { footerContent?.invoke(it) }
                         }
                     }

@@ -89,7 +89,7 @@ private fun FeedScreen(
         contentPadding = contentPadding
     ) { innerPadding ->
         AppScreenStateAware(
-            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+            contentPadding = innerPadding,
             scrollState = scrollState,
             enablePullToRefresh = true,
             uiState = uiState,
