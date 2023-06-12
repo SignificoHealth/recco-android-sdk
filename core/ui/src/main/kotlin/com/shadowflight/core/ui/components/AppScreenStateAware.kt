@@ -92,7 +92,7 @@ fun <T> AppScreenStateAware(
     content: @Composable ColumnScope.(uiStateData: T) -> Unit
 ) {
     val isFirstLoading = remember { mutableStateOf(true) }
-    val isAnimatedContentCollapsed = remember { mutableStateOf(true) }
+    val isAnimatedContentCollapsed = remember { mutableStateOf(false) }
     val isError = uiState.error != null
 
     AppTheme(colorStatusBar = colorStatusBar) {
