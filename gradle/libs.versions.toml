@@ -21,7 +21,6 @@ androidx-lifecycle = "2.6.1"
 androidx-navigation = "2.6.0-rc01"
 coil = "2.3.0"
 compose-html = "1.0.3"
-compose-state-events = "2.0.2"
 exoplayer = "2.18.6"
 hilt = "2.46.1"
 kotlin = "1.8.21"
@@ -82,7 +81,6 @@ coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
 compose-html = { group = "com.github.viluahealthcare", name = "compose-html", version.ref = "compose-html" }
-compose-state-events = { group = "com.github.leonard-palm", name = "compose-state-events", version.ref = "compose-state-events" }
 
 exoplayer-core = { group = "com.google.android.exoplayer", name = "exoplayer-core", version.ref = "exoplayer" }
 exoplayer-mediasession = { group = "com.google.android.exoplayer", name = "extension-mediasession", version.ref = "exoplayer" }

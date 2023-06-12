@@ -23,9 +23,6 @@ import com.shadowflight.core.ui.extensions.combine
 import com.shadowflight.core.ui.pipelines.GlobalViewEvent
 import com.shadowflight.core.ui.pipelines.globalViewEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
-import de.palm.composestateevents.StateEvent
-import de.palm.composestateevents.consumed
-import de.palm.composestateevents.triggered
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -61,7 +58,6 @@ class FeedViewModel @Inject constructor(
         when (userInteract) {
             FeedUserInteract.Retry -> initialLoadOrRetry()
             FeedUserInteract.Refresh -> refresh()
-            FeedUserInteract.ScrollConsumed -> updateStateEvent(consumed)
         }
     }
 
@@ -69,15 +65,15 @@ class FeedViewModel @Inject constructor(
         viewModelScope.launch {
             globalViewEvents
                 .filter { it is GlobalViewEvent.ResetFeedScroll }
-                .collectLatest { updateStateEvent(triggered) }
+                .collectLatest { updateStateEvent() }
         }
     }
 
-    private fun updateStateEvent(stateEvent: StateEvent) {
+    private fun updateStateEvent() {
         val uiState = _viewState.value
         val feedUI = uiState.data ?: return
         _viewState.value = uiState.copy(
-            data = feedUI.copy(resetScrollPosition = stateEvent)
+            data = feedUI.copy(resetScrollPosition = !feedUI.resetScrollPosition)
         )
     }
 
