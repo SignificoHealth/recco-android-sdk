@@ -16,16 +16,14 @@ import com.shadowflight.core.repository.QuestionnaireRepository
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.UiState
-import com.shadowflight.core.ui.pipelines.Pipelines
+import com.shadowflight.core.ui.pipelines.GlobalViewEvent
 import com.shadowflight.core.ui.pipelines.ToastMessageType
-import com.shadowflight.core.ui.pipelines.ViewEvent
+import com.shadowflight.core.ui.pipelines.globalViewEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -208,12 +206,10 @@ class QuestionnaireViewModel @Inject constructor(
             runCatching {
                 questionnaireRepository.answers(questionnaireUI.questionnaire)
             }.onSuccess {
+                globalViewEvents.emit(GlobalViewEvent.ResetFeedScroll)
                 feedRepository.reloadFeed()
                 recommendationRepository.reloadSection(topic)
-
-                viewModelScope.launch {
-                    _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireSubmitted)
-                }
+                _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireSubmitted)
                 _viewState.emit(
                     uiState.copy(
                         data = questionnaireUI.copy(
@@ -223,8 +219,8 @@ class QuestionnaireViewModel @Inject constructor(
                 )
             }.onFailure { e ->
                 logger.e(e)
-                Pipelines.viewEvents.emit(
-                    ViewEvent.ShowToast(
+                globalViewEvents.emit(
+                    GlobalViewEvent.ShowToast(
                         titleRes = R.string.common_error_desc,
                         type = ToastMessageType.Error
                     )

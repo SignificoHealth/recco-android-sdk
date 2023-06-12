@@ -20,14 +20,24 @@ import com.shadowflight.core.repository.FeedRepository
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.combine
+import com.shadowflight.core.ui.pipelines.GlobalViewEvent
+import com.shadowflight.core.ui.pipelines.globalViewEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import de.palm.composestateevents.StateEvent
+import de.palm.composestateevents.consumed
+import de.palm.composestateevents.triggered
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
@@ -35,10 +45,15 @@ class FeedViewModel @Inject constructor(
     private val recommendationRepository: RecommendationRepository,
     private val logger: Logger
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(UiState<List<FeedSectionAndRecommendations>>())
-    val viewState: Flow<UiState<List<FeedSectionAndRecommendations>>> = _viewState
+    private val _viewState = MutableStateFlow(UiState<FeedUI>())
+    val viewState: StateFlow<UiState<FeedUI>> = _viewState.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(stopTimeout = 5.seconds),
+        initialValue = UiState()
+    )
 
     init {
+        setUpGlobalViewEvents()
         initialLoadOrRetry()
     }
 
@@ -46,7 +61,24 @@ class FeedViewModel @Inject constructor(
         when (userInteract) {
             FeedUserInteract.Retry -> initialLoadOrRetry()
             FeedUserInteract.Refresh -> refresh()
+            FeedUserInteract.ScrollConsumed -> updateStateEvent(consumed)
         }
+    }
+
+    private fun setUpGlobalViewEvents() {
+        viewModelScope.launch {
+            globalViewEvents
+                .filter { it is GlobalViewEvent.ResetFeedScroll }
+                .collectLatest { updateStateEvent(triggered) }
+        }
+    }
+
+    private fun updateStateEvent(stateEvent: StateEvent) {
+        val uiState = _viewState.value
+        val feedUI = uiState.data ?: return
+        _viewState.value = uiState.copy(
+            data = feedUI.copy(resetScrollPosition = stateEvent)
+        )
     }
 
     private fun refresh() {
@@ -113,11 +145,12 @@ class FeedViewModel @Inject constructor(
             }.catch { error ->
                 _viewState.value = _viewState.value.copy(error = error, isLoading = false)
                 logger.e(error)
-            }.collectLatest { feedSectionAndRecommendations ->
-                _viewState.value = _viewState.value.copy(
+            }.collectLatest { sections ->
+                val uiState = _viewState.value
+                _viewState.value = uiState.copy(
                     isLoading = false,
                     error = null,
-                    data = feedSectionAndRecommendations
+                    data = (uiState.data ?: FeedUI()).copy(sections = sections)
                 )
             }
         }

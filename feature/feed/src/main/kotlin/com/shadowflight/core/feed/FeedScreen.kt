@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -54,6 +55,8 @@ import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.viewedOverlay
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
+import de.palm.composestateevents.EventEffect
+import de.palm.composestateevents.StateEvent
 
 @Composable
 fun FeedRoute(
@@ -61,10 +64,7 @@ fun FeedRoute(
     navigateToQuestionnaire: (Topic) -> Unit,
     viewModel: FeedViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.viewState.collectAsStateWithLifecycle(
-        initialValue = UiState()
-    )
-
+    val uiState by viewModel.viewState.collectAsStateWithLifecycle()
     FeedScreen(
         uiState = uiState,
         onUserInteract = { viewModel.onUserInteract(it) },
@@ -75,12 +75,14 @@ fun FeedRoute(
 
 @Composable
 private fun FeedScreen(
-    uiState: UiState<List<FeedSectionAndRecommendations>>,
+    uiState: UiState<FeedUI>,
     onUserInteract: (FeedUserInteract) -> Unit,
     navigateToQuestionnaire: (Topic) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
-    contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues(),
+    contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
+    val scrollState = rememberScrollState()
+
     Scaffold(
         topBar = { AppTopBar() },
         backgroundColor = AppTheme.colors.background,
@@ -88,10 +90,10 @@ private fun FeedScreen(
     ) { innerPadding ->
         AppScreenStateAware(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
-            scrollState = rememberScrollState(),
+            scrollState = scrollState,
             enablePullToRefresh = true,
             uiState = uiState,
-            isEmpty = uiState.data.orEmpty().isEmpty(),
+            isEmpty = uiState.data?.sections.orEmpty().isEmpty(),
             retry = { onUserInteract(FeedUserInteract.Retry) },
             refresh = { onUserInteract(FeedUserInteract.Refresh) },
             emptyContent = {
@@ -108,8 +110,13 @@ private fun FeedScreen(
                 }
             }
         ) { data ->
+            EventEffect(
+                event = data.resetScrollPosition,
+                onConsumed = { onUserInteract(FeedUserInteract.ScrollConsumed) }
+            ) { scrollState.scrollTo(0) }
+
             FeedContent(
-                feedSectionAndRecommendations = data,
+                feedUI = data,
                 navigateToArticle = navigateToArticle,
                 navigateToQuestionnaire = navigateToQuestionnaire
             )
@@ -119,7 +126,7 @@ private fun FeedScreen(
 
 @Composable
 private fun FeedContent(
-    feedSectionAndRecommendations: List<FeedSectionAndRecommendations>,
+    feedUI: FeedUI,
     navigateToQuestionnaire: (Topic) -> Unit,
     navigateToArticle: (ContentId) -> Unit
 ) {
@@ -132,11 +139,12 @@ private fun FeedContent(
         FeedHeader()
         Spacer(Modifier.height(AppSpacing.dp_40))
 
-        feedSectionAndRecommendations.forEach { feedSectionAndRecommendations ->
+        feedUI.sections.forEach { sections ->
             FeedSection(
-                feedSectionAndRecommendations = feedSectionAndRecommendations,
+                sections = sections,
                 navigateToArticle = navigateToArticle,
-                navigateToQuestionnaire = navigateToQuestionnaire
+                navigateToQuestionnaire = navigateToQuestionnaire,
+                resetScrollPosition = feedUI.resetScrollPosition
             )
             Spacer(Modifier.height(AppSpacing.dp_40))
         }
@@ -176,36 +184,45 @@ private const val LOCK_PLACEHOLDER_ELEMENTS = 5
 
 @Composable
 private fun FeedSection(
-    feedSectionAndRecommendations: FeedSectionAndRecommendations,
+    resetScrollPosition: StateEvent,
+    sections: FeedSectionAndRecommendations,
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.padding(start = AppSpacing.dp_24),
-            text = feedSectionAndRecommendations.feedSection.type.asSectionTitle(),
+            text = sections.feedSection.type.asSectionTitle(),
             style = AppTheme.typography.h4
         )
         Spacer(Modifier.height(AppSpacing.dp_16))
 
+        val scrollState = rememberLazyListState()
+
+        EventEffect(
+            event = resetScrollPosition,
+            onConsumed = {}
+        ) { scrollState.scrollToItem(0) }
+
         LazyRow(
+            state = scrollState,
             horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8),
             contentPadding = PaddingValues(
                 start = AppSpacing.dp_24,
                 end = AppSpacing.dp_24
             )
         ) {
-            if (feedSectionAndRecommendations.feedSection.locked) {
+            if (sections.feedSection.locked) {
                 items(LOCK_PLACEHOLDER_ELEMENTS) {
                     LockedCard(onClick = {
-                        feedSectionAndRecommendations.feedSection.topic?.let {
+                        sections.feedSection.topic?.let {
                             navigateToQuestionnaire(it)
                         }
                     })
                 }
             } else {
                 items(
-                    items = feedSectionAndRecommendations.recommendations,
+                    items = sections.recommendations,
                     key = { it.id.itemId }) { recommendation ->
                     Card(recommendation, navigateToArticle)
                 }
@@ -303,7 +320,7 @@ private fun LockedCard(onClick: () -> Unit) {
 @Preview(showBackground = true, backgroundColor = 0xFFF)
 @Composable
 private fun Preview(
-    @PreviewParameter(FeedUIPreviewProvider::class) uiState: UiState<List<FeedSectionAndRecommendations>>
+    @PreviewParameter(FeedUIPreviewProvider::class) uiState: UiState<FeedUI>
 ) {
     FeedScreen(
         uiState = uiState,
