@@ -4,7 +4,7 @@ import com.shadowflight.core.model.questionnaire.Questionnaire
 
 data class QuestionnaireUI(
     val questionnaire: Questionnaire,
-    val progress: Float = (100 / questionnaire.questions.size) / 100.0f,
+    val progress: Float = 0f,
     val currentPage: Int = 0,
     val totalPages: Int = questionnaire.questions.size,
     val showBack: Boolean = false,
