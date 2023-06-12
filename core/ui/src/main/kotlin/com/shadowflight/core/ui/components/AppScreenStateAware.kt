@@ -97,7 +97,11 @@ fun <T> AppScreenStateAware(
 
     AppTheme(colorStatusBar = colorStatusBar) {
         if (isFloatingHeader) {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = contentPadding.calculateTopPadding())
+            ) {
                 backgroundContent?.invoke()
 
                 AppScreenStateAwareContent(
@@ -142,14 +146,14 @@ fun <T> AppScreenStateAware(
                 }
             }
         } else {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = contentPadding.calculateTopPadding())
+            ) {
                 backgroundContent?.invoke()
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = contentPadding.calculateTopPadding())
-                ) {
+                Column(modifier = Modifier.fillMaxSize()) {
                     headerContent?.let {
                         HeaderContent(
                             isFirstLoading = isFirstLoading.value,

@@ -80,7 +80,7 @@ private fun ArticleScreen(
         contentPadding = contentPadding
     ) { innerPadding ->
         AppScreenStateAware(
-            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+            contentPadding = innerPadding,
             scrollState = scrollState,
             uiState = uiState,
             retry = { onUserInteract(ArticleUserInteract.Retry) },
