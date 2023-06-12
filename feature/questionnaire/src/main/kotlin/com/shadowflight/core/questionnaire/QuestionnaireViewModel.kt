@@ -16,16 +16,14 @@ import com.shadowflight.core.repository.QuestionnaireRepository
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.UiState
-import com.shadowflight.core.ui.pipelines.Pipelines
+import com.shadowflight.core.ui.pipelines.GlobalViewEvent
 import com.shadowflight.core.ui.pipelines.ToastMessageType
-import com.shadowflight.core.ui.pipelines.ViewEvent
+import com.shadowflight.core.ui.pipelines.globalViewEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -56,7 +54,16 @@ class QuestionnaireViewModel @Inject constructor(
             is ClickOnMultiChoiceAnswerOption -> clickOnMultiChoiceAnswerOption(userInteract)
             is WriteOnNumericQuestion -> writeOnNumericQuestion(userInteract)
             BackClicked -> scrollTo(Adjustment.BACKWARD)
-            NextClicked -> scrollTo(Adjustment.FORWARD)
+            NextClicked -> {
+                val uiState = _viewState.value
+                val questionnaireUI = uiState.data ?: return
+
+                if (questionnaireUI.currentPage == questionnaireUI.questionnaire.questions.size - 1) {
+                    submitQuestionnaire()
+                } else {
+                    scrollTo(Adjustment.FORWARD)
+                }
+            }
         }
     }
 
@@ -64,35 +71,29 @@ class QuestionnaireViewModel @Inject constructor(
         val uiState = _viewState.value
         val questionnaireUI = uiState.data ?: return
 
-        if (adjustment == Adjustment.FORWARD
-            && questionnaireUI.currentPage == questionnaireUI.questionnaire.questions.size - 1
-        ) {
-            submitQuestionnaire()
-        } else {
-            val newPage = questionnaireUI.currentPage + adjustment.value
-            if (newPage < 0) return
+        val newPage = questionnaireUI.currentPage + adjustment.value
+        if (newPage < 0) return
 
-            viewModelScope.launch {
-                _viewEvents.emit(QuestionnaireViewEvent.ScrollTo(newPage))
-            }
+        viewModelScope.launch {
+            _viewEvents.emit(QuestionnaireViewEvent.ScrollTo(newPage))
+        }
 
-            viewModelScope.launch {
-                val questions = questionnaireUI.questionnaire.questions
-                _viewState.emit(
-                    uiState.copy(
-                        data = questionnaireUI.copy(
-                            progress = (newPage.toFloat() + 1) / questions.size.toFloat(),
-                            currentPage = newPage,
-                            showBack = newPage != 0,
-                            isNextEnabled = questions[newPage].isAnswerInputValid(
-                                requiredToBeAnswered
-                            ),
-                            isLastPage = newPage == questionnaireUI.questionnaire.questions.size - 1,
-                            isFirstPage = newPage == 0
-                        )
+        viewModelScope.launch {
+            val questions = questionnaireUI.questionnaire.questions
+            _viewState.emit(
+                uiState.copy(
+                    data = questionnaireUI.copy(
+                        progress = (newPage.toFloat() + 1) / questions.size.toFloat(),
+                        currentPage = newPage,
+                        showBack = newPage != 0,
+                        isNextEnabled = questions[newPage].isAnswerInputValid(
+                            requiredToBeAnswered
+                        ),
+                        isLastPage = newPage == questionnaireUI.questionnaire.questions.size - 1,
+                        isFirstPage = newPage == 0
                     )
                 )
-            }
+            )
         }
     }
 
@@ -105,7 +106,8 @@ class QuestionnaireViewModel @Inject constructor(
                             isLoading = false,
                             data = QuestionnaireUI(
                                 isNextEnabled = !requiredToBeAnswered,
-                                questionnaire = questionnaire
+                                questionnaire = questionnaire,
+                                progress = 1f / questionnaire.questions.size
                             )
                         )
                     )
@@ -208,12 +210,10 @@ class QuestionnaireViewModel @Inject constructor(
             runCatching {
                 questionnaireRepository.answers(questionnaireUI.questionnaire)
             }.onSuccess {
+                globalViewEvents.emit(GlobalViewEvent.ResetFeedScroll)
                 feedRepository.reloadFeed()
                 recommendationRepository.reloadSection(topic)
-
-                viewModelScope.launch {
-                    _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireSubmitted)
-                }
+                _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireSubmitted)
                 _viewState.emit(
                     uiState.copy(
                         data = questionnaireUI.copy(
@@ -223,8 +223,8 @@ class QuestionnaireViewModel @Inject constructor(
                 )
             }.onFailure { e ->
                 logger.e(e)
-                Pipelines.viewEvents.emit(
-                    ViewEvent.ShowToast(
+                globalViewEvents.emit(
+                    GlobalViewEvent.ShowToast(
                         titleRes = R.string.common_error_desc,
                         type = ToastMessageType.Error
                     )

@@ -94,7 +94,6 @@ fun QuestionnaireScreen(
     LaunchedEffect(key1 = Unit) {
         viewEvents.collectLatest { event ->
             when (event) {
-                Initial -> Unit
                 QuestionnaireSubmitted -> navigateUp()
                 is ScrollTo -> {
                     focusManager.clearFocus()
