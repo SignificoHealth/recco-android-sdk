@@ -65,16 +65,10 @@ class FeedViewModel @Inject constructor(
         viewModelScope.launch {
             globalViewEvents
                 .filter { it is GlobalViewEvent.ResetFeedScroll }
-                .collectLatest { updateStateEvent() }
+                .collectLatest {
+                    _viewState.value.data?.triggerResetScrollState?.trigger()
+                }
         }
-    }
-
-    private fun updateStateEvent() {
-        val uiState = _viewState.value
-        val feedUI = uiState.data ?: return
-        _viewState.value = uiState.copy(
-            data = feedUI.copy(resetScrollPosition = !feedUI.resetScrollPosition)
-        )
     }
 
     private fun refresh() {
@@ -146,7 +140,7 @@ class FeedViewModel @Inject constructor(
                 _viewState.value = uiState.copy(
                     isLoading = false,
                     error = null,
-                    data = (uiState.data ?: FeedUI()).copy(sections = sections)
+                    data = (uiState.data ?: FeedUI()).copy(sections = sections),
                 )
             }
         }

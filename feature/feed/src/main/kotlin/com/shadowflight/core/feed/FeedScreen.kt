@@ -28,10 +28,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -86,9 +83,6 @@ private fun FeedScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    val triggerResetScroll = remember {
-        derivedStateOf { uiState.data?.resetScrollPosition ?: false }
-    }
 
     Scaffold(
         topBar = { AppTopBar() },
@@ -121,15 +115,15 @@ private fun FeedScreen(
                 feedUI = data,
                 navigateToArticle = navigateToArticle,
                 navigateToQuestionnaire = navigateToQuestionnaire,
-                triggerResetScroll = triggerResetScroll
             )
-        }
-    }
 
-    SideEffect {
-        coroutineScope.launch {
-            if (triggerResetScroll.value != uiState.data?.resetScrollPosition) {
-                scrollState.animateScrollTo(0)
+            SideEffect {
+                coroutineScope.launch {
+                    if (data.triggerResetScrollState.isPendingToConsume()) {
+                        scrollState.animateScrollTo(0)
+                        data.triggerResetScrollState.consumedDelayed()
+                    }
+                }
             }
         }
     }
@@ -140,7 +134,6 @@ private fun FeedContent(
     feedUI: FeedUI,
     navigateToQuestionnaire: (Topic) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
-    triggerResetScroll: State<Boolean>,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -160,7 +153,7 @@ private fun FeedContent(
                 navigateToQuestionnaire = navigateToQuestionnaire,
                 resetScrollPosition = { scrollState ->
                     coroutineScope.launch {
-                        if (triggerResetScroll.value != feedUI.resetScrollPosition) {
+                        if (feedUI.triggerResetScrollState.isPendingToConsume()) {
                             scrollState.scrollToItem(0)
                         }
                     }
