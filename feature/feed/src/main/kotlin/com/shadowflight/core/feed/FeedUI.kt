@@ -1,10 +1,9 @@
 package com.shadowflight.core.feed
 
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
-import de.palm.composestateevents.StateEvent
-import de.palm.composestateevents.consumed
+import com.shadowflight.core.ui.TriggerState
 
 data class FeedUI(
-    val resetScrollPosition: StateEvent = consumed,
+    val triggerResetScrollState: TriggerState = TriggerState(),
     val sections: List<FeedSectionAndRecommendations> = emptyList(),
 )

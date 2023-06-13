@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package com.shadowflight.core.feed
 
 import androidx.compose.foundation.Image
@@ -19,6 +17,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -28,7 +27,9 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -55,8 +56,7 @@ import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.viewedOverlay
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
-import de.palm.composestateevents.EventEffect
-import de.palm.composestateevents.StateEvent
+import kotlinx.coroutines.launch
 
 @Composable
 fun FeedRoute(
@@ -81,6 +81,7 @@ private fun FeedScreen(
     navigateToArticle: (ContentId) -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
 
     Scaffold(
@@ -110,16 +111,20 @@ private fun FeedScreen(
                 }
             }
         ) { data ->
-            EventEffect(
-                event = data.resetScrollPosition,
-                onConsumed = { onUserInteract(FeedUserInteract.ScrollConsumed) }
-            ) { scrollState.scrollTo(0) }
-
             FeedContent(
                 feedUI = data,
                 navigateToArticle = navigateToArticle,
-                navigateToQuestionnaire = navigateToQuestionnaire
+                navigateToQuestionnaire = navigateToQuestionnaire,
             )
+
+            SideEffect {
+                coroutineScope.launch {
+                    if (data.triggerResetScrollState.isPendingToConsume()) {
+                        scrollState.animateScrollTo(0)
+                        data.triggerResetScrollState.consumedDelayed()
+                    }
+                }
+            }
         }
     }
 }
@@ -128,8 +133,10 @@ private fun FeedScreen(
 private fun FeedContent(
     feedUI: FeedUI,
     navigateToQuestionnaire: (Topic) -> Unit,
-    navigateToArticle: (ContentId) -> Unit
+    navigateToArticle: (ContentId) -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -139,12 +146,18 @@ private fun FeedContent(
         FeedHeader()
         Spacer(Modifier.height(AppSpacing.dp_40))
 
-        feedUI.sections.forEach { sections ->
+        feedUI.sections.forEach { section ->
             FeedSection(
-                sections = sections,
+                section = section,
                 navigateToArticle = navigateToArticle,
                 navigateToQuestionnaire = navigateToQuestionnaire,
-                resetScrollPosition = feedUI.resetScrollPosition
+                resetScrollPosition = { scrollState ->
+                    coroutineScope.launch {
+                        if (feedUI.triggerResetScrollState.isPendingToConsume()) {
+                            scrollState.scrollToItem(0)
+                        }
+                    }
+                }
             )
             Spacer(Modifier.height(AppSpacing.dp_40))
         }
@@ -182,27 +195,23 @@ private fun FeedHeader() {
 
 private const val LOCK_PLACEHOLDER_ELEMENTS = 5
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun FeedSection(
-    resetScrollPosition: StateEvent,
-    sections: FeedSectionAndRecommendations,
+    section: FeedSectionAndRecommendations,
     navigateToArticle: (ContentId) -> Unit,
-    navigateToQuestionnaire: (Topic) -> Unit
+    navigateToQuestionnaire: (Topic) -> Unit,
+    resetScrollPosition: (LazyListState) -> Unit,
 ) {
+    val scrollState = rememberLazyListState()
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.padding(start = AppSpacing.dp_24),
-            text = sections.feedSection.type.asSectionTitle(),
+            text = section.feedSection.type.asSectionTitle(),
             style = AppTheme.typography.h4
         )
         Spacer(Modifier.height(AppSpacing.dp_16))
-
-        val scrollState = rememberLazyListState()
-
-        EventEffect(
-            event = resetScrollPosition,
-            onConsumed = {}
-        ) { scrollState.scrollToItem(0) }
 
         LazyRow(
             state = scrollState,
@@ -212,22 +221,26 @@ private fun FeedSection(
                 end = AppSpacing.dp_24
             )
         ) {
-            if (sections.feedSection.locked) {
+            if (section.feedSection.locked) {
                 items(LOCK_PLACEHOLDER_ELEMENTS) {
                     LockedCard(onClick = {
-                        sections.feedSection.topic?.let {
+                        section.feedSection.topic?.let {
                             navigateToQuestionnaire(it)
                         }
                     })
                 }
             } else {
                 items(
-                    items = sections.recommendations,
+                    items = section.recommendations,
                     key = { it.id.itemId }) { recommendation ->
                     Card(recommendation, navigateToArticle)
                 }
             }
         }
+    }
+
+    SideEffect {
+        resetScrollPosition(scrollState)
     }
 }
 
@@ -273,6 +286,7 @@ private fun Card(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun LockedCard(onClick: () -> Unit) {
     Card(

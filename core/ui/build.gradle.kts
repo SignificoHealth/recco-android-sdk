@@ -38,6 +38,4 @@ dependencies {
     api(libs.androidx.navigation.compose)
 
     api(libs.compose.html)
-
-    api(libs.compose.state.events)
 }
