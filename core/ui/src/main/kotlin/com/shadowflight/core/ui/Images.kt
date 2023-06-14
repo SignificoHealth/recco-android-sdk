@@ -53,7 +53,7 @@ fun AppTintedImageNoConnection(
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.ic_no_connection,
+        drawableRes = R.drawable.ic_no_connection, // FIXME
         drawableResTint = R.drawable.ic_no_connection_tint,
         tint = tint,
     )
@@ -66,7 +66,7 @@ fun AppTintedImagePeopleDigital(
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.ic_people_digital_tint, // FIXME
+        drawableRes = R.drawable.ic_people_digital, // FIXME
         drawableResTint = R.drawable.ic_people_digital_tint,
         tint = tint,
     )
@@ -79,7 +79,7 @@ fun AppTintedImageRidingBike(
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.ic_riding_bike_tint, // FIXME
+        drawableRes = R.drawable.ic_riding_bike, // FIXME
         drawableResTint = R.drawable.ic_riding_bike_tint,
         tint = tint,
     )
@@ -92,7 +92,7 @@ fun AppTintedImageAboutYou(
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.ic_about_you_tint, // FIXME
+        drawableRes = R.drawable.ic_about_you, // FIXME
         drawableResTint = R.drawable.ic_about_you_tint,
         tint = tint,
     )
@@ -105,7 +105,7 @@ fun AppTintedImagePortrait1(
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.ic_portrait_1_tint, // FIXME
+        drawableRes = R.drawable.ic_portrait_1, // FIXME
         drawableResTint = R.drawable.ic_portrait_1_tint,
         tint = tint,
     )
@@ -118,7 +118,7 @@ fun AppTintedImagePortrait2(
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.ic_portrait_2_tint, // FIXME
+        drawableRes = R.drawable.ic_portrait_2, // FIXME
         drawableResTint = R.drawable.ic_portrait_2_tint,
         tint = tint,
     )
