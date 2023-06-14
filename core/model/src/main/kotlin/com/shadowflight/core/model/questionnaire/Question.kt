@@ -1,6 +1,7 @@
 package com.shadowflight.core.model.questionnaire
 
 sealed class Question {
+    abstract val questionnaireId: String
     abstract val id: String
     abstract val index: Int
     abstract val text: String
@@ -8,6 +9,7 @@ sealed class Question {
 }
 
 data class MultiChoiceQuestion(
+    override val questionnaireId: String,
     override val id: String,
     override val index: Int,
     override val text: String,
@@ -25,6 +27,7 @@ data class MultiChoiceQuestion(
 }
 
 data class NumericQuestion(
+    override val questionnaireId: String,
     override val id: String,
     override val index: Int,
     override val text: String,

@@ -4,23 +4,16 @@ import com.shadowflight.core.model.questionnaire.MultiChoiceAnswerOption
 import com.shadowflight.core.model.questionnaire.MultiChoiceQuestion
 import com.shadowflight.core.model.questionnaire.NumericQuestion
 import com.shadowflight.core.model.questionnaire.NumericQuestionFormat
-import com.shadowflight.core.model.questionnaire.Questionnaire
 import com.shadowflight.core.model.questionnaire.Question
 import com.shadowflight.core.openapi.model.CreateQuestionnaireAnswerDTO
 import com.shadowflight.core.openapi.model.MultiChoiceAnswerOptionDTO
 import com.shadowflight.core.openapi.model.NumericQuestionDTO
 import com.shadowflight.core.openapi.model.QuestionAnswerTypeDTO
 import com.shadowflight.core.openapi.model.QuestionDTO
-import com.shadowflight.core.openapi.model.QuestionnaireAnswersDTO
-import com.shadowflight.core.openapi.model.QuestionnaireDTO
 
-fun QuestionnaireDTO.asEntity() = Questionnaire(
-    id = id,
-    questions = questions.map(QuestionDTO::asEntity)
-)
-
-private fun QuestionDTO.asEntity() = when (type) {
+fun QuestionDTO.asEntity() = when (type) {
     QuestionAnswerTypeDTO.MULTICHOICE -> MultiChoiceQuestion(
+        questionnaireId = questionnaireId,
         id = id,
         index = index,
         text = text,
@@ -30,6 +23,7 @@ private fun QuestionDTO.asEntity() = when (type) {
     )
 
     QuestionAnswerTypeDTO.NUMERIC -> NumericQuestion(
+        questionnaireId = questionnaireId,
         id = id,
         index = index,
         text = text,
@@ -53,12 +47,7 @@ private fun NumericQuestionDTO.Format.asEntity() = when (this) {
     NumericQuestionDTO.Format.DECIMAL -> NumericQuestionFormat.DECIMAL
 }
 
-fun Questionnaire.asAnswersDTO() = QuestionnaireAnswersDTO(
-    id = id,
-    answers = questions.map { it.asDTO(questionnaireId = id) }
-)
-
-private fun Question.asDTO(questionnaireId: String) = CreateQuestionnaireAnswerDTO(
+fun Question.asDTO() = CreateQuestionnaireAnswerDTO(
     questionnaireId = questionnaireId,
     questionId = id,
     type = when (this) {

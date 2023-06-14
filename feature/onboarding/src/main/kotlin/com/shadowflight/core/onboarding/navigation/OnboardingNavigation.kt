@@ -9,14 +9,15 @@ import com.shadowflight.core.onboarding.OnboardingRoute
 const val OnboardingGraph = "onboarding_graph"
 const val OnboardingRoute = "onboarding"
 
-@OptIn(ExperimentalAnimationApi::class)
-fun NavGraphBuilder.onboardingGraph() {
+fun NavGraphBuilder.onboardingGraph(
+    navigateToQuestionnaire: () -> Unit
+) {
     navigation(
         route = OnboardingGraph,
         startDestination = OnboardingRoute
     ) {
         composable(route = OnboardingRoute) {
-            OnboardingRoute()
+            OnboardingRoute(navigateToQuestionnaire)
         }
     }
 }

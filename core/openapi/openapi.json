@@ -163,7 +163,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/QuestionnaireAnswers"
+                  "$ref": "#/components/schemas/CreateQuestionnaireAnswer"
                 }
               }
             }
@@ -203,7 +203,10 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/QuestionnaireAnswers"
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CreateQuestionnaireAnswer"
+                }
               }
             }
           },
@@ -719,7 +722,10 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Questionnaire"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Question"
+                  }
                 }
               }
             }
@@ -737,7 +743,7 @@
         "tags": [
           "Questionnaire"
         ],
-        "summary": "Return the onboarding questionnaires.",
+        "summary": "Return the onboarding questionnaire.",
         "operationId": "onboarding",
         "responses": {
           "401": {
@@ -757,7 +763,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Questionnaire"
+                    "$ref": "#/components/schemas/Question"
                   }
                 }
               }
@@ -970,24 +976,6 @@
           "numeric"
         ]
       },
-      "QuestionnaireAnswers": {
-        "required": [
-          "answers",
-          "id"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "answers": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CreateQuestionnaireAnswer"
-            }
-          }
-        }
-      },
       "PATReferenceDelete": {
         "required": [
           "tokenId"
@@ -1027,12 +1015,16 @@
       },
       "AppUser": {
         "required": [
-          "id"
+          "id",
+          "isOnboardingQuestionnaireCompleted"
         ],
         "type": "object",
         "properties": {
           "id": {
             "type": "string"
+          },
+          "isOnboardingQuestionnaireCompleted": {
+            "type": "boolean"
           }
         }
       },
@@ -1189,11 +1181,15 @@
         "required": [
           "id",
           "index",
+          "questionnaireId",
           "text",
           "type"
         ],
         "type": "object",
         "properties": {
+          "questionnaireId": {
+            "type": "string"
+          },
           "id": {
             "type": "string"
           },
@@ -1212,24 +1208,6 @@
           },
           "numeric": {
             "$ref": "#/components/schemas/NumericQuestion"
-          }
-        }
-      },
-      "Questionnaire": {
-        "required": [
-          "id",
-          "questions"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "questions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Question"
-            }
           }
         }
       },

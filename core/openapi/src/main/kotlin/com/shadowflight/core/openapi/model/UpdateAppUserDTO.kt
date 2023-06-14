@@ -13,22 +13,17 @@
 
 package com.shadowflight.core.openapi.model
 
-import com.shadowflight.core.openapi.model.QuestionDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
  * 
  *
- * @param id 
- * @param questions 
+ * @param isOnboardingCompleted 
  */
 @JsonClass(generateAdapter = true)
-data class QuestionnaireDTO(
+data class UpdateAppUserDTO(
 
-    @Json(name = "id")
-    val id: kotlin.String,
-
-    @Json(name = "questions")
-    val questions: kotlin.collections.List<QuestionDTO>
+    @Json(name = "isOnboardingCompleted")
+    val isOnboardingCompleted: kotlin.Boolean? = null
 )

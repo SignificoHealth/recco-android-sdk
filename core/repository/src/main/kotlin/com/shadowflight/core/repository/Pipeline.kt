@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlin.random.Random
 
-class Pipeline<T>(private val remoteDatasource: suspend () -> T) {
+internal class Pipeline<T>(private val remoteDatasource: suspend () -> T) {
     private val _state = MutableStateFlow(PipelineUpdate(remoteDatasource))
     var value: T? = null
         private set
