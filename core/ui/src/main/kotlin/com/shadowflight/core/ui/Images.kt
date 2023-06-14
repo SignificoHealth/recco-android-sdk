@@ -3,11 +3,17 @@ package com.shadowflight.core.ui
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 
 // width/height positive ratio
@@ -141,5 +147,23 @@ private fun AppTintedImage(
             painter = painterResource(drawableRes),
             contentDescription = null
         )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewAppTintedImagePottedPlant2() {
+    Column {
+        AppTintedImagePottedPlant2()
+        AppTintedImagePottedPlant2(tint = AppTheme.colors.error)
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewAppTintedImageApple() {
+    Column {
+        AppTintedImageApple()
+        AppTintedImageApple(tint = AppTheme.colors.error)
     }
 }
