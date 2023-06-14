@@ -14,14 +14,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.shadowflight.core.ui.AppTintedImageNoConnection
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 import com.shadowflight.core.ui.R
 
+/**
+ * [drawableRes] will take precedence over [drawableComposable]
+ */
 data class EmptyState(
     @StringRes val titleRes: Int,
     val description: String? = null,
-    @DrawableRes val drawableRes: Int,
+    @DrawableRes val drawableRes: Int? = null,
+    val drawableComposable:  @Composable (() -> Unit)? = null,
     @StringRes val ctaTextRes: Int? = null,
     @DrawableRes val ctaIconRes: Int? = null,
     val onCtaClick: (() -> Unit)? = null
@@ -41,13 +46,18 @@ fun AppEmptyContent(
                 .padding(AppSpacing.dp_24),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                modifier = drawableModifier,
-                contentScale = ContentScale.FillWidth,
-                painter = painterResource(id = emptyState.drawableRes),
-                contentDescription = null
-            )
-            Spacer(Modifier.height(AppSpacing.dp_40))
+            if (emptyState.drawableRes != null) {
+                Image(
+                    modifier = drawableModifier,
+                    contentScale = ContentScale.FillWidth,
+                    painter = painterResource(id = emptyState.drawableRes),
+                    contentDescription = null
+                )
+                Spacer(Modifier.height(AppSpacing.dp_40))
+            } else if (emptyState.drawableComposable != null) {
+                emptyState.drawableComposable.invoke()
+                Spacer(Modifier.height(AppSpacing.dp_40))
+            }
 
             Text(
                 text = stringResource(emptyState.titleRes),
@@ -87,7 +97,7 @@ private fun PreviewWithoutCta() {
         emptyState = EmptyState(
             titleRes = R.string.no_network_connection_error_title,
             description = stringResource(R.string.no_network_connection_error_desc),
-            drawableRes = R.drawable.bg_no_connection,
+            drawableRes = R.drawable.ic_no_connection,
         )
     )
 }
@@ -98,7 +108,7 @@ private fun PreviewWithoutDescription() {
     AppEmptyContent(
         emptyState = EmptyState(
             titleRes = R.string.no_network_connection_error_title,
-            drawableRes = R.drawable.bg_no_connection,
+            drawableRes = R.drawable.ic_no_connection,
             ctaTextRes = R.string.reload,
             ctaIconRes = R.drawable.ic_retry,
             onCtaClick = { }
@@ -113,7 +123,7 @@ private fun PreviewFull() {
         emptyState = EmptyState(
             titleRes = R.string.no_network_connection_error_title,
             description = stringResource(R.string.no_network_connection_error_desc),
-            drawableRes = R.drawable.bg_no_connection,
+            drawableRes = R.drawable.ic_no_connection,
             ctaTextRes = R.string.reload,
             ctaIconRes = R.drawable.ic_retry,
             onCtaClick = { }
@@ -131,7 +141,10 @@ private fun PreviewCustomImageSize() {
         emptyState = EmptyState(
             titleRes = R.string.no_network_connection_error_title,
             description = stringResource(R.string.no_network_connection_error_desc),
-            drawableRes = R.drawable.bg_no_connection,
+            drawableRes = null,
+            drawableComposable = {
+                AppTintedImageNoConnection(tint = AppTheme.colors.error)
+            },
             ctaTextRes = R.string.reload,
             ctaIconRes = R.drawable.ic_retry,
             onCtaClick = { }

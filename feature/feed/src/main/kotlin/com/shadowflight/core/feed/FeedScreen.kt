@@ -47,6 +47,7 @@ import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Recommendation
 import com.shadowflight.core.model.recommendation.Status
+import com.shadowflight.core.ui.AppTintedImagePottedPlant2
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.AppEmptyContent
 import com.shadowflight.core.ui.components.AppScreenStateAware
@@ -185,10 +186,8 @@ private fun FeedHeader() {
                     style = AppTheme.typography.body1
                 )
             }
-            Image(
-                painter = painterResource(R.drawable.bg_plant),
-                contentDescription = null
-            )
+
+            AppTintedImagePottedPlant2()
         }
     }
 }
