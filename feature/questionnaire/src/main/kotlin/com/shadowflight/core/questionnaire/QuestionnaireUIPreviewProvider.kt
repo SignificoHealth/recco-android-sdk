@@ -11,7 +11,7 @@ class QuestionnaireUIStatePreviewProvider :
             UiState(
                 isLoading = false,
                 data = QuestionnaireUI(
-                    questionnaire = QuestionnairePreviewProvider.multiChoice(maxOptions = 2),
+                    questions = QuestionnairePreviewProvider.multiChoice(maxOptions = 2),
                     progress = .25f,
                     isLastPage = true,
                     isNextEnabled = true,
@@ -21,14 +21,14 @@ class QuestionnaireUIStatePreviewProvider :
             UiState(
                 isLoading = false,
                 data = QuestionnaireUI(
-                    questionnaire = QuestionnairePreviewProvider.multiChoice(maxOptions = 1),
+                    questions = QuestionnairePreviewProvider.multiChoice(maxOptions = 1),
                     progress = .5f
                 )
             ),
             UiState(
                 isLoading = false,
                 data = QuestionnaireUI(
-                    questionnaire = QuestionnairePreviewProvider.numeric(),
+                    questions = QuestionnairePreviewProvider.numeric(),
                     progress = .75f
                 )
             ),

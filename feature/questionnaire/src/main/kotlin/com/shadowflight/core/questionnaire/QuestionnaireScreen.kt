@@ -61,8 +61,9 @@ import kotlinx.coroutines.flow.flow
 
 @Composable
 internal fun QuestionnaireRoute(
-    topic: Topic,
+    topic: Topic?,
     navigateUp: () -> Unit,
+    navigateToFeed: () -> Unit,
     viewModel: QuestionnaireViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
@@ -73,6 +74,7 @@ internal fun QuestionnaireRoute(
         uiState = uiState,
         onUserInteract = { viewModel.onUserInteract(it) },
         navigateUp = navigateUp,
+        navigateToFeed = navigateToFeed,
         viewEvents = viewModel.viewEvents
     )
 }
@@ -80,11 +82,12 @@ internal fun QuestionnaireRoute(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun QuestionnaireScreen(
-    topic: Topic,
+    topic: Topic?,
     uiState: UiState<QuestionnaireUI>,
     viewEvents: Flow<QuestionnaireViewEvent>,
     onUserInteract: (QuestionnaireUserInteract) -> Unit,
     navigateUp: () -> Unit,
+    navigateToFeed: () -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues(),
 ) {
     val pagerState = rememberPagerState()
@@ -94,6 +97,7 @@ fun QuestionnaireScreen(
         viewEvents.collectLatest { event ->
             when (event) {
                 QuestionnaireSubmitted -> navigateUp()
+                QuestionnaireOnboardingSubmitted -> navigateToFeed()
                 is ScrollTo -> {
                     focusManager.clearFocus()
                     pagerState.scrollToPage(event.page)
@@ -102,12 +106,17 @@ fun QuestionnaireScreen(
         }
     }
 
+
     Scaffold(
         topBar = {
             AppTopBar(
-                title = topic.asTitle(),
+                title = topic?.asTitle() ?: stringResource(id = R.string.about_you),
                 elevation = 0.dp,
-                navigationIcon = { BackIconButton(onClick = navigateUp) }
+                navigationIcon = if (topic != null) {
+                    { BackIconButton(onClick = navigateUp) }
+                } else {
+                    {}
+                }
             )
         },
         backgroundColor = AppTheme.colors.background,
@@ -139,7 +148,7 @@ fun QuestionnaireScreen(
                                 append((data.currentPage + 1).toString())
                             }
                             withStyle(style = SpanStyle(color = AppTheme.colors.primary)) {
-                                append("/${data.questionnaire.questions.size}")
+                                append("/${data.questions.size}")
                             }
                         },
                         style = AppTheme.typography.h4
@@ -165,7 +174,6 @@ fun QuestionnaireScreen(
             QuestionnaireContent(
                 data = data,
                 state = pagerState,
-                navigateUp = navigateUp,
                 onUserInteract = onUserInteract
             )
         }
@@ -175,20 +183,14 @@ fun QuestionnaireScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun QuestionnaireContent(
-    navigateUp: () -> Unit,
     data: QuestionnaireUI,
     state: PagerState,
     onUserInteract: (QuestionnaireUserInteract) -> Unit
 ) {
-    BackHandler(onBack = {
-        if (data.isFirstPage) {
-            navigateUp()
-        } else {
-            onUserInteract(BackClicked)
-        }
-    })
-
-    val questions = data.questionnaire.questions
+    BackHandler(
+        enabled = !data.isFirstPage,
+        onBack = { onUserInteract(BackClicked) }
+    )
 
     Column(
         modifier = Modifier
@@ -197,11 +199,11 @@ private fun QuestionnaireContent(
     ) {
         HorizontalPager(
             modifier = Modifier.fillMaxSize(),
-            pageCount = questions.size,
+            pageCount = data.questions.size,
             state = state,
             userScrollEnabled = false
         ) { page ->
-            val question = questions[page]
+            val question = data.questions[page]
             val scrollState = rememberScrollState()
 
             Box {
@@ -280,6 +282,7 @@ private fun Preview(
         topic = Topic.NUTRITION,
         uiState = uiState,
         navigateUp = {},
+        navigateToFeed = {},
         onUserInteract = {},
         viewEvents = flow { }
     )

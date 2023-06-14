@@ -19,8 +19,6 @@ src/main/kotlin/com/shadowflight/core/openapi/model/PATDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/PATReferenceDeleteDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/QuestionAnswerTypeDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/QuestionDTO.kt
-src/main/kotlin/com/shadowflight/core/openapi/model/QuestionnaireAnswersDTO.kt
-src/main/kotlin/com/shadowflight/core/openapi/model/QuestionnaireDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/RatingDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/StatusDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/TopicDTO.kt

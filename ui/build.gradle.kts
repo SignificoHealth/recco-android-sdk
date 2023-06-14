@@ -10,6 +10,8 @@ android {
 
 dependencies {
     api(project(":core:model"))
+    implementation(project(":core:logger"))
+    implementation(project(":core:repository"))
     implementation(project(":core:persistence"))
     implementation(project(":core:ui"))
     implementation(project(":feature:feed"))

@@ -8,26 +8,38 @@ import com.shadowflight.core.article.navigation.articleGraph
 import com.shadowflight.core.article.navigation.navigateToArticle
 import com.shadowflight.core.feed.navigation.FeedGraph
 import com.shadowflight.core.feed.navigation.feedGraph
+import com.shadowflight.core.feed.navigation.navigateToFeed
+import com.shadowflight.core.model.recommendation.User
+import com.shadowflight.core.onboarding.navigation.OnboardingGraph
 import com.shadowflight.core.onboarding.navigation.onboardingGraph
-import com.shadowflight.core.questionnaire.navigation.navigateToQuestionnaire
+import com.shadowflight.core.questionnaire.navigation.navigateToOnboardingQuestionnaire
+import com.shadowflight.core.questionnaire.navigation.navigateToTopicQuestionnaire
 import com.shadowflight.core.questionnaire.navigation.questionnaireGraph
 
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    user: User
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = FeedGraph
+        startDestination = when {
+            !user.isOnboardingQuestionnaireCompleted -> OnboardingGraph
+            else -> FeedGraph
+        }
     ) {
-        onboardingGraph()
+        onboardingGraph(navigateToQuestionnaire = navController::navigateToOnboardingQuestionnaire)
         feedGraph(
             navigateToArticle = navController::navigateToArticle,
-            navigateToQuestionnaire = navController::navigateToQuestionnaire
+            navigateToQuestionnaire = navController::navigateToTopicQuestionnaire
         )
         articleGraph(navigateUp = navController::navigateUp)
-        questionnaireGraph(navigateUp = navController::navigateUp)
+        questionnaireGraph(
+            isOnboardingQuestionnaireCompleted = user.isOnboardingQuestionnaireCompleted,
+            navigateUp = navController::navigateUp,
+            navigateToFeed = navController::navigateToFeed
+        )
     }
 }

@@ -35,8 +35,8 @@ class QuestionnaireViewModel @Inject constructor(
     private val logger: Logger,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val topic by lazy { checkNotNull(savedStateHandle.get<Topic>(topicArg)) }
-    private val requiredToBeAnswered by lazy { false }
+    private val topic by lazy { savedStateHandle.get<Topic>(topicArg) }
+    private val isOnboarding by lazy { topic == null }
 
     private val _viewState = MutableStateFlow(UiState<QuestionnaireUI>())
     val viewState: Flow<UiState<QuestionnaireUI>> = _viewState
@@ -58,7 +58,7 @@ class QuestionnaireViewModel @Inject constructor(
                 val uiState = _viewState.value
                 val questionnaireUI = uiState.data ?: return
 
-                if (questionnaireUI.currentPage == questionnaireUI.questionnaire.questions.size - 1) {
+                if (questionnaireUI.currentPage == questionnaireUI.questions.size - 1) {
                     submitQuestionnaire()
                 } else {
                     scrollTo(Adjustment.FORWARD)
@@ -79,7 +79,7 @@ class QuestionnaireViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val questions = questionnaireUI.questionnaire.questions
+            val questions = questionnaireUI.questions
             _viewState.emit(
                 uiState.copy(
                     data = questionnaireUI.copy(
@@ -87,9 +87,9 @@ class QuestionnaireViewModel @Inject constructor(
                         currentPage = newPage,
                         showBack = newPage != 0,
                         isNextEnabled = questions[newPage].isAnswerInputValid(
-                            requiredToBeAnswered
+                            requiredToBeAnswered = isOnboarding
                         ),
-                        isLastPage = newPage == questionnaireUI.questionnaire.questions.size - 1,
+                        isLastPage = newPage == questions.size - 1,
                         isFirstPage = newPage == 0
                     )
                 )
@@ -99,29 +99,33 @@ class QuestionnaireViewModel @Inject constructor(
 
     private fun initialLoadSubscribe() {
         viewModelScope.launch {
-            runCatching { questionnaireRepository.getQuestionnaireByTopic(topic) }
-                .onSuccess { questionnaire ->
-                    _viewState.emit(
-                        UiState(
-                            isLoading = false,
-                            data = QuestionnaireUI(
-                                isNextEnabled = !requiredToBeAnswered,
-                                questionnaire = questionnaire,
-                                progress = 1f / questionnaire.questions.size
-                            )
+            runCatching {
+                if (topic != null) {
+                    questionnaireRepository.getQuestionnaireByTopic(topic!!)
+                } else {
+                    questionnaireRepository.getOnboarding()
+                }
+            }.onSuccess { questions ->
+                _viewState.emit(
+                    UiState(
+                        isLoading = false,
+                        data = QuestionnaireUI(
+                            isNextEnabled = !isOnboarding,
+                            questions = questions,
+                            progress = 1f / questions.size
                         )
                     )
-                }.onFailure {
-                    _viewState.emit(UiState(error = it, isLoading = false))
-                    logger.e(it)
-                }
+                )
+            }.onFailure {
+                _viewState.emit(UiState(error = it, isLoading = false))
+                logger.e(it)
+            }
         }
     }
 
     private fun clickOnMultiChoiceAnswerOption(input: ClickOnMultiChoiceAnswerOption) {
         val uiState = _viewState.value
         val questionnaireUI = _viewState.value.data ?: return
-        val questionnaire = questionnaireUI.questionnaire
         val (question, selectedOption) = input
 
         val updatedQuestion = question.copy(
@@ -145,16 +149,16 @@ class QuestionnaireViewModel @Inject constructor(
             _viewState.emit(
                 uiState.copy(
                     data = questionnaireUI.copy(
-                        questionnaire = questionnaire.copy(
-                            questions = questionnaire.questions.map {
-                                if (question.id == it.id) {
-                                    updatedQuestion
-                                } else {
-                                    it
-                                }
+                        questions = questionnaireUI.questions.map {
+                            if (question.id == it.id) {
+                                updatedQuestion
+                            } else {
+                                it
                             }
-                        ),
-                        isNextEnabled = updatedQuestion.isAnswerInputValid(requiredToBeAnswered)
+                        },
+                        isNextEnabled = updatedQuestion.isAnswerInputValid(
+                            requiredToBeAnswered = isOnboarding
+                        )
                     )
                 )
             )
@@ -171,7 +175,6 @@ class QuestionnaireViewModel @Inject constructor(
     private fun writeOnNumericQuestion(input: WriteOnNumericQuestion) {
         val uiState = _viewState.value
         val questionnaireUI = _viewState.value.data ?: return
-        val questionnaire = questionnaireUI.questionnaire
         val (question, selectedValue) = input
         val updatedQuestion = question.copy(selectedValue = selectedValue.toDoubleOrNull())
 
@@ -179,16 +182,15 @@ class QuestionnaireViewModel @Inject constructor(
             _viewState.emit(
                 uiState.copy(
                     data = questionnaireUI.copy(
-                        questionnaire = questionnaire.copy(
-                            questions = questionnaire.questions.map {
-                                if (question.id == it.id) {
-                                    updatedQuestion
-                                } else {
-                                    it
-                                }
+                        questions = questionnaireUI.questions.map {
+                            if (question.id == it.id) {
+                                updatedQuestion
+                            } else {
+                                it
                             }
-                        ),
-                        isNextEnabled = updatedQuestion.isAnswerInputValid(requiredToBeAnswered)
+                        },
+                        isNextEnabled = updatedQuestion
+                            .isAnswerInputValid(requiredToBeAnswered = isOnboarding)
                     )
                 )
             )
@@ -208,12 +210,21 @@ class QuestionnaireViewModel @Inject constructor(
                 )
             )
             runCatching {
-                questionnaireRepository.answers(questionnaireUI.questionnaire)
+                if (topic != null) {
+                    questionnaireRepository.answers(questionnaireUI.questions)
+                } else {
+                    questionnaireRepository.onboardingAnswers(questionnaireUI.questions)
+                }
             }.onSuccess {
-                globalViewEvents.emit(GlobalViewEvent.ResetFeedScroll)
-                feedRepository.reloadFeed()
-                recommendationRepository.reloadSection(topic)
-                _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireSubmitted)
+                if (topic != null) {
+                    recommendationRepository.reloadSection(topic!!)
+                    globalViewEvents.emit(GlobalViewEvent.ResetFeedScroll)
+                    feedRepository.reloadFeed()
+                    _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireSubmitted)
+                } else {
+                    _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireOnboardingSubmitted)
+                }
+
                 _viewState.emit(
                     uiState.copy(
                         data = questionnaireUI.copy(

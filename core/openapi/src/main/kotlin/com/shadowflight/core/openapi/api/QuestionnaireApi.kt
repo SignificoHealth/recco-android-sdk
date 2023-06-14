@@ -18,8 +18,8 @@ import retrofit2.Response
 import okhttp3.RequestBody
 import com.squareup.moshi.Json
 import com.shadowflight.core.openapi.model.ApiErrorDTO
-import com.shadowflight.core.openapi.model.QuestionnaireAnswersDTO
-import com.shadowflight.core.openapi.model.QuestionnaireDTO
+import com.shadowflight.core.openapi.model.CreateQuestionnaireAnswerDTO
+import com.shadowflight.core.openapi.model.QuestionDTO
 import com.shadowflight.core.openapi.model.TopicDTO
 
 interface QuestionnaireApi {
@@ -31,11 +31,11 @@ interface QuestionnaireApi {
      *  - 401: Unauthorized
      *  - 204: No Content
      *
-     * @param questionnaireAnswersDTO 
+     * @param createQuestionnaireAnswerDTO 
      * @return [Unit]
      */
     @POST("api/v1/me/questionnaire/answers")
-    suspend fun answers(@Body questionnaireAnswersDTO: QuestionnaireAnswersDTO): Response<Unit>
+    suspend fun answers(@Body createQuestionnaireAnswerDTO: kotlin.collections.List<CreateQuestionnaireAnswerDTO>): Response<Unit>
 
     /**
      * Return the associated questionnaire for a given topic.
@@ -45,22 +45,22 @@ interface QuestionnaireApi {
      *  - 200: OK
      *
      * @param topic 
-     * @return [QuestionnaireDTO]
+     * @return [kotlin.collections.List<QuestionDTO>]
      */
     @GET("api/v1/me/questionnaire/topics/{topic}")
-    suspend fun getQuestionnaireByTopic(@Path("topic") topic: TopicDTO): Response<QuestionnaireDTO>
+    suspend fun getQuestionnaireByTopic(@Path("topic") topic: TopicDTO): Response<kotlin.collections.List<QuestionDTO>>
 
     /**
-     * Return the onboarding questionnaires.
+     * Return the onboarding questionnaire.
      * 
      * Responses:
      *  - 401: Unauthorized
      *  - 200: OK
      *
-     * @return [kotlin.collections.List<QuestionnaireDTO>]
+     * @return [kotlin.collections.List<QuestionDTO>]
      */
     @GET("api/v1/me/questionnaire/onboarding_questionnaires")
-    suspend fun onboarding(): Response<kotlin.collections.List<QuestionnaireDTO>>
+    suspend fun onboarding(): Response<kotlin.collections.List<QuestionDTO>>
 
     /**
      * Set user app answers for the onboarding questionnaires.
@@ -69,9 +69,9 @@ interface QuestionnaireApi {
      *  - 401: Unauthorized
      *  - 204: No Content
      *
-     * @param questionnaireAnswersDTO 
+     * @param createQuestionnaireAnswerDTO 
      * @return [Unit]
      */
     @POST("api/v1/me/questionnaire/onboarding_answers")
-    suspend fun onboardingAnswers(@Body questionnaireAnswersDTO: kotlin.collections.List<QuestionnaireAnswersDTO>): Response<Unit>
+    suspend fun onboardingAnswers(@Body createQuestionnaireAnswerDTO: kotlin.collections.List<CreateQuestionnaireAnswerDTO>): Response<Unit>
 }

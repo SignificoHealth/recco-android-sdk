@@ -22,6 +22,7 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
+ * @param questionnaireId 
  * @param id 
  * @param index 
  * @param text 
@@ -31,6 +32,9 @@ import com.squareup.moshi.JsonClass
  */
 @JsonClass(generateAdapter = true)
 data class QuestionDTO(
+
+    @Json(name = "questionnaireId")
+    val questionnaireId: kotlin.String,
 
     @Json(name = "id")
     val id: kotlin.String,

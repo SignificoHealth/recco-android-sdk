@@ -1,5 +1,6 @@
 package com.shadowflight.core.feed.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -21,5 +22,11 @@ fun NavGraphBuilder.feedGraph(
         composable(route = FeedRoute) {
             FeedRoute(navigateToArticle, navigateToQuestionnaire)
         }
+    }
+}
+
+fun NavController.navigateToFeed() {
+    navigate(FeedRoute) {
+        popUpTo(id = 0)
     }
 }
