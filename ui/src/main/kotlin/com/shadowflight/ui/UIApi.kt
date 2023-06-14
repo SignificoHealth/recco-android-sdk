@@ -29,13 +29,18 @@ object UIApi {
     }
 
     fun login(userId: String) {
-        EntryPoints.get(application, UIApiInterface::class.java).getAuthCredentials()
-            .apply {
-                setUserId(userId)
-            }
+        EntryPoints
+            .get(application, UIApiInterface::class.java).getAuthCredentials()
+            .apply { setUserId(userId) }
     }
 
-    fun navigateToFeed(context: Context) {
+    fun logout() {
+        EntryPoints
+            .get(application, UIApiInterface::class.java).getAuthCredentials()
+            .apply { logout() }
+    }
+
+    fun navigateToDashboard(context: Context) {
         context.startActivity(Intent(context, MainActivity::class.java))
     }
 }

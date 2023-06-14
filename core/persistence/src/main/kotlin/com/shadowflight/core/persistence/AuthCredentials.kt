@@ -52,6 +52,13 @@ class AuthCredentials @Inject constructor(
         prefs.edit { putString(TOKEN_ID_KEY, null) }
     }
 
+
+    fun logout() {
+        prefs.edit { putString(USER_ID_KEY, null) }
+        pat = null
+        prefs.edit { putString(TOKEN_ID_KEY, null) }
+    }
+
     companion object {
         private const val USER_ID_KEY = "userId"
         private const val TOKEN_ID_KEY = "tokenId"
