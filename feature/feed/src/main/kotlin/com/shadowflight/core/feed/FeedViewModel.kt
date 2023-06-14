@@ -10,8 +10,8 @@ import com.shadowflight.core.model.feed.FeedSectionType.NUTRITION_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.NUTRITION_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS
-import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_WELLBEING_EXPLORE
-import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_WELLBEING_RECOMMENDATIONS
+import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_EXPLORE
+import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.PREFERRED_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_RECOMMENDATIONS
@@ -114,14 +114,14 @@ class FeedViewModel @Inject constructor(
                             when (feedSection.type) {
                                 PHYSICAL_ACTIVITY_RECOMMENDATIONS -> tailoredPhysicalActivity
                                 NUTRITION_RECOMMENDATIONS -> tailoredNutrition
-                                PHYSICAL_WELLBEING_RECOMMENDATIONS -> tailoredPhysicalWellbeing
+                                MENTAL_WELLBEING_RECOMMENDATIONS -> tailoredPhysicalWellbeing
                                 SLEEP_RECOMMENDATIONS -> tailoredSleep
                                 PREFERRED_RECOMMENDATIONS -> preferredRecommendations
                                 MOST_POPULAR -> mostPopular
                                 NEW_CONTENT -> newestContent
                                 PHYSICAL_ACTIVITY_EXPLORE -> explorePhysicalActivity
                                 NUTRITION_EXPLORE -> exploreNutrition
-                                PHYSICAL_WELLBEING_EXPLORE -> explorePhysicalWellbeing
+                                MENTAL_WELLBEING_EXPLORE -> explorePhysicalWellbeing
                                 SLEEP_EXPLORE -> exploreSleep
                                 STARTING_RECOMMENDATIONS -> starting
                             }
