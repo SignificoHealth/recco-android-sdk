@@ -1,6 +1,5 @@
 package com.shadowflight.core.repository
 
-import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.Article
@@ -42,11 +41,11 @@ class RecommendationRepository @Inject constructor(
             api.exploreContentByTopic(TopicDTO.NUTRITION).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.PHYSICAL_WELLBEING_RECOMMENDATIONS to Pipeline {
+        FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS to Pipeline {
             api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.PHYSICAL_WELLBEING_EXPLORE to Pipeline {
+        FeedSectionType.MENTAL_WELLBEING_EXPLORE to Pipeline {
             api.exploreContentByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
@@ -87,10 +86,10 @@ class RecommendationRepository @Inject constructor(
     val exploreNutrition = sectionsPipelines[FeedSectionType.NUTRITION_EXPLORE]!!.state
 
     val tailoredPhysicalWellbeing =
-        sectionsPipelines[FeedSectionType.PHYSICAL_WELLBEING_RECOMMENDATIONS]!!.state
+        sectionsPipelines[FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS]!!.state
 
     val explorePhysicalWellbeing =
-        sectionsPipelines[FeedSectionType.PHYSICAL_WELLBEING_EXPLORE]!!.state
+        sectionsPipelines[FeedSectionType.MENTAL_WELLBEING_EXPLORE]!!.state
 
     val tailoredSleep = sectionsPipelines[FeedSectionType.SLEEP_RECOMMENDATIONS]!!.state
 
@@ -113,7 +112,7 @@ class RecommendationRepository @Inject constructor(
         val sectionType = when (topic) {
             Topic.PHYSICAL_ACTIVITY -> FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS
             Topic.NUTRITION -> FeedSectionType.NUTRITION_RECOMMENDATIONS
-            Topic.PHYSICAL_WELLBEING -> FeedSectionType.PHYSICAL_WELLBEING_RECOMMENDATIONS
+            Topic.MENTAL_WELLBEING -> FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS
             Topic.SLEEP -> FeedSectionType.SLEEP_RECOMMENDATIONS
         }
         sectionsPipelines[sectionType]?.reloadRemoteDatasource()

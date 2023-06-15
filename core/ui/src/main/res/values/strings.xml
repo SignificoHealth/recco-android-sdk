@@ -10,7 +10,7 @@
     <string name="news_for_your">New for You</string>
     <string name="physical_activity">Physical activity</string>
     <string name="nutrition">Nutrition</string>
-    <string name="physical_wellbeing">Physical wellbeing</string>
+    <string name="mental_wellbeing">Mental health</string>
     <string name="sleep">Sleep</string>
     <string name="unlock">Unlock</string>
     <string name="no_content_available_title_default">No content available</string>
@@ -30,4 +30,11 @@
     <string name="next">Continue</string>
     <string name="finish">Finish</string>
     <string name="about_you">About you</string>
+
+    <!-- Questionnaire topics starting dialogs  -->
+    <string name="physical_activity_explanation">Some physical activity explanation</string>
+    <string name="nutrition_explanation">Some nutrition explanation</string>
+    <string name="mental_wellbeing_explanation">Mental health encompasses emotional, psychological, and social well-being, influencing cognition, perception, and behavior. It likewise determines how an individual handles stress, interpersonal relationships, and decision-making.</string>
+    <string name="sleep_explanation">Some sleep explanation</string>
+    <string name="start">Start</string>
 </resources>

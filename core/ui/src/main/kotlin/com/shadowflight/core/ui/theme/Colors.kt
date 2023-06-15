@@ -29,7 +29,7 @@ internal val onSurface = Color(0xFF383B45)
 internal val error: Color = Color(0xFFB00020)
 internal val onError: Color = Color.White
 internal val shadow06: Color = Color(0xFF000000).copy(alpha = .06f)
-internal val lightGrey: Color = Color(0xFFD8D8D8)
+internal val lightGrey: Color = Color(0xFFEBEBEB)
 
 
 @Immutable

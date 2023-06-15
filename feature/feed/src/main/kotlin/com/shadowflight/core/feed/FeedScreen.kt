@@ -27,8 +27,11 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,13 +50,17 @@ import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Recommendation
 import com.shadowflight.core.model.recommendation.Status
+import com.shadowflight.core.ui.AppTintedImagePeopleDigital
 import com.shadowflight.core.ui.AppTintedImagePottedPlant2
 import com.shadowflight.core.ui.R
+import com.shadowflight.core.ui.components.AppAlertDialog
 import com.shadowflight.core.ui.components.AppEmptyContent
 import com.shadowflight.core.ui.components.AppScreenStateAware
 import com.shadowflight.core.ui.components.AppTopBar
 import com.shadowflight.core.ui.components.EmptyState
 import com.shadowflight.core.ui.components.UiState
+import com.shadowflight.core.ui.extensions.asResExplanation
+import com.shadowflight.core.ui.extensions.asResTitle
 import com.shadowflight.core.ui.extensions.viewedOverlay
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
@@ -204,6 +211,17 @@ private fun FeedSection(
 ) {
     val scrollState = rememberLazyListState()
 
+    val openDialog = remember { mutableStateOf(false) }
+    val topicDialog: MutableState<Topic?> = remember { mutableStateOf(null) }
+
+    topicDialog.value?.let { topic ->
+        QuestionnaireStartDialog(
+            openDialog = openDialog,
+            topic = topic,
+            onClick = { navigateToQuestionnaire(topic) }
+        )
+    }
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.padding(start = AppSpacing.dp_24),
@@ -224,7 +242,8 @@ private fun FeedSection(
                 items(LOCK_PLACEHOLDER_ELEMENTS) {
                     LockedCard(onClick = {
                         section.feedSection.topic?.let {
-                            navigateToQuestionnaire(it)
+                            openDialog.value = true
+                            topicDialog.value = it
                         }
                     })
                 }
@@ -241,6 +260,33 @@ private fun FeedSection(
     SideEffect {
         resetScrollPosition(scrollState)
     }
+}
+
+@Composable
+private fun QuestionnaireStartDialog(
+    openDialog: MutableState<Boolean>,
+    topic: Topic,
+    onClick: () -> Unit
+) {
+    AppAlertDialog(
+        openDialog = openDialog,
+        header = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(AppTheme.colors.accent20),
+                contentAlignment = Alignment.Center
+            ) {
+                AppTintedImagePeopleDigital(
+                    modifier = Modifier.size(237.dp)
+                )
+            }
+        },
+        titleRes = topic.asResTitle(),
+        descriptionRes = topic.asResExplanation(),
+        textButtonPrimaryRes = R.string.start,
+        onClickPrimary = onClick
+    )
 }
 
 @ExperimentalMaterialApi

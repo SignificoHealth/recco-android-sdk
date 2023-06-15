@@ -18,9 +18,9 @@ fun FeedSectionType.asSectionTitle(): String = when (this) {
         stringResource(R.string.nutrition)
     )
 
-    PHYSICAL_WELLBEING_RECOMMENDATIONS -> stringResource(
+    MENTAL_WELLBEING_RECOMMENDATIONS -> stringResource(
         R.string.recommended_for_you_topic,
-        stringResource(R.string.physical_wellbeing)
+        stringResource(R.string.mental_wellbeing)
     )
 
     SLEEP_RECOMMENDATIONS -> stringResource(
@@ -38,9 +38,9 @@ fun FeedSectionType.asSectionTitle(): String = when (this) {
         stringResource(R.string.nutrition)
     )
 
-    PHYSICAL_WELLBEING_EXPLORE -> stringResource(
+    MENTAL_WELLBEING_EXPLORE -> stringResource(
         R.string.explore_topic,
-        stringResource(R.string.physical_wellbeing)
+        stringResource(R.string.mental_wellbeing)
     )
 
     SLEEP_EXPLORE -> stringResource(
