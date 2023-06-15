@@ -27,6 +27,7 @@ dependencies {
     api(libs.accompanist.pager.indicators)
     api(libs.accompanist.systemuicontroller)
     api(libs.accompanist.swiperefresh)
+    api(libs.accompanist.drawablepainter)
 
     api(libs.coil.compose)
 

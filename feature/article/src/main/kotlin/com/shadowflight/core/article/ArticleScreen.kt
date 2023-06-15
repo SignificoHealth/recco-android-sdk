@@ -27,11 +27,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.google.accompanist.insets.ui.Scaffold
 import com.ireward.htmlcompose.HtmlText
 import com.shadowflight.core.model.recommendation.Article
 import com.shadowflight.core.ui.ASPECT_RATIO_4_3
+import com.shadowflight.core.ui.AsyncImageAdjustedViewBounds
 import com.shadowflight.core.ui.components.AppScreenStateAware
 import com.shadowflight.core.ui.components.AppTopBar
 import com.shadowflight.core.ui.components.BackIconButton
@@ -85,13 +85,12 @@ private fun ArticleScreen(
             uiState = uiState,
             retry = { onUserInteract(ArticleUserInteract.Retry) },
             animatedContent = {
-                AsyncImage(
-                    model = it.article.imageUrl,
-                    contentDescription = null,
+                AsyncImageAdjustedViewBounds(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(ASPECT_RATIO_4_3),
-                    contentScale = ContentScale.Crop
+                    data = it.article.imageUrl,
+                    contentScale = ContentScale.Crop,
                 )
             },
             isFloatingFooter = true,

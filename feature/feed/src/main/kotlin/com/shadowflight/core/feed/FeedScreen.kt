@@ -43,7 +43,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.google.accompanist.insets.ui.Scaffold
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
 import com.shadowflight.core.model.feed.Topic
@@ -52,6 +51,7 @@ import com.shadowflight.core.model.recommendation.Recommendation
 import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.ui.AppTintedImagePeopleDigital
 import com.shadowflight.core.ui.AppTintedImagePottedPlant2
+import com.shadowflight.core.ui.AsyncImageAdjustedViewBounds
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.AppAlertDialog
 import com.shadowflight.core.ui.components.AppEmptyContent
@@ -62,6 +62,7 @@ import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.asResExplanation
 import com.shadowflight.core.ui.extensions.asResTitle
 import com.shadowflight.core.ui.extensions.viewedOverlay
+import com.shadowflight.core.ui.loadingCardAnimationDrawable
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 import kotlinx.coroutines.launch
@@ -302,9 +303,7 @@ private fun Card(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            AsyncImage(
-                model = recommendation.imageUrl,
-                contentDescription = null,
+            AsyncImageAdjustedViewBounds(
                 modifier = Modifier
                     .fillMaxSize()
                     .run {
@@ -314,7 +313,9 @@ private fun Card(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
                             this
                         }
                     },
-                contentScale = ContentScale.Crop
+                data = recommendation.imageUrl,
+                contentScale = ContentScale.Crop,
+                loadingAnimationDrawable = loadingCardAnimationDrawable()
             )
 
             Text(

@@ -37,6 +37,7 @@ retrofit = "2.9.0"
 security = "1.0.0"
 
 [libraries]
+accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "accompanist" }
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }
 accompanist-insets-ui = { group = "com.google.accompanist", name = "accompanist-insets-ui", version.ref = "accompanist" }
 accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist" }
