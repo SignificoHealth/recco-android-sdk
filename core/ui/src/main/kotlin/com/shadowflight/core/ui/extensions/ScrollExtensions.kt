@@ -61,7 +61,11 @@ fun LazyListState.isScrollingUp(): Boolean {
 fun ScrollState.isEndReached(): Boolean {
     val endReached by remember {
         derivedStateOf {
-            this.value >= this.maxValue - EDGE_REACHED_OFFSET
+            if (this.maxValue == Int.MAX_VALUE) {
+                true
+            } else {
+                this.value >= this.maxValue - EDGE_REACHED_OFFSET
+            }
         }
     }
     return endReached
