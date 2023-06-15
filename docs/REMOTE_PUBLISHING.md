@@ -37,6 +37,8 @@ In order for Shadowflight SDK to be published to Github Repository Registry, you
 
   Meant to publish artifacts taking into account release buildType configuration for all modules.
 
+  __WARNING:__ This approach is not available anymore, without specific configuration, executing this task currently will end up in failure. Remote publishing should only be triggered using Github Actions.
+
 ## Checking Results
 
 Visit [Packages](https://github.com/orgs/viluahealthcare/packages?repo_name=android-shadowflight-sdk) section in Github.
@@ -64,13 +66,13 @@ Now, create a file named gradle.properties under ~/.gradle/ directory.
 Include the following content, so you can reference your Github user and key securely and, avoiding this data to be uploaded to any repository by mistake.
 
 ```groovy
-repositories {
-  gpr.user=your-github-user-here
-  gpr.key=your-github-key-here
-}
+gprUser=your-github-user-here
+gprKey=your-github-key-here
 ```
 
-In order to sync artifacts previously published in Github Packages repository, you need to add the following configuration inside settings.gradle file.
+In order to sync artifacts previously published in Github Packages repository, you need to add the following configuration.
+
+Inside settings.gradle.kt file.
 
 ```kotlin
 repositories {
@@ -79,8 +81,24 @@ repositories {
     name = "GithubPackages"
     url = uri("https://maven.pkg.github.com/viluahealthcare/android-shadowflight-sdk")
     credentials {
-      username = extra["gpr.user"].toString()
-      password = extra["gpr.key"].toString()
+      username = extra["gprUser"].toString()
+      password = extra["gprKey"].toString()
+    }
+  }
+}
+```
+
+Inside settings.gradle file.
+
+```kotlin
+repositories {
+  ...
+  maven {
+    name = "GithubPackages"
+    url = uri("https://maven.pkg.github.com/viluahealthcare/android-shadowflight-sdk")
+    credentials {
+      username = gprUser
+      password = gprKey
     }
   }
 }

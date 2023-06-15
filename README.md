@@ -9,6 +9,7 @@ You can add new custom properties in the `openapi-generator-config.json` file to
 
 - [__Local reference__](./docs/LOCAL_PUBLISHING.md)
 - [__Remote reference__](./docs/REMOTE_PUBLISHING.md)
+- [__Workflow reference__](./docs/ACTION_PUBLISHING.md)
 
 ### References:
 - [Kotlin generator](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/kotlin.md)

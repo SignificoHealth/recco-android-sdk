@@ -32,8 +32,8 @@ internal fun Project.configureMavenPublish(extension: PublishingExtension) {
                 name = "GithubPackages"
                 url = uri("https://maven.pkg.github.com/viluahealthcare/android-shadowflight-sdk")
                 credentials {
-                    username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-                    password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+                    username = System.getenv("USERNAME")
+                    password = System.getenv("TOKEN")
                 }
             }
         }
