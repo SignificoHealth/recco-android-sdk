@@ -30,10 +30,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
 import com.ireward.htmlcompose.HtmlText
 import com.shadowflight.core.model.recommendation.Article
-import com.shadowflight.core.ui.ASPECT_RATIO_4_3
-import com.shadowflight.core.ui.AsyncImageAdjustedViewBounds
+import com.shadowflight.core.ui.components.ASPECT_RATIO_4_3
 import com.shadowflight.core.ui.components.AppScreenStateAware
 import com.shadowflight.core.ui.components.AppTopBar
+import com.shadowflight.core.ui.components.AppAsyncImage
 import com.shadowflight.core.ui.components.BackIconButton
 import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.isEndReached
@@ -85,7 +85,7 @@ private fun ArticleScreen(
             uiState = uiState,
             retry = { onUserInteract(ArticleUserInteract.Retry) },
             animatedContent = {
-                AsyncImageAdjustedViewBounds(
+                AppAsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(ASPECT_RATIO_4_3),

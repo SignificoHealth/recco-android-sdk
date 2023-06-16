@@ -3,13 +3,11 @@ package com.shadowflight.core.ui.extensions
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import com.shadowflight.core.model.exceptions.InternalServerErrorException
 import com.shadowflight.core.model.exceptions.NoConnectException
 import com.shadowflight.core.model.exceptions.ServiceUnavailableException
-import com.shadowflight.core.ui.AppTintedImageNoConnection
-import com.shadowflight.core.ui.AppTintedImagePottedPlant2
 import com.shadowflight.core.ui.R
+import com.shadowflight.core.ui.components.AppTintedImageNoConnection
 
 @StringRes
 fun Throwable?.asTitleRes(): Int = when (this) {

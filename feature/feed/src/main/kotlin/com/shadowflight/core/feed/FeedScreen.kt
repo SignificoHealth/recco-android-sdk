@@ -49,20 +49,20 @@ import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Recommendation
 import com.shadowflight.core.model.recommendation.Status
-import com.shadowflight.core.ui.AppTintedImagePeopleDigital
-import com.shadowflight.core.ui.AppTintedImagePottedPlant2
-import com.shadowflight.core.ui.AsyncImageAdjustedViewBounds
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.AppAlertDialog
 import com.shadowflight.core.ui.components.AppEmptyContent
 import com.shadowflight.core.ui.components.AppScreenStateAware
+import com.shadowflight.core.ui.components.AppTintedImagePeopleDigital
+import com.shadowflight.core.ui.components.AppTintedImagePottedPlant2
 import com.shadowflight.core.ui.components.AppTopBar
+import com.shadowflight.core.ui.components.AppAsyncImage
 import com.shadowflight.core.ui.components.EmptyState
 import com.shadowflight.core.ui.components.UiState
+import com.shadowflight.core.ui.components.loadingCardAnimationDrawable
 import com.shadowflight.core.ui.extensions.asResExplanation
 import com.shadowflight.core.ui.extensions.asResTitle
 import com.shadowflight.core.ui.extensions.viewedOverlay
-import com.shadowflight.core.ui.loadingCardAnimationDrawable
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 import kotlinx.coroutines.launch
@@ -303,7 +303,7 @@ private fun Card(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            AsyncImageAdjustedViewBounds(
+            AppAsyncImage(
                 modifier = Modifier
                     .fillMaxSize()
                     .run {
