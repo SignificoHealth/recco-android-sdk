@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
+import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
@@ -118,6 +119,11 @@ private fun FeedScreen(
                         )
                     )
                 }
+            },
+            loadingHeaderContent = {
+                Spacer(Modifier.height(AppSpacing.dp_40))
+                FeedHeader()
+                Spacer(Modifier.height(AppSpacing.dp_40))
             }
         ) { data ->
             FeedContent(
