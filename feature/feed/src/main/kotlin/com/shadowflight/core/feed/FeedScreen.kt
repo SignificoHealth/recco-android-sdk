@@ -400,20 +400,20 @@ private fun LockedCard(onClick: () -> Unit) {
     }
 }
 
-enum class AnimationState { LOCKED, UNLOCKING, UNLOCKED }
+enum class AnimationState { LOCKED, ROTATING, UNLOCKING, UNLOCKED }
 
 @Composable
 private fun AppLockIcon(startAnimation: State<Boolean>) {
     val rotationTarget = -17f
     val visibleState = remember { MutableTransitionState(AnimationState.LOCKED) }
     val iconRes = remember { mutableStateOf(R.drawable.ic_lock) }
-    val animatableRotation = remember { Animatable(0f) }
     val animationTransition = updateTransition(visibleState, label = "LockTransition")
     val scaleFactor by animationTransition.animateFloat(
         label = "LockScaleFactorTransition",
         targetValueByState = { state ->
             when (state) {
                 AnimationState.LOCKED -> 1f
+                AnimationState.ROTATING -> 1f
                 AnimationState.UNLOCKING -> 1.3f
                 AnimationState.UNLOCKED -> 1f
             }
@@ -425,12 +425,23 @@ private fun AppLockIcon(startAnimation: State<Boolean>) {
             )
         }
     )
+    val rotateFactor by animationTransition.animateFloat(
+        label = "LockRotateFactorTransition",
+        targetValueByState = { state ->
+            when (state) {
+                AnimationState.LOCKED -> 0f
+                AnimationState.ROTATING -> rotationTarget
+                AnimationState.UNLOCKING -> rotationTarget
+                AnimationState.UNLOCKED -> rotationTarget
+            }
+        },
+    )
     val coroutineScope = rememberCoroutineScope()
 
     if (startAnimation.value) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
-                animatableRotation.animateTo(targetValue = rotationTarget)
+                visibleState.targetState = AnimationState.ROTATING
                 delay(500)
                 iconRes.value = R.drawable.ic_unlock
                 visibleState.targetState = AnimationState.UNLOCKING
@@ -447,7 +458,7 @@ private fun AppLockIcon(startAnimation: State<Boolean>) {
                 this.scaleX = scaleFactor
                 this.scaleY = scaleFactor
                 this.alpha = 1f
-                this.rotationZ = animatableRotation.value
+                this.rotationZ = rotateFactor
             },
         painter = painterResource(iconRes.value),
         contentDescription = null
