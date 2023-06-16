@@ -1,5 +1,11 @@
 package com.shadowflight.core.feed
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,14 +33,17 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,7 +53,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
-import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
@@ -52,12 +60,12 @@ import com.shadowflight.core.model.recommendation.Recommendation
 import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.AppAlertDialog
+import com.shadowflight.core.ui.components.AppAsyncImage
 import com.shadowflight.core.ui.components.AppEmptyContent
 import com.shadowflight.core.ui.components.AppScreenStateAware
 import com.shadowflight.core.ui.components.AppTintedImagePeopleDigital
 import com.shadowflight.core.ui.components.AppTintedImagePottedPlant2
 import com.shadowflight.core.ui.components.AppTopBar
-import com.shadowflight.core.ui.components.AppAsyncImage
 import com.shadowflight.core.ui.components.EmptyState
 import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.components.loadingCardAnimationDrawable
@@ -66,6 +74,7 @@ import com.shadowflight.core.ui.extensions.asResTitle
 import com.shadowflight.core.ui.extensions.viewedOverlay
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -341,24 +350,36 @@ private fun Card(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun LockedCard(onClick: () -> Unit) {
+    val startAnimation = remember { mutableStateOf(false) }
+    val cardRes = remember {
+        mutableStateOf(
+            listOf(
+                R.drawable.bg_no_rec_1,
+                R.drawable.bg_no_rec_2,
+                R.drawable.bg_no_rec_3
+            ).random()
+        )
+    }
+    val coroutineScope = rememberCoroutineScope()
+
     Card(
         modifier = Modifier
             .height(257.dp)
             .width(145.dp),
         elevation = 0.dp,
-        onClick = onClick
+        onClick = {
+            coroutineScope.launch {
+                startAnimation.value = true
+                delay(1000)
+                onClick()
+            }
+        }
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
             Image(
-                painter = painterResource(
-                    listOf(
-                        R.drawable.bg_no_rec_1,
-                        R.drawable.bg_no_rec_2,
-                        R.drawable.bg_no_rec_3
-                    ).random()
-                ),
+                painter = painterResource(cardRes.value),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
@@ -369,11 +390,7 @@ private fun LockedCard(onClick: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Icon(
-                    modifier = Modifier.size(AppSpacing.dp_24),
-                    painter = painterResource(R.drawable.ic_unlock),
-                    contentDescription = null
-                )
+                AppLockIcon(startAnimation)
                 Text(
                     text = stringResource(R.string.unlock),
                     style = AppTheme.typography.h3
@@ -381,6 +398,60 @@ private fun LockedCard(onClick: () -> Unit) {
             }
         }
     }
+}
+
+enum class AnimationState { LOCKED, UNLOCKING, UNLOCKED }
+
+@Composable
+private fun AppLockIcon(startAnimation: State<Boolean>) {
+    val rotationTarget = -17f
+    val visibleState = remember { MutableTransitionState(AnimationState.LOCKED) }
+    val iconRes = remember { mutableStateOf(R.drawable.ic_lock) }
+    val animatableRotation = remember { Animatable(0f) }
+    val animationTransition = updateTransition(visibleState, label = "LockTransition")
+    val scaleFactor by animationTransition.animateFloat(
+        label = "LockScaleFactorTransition",
+        targetValueByState = { state ->
+            when (state) {
+                AnimationState.LOCKED -> 1f
+                AnimationState.UNLOCKING -> 1.3f
+                AnimationState.UNLOCKED -> 1f
+            }
+        },
+        transitionSpec = {
+            spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+        }
+    )
+    val coroutineScope = rememberCoroutineScope()
+
+    if (startAnimation.value) {
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                animatableRotation.animateTo(targetValue = rotationTarget)
+                delay(500)
+                iconRes.value = R.drawable.ic_unlock
+                visibleState.targetState = AnimationState.UNLOCKING
+                delay(100)
+                visibleState.targetState = AnimationState.UNLOCKED
+                delay(1000)
+            }
+        }
+    }
+
+    Icon(
+        modifier = Modifier
+            .graphicsLayer {
+                this.scaleX = scaleFactor
+                this.scaleY = scaleFactor
+                this.alpha = 1f
+                this.rotationZ = animatableRotation.value
+            },
+        painter = painterResource(iconRes.value),
+        contentDescription = null
+    )
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF)
