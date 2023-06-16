@@ -1,11 +1,12 @@
 package com.shadowflight.core.feed
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloat
+import android.view.animation.OvershootInterpolator
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Spring.DampingRatioHighBouncy
+import androidx.compose.animation.core.Spring.StiffnessMedium
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -74,8 +75,10 @@ import com.shadowflight.core.ui.extensions.asResTitle
 import com.shadowflight.core.ui.extensions.viewedOverlay
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun FeedRoute(
@@ -400,65 +403,68 @@ private fun LockedCard(onClick: () -> Unit) {
     }
 }
 
-enum class AnimationState { LOCKED, ROTATING, UNLOCKING, UNLOCKED }
-
 @Composable
 private fun AppLockIcon(startAnimation: State<Boolean>) {
-    val rotationTarget = -17f
-    val visibleState = remember { MutableTransitionState(AnimationState.LOCKED) }
+    val transformationRotateSpec = tween<Float>(
+        durationMillis = 300,
+        easing = FastOutSlowInEasing,
+    )
+    val transformationBounceSpecEnter = tween<Float>(
+        durationMillis = 100,
+        easing = { OvershootInterpolator().getInterpolation(it) },
+    )
+    val transformationBounceSpecExit = spring<Float>(
+        dampingRatio = DampingRatioHighBouncy,
+        stiffness = StiffnessMedium
+    )
     val iconRes = remember { mutableStateOf(R.drawable.ic_lock) }
-    val animationTransition = updateTransition(visibleState, label = "LockTransition")
-    val scaleFactor by animationTransition.animateFloat(
-        label = "LockScaleFactorTransition",
-        targetValueByState = { state ->
-            when (state) {
-                AnimationState.LOCKED -> 1f
-                AnimationState.ROTATING -> 1f
-                AnimationState.UNLOCKING -> 1.3f
-                AnimationState.UNLOCKED -> 1f
-            }
-        },
-        transitionSpec = {
-            spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow
-            )
-        }
-    )
-    val rotateFactor by animationTransition.animateFloat(
-        label = "LockRotateFactorTransition",
-        targetValueByState = { state ->
-            when (state) {
-                AnimationState.LOCKED -> 0f
-                AnimationState.ROTATING -> rotationTarget
-                AnimationState.UNLOCKING -> rotationTarget
-                AnimationState.UNLOCKED -> rotationTarget
-            }
-        },
-    )
-    val coroutineScope = rememberCoroutineScope()
+    val rotateStart = 0f
+    val rotateEnd = -20f
+    val rotate = remember { mutableStateOf(rotateStart) }
+    val scaleStart = 1f
+    val scaleEnd = 1.3f
+    val scale = remember { mutableStateOf(1f) }
 
     if (startAnimation.value) {
         LaunchedEffect(Unit) {
-            coroutineScope.launch {
-                visibleState.targetState = AnimationState.ROTATING
-                delay(500)
-                iconRes.value = R.drawable.ic_unlock
-                visibleState.targetState = AnimationState.UNLOCKING
-                delay(100)
-                visibleState.targetState = AnimationState.UNLOCKED
-                delay(1000)
+            coroutineScope {
+                launch {
+                    animate(
+                        initialValue = rotateStart,
+                        targetValue = rotateEnd,
+                        animationSpec = transformationRotateSpec
+                    ) { value: Float, _: Float ->
+                        rotate.value = value
+                    }
+                    iconRes.value = R.drawable.ic_unlock
+                    animate(
+                        initialValue = scaleStart,
+                        targetValue = scaleEnd,
+                        animationSpec = transformationBounceSpecEnter
+                    ) { value: Float, _: Float ->
+                        scale.value = value
+                    }
+                    animate(
+                        initialValue = scaleEnd,
+                        targetValue = scaleStart,
+                        animationSpec = transformationBounceSpecExit
+                    ) { value: Float, _: Float ->
+                        scale.value = value
+                    }
+                }
             }
+
+            delay(1000)
         }
     }
 
     Icon(
         modifier = Modifier
             .graphicsLayer {
-                this.scaleX = scaleFactor
-                this.scaleY = scaleFactor
+                this.scaleX = scale.value
+                this.scaleY = scale.value
                 this.alpha = 1f
-                this.rotationZ = rotateFactor
+                this.rotationZ = rotate.value
             },
         painter = painterResource(iconRes.value),
         contentDescription = null
