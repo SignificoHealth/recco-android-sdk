@@ -1,6 +1,7 @@
 package com.shadowflight.core.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ScrollState
@@ -159,7 +160,6 @@ fun <T> AppScreenStateAware(
 
                 Column(modifier = Modifier.fillMaxSize()) {
                     headerContent?.let {
-
                         HeaderContent(
                             isFirstLoading = isFirstLoading.value,
                             isAnimatedContentCollapsed = isAnimatedContentCollapsed.value,
@@ -255,6 +255,8 @@ private fun HeaderAwareContent(
     content: @Composable () -> Unit
 ) {
     val extraHeight = remember {
+        // TODO we might want calculate dynamically the header height or we can add any space
+        // when setting up the screen component to adjust it to the header content.
         mutableStateOf(if (isFloatingHeader) AppSpacing.dp_40 else 0.dp)
     }
 
@@ -294,111 +296,113 @@ private fun <T> AppScreenStateAwareContent(
     swipeRefreshState.isRefreshing = uiState.isLoading
     val animatedContentHeight = remember { mutableStateOf(0f) }
 
-    when {
-        uiState.isLoading && isFirstLoading.value -> {
+    Crossfade(targetState = uiState.isLoading && isFirstLoading.value) { isInitialLoading ->
+        if (isInitialLoading) {
             HeaderAwareContent(isFloatingHeader) {
                 AppProgressLoadingCircled(modifier = modifier)
             }
-        }
-
-        uiState.error != null -> {
-            HeaderAwareContent(isFloatingHeader) {
-                AppErrorContent(
-                    throwable = uiState.error,
-                    retry = retry,
-                    scrollState = rememberScrollState()
-                )
-            }
-        }
-
-        isEmpty -> {
-            SwipeRefreshContent(
-                modifier = modifier,
-                swipeRefreshState = swipeRefreshState,
-                enablePullToRefresh = enablePullToRefresh,
-                avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                refresh = refresh,
-                colorStatusBar = colorStatusBar
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    emptyContent?.invoke(this)
-                }
-            }
-        }
-
-        else -> {
-            LaunchedEffect(Unit) {
-                isFirstLoading.value = false
-            }
-            SwipeRefreshContent(
-                modifier = modifier,
-                swipeRefreshState = swipeRefreshState,
-                enablePullToRefresh = enablePullToRefresh,
-                avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                refresh = refresh,
-                colorStatusBar = colorStatusBar,
-            ) {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .let {
-                                if (scrollState != null) {
-                                    it.verticalScroll(scrollState)
-                                } else {
-                                    it
-                                }
-                            }
-                    ) {
-                        if (scrollState != null) {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.BottomCenter
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .onGloballyPositioned { coordinates ->
-                                            val height = coordinates.size.height.toFloat()
-                                            // If there is no animated content we specify a default height
-                                            // in order to allow elevate the header when scrolling
-                                            animatedContentHeight.value =
-                                                if (height <= 0f) 10f else height
-                                        }
-                                        .graphicsLayer {
-                                            val scrollValue = scrollState.value.toFloat()
-                                            val height = animatedContentHeight.value
-                                            if (height > 0f) {
-                                                alpha = min(
-                                                    1f,
-                                                    1f - ((scrollValue / height)) * 1.3f
-                                                )
-                                                isAnimatedContentCollapsed.value = alpha <= 0
-                                                translationY = 0.5f * scrollState.value
-                                            }
-                                        }
-                                ) {
-                                    uiState.data?.let { animatedContent?.invoke(it) }
-                                }
-                                animatedContentShapeContent?.invoke()
-                            }
-                        }
-
-                        uiState.data?.let { content(it) }
+        } else {
+            when {
+                uiState.error != null -> {
+                    HeaderAwareContent(isFloatingHeader) {
+                        AppErrorContent(
+                            throwable = uiState.error,
+                            retry = retry,
+                            scrollState = rememberScrollState()
+                        )
                     }
+                }
 
-                    if (!isFloatingFooter) {
-                        if (scrollState != null) {
-                            AppElevatedBottomContent(scrollState = scrollState) {
-                                uiState.data?.let { footerContent?.invoke(it) }
+                isEmpty -> {
+                    SwipeRefreshContent(
+                        modifier = modifier,
+                        swipeRefreshState = swipeRefreshState,
+                        enablePullToRefresh = enablePullToRefresh,
+                        avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
+                        refresh = refresh,
+                        colorStatusBar = colorStatusBar
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            emptyContent?.invoke(this)
+                        }
+                    }
+                }
+
+                else -> {
+                    LaunchedEffect(Unit) {
+                        isFirstLoading.value = false
+                    }
+                    SwipeRefreshContent(
+                        modifier = modifier,
+                        swipeRefreshState = swipeRefreshState,
+                        enablePullToRefresh = enablePullToRefresh,
+                        avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
+                        refresh = refresh,
+                        colorStatusBar = colorStatusBar,
+                    ) {
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .let {
+                                        if (scrollState != null) {
+                                            it.verticalScroll(scrollState)
+                                        } else {
+                                            it
+                                        }
+                                    }
+                            ) {
+                                if (scrollState != null) {
+                                    Box(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        contentAlignment = Alignment.BottomCenter
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .onGloballyPositioned { coordinates ->
+                                                    val height = coordinates.size.height.toFloat()
+                                                    // If there is no animated content we specify a default height
+                                                    // in order to allow elevate the header when scrolling
+                                                    animatedContentHeight.value =
+                                                        if (height <= 0f) 10f else height
+                                                }
+                                                .graphicsLayer {
+                                                    val scrollValue = scrollState.value.toFloat()
+                                                    val height = animatedContentHeight.value
+                                                    if (height > 0f) {
+                                                        alpha = min(
+                                                            1f,
+                                                            1f - ((scrollValue / height)) * 1.3f
+                                                        )
+                                                        isAnimatedContentCollapsed.value = alpha <= 0
+                                                        translationY = 0.5f * scrollState.value
+                                                    }
+                                                }
+                                        ) {
+                                            uiState.data?.let { animatedContent?.invoke(it) }
+                                        }
+                                        animatedContentShapeContent?.invoke()
+                                    }
+                                }
+
+                                uiState.data?.let { content(it) }
                             }
-                        } else {
-                            uiState.data?.let { footerContent?.invoke(it) }
+
+                            if (!isFloatingFooter) {
+                                if (scrollState != null) {
+                                    AppElevatedBottomContent(scrollState = scrollState) {
+                                        uiState.data?.let { footerContent?.invoke(it) }
+                                    }
+                                } else {
+                                    uiState.data?.let { footerContent?.invoke(it) }
+                                }
+                            }
                         }
                     }
                 }
