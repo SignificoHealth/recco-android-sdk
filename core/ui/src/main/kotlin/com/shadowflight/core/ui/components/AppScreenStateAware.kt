@@ -76,6 +76,7 @@ fun <T> AppScreenStateAware(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     scrollState: ScrollState? = null,
     isFloatingHeader: Boolean = false,
+    isFloatingFooter: Boolean = false,
     uiState: UiState<T>,
     enablePullToRefresh: Boolean = false,
     avoidClickingWhenRefreshing: Boolean = true,
@@ -83,13 +84,13 @@ fun <T> AppScreenStateAware(
     retry: () -> Unit,
     refresh: (() -> Unit)? = null,
     colorStatusBar: Color = AppTheme.colors.primary,
+    loadingHeaderContent: @Composable (() -> Unit)? = null,
     backgroundContent: @Composable (() -> Unit)? = null,
     animatedContentShapeContent: @Composable (() -> Unit)? = null,
     animatedContent: @Composable ((uiStateData: T) -> Unit)? = null,
     emptyContent: @Composable (ColumnScope.() -> Unit)? = null,
     headerContent: @Composable ((uiStateData: T, isAnimatedContentCollapsed: Boolean) -> Unit)? = null,
     footerContent: @Composable ((uiStateData: T) -> Unit)? = null,
-    isFloatingFooter: Boolean = false,
     content: @Composable ColumnScope.(uiStateData: T) -> Unit
 ) {
     val isFirstLoading = remember { mutableStateOf(true) }
@@ -110,6 +111,7 @@ fun <T> AppScreenStateAware(
                     isAnimatedContentCollapsed = isAnimatedContentCollapsed,
                     modifier = modifier,
                     isFloatingHeader = true,
+                    isFloatingFooter = isFloatingFooter,
                     scrollState = scrollState,
                     animatedContentShapeContent = animatedContentShapeContent,
                     animatedContent = animatedContent,
@@ -117,12 +119,12 @@ fun <T> AppScreenStateAware(
                     isEmpty = isEmpty,
                     retry = retry,
                     refresh = refresh ?: {},
+                    loadingHeaderContent = loadingHeaderContent,
                     emptyContent = emptyContent,
                     enablePullToRefresh = enablePullToRefresh,
                     avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
                     colorStatusBar = colorStatusBar,
                     footerContent = footerContent,
-                    isFloatingFooter = isFloatingFooter,
                     content = content
                 )
 
@@ -176,6 +178,7 @@ fun <T> AppScreenStateAware(
                         isAnimatedContentCollapsed = isAnimatedContentCollapsed,
                         modifier = modifier,
                         isFloatingHeader = false,
+                        isFloatingFooter = isFloatingFooter,
                         scrollState = scrollState,
                         animatedContentShapeContent = animatedContentShapeContent,
                         animatedContent = animatedContent,
@@ -184,12 +187,12 @@ fun <T> AppScreenStateAware(
                         uiState = uiState,
                         retry = retry,
                         refresh = refresh ?: {},
+                        loadingHeaderContent = loadingHeaderContent,
                         emptyContent = emptyContent,
                         enablePullToRefresh = enablePullToRefresh,
                         avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
                         colorStatusBar = colorStatusBar,
                         footerContent = footerContent,
-                        isFloatingFooter = isFloatingFooter,
                         content = content
                     )
                 }
@@ -252,7 +255,7 @@ private fun HeaderContent(
 @Composable
 private fun HeaderAwareContent(
     isFloatingHeader: Boolean,
-    content: @Composable () -> Unit
+    content: @Composable ColumnScope.() -> Unit
 ) {
     val extraHeight = remember {
         // TODO we might want calculate dynamically the header height or we can add any space
@@ -261,9 +264,7 @@ private fun HeaderAwareContent(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = AppSpacing.dp_24),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(extraHeight.value))
@@ -285,6 +286,7 @@ private fun <T> AppScreenStateAwareContent(
     enablePullToRefresh: Boolean,
     avoidClickingWhenRefreshing: Boolean,
     colorStatusBar: Color,
+    loadingHeaderContent: @Composable (() -> Unit)? = null,
     animatedContentShapeContent: @Composable (() -> Unit)?,
     animatedContent: @Composable ((uiStateData: T) -> Unit)?,
     emptyContent: @Composable (ColumnScope.() -> Unit)?,
@@ -299,7 +301,8 @@ private fun <T> AppScreenStateAwareContent(
     Crossfade(targetState = uiState.isLoading && isFirstLoading.value) { isInitialLoading ->
         if (isInitialLoading) {
             HeaderAwareContent(isFloatingHeader) {
-                AppProgressLoadingCircled(modifier = modifier)
+                loadingHeaderContent?.invoke()
+                AppProgressLoadingCircled(modifier = modifier.padding(top = AppSpacing.dp_24))
             }
         } else {
             when {
@@ -380,7 +383,8 @@ private fun <T> AppScreenStateAwareContent(
                                                             1f,
                                                             1f - ((scrollValue / height)) * 1.3f
                                                         )
-                                                        isAnimatedContentCollapsed.value = alpha <= 0
+                                                        isAnimatedContentCollapsed.value =
+                                                            alpha <= 0
                                                         translationY = 0.5f * scrollState.value
                                                     }
                                                 }
