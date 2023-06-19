@@ -10,10 +10,14 @@ internal class Pipeline<T>(private val remoteDatasource: suspend () -> T) {
     var value: T? = null
         private set
 
+    var id: Int = 0
+        private set
+
     val state: Flow<T> = _state.map { update ->
         when {
             value != null -> value!!
             else -> {
+                id = update.id
                 update.datasource().also { updated ->
                     value = updated
                 }
@@ -35,9 +39,12 @@ internal class Pipeline<T>(private val remoteDatasource: suspend () -> T) {
         _state.emit(PipelineUpdate({ data }))
     }
 
-    fun clearValue() {
+    private fun clearValue() {
         value = null
     }
 }
 
-private data class PipelineUpdate<T>(val datasource: suspend () -> T, val id: Int = Random.nextInt())
+private data class PipelineUpdate<T>(
+    val datasource: suspend () -> T,
+    val id: Int = Random.nextInt()
+)

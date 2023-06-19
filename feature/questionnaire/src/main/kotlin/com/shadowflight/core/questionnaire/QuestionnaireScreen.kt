@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
+import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.questionnaire.MultiChoiceQuestion
 import com.shadowflight.core.model.questionnaire.NumericQuestion
@@ -62,6 +63,7 @@ import kotlinx.coroutines.flow.flow
 @Composable
 internal fun QuestionnaireRoute(
     topic: Topic?,
+    feedSectionType: FeedSectionType?,
     navigateUp: () -> Unit,
     navigateToFeed: () -> Unit,
     viewModel: QuestionnaireViewModel = hiltViewModel()

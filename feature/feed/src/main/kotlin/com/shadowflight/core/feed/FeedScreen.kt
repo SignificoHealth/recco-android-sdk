@@ -1,7 +1,10 @@
 package com.shadowflight.core.feed
 
+import android.util.Log
 import android.view.animation.OvershootInterpolator
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring.DampingRatioHighBouncy
 import androidx.compose.animation.core.Spring.StiffnessMedium
 import androidx.compose.animation.core.animate
@@ -37,7 +40,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,12 +56,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
+import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
+import com.shadowflight.core.model.feed.FeedSectionType
+import com.shadowflight.core.model.feed.LockType
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Recommendation
 import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.ui.R
+import com.shadowflight.core.ui.TriggerState
 import com.shadowflight.core.ui.components.AppAlertDialog
 import com.shadowflight.core.ui.components.AppAsyncImage
 import com.shadowflight.core.ui.components.AppEmptyContent
@@ -76,14 +82,13 @@ import com.shadowflight.core.ui.extensions.viewedOverlay
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun FeedRoute(
     navigateToArticle: (ContentId) -> Unit,
-    navigateToQuestionnaire: (Topic) -> Unit,
+    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     viewModel: FeedViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle()
@@ -99,7 +104,7 @@ fun FeedRoute(
 private fun FeedScreen(
     uiState: UiState<FeedUI>,
     onUserInteract: (FeedUserInteract) -> Unit,
-    navigateToQuestionnaire: (Topic) -> Unit,
+    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
@@ -141,14 +146,22 @@ private fun FeedScreen(
             FeedContent(
                 feedUI = data,
                 navigateToArticle = navigateToArticle,
-                navigateToQuestionnaire = navigateToQuestionnaire,
+                navigateToQuestionnaire = { topic, feedSectionType ->
+                    navigateToQuestionnaire(topic, feedSectionType)
+                },
+                onLockAnimationFinished = {
+                    onUserInteract(FeedUserInteract.RefreshUnlockedFeedSection)
+                },
+                onShowUnlockedContentFinished = {
+                    onUserInteract(FeedUserInteract.ResetUnlockedFeedSection)
+                }
             )
 
             SideEffect {
                 coroutineScope.launch {
-                    if (data.triggerResetScrollState.isPendingToConsume()) {
+                    if (data.resetScrollTriggerState.isPendingToConsume()) {
                         scrollState.animateScrollTo(0)
-                        data.triggerResetScrollState.consumedDelayed()
+                        //data.resetScrollTriggerState.consumedDelayed()
                     }
                 }
             }
@@ -159,11 +172,11 @@ private fun FeedScreen(
 @Composable
 private fun FeedContent(
     feedUI: FeedUI,
-    navigateToQuestionnaire: (Topic) -> Unit,
+    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
+    onLockAnimationFinished: () -> Unit,
+    onShowUnlockedContentFinished: () -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -176,15 +189,12 @@ private fun FeedContent(
         feedUI.sections.forEach { section ->
             FeedSection(
                 section = section,
+                sectionTypeToUnlock = feedUI.feedSectionTypeToUnlock,
                 navigateToArticle = navigateToArticle,
                 navigateToQuestionnaire = navigateToQuestionnaire,
-                resetScrollPosition = { scrollState ->
-                    coroutineScope.launch {
-                        if (feedUI.triggerResetScrollState.isPendingToConsume()) {
-                            scrollState.scrollToItem(0)
-                        }
-                    }
-                }
+                resetScrollTriggerState = feedUI.resetScrollTriggerState,
+                onLockAnimationFinished = onLockAnimationFinished,
+                onUnlockAnimationFinished = onShowUnlockedContentFinished,
             )
             Spacer(Modifier.height(AppSpacing.dp_40))
         }
@@ -220,64 +230,153 @@ private fun FeedHeader() {
 
 private const val LOCK_PLACEHOLDER_ELEMENTS = 5
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun FeedSection(
     section: FeedSectionAndRecommendations,
+    sectionTypeToUnlock: FeedSectionType?,
     navigateToArticle: (ContentId) -> Unit,
-    navigateToQuestionnaire: (Topic) -> Unit,
-    resetScrollPosition: (LazyListState) -> Unit,
+    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
+    resetScrollTriggerState: TriggerState,
+    onLockAnimationFinished: () -> Unit,
+    onUnlockAnimationFinished: () -> Unit,
 ) {
     val scrollState = rememberLazyListState()
-
+    val coroutineScope = rememberCoroutineScope()
     val openDialog = remember { mutableStateOf(false) }
     val topicDialog: MutableState<Topic?> = remember { mutableStateOf(null) }
+    val feedSection = section.feedSection
 
     topicDialog.value?.let { topic ->
         QuestionnaireStartDialog(
             openDialog = openDialog,
             topic = topic,
-            onClick = { navigateToQuestionnaire(topic) }
+            onClick = { navigateToQuestionnaire(topic, feedSection.type) },
         )
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.padding(start = AppSpacing.dp_24),
-            text = section.feedSection.type.asSectionTitle(),
+            text = feedSection.type.asSectionTitle(),
             style = AppTheme.typography.h4
         )
         Spacer(Modifier.height(AppSpacing.dp_16))
 
-        LazyRow(
-            state = scrollState,
-            horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8),
-            contentPadding = PaddingValues(
-                start = AppSpacing.dp_24,
-                end = AppSpacing.dp_24
-            )
-        ) {
-            if (section.feedSection.locked) {
-                items(LOCK_PLACEHOLDER_ELEMENTS) {
-                    LockedCard(onClick = {
-                        section.feedSection.topic?.let {
-                            openDialog.value = true
-                            topicDialog.value = it
-                        }
-                    })
+        //Log.e("XXX", "isPendingToConsume = ${unlockAnimTriggerState.isPendingToConsume()} - sectionType=${sectionTypeToUnlock}")
+
+        if (feedSection.type == sectionTypeToUnlock && feedSection.locked != LockType.LOCKED) {
+            Crossfade(
+                targetState = feedSection.locked == LockType.UNLOCKED,
+                animationSpec = tween(
+                    durationMillis = 3000,
+                    easing = LinearEasing,
+                )
+            ) { isUnlocked ->
+                if (isUnlocked) {
+                    Log.e("XXX", "Unlocked = ${feedSection.type} - ${feedSection.locked}")
+                    UnlockedItems(
+                        scrollState = scrollState,
+                        section = section,
+                        navigateToArticle = navigateToArticle
+                    )
+                    onUnlockAnimationFinished()
+                } else {
+                    Log.e("XXX", "unlocking = ${feedSection.type} - ${feedSection.locked}")
+
+                    LockedItems(
+                        scrollState = scrollState,
+                        feedSection = feedSection,
+                        openDialog = openDialog,
+                        topicDialog = topicDialog,
+                        resetScrollTriggerState = resetScrollTriggerState,
+                        onLockAnimationFinished = onLockAnimationFinished
+                    )
                 }
+            }
+        } else {
+            if (feedSection.locked == LockType.UNLOCKED) {
+                UnlockedItems(
+                    scrollState = scrollState,
+                    section = section,
+                    navigateToArticle = navigateToArticle
+                )
             } else {
-                items(
-                    items = section.recommendations,
-                    key = { it.id.itemId }) { recommendation ->
-                    Card(recommendation, navigateToArticle)
-                }
+                LockedItems(
+                    scrollState = scrollState,
+                    feedSection = feedSection,
+                    openDialog = openDialog,
+                    topicDialog = topicDialog,
+                    resetScrollTriggerState = resetScrollTriggerState,
+                    onLockAnimationFinished = onLockAnimationFinished
+                )
             }
         }
     }
 
     SideEffect {
-        resetScrollPosition(scrollState)
+        coroutineScope.launch {
+            if (resetScrollTriggerState.isPendingToConsume()) {
+                scrollState.scrollToItem(0)
+            }
+        }
+    }
+}
+
+@Composable
+private fun LockedItems(
+    scrollState: LazyListState,
+    feedSection: FeedSection,
+    openDialog: MutableState<Boolean>,
+    topicDialog: MutableState<Topic?>,
+    resetScrollTriggerState: TriggerState,
+    onLockAnimationFinished: () -> Unit
+) {
+    LazyRow(
+        state = scrollState,
+        horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8),
+        contentPadding = PaddingValues(
+            start = AppSpacing.dp_24,
+            end = AppSpacing.dp_24
+        )
+    ) {
+        items(LOCK_PLACEHOLDER_ELEMENTS) {
+            LockedCard(
+                onClick = {
+                    feedSection.topic?.let { topic ->
+                        openDialog.value = true
+                        topicDialog.value = topic
+                    }
+                },
+                shouldStartAnimation = {
+                    feedSection.locked == LockType.UNLOCKING
+                            && resetScrollTriggerState.isConsumed()
+                },
+                onAnimationFinished = onLockAnimationFinished
+            )
+        }
+    }
+}
+
+@Composable
+private fun UnlockedItems(
+    scrollState: LazyListState,
+    section: FeedSectionAndRecommendations,
+    navigateToArticle: (ContentId) -> Unit
+) {
+    LazyRow(
+        state = scrollState,
+        horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8),
+        contentPadding = PaddingValues(
+            start = AppSpacing.dp_24,
+            end = AppSpacing.dp_24
+        )
+    ) {
+        items(
+            items = section.recommendations,
+            key = { item -> item.id.itemId }
+        ) { recommendation ->
+            Card(recommendation, navigateToArticle)
+        }
     }
 }
 
@@ -285,7 +384,7 @@ private fun FeedSection(
 private fun QuestionnaireStartDialog(
     openDialog: MutableState<Boolean>,
     topic: Topic,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     AppAlertDialog(
         openDialog = openDialog,
@@ -308,7 +407,7 @@ private fun QuestionnaireStartDialog(
     )
 }
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun Card(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
     Card(
@@ -352,8 +451,11 @@ private fun Card(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun LockedCard(onClick: () -> Unit) {
-    val startAnimation = remember { mutableStateOf(false) }
+private fun LockedCard(
+    onClick: () -> Unit,
+    shouldStartAnimation: () -> Boolean,
+    onAnimationFinished: () -> Unit,
+) {
     val cardRes = remember {
         mutableStateOf(
             listOf(
@@ -363,20 +465,13 @@ private fun LockedCard(onClick: () -> Unit) {
             ).random()
         )
     }
-    val coroutineScope = rememberCoroutineScope()
 
     Card(
         modifier = Modifier
             .height(257.dp)
             .width(145.dp),
         elevation = 0.dp,
-        onClick = {
-            coroutineScope.launch {
-                startAnimation.value = true
-                delay(1000)
-                onClick()
-            }
-        }
+        onClick = onClick
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -393,7 +488,10 @@ private fun LockedCard(onClick: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                AppLockIcon(startAnimation)
+                AppLockIcon(
+                    shouldStartAnimation = shouldStartAnimation,
+                    onAnimationFinished = onAnimationFinished
+                )
                 Text(
                     text = stringResource(R.string.unlock),
                     style = AppTheme.typography.h3
@@ -404,7 +502,10 @@ private fun LockedCard(onClick: () -> Unit) {
 }
 
 @Composable
-private fun AppLockIcon(startAnimation: State<Boolean>) {
+private fun AppLockIcon(
+    shouldStartAnimation: () -> Boolean,
+    onAnimationFinished: () -> Unit,
+) {
     val transformationRotateSpec = tween<Float>(
         durationMillis = 300,
         easing = FastOutSlowInEasing,
@@ -425,7 +526,7 @@ private fun AppLockIcon(startAnimation: State<Boolean>) {
     val scaleEnd = 1.3f
     val scale = remember { mutableStateOf(1f) }
 
-    if (startAnimation.value) {
+    if (shouldStartAnimation()) {
         LaunchedEffect(Unit) {
             coroutineScope {
                 launch {
@@ -454,7 +555,7 @@ private fun AppLockIcon(startAnimation: State<Boolean>) {
                 }
             }
 
-            delay(1000)
+            onAnimationFinished()
         }
     }
 
@@ -479,6 +580,6 @@ private fun Preview(
     FeedScreen(
         uiState = uiState,
         onUserInteract = {},
-        navigateToQuestionnaire = {},
+        navigateToQuestionnaire = { _, _ -> },
         navigateToArticle = {})
 }

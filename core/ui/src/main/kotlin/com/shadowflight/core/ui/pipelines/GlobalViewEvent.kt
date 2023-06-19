@@ -2,9 +2,9 @@ package com.shadowflight.core.ui.pipelines
 
 import android.os.Bundle
 import androidx.annotation.StringRes
+import com.shadowflight.core.model.feed.FeedSectionType
+import com.shadowflight.core.model.feed.Topic
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import java.util.UUID
 import kotlin.random.Random
 
 val globalViewEvents = MutableSharedFlow<GlobalViewEvent>()
@@ -22,7 +22,10 @@ sealed class GlobalViewEvent(
         val navArgs: Bundle? = null
     ) : GlobalViewEvent()
 
-    object ResetFeedScroll : GlobalViewEvent()
+    data class ResetFeedScroll(
+        val topic: Topic?,
+        val feedSectionType: FeedSectionType?
+    ) : GlobalViewEvent()
 }
 
 enum class ToastMessageType {

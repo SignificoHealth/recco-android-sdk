@@ -6,10 +6,12 @@ import androidx.compose.runtime.setValue
 import kotlinx.coroutines.delay
 
 class TriggerState {
-    private var pendingToConsume: Boolean by mutableStateOf(false)
+    private var pendingToConsume: Boolean? by mutableStateOf(null)
 
-    fun trigger() {
-        pendingToConsume = true
+    fun trigger(onlyOnce: Boolean = true) {
+        if (!onlyOnce || pendingToConsume == null) {
+            pendingToConsume = true
+        }
     }
 
     fun consumed() {
@@ -21,9 +23,11 @@ class TriggerState {
         consumed()
     }
 
-    fun isPendingToConsume(): Boolean = pendingToConsume
+    fun isPendingToConsume(): Boolean = pendingToConsume == true
+
+    fun isConsumed(): Boolean = pendingToConsume == false
 
     companion object {
-        private const val DELAY = 1000L
+        private const val DELAY = 700L
     }
 }

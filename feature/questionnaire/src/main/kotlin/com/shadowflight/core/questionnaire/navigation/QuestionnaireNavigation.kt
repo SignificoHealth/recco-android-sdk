@@ -6,14 +6,15 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
+import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.Topic
-import com.shadowflight.core.model.recommendation.User
 import com.shadowflight.core.questionnaire.QuestionnaireRoute
 import com.shadowflight.core.ui.extensions.asSerializable
 
 internal const val topicArg = "topic"
+internal const val feedSectionTypeArg = "feedSectionType"
 const val QuestionnaireGraph = "questionnaire_graph"
-private const val QuestionnaireRoute = "questionnaire/{$topicArg}"
+private const val QuestionnaireRoute = "questionnaire/{$topicArg}/{$feedSectionTypeArg}"
 private const val QuestionnaireOnboardingRoute = "questionnaire_onboarding"
 
 fun NavGraphBuilder.questionnaireGraph(
@@ -34,11 +35,17 @@ fun NavGraphBuilder.questionnaireGraph(
             arguments = listOf(
                 navArgument(topicArg) {
                     type = NavType.EnumType(Topic::class.java)
+                },
+                navArgument(feedSectionTypeArg) {
+                    type = NavType.EnumType(FeedSectionType::class.java)
                 }
             )
         ) { backStackEntry ->
             QuestionnaireRoute(
                 topic = checkNotNull(backStackEntry.arguments?.asSerializable(topicArg)),
+                feedSectionType = checkNotNull(
+                    backStackEntry.arguments?.asSerializable(feedSectionTypeArg)
+                ),
                 navigateUp = navigateUp,
                 navigateToFeed = navigateToFeed
             )
@@ -48,6 +55,7 @@ fun NavGraphBuilder.questionnaireGraph(
         ) {
             QuestionnaireRoute(
                 topic = null,
+                feedSectionType = null,
                 navigateUp = navigateUp,
                 navigateToFeed = navigateToFeed
             )
@@ -56,12 +64,16 @@ fun NavGraphBuilder.questionnaireGraph(
 }
 
 fun NavController.navigateToTopicQuestionnaire(
-    topic: Topic
+    topic: Topic,
+    feedSectionType: FeedSectionType
 ) {
     navigate(
         QuestionnaireRoute.replace(
             oldValue = "{$topicArg}",
             newValue = topic.name
+        ).replace(
+            oldValue = "{$feedSectionTypeArg}",
+            newValue = feedSectionType.name
         )
     )
 }

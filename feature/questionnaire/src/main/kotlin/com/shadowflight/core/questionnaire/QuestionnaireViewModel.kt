@@ -4,16 +4,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.logger.Logger
+import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.questionnaire.QuestionnaireUserInteract.BackClicked
 import com.shadowflight.core.questionnaire.QuestionnaireUserInteract.ClickOnMultiChoiceAnswerOption
 import com.shadowflight.core.questionnaire.QuestionnaireUserInteract.NextClicked
 import com.shadowflight.core.questionnaire.QuestionnaireUserInteract.Retry
 import com.shadowflight.core.questionnaire.QuestionnaireUserInteract.WriteOnNumericQuestion
+import com.shadowflight.core.questionnaire.navigation.feedSectionTypeArg
 import com.shadowflight.core.questionnaire.navigation.topicArg
-import com.shadowflight.core.repository.FeedRepository
 import com.shadowflight.core.repository.QuestionnaireRepository
-import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.pipelines.GlobalViewEvent
@@ -30,12 +30,11 @@ import javax.inject.Inject
 @HiltViewModel
 class QuestionnaireViewModel @Inject constructor(
     private val questionnaireRepository: QuestionnaireRepository,
-    private val recommendationRepository: RecommendationRepository,
-    private val feedRepository: FeedRepository,
     private val logger: Logger,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val topic by lazy { savedStateHandle.get<Topic>(topicArg) }
+    private val feedSectionType by lazy { savedStateHandle.get<FeedSectionType>(feedSectionTypeArg) }
     private val isOnboarding by lazy { topic == null }
 
     private val _viewState = MutableStateFlow(UiState<QuestionnaireUI>())
@@ -217,9 +216,7 @@ class QuestionnaireViewModel @Inject constructor(
                 }
             }.onSuccess {
                 if (topic != null) {
-                    recommendationRepository.reloadSection(topic!!)
-                    globalViewEvents.emit(GlobalViewEvent.ResetFeedScroll)
-                    feedRepository.reloadFeed()
+                    globalViewEvents.emit(GlobalViewEvent.ResetFeedScroll(topic, feedSectionType))
                     _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireSubmitted)
                 } else {
                     _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireOnboardingSubmitted)

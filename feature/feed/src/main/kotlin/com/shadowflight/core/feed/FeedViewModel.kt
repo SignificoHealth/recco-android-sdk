@@ -1,28 +1,33 @@
 package com.shadowflight.core.feed
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.logger.Logger
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
+import com.shadowflight.core.model.feed.FeedSectionType
+import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_EXPLORE
+import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.MOST_POPULAR
 import com.shadowflight.core.model.feed.FeedSectionType.NEW_CONTENT
 import com.shadowflight.core.model.feed.FeedSectionType.NUTRITION_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.NUTRITION_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS
-import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_EXPLORE
-import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.PREFERRED_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.STARTING_RECOMMENDATIONS
+import com.shadowflight.core.model.feed.LockType
 import com.shadowflight.core.repository.FeedRepository
 import com.shadowflight.core.repository.RecommendationRepository
+import com.shadowflight.core.ui.TriggerState
 import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.combine
 import com.shadowflight.core.ui.pipelines.GlobalViewEvent
 import com.shadowflight.core.ui.pipelines.globalViewEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -48,6 +53,12 @@ class FeedViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(stopTimeout = 5.seconds),
         initialValue = UiState()
     )
+    private var isShowingUnlockedSection = false
+    private var forceShowLoading = false
+    private var previousFeedSectionId = 0
+    private var previousFeedRecommendationsId = 0
+    private var currentFeedSectionId = 0
+    private var currentFeedRecommendationsId = 0
 
     init {
         setUpGlobalViewEvents()
@@ -58,6 +69,28 @@ class FeedViewModel @Inject constructor(
         when (userInteract) {
             FeedUserInteract.Retry -> initialLoadOrRetry()
             FeedUserInteract.Refresh -> refresh()
+            FeedUserInteract.RefreshUnlockedFeedSection -> {
+                viewModelScope.launch {
+                    val feedSectionType = _viewState.value.data?.feedSectionTypeToUnlock
+                    if (!isShowingUnlockedSection && feedRepository.setFeedSectionAsUnlocked(
+                            feedSectionType = feedSectionType
+                        )
+                    ) {
+                        isShowingUnlockedSection = true
+                        forceLoadingState(showLoading = false)
+                        Log.e("XXX", "RefreshUnlockedFeedSection=$feedSectionType")
+                    }
+                }
+            }
+            FeedUserInteract.ResetUnlockedFeedSection -> {
+                resetPipelineIds(_viewState.value.data?.feedSectionTypeToUnlock)
+                Log.e("XXX", "ResetUnlockedFeedSection")
+                _viewState.value = _viewState.value.copy(
+                    data = _viewState.value.data?.copy(feedSectionTypeToUnlock = null),
+                )
+                isShowingUnlockedSection = false
+                forceLoadingState(showLoading = false)
+            }
         }
     }
 
@@ -66,10 +99,71 @@ class FeedViewModel @Inject constructor(
             globalViewEvents
                 .filter { it is GlobalViewEvent.ResetFeedScroll }
                 .collectLatest {
-                    _viewState.value.data?.triggerResetScrollState?.trigger()
+                    val (topic, feedSectionType) = (it as GlobalViewEvent.ResetFeedScroll)
+                    resetPipelineIds(feedSectionType)
+
+                    _viewState.value = _viewState.value.copy(
+                        data = _viewState.value.data?.copy(
+                            feedSectionTypeToUnlock = feedSectionType,
+                            resetScrollTriggerState = TriggerState().apply { trigger() }
+                        ),
+                    )
+                    Log.e("XXX", "ResetFeedScroll")
+                    feedRepository.moveUnlockedFeedSectionAtTop(feedSectionType!!)
+                    // time enough to perform the scroll animations
+                    delay(500)
+                    forceLoadingState(showLoading = true)
+                    feedRepository.reloadFeed()
+                    recommendationRepository.reloadSection(topic = topic!!)
                 }
         }
     }
+
+    private fun forceLoadingState(showLoading: Boolean) {
+        forceShowLoading = showLoading
+        _viewState.value = _viewState.value.copy(
+            isLoading = forceShowLoading,
+        )
+    }
+
+    private fun isContentUpdated(feedSectionType: FeedSectionType?): Boolean {
+        currentFeedSectionId = feedRepository.feedSectionsPipelineId
+        currentFeedRecommendationsId = getRecommendationsPipelineId(feedSectionType)
+
+//        Log.e(
+//            "XXX",
+//            "($currentFeedSectionId,$currentFeedRecommendationsId) == ($previousFeedSectionId,$previousFeedRecommendationsId)"
+//        )
+
+        return previousFeedSectionId != currentFeedSectionId
+                && previousFeedRecommendationsId != currentFeedRecommendationsId
+                && previousFeedRecommendationsId != 0
+                && currentFeedRecommendationsId != 0
+    }
+
+    private fun resetPipelineIds(feedSectionType: FeedSectionType?) {
+        previousFeedSectionId = feedRepository.feedSectionsPipelineId
+        previousFeedRecommendationsId = getRecommendationsPipelineId(feedSectionType)
+        currentFeedSectionId = previousFeedSectionId
+        currentFeedRecommendationsId = previousFeedRecommendationsId
+    }
+
+    private fun getRecommendationsPipelineId(feedSectionType: FeedSectionType?) =
+        when (feedSectionType) {
+            PHYSICAL_ACTIVITY_RECOMMENDATIONS -> recommendationRepository.tailoredPhysicalActivityPipelineId
+            NUTRITION_RECOMMENDATIONS -> recommendationRepository.tailoredNutritionPipelineId
+            MENTAL_WELLBEING_RECOMMENDATIONS -> recommendationRepository.tailoredPhysicalWellbeingPipelineId
+            SLEEP_RECOMMENDATIONS -> recommendationRepository.tailoredSleepPipelineId
+            PHYSICAL_ACTIVITY_EXPLORE -> recommendationRepository.explorePhysicalActivityPipelineId
+            NUTRITION_EXPLORE -> recommendationRepository.exploreNutritionPipelineId
+            MENTAL_WELLBEING_EXPLORE -> recommendationRepository.explorePhysicalWellbeingPipelineId
+            SLEEP_EXPLORE -> recommendationRepository.exploreSleepPipelineId
+            PREFERRED_RECOMMENDATIONS -> recommendationRepository.preferredRecommendationsPipelineId
+            MOST_POPULAR -> recommendationRepository.mostPopularPipelineId
+            NEW_CONTENT -> recommendationRepository.newestContentPipelineId
+            STARTING_RECOMMENDATIONS -> recommendationRepository.startingPipelineId
+            null -> 0
+        }
 
     private fun refresh() {
         viewModelScope.launch {
@@ -105,13 +199,22 @@ class FeedViewModel @Inject constructor(
                 mostPopular,
                 newestContent,
                 starting ->
+                val feedSectionTypeToUnlock = _viewState.value.data?.feedSectionTypeToUnlock
+
                 feedSections.map { feedSection ->
+                    val feedSectionUpdated = if (feedSection.type == feedSectionTypeToUnlock
+                        && !isShowingUnlockedSection
+                    ) {
+                        feedSection.copy(locked = LockType.UNLOCKING)
+                    } else {
+                        feedSection
+                    }
                     FeedSectionAndRecommendations(
-                        feedSection = feedSection,
-                        recommendations = if (feedSection.locked) {
+                        feedSection = feedSectionUpdated,
+                        recommendations = if (feedSectionUpdated.locked != LockType.UNLOCKED) {
                             emptyList()
                         } else {
-                            when (feedSection.type) {
+                            when (feedSectionUpdated.type) {
                                 PHYSICAL_ACTIVITY_RECOMMENDATIONS -> tailoredPhysicalActivity
                                 NUTRITION_RECOMMENDATIONS -> tailoredNutrition
                                 MENTAL_WELLBEING_RECOMMENDATIONS -> tailoredPhysicalWellbeing
@@ -128,7 +231,7 @@ class FeedViewModel @Inject constructor(
                         }
                     )
                 }.filter {
-                    it.recommendations.isNotEmpty() || it.feedSection.locked
+                    it.recommendations.isNotEmpty() || it.feedSection.locked != LockType.UNLOCKED
                 }
             }.onStart {
                 _viewState.value = _viewState.value.copy(error = null, isLoading = true)
@@ -136,9 +239,14 @@ class FeedViewModel @Inject constructor(
                 _viewState.value = _viewState.value.copy(error = error, isLoading = false)
                 logger.e(error)
             }.collectLatest { sections ->
+                if (isContentUpdated(_viewState.value.data?.feedSectionTypeToUnlock)) {
+                    resetPipelineIds(null)
+                    Log.e("XXX", "isContentUpdated=true")
+                    _viewState.value.data?.resetScrollTriggerState?.consumed()
+                }
                 val uiState = _viewState.value
                 _viewState.value = uiState.copy(
-                    isLoading = false,
+                    isLoading = forceShowLoading,
                     error = null,
                     data = (uiState.data ?: FeedUI()).copy(sections = sections),
                 )

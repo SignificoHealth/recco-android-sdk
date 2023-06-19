@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.shadowflight.core.feed.FeedRoute
+import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
 
@@ -13,7 +14,7 @@ const val FeedRoute = "feed"
 
 fun NavGraphBuilder.feedGraph(
     navigateToArticle: (ContentId) -> Unit,
-    navigateToQuestionnaire: (Topic) -> Unit
+    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
 ) {
     navigation(
         route = FeedGraph,
