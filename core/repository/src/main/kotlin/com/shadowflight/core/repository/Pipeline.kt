@@ -17,8 +17,8 @@ internal class Pipeline<T>(private val remoteDatasource: suspend () -> T) {
         when {
             value != null -> value!!
             else -> {
-                id = update.id
                 update.datasource().also { updated ->
+                    id = update.id
                     value = updated
                 }
             }
@@ -36,7 +36,7 @@ internal class Pipeline<T>(private val remoteDatasource: suspend () -> T) {
 
     suspend fun replaceWithLocal(data: T) {
         clearValue()
-        _state.emit(PipelineUpdate({ data }))
+        _state.emit(PipelineUpdate(datasource = { data }, id = id))
     }
 
     private fun clearValue() {
