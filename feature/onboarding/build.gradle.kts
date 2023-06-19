@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.shadowflight.core.onboarding"
 }
+
+dependencies {
+    implementation(project(":core:ui"))
+}

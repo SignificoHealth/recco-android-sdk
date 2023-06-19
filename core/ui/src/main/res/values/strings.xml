@@ -37,4 +37,14 @@
     <string name="mental_wellbeing_explanation">Mental health encompasses emotional, psychological, and social well-being, influencing cognition, perception, and behavior. It likewise determines how an individual handles stress, interpersonal relationships, and decision-making.</string>
     <string name="sleep_explanation">Some sleep explanation</string>
     <string name="start">Start</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_button_next">Next</string>
+    <string name="onboarding_button_start">Start</string>
+    <string name="onboarding_welcome_title">Well hello there!</string>
+    <string name="onboarding_welcome_body">Welcome to Shadowflight.\n\nWe’ll give you customized health advice for a better life.\n\nAll advice will be stored here. Come back every time you want!</string>
+    <string name="onboarding_content_title">Cool content</string>
+    <string name="onboarding_content_body">We´ll give you health advice, recipes, and exercise to help you live your life at it’s fullest.\n\nWe’ll give you some questions to fine-tune the content you want to see</string>
+    <string name="onboarding_about_title">About you</string>
+    <string name="onboarding_about_body">Who are you? What are your health interests? What’s your health status?\n\nWe want to know you!</string>
 </resources>
