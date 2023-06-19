@@ -1,8 +1,8 @@
 package com.shadowflight.core.feed
 
-import android.util.Log
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring.DampingRatioHighBouncy
@@ -152,16 +152,12 @@ private fun FeedScreen(
                 onLockAnimationFinished = {
                     onUserInteract(FeedUserInteract.RefreshUnlockedFeedSection)
                 },
-                onShowUnlockedContentFinished = {
-                    onUserInteract(FeedUserInteract.ResetUnlockedFeedSection)
-                }
             )
 
             SideEffect {
                 coroutineScope.launch {
                     if (data.resetScrollTriggerState.isPendingToConsume()) {
                         scrollState.animateScrollTo(0)
-                        //data.resetScrollTriggerState.consumedDelayed()
                     }
                 }
             }
@@ -175,7 +171,6 @@ private fun FeedContent(
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
     onLockAnimationFinished: () -> Unit,
-    onShowUnlockedContentFinished: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -189,12 +184,10 @@ private fun FeedContent(
         feedUI.sections.forEach { section ->
             FeedSection(
                 section = section,
-                sectionTypeToUnlock = feedUI.feedSectionTypeToUnlock,
                 navigateToArticle = navigateToArticle,
                 navigateToQuestionnaire = navigateToQuestionnaire,
                 resetScrollTriggerState = feedUI.resetScrollTriggerState,
                 onLockAnimationFinished = onLockAnimationFinished,
-                onUnlockAnimationFinished = onShowUnlockedContentFinished,
             )
             Spacer(Modifier.height(AppSpacing.dp_40))
         }
@@ -233,12 +226,10 @@ private const val LOCK_PLACEHOLDER_ELEMENTS = 5
 @Composable
 private fun FeedSection(
     section: FeedSectionAndRecommendations,
-    sectionTypeToUnlock: FeedSectionType?,
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     resetScrollTriggerState: TriggerState,
     onLockAnimationFinished: () -> Unit,
-    onUnlockAnimationFinished: () -> Unit,
 ) {
     val scrollState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -262,39 +253,14 @@ private fun FeedSection(
         )
         Spacer(Modifier.height(AppSpacing.dp_16))
 
-        //Log.e("XXX", "isPendingToConsume = ${unlockAnimTriggerState.isPendingToConsume()} - sectionType=${sectionTypeToUnlock}")
-
-        if (feedSection.type == sectionTypeToUnlock && feedSection.locked != LockType.LOCKED) {
-            Crossfade(
-                targetState = feedSection.locked == LockType.UNLOCKED,
-                animationSpec = tween(
-                    durationMillis = 3000,
-                    easing = LinearEasing,
-                )
-            ) { isUnlocked ->
-                if (isUnlocked) {
-                    Log.e("XXX", "Unlocked = ${feedSection.type} - ${feedSection.locked}")
-                    UnlockedItems(
-                        scrollState = scrollState,
-                        section = section,
-                        navigateToArticle = navigateToArticle
-                    )
-                    onUnlockAnimationFinished()
-                } else {
-                    Log.e("XXX", "unlocking = ${feedSection.type} - ${feedSection.locked}")
-
-                    LockedItems(
-                        scrollState = scrollState,
-                        feedSection = feedSection,
-                        openDialog = openDialog,
-                        topicDialog = topicDialog,
-                        resetScrollTriggerState = resetScrollTriggerState,
-                        onLockAnimationFinished = onLockAnimationFinished
-                    )
-                }
-            }
-        } else {
-            if (feedSection.locked == LockType.UNLOCKED) {
+        Crossfade(
+            targetState = feedSection.locked == LockType.UNLOCKED,
+            animationSpec = tween(
+                durationMillis = 1000,
+                easing = LinearEasing,
+            )
+        ) { isUnlocked ->
+            if (isUnlocked) {
                 UnlockedItems(
                     scrollState = scrollState,
                     section = section,

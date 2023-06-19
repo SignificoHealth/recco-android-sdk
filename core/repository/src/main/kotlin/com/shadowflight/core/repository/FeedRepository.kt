@@ -1,6 +1,5 @@
 package com.shadowflight.core.repository
 
-import android.util.Log
 import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.LockType
@@ -28,10 +27,6 @@ class FeedRepository @Inject constructor(
         api.getFeed().unwrap().map(FeedSectionDTO::asEntity)
 
     suspend fun setFeedSectionAsUnlocked(feedSectionType: FeedSectionType?): Boolean {
-        Log.e(
-            "XXX",
-            "setFeedSectionAsUnlocked($feedSectionType) value is null = ${feedSectionsPipeline.value == null}"
-        )
         return if (feedSectionsPipeline.value == null || feedSectionType == null) {
             false
         } else {
@@ -52,11 +47,6 @@ class FeedRepository @Inject constructor(
     }
 
     suspend fun moveUnlockedFeedSectionAtTop(feedSectionType: FeedSectionType) {
-        Log.e(
-            "XXX",
-            "moveUnlockedFeedSectionAtTop($feedSectionType) value is null = ${feedSectionsPipeline.value == null}"
-        )
-
         val sectionsUpdated = listOf(
             FeedSection(
                 type = feedSectionType,

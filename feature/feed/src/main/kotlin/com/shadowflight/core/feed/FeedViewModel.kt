@@ -1,6 +1,5 @@
 package com.shadowflight.core.feed
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.logger.Logger
@@ -41,6 +40,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
+private const val DELAY_PERFORM_SCROLL_ANIM = 500L
+
 @HiltViewModel
 class FeedViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
@@ -53,7 +54,6 @@ class FeedViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(stopTimeout = 5.seconds),
         initialValue = UiState()
     )
-    private var isShowingUnlockedSection = false
     private var forceShowLoading = false
     private var previousFeedSectionId = 0
     private var previousFeedRecommendationsId = 0
@@ -72,24 +72,13 @@ class FeedViewModel @Inject constructor(
             FeedUserInteract.RefreshUnlockedFeedSection -> {
                 viewModelScope.launch {
                     val feedSectionType = _viewState.value.data?.feedSectionTypeToUnlock
-                    if (!isShowingUnlockedSection && feedRepository.setFeedSectionAsUnlocked(
-                            feedSectionType = feedSectionType
-                        )
-                    ) {
-                        isShowingUnlockedSection = true
-                        forceLoadingState(showLoading = false)
-                        Log.e("XXX", "RefreshUnlockedFeedSection=$feedSectionType")
-                    }
+                    forceShowLoading = false
+                    _viewState.value = _viewState.value.copy(
+                        isLoading = forceShowLoading,
+                        data = _viewState.value.data?.copy(feedSectionTypeToUnlock = null),
+                    )
+                    feedRepository.setFeedSectionAsUnlocked(feedSectionType)
                 }
-            }
-            FeedUserInteract.ResetUnlockedFeedSection -> {
-                resetPipelineIds(_viewState.value.data?.feedSectionTypeToUnlock)
-                Log.e("XXX", "ResetUnlockedFeedSection")
-                _viewState.value = _viewState.value.copy(
-                    data = _viewState.value.data?.copy(feedSectionTypeToUnlock = null),
-                )
-                isShowingUnlockedSection = false
-                forceLoadingState(showLoading = false)
             }
         }
     }
@@ -108,19 +97,17 @@ class FeedViewModel @Inject constructor(
                             resetScrollTriggerState = TriggerState().apply { trigger() }
                         ),
                     )
-                    Log.e("XXX", "ResetFeedScroll")
                     feedRepository.moveUnlockedFeedSectionAtTop(feedSectionType!!)
-                    // time enough to perform the scroll animations
-                    delay(500)
-                    forceLoadingState(showLoading = true)
+                    delay(DELAY_PERFORM_SCROLL_ANIM)
+                    forceLoadingState()
                     feedRepository.reloadFeed()
                     recommendationRepository.reloadSection(topic = topic!!)
                 }
         }
     }
 
-    private fun forceLoadingState(showLoading: Boolean) {
-        forceShowLoading = showLoading
+    private fun forceLoadingState() {
+        forceShowLoading = true
         _viewState.value = _viewState.value.copy(
             isLoading = forceShowLoading,
         )
@@ -129,11 +116,6 @@ class FeedViewModel @Inject constructor(
     private fun isContentUpdated(feedSectionType: FeedSectionType?): Boolean {
         currentFeedSectionId = feedRepository.feedSectionsPipelineId
         currentFeedRecommendationsId = getRecommendationsPipelineId(feedSectionType)
-
-//        Log.e(
-//            "XXX",
-//            "($currentFeedSectionId,$currentFeedRecommendationsId) == ($previousFeedSectionId,$previousFeedRecommendationsId)"
-//        )
 
         return previousFeedSectionId != currentFeedSectionId
                 && previousFeedRecommendationsId != currentFeedRecommendationsId
@@ -202,9 +184,7 @@ class FeedViewModel @Inject constructor(
                 val feedSectionTypeToUnlock = _viewState.value.data?.feedSectionTypeToUnlock
 
                 feedSections.map { feedSection ->
-                    val feedSectionUpdated = if (feedSection.type == feedSectionTypeToUnlock
-                        && !isShowingUnlockedSection
-                    ) {
+                    val feedSectionUpdated = if (feedSection.type == feedSectionTypeToUnlock) {
                         feedSection.copy(locked = LockType.UNLOCKING)
                     } else {
                         feedSection
@@ -239,16 +219,21 @@ class FeedViewModel @Inject constructor(
                 _viewState.value = _viewState.value.copy(error = error, isLoading = false)
                 logger.e(error)
             }.collectLatest { sections ->
-                if (isContentUpdated(_viewState.value.data?.feedSectionTypeToUnlock)) {
+                val data = (_viewState.value.data ?: FeedUI())
+                val triggerStateUpdated = if (isContentUpdated(data.feedSectionTypeToUnlock)) {
                     resetPipelineIds(null)
-                    Log.e("XXX", "isContentUpdated=true")
-                    _viewState.value.data?.resetScrollTriggerState?.consumed()
+                    data.resetScrollTriggerState.also { it.consumed() }
+                } else {
+                    data.resetScrollTriggerState
                 }
-                val uiState = _viewState.value
-                _viewState.value = uiState.copy(
+
+                _viewState.value = _viewState.value.copy(
                     isLoading = forceShowLoading,
                     error = null,
-                    data = (uiState.data ?: FeedUI()).copy(sections = sections),
+                    data = data.copy(
+                        resetScrollTriggerState = triggerStateUpdated,
+                        sections = sections
+                    ),
                 )
             }
         }
