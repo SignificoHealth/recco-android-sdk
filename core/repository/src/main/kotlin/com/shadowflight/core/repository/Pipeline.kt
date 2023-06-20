@@ -10,11 +10,20 @@ internal class Pipeline<T>(private val remoteDatasource: suspend () -> T) {
     var value: T? = null
         private set
 
+    /**
+     * This ID represents a unique remote call so for local data overrides ([replaceWithLocal])
+     * the ID will stay the same, but for remote calls ([reloadRemoteDatasource]) it will be
+     * automatically generated.
+     */
+    var id: Int = 0
+        private set
+
     val state: Flow<T> = _state.map { update ->
         when {
             value != null -> value!!
             else -> {
                 update.datasource().also { updated ->
+                    id = update.id
                     value = updated
                 }
             }
@@ -32,12 +41,15 @@ internal class Pipeline<T>(private val remoteDatasource: suspend () -> T) {
 
     suspend fun replaceWithLocal(data: T) {
         clearValue()
-        _state.emit(PipelineUpdate({ data }))
+        _state.emit(PipelineUpdate(datasource = { data }, id = id))
     }
 
-    fun clearValue() {
+    private fun clearValue() {
         value = null
     }
 }
 
-private data class PipelineUpdate<T>(val datasource: suspend () -> T, val id: Int = Random.nextInt())
+private data class PipelineUpdate<T>(
+    val datasource: suspend () -> T,
+    val id: Int = Random.nextInt()
+)

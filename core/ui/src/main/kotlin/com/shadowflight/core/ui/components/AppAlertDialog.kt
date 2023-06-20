@@ -41,11 +41,17 @@ fun AppAlertDialog(
     @StringRes titleRes: Int,
     @StringRes descriptionRes: Int? = null,
     @StringRes textButtonPrimaryRes: Int,
-    onClickPrimary: () -> Unit
+    onClickPrimary: () -> Unit,
+    onDismiss: () -> Unit = {}
 ) {
     if (openDialog.value) {
-        Dialog(properties = DialogProperties(usePlatformDefaultWidth = false),
-            onDismissRequest = { openDialog.value = false }) {
+        Dialog(
+            properties = DialogProperties(usePlatformDefaultWidth = false),
+            onDismissRequest = {
+                openDialog.value = false
+                onDismiss()
+            }
+        ) {
             Box(
                 Modifier
                     .padding(AppSpacing.dp_24)

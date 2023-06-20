@@ -104,6 +104,10 @@ class RecommendationRepository @Inject constructor(
 
     val starting = sectionsPipelines[FeedSectionType.STARTING_RECOMMENDATIONS]!!.state
 
+    fun getPipelineId(feedSectionType: FeedSectionType?): Int {
+        return feedSectionType?.let { sectionsPipelines[it]!!.id } ?: 0
+    }
+
     suspend fun reloadAllSections() {
         sectionsPipelines.forEach { (_, pipeline) -> pipeline.reloadRemoteDatasource() }
     }

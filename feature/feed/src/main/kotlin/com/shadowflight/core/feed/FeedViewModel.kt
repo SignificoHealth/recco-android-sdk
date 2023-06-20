@@ -4,25 +4,30 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.logger.Logger
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
+import com.shadowflight.core.model.feed.FeedSectionType
+import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_EXPLORE
+import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.MOST_POPULAR
 import com.shadowflight.core.model.feed.FeedSectionType.NEW_CONTENT
 import com.shadowflight.core.model.feed.FeedSectionType.NUTRITION_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.NUTRITION_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS
-import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_EXPLORE
-import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.PREFERRED_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.STARTING_RECOMMENDATIONS
+import com.shadowflight.core.model.feed.LockType
+import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.repository.FeedRepository
 import com.shadowflight.core.repository.RecommendationRepository
+import com.shadowflight.core.ui.TriggerState
 import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.combine
 import com.shadowflight.core.ui.pipelines.GlobalViewEvent
 import com.shadowflight.core.ui.pipelines.globalViewEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -36,10 +41,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
+private const val DELAY_TO_PERFORM_SCROLL_ANIM = 500L
+
 @HiltViewModel
 class FeedViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val recommendationRepository: RecommendationRepository,
+    private val feedApiObserver: FeedApiObserver,
     private val logger: Logger
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(UiState<FeedUI>())
@@ -48,6 +56,7 @@ class FeedViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(stopTimeout = 5.seconds),
         initialValue = UiState()
     )
+    private var forceShowLoading = false
 
     init {
         setUpGlobalViewEvents()
@@ -58,6 +67,19 @@ class FeedViewModel @Inject constructor(
         when (userInteract) {
             FeedUserInteract.Retry -> initialLoadOrRetry()
             FeedUserInteract.Refresh -> refresh()
+            FeedUserInteract.RefreshUnlockedFeedSection -> hideLoadingAndClearUnlockingState()
+        }
+    }
+
+    private fun hideLoadingAndClearUnlockingState() {
+        viewModelScope.launch {
+            val feedSectionType = _viewState.value.data?.feedSectionTypeToUnlock
+            forceShowLoading = false
+            _viewState.value = _viewState.value.copy(
+                isLoading = forceShowLoading,
+                data = _viewState.value.data?.copy(feedSectionTypeToUnlock = null),
+            )
+            feedRepository.setFeedSectionAsUnlocked(feedSectionType)
         }
     }
 
@@ -66,8 +88,35 @@ class FeedViewModel @Inject constructor(
             globalViewEvents
                 .filter { it is GlobalViewEvent.ResetFeedScroll }
                 .collectLatest {
-                    _viewState.value.data?.triggerResetScrollState?.trigger()
+                    val (topic, feedSectionType) = (it as GlobalViewEvent.ResetFeedScroll)
+                    feedApiObserver.reset()
+                    moveUnlockedFeedSectionAtTop(feedSectionType)
+                    delay(DELAY_TO_PERFORM_SCROLL_ANIM)
+                    forceLoadingWhileRefreshingFeedSection(topic!!)
                 }
+        }
+    }
+
+    private fun moveUnlockedFeedSectionAtTop(feedSectionType: FeedSectionType?) {
+        viewModelScope.launch {
+            _viewState.value = _viewState.value.copy(
+                data = _viewState.value.data?.copy(
+                    feedSectionTypeToUnlock = feedSectionType,
+                    resetScrollTriggerState = TriggerState().apply { trigger() }
+                ),
+            )
+            feedRepository.moveUnlockedFeedSectionAtTop(feedSectionType!!)
+        }
+    }
+
+    private fun forceLoadingWhileRefreshingFeedSection(topic: Topic) {
+        viewModelScope.launch {
+            forceShowLoading = true
+            _viewState.value = _viewState.value.copy(
+                isLoading = forceShowLoading,
+            )
+            feedRepository.reloadFeed()
+            recommendationRepository.reloadSection(topic = topic)
         }
     }
 
@@ -105,10 +154,18 @@ class FeedViewModel @Inject constructor(
                 mostPopular,
                 newestContent,
                 starting ->
+                val feedSectionTypeToUnlock = _viewState.value.data?.feedSectionTypeToUnlock
+
                 feedSections.map { feedSection ->
+                    if (feedSection.type == feedSectionTypeToUnlock) {
+                        feedSection.copy(locked = LockType.UNLOCKING)
+                    } else {
+                        feedSection
+                    }
+                }.map { feedSection ->
                     FeedSectionAndRecommendations(
                         feedSection = feedSection,
-                        recommendations = if (feedSection.locked) {
+                        recommendations = if (feedSection.locked != LockType.UNLOCKED) {
                             emptyList()
                         } else {
                             when (feedSection.type) {
@@ -128,7 +185,7 @@ class FeedViewModel @Inject constructor(
                         }
                     )
                 }.filter {
-                    it.recommendations.isNotEmpty() || it.feedSection.locked
+                    it.recommendations.isNotEmpty() || it.feedSection.locked != LockType.UNLOCKED
                 }
             }.onStart {
                 _viewState.value = _viewState.value.copy(error = null, isLoading = true)
@@ -136,11 +193,21 @@ class FeedViewModel @Inject constructor(
                 _viewState.value = _viewState.value.copy(error = error, isLoading = false)
                 logger.e(error)
             }.collectLatest { sections ->
-                val uiState = _viewState.value
-                _viewState.value = uiState.copy(
-                    isLoading = false,
+                val data = (_viewState.value.data ?: FeedUI())
+                val triggerStateUpdated =
+                    if (feedApiObserver.hasFinished(data.feedSectionTypeToUnlock)) {
+                        data.resetScrollTriggerState.also { it.consumed() }
+                    } else {
+                        data.resetScrollTriggerState
+                    }
+
+                _viewState.value = _viewState.value.copy(
+                    isLoading = forceShowLoading,
                     error = null,
-                    data = (uiState.data ?: FeedUI()).copy(sections = sections),
+                    data = data.copy(
+                        resetScrollTriggerState = triggerStateUpdated,
+                        sections = sections
+                    ),
                 )
             }
         }
