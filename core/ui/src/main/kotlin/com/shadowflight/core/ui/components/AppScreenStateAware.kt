@@ -31,13 +31,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -93,8 +96,8 @@ fun <T> AppScreenStateAware(
     footerContent: @Composable ((uiStateData: T) -> Unit)? = null,
     content: @Composable ColumnScope.(uiStateData: T) -> Unit
 ) {
-    val isFirstLoading = remember { mutableStateOf(true) }
-    val isAnimatedContentCollapsed = remember { mutableStateOf(false) }
+    val isFirstLoading = rememberSaveable { mutableStateOf(true) }
+    val isAnimatedContentCollapsed = rememberSaveable { mutableStateOf(false) }
     val isError = uiState.error != null
 
     AppTheme(colorStatusBar = colorStatusBar) {
@@ -296,7 +299,7 @@ private fun <T> AppScreenStateAwareContent(
 ) {
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = uiState.isLoading)
     swipeRefreshState.isRefreshing = uiState.isLoading
-    val animatedContentHeight = remember { mutableStateOf(0f) }
+    val animatedContentHeight = rememberSaveable { mutableStateOf(0f) }
 
     Crossfade(targetState = uiState.isLoading && isFirstLoading.value) { isInitialLoading ->
         if (isInitialLoading) {
