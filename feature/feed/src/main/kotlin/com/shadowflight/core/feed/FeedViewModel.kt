@@ -47,6 +47,7 @@ private const val DELAY_TO_PERFORM_SCROLL_ANIM = 500L
 class FeedViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val recommendationRepository: RecommendationRepository,
+    private val feedApiObserver: FeedApiObserver,
     private val logger: Logger
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(UiState<FeedUI>())
@@ -56,10 +57,6 @@ class FeedViewModel @Inject constructor(
         initialValue = UiState()
     )
     private var forceShowLoading = false
-    private var previousFeedSectionId = 0
-    private var previousFeedRecommendationsId = 0
-    private var currentFeedSectionId = 0
-    private var currentFeedRecommendationsId = 0
 
     init {
         setUpGlobalViewEvents()
@@ -92,7 +89,7 @@ class FeedViewModel @Inject constructor(
                 .filter { it is GlobalViewEvent.ResetFeedScroll }
                 .collectLatest {
                     val (topic, feedSectionType) = (it as GlobalViewEvent.ResetFeedScroll)
-                    resetPipelineIds()
+                    feedApiObserver.reset()
                     moveUnlockedFeedSectionAtTop(feedSectionType)
                     delay(DELAY_TO_PERFORM_SCROLL_ANIM)
                     forceLoadingWhileRefreshingFeedSection(topic!!)
@@ -121,21 +118,6 @@ class FeedViewModel @Inject constructor(
             feedRepository.reloadFeed()
             recommendationRepository.reloadSection(topic = topic)
         }
-    }
-
-    private fun isContentUpdated(feedSectionType: FeedSectionType?): Boolean {
-        currentFeedSectionId = feedRepository.feedSectionsPipelineId
-        currentFeedRecommendationsId = recommendationRepository.getPipelineId(feedSectionType)
-
-        return currentFeedRecommendationsId != 0
-                && previousFeedSectionId != currentFeedSectionId
-                && previousFeedRecommendationsId != currentFeedRecommendationsId
-
-    }
-
-    private fun resetPipelineIds() {
-        previousFeedSectionId = currentFeedSectionId
-        previousFeedRecommendationsId = currentFeedRecommendationsId
     }
 
     private fun refresh() {
@@ -212,12 +194,12 @@ class FeedViewModel @Inject constructor(
                 logger.e(error)
             }.collectLatest { sections ->
                 val data = (_viewState.value.data ?: FeedUI())
-                val triggerStateUpdated = if (isContentUpdated(data.feedSectionTypeToUnlock)) {
-                    resetPipelineIds()
-                    data.resetScrollTriggerState.also { it.consumed() }
-                } else {
-                    data.resetScrollTriggerState
-                }
+                val triggerStateUpdated =
+                    if (feedApiObserver.hasFinished(data.feedSectionTypeToUnlock)) {
+                        data.resetScrollTriggerState.also { it.consumed() }
+                    } else {
+                        data.resetScrollTriggerState
+                    }
 
                 _viewState.value = _viewState.value.copy(
                     isLoading = forceShowLoading,
