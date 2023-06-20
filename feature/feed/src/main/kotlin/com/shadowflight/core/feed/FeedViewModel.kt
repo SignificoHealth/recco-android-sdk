@@ -18,6 +18,7 @@ import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.STARTING_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.LockType
+import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.repository.FeedRepository
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.TriggerState
@@ -40,7 +41,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-private const val DELAY_PERFORM_SCROLL_ANIM = 500L
+private const val DELAY_TO_PERFORM_SCROLL_ANIM = 500L
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
@@ -69,17 +70,19 @@ class FeedViewModel @Inject constructor(
         when (userInteract) {
             FeedUserInteract.Retry -> initialLoadOrRetry()
             FeedUserInteract.Refresh -> refresh()
-            FeedUserInteract.RefreshUnlockedFeedSection -> {
-                viewModelScope.launch {
-                    val feedSectionType = _viewState.value.data?.feedSectionTypeToUnlock
-                    forceShowLoading = false
-                    _viewState.value = _viewState.value.copy(
-                        isLoading = forceShowLoading,
-                        data = _viewState.value.data?.copy(feedSectionTypeToUnlock = null),
-                    )
-                    feedRepository.setFeedSectionAsUnlocked(feedSectionType)
-                }
-            }
+            FeedUserInteract.RefreshUnlockedFeedSection -> hideLoadingAndClearUnlockingState()
+        }
+    }
+
+    private fun hideLoadingAndClearUnlockingState() {
+        viewModelScope.launch {
+            val feedSectionType = _viewState.value.data?.feedSectionTypeToUnlock
+            forceShowLoading = false
+            _viewState.value = _viewState.value.copy(
+                isLoading = forceShowLoading,
+                data = _viewState.value.data?.copy(feedSectionTypeToUnlock = null),
+            )
+            feedRepository.setFeedSectionAsUnlocked(feedSectionType)
         }
     }
 
@@ -90,27 +93,34 @@ class FeedViewModel @Inject constructor(
                 .collectLatest {
                     val (topic, feedSectionType) = (it as GlobalViewEvent.ResetFeedScroll)
                     resetPipelineIds(feedSectionType)
-
-                    _viewState.value = _viewState.value.copy(
-                        data = _viewState.value.data?.copy(
-                            feedSectionTypeToUnlock = feedSectionType,
-                            resetScrollTriggerState = TriggerState().apply { trigger() }
-                        ),
-                    )
-                    feedRepository.moveUnlockedFeedSectionAtTop(feedSectionType!!)
-                    delay(DELAY_PERFORM_SCROLL_ANIM)
-                    forceLoadingState()
-                    feedRepository.reloadFeed()
-                    recommendationRepository.reloadSection(topic = topic!!)
+                    moveUnlockedFeedSectionAtTop(feedSectionType)
+                    delay(DELAY_TO_PERFORM_SCROLL_ANIM)
+                    forceLoadingWhileRefreshingFeedSection(topic!!)
                 }
         }
     }
 
-    private fun forceLoadingState() {
-        forceShowLoading = true
-        _viewState.value = _viewState.value.copy(
-            isLoading = forceShowLoading,
-        )
+    private fun moveUnlockedFeedSectionAtTop(feedSectionType: FeedSectionType?) {
+        viewModelScope.launch {
+            _viewState.value = _viewState.value.copy(
+                data = _viewState.value.data?.copy(
+                    feedSectionTypeToUnlock = feedSectionType,
+                    resetScrollTriggerState = TriggerState().apply { trigger() }
+                ),
+            )
+            feedRepository.moveUnlockedFeedSectionAtTop(feedSectionType!!)
+        }
+    }
+
+    private fun forceLoadingWhileRefreshingFeedSection(topic: Topic) {
+        viewModelScope.launch {
+            forceShowLoading = true
+            _viewState.value = _viewState.value.copy(
+                isLoading = forceShowLoading,
+            )
+            feedRepository.reloadFeed()
+            recommendationRepository.reloadSection(topic = topic)
+        }
     }
 
     private fun isContentUpdated(feedSectionType: FeedSectionType?): Boolean {
@@ -184,17 +194,18 @@ class FeedViewModel @Inject constructor(
                 val feedSectionTypeToUnlock = _viewState.value.data?.feedSectionTypeToUnlock
 
                 feedSections.map { feedSection ->
-                    val feedSectionUpdated = if (feedSection.type == feedSectionTypeToUnlock) {
+                    if (feedSection.type == feedSectionTypeToUnlock) {
                         feedSection.copy(locked = LockType.UNLOCKING)
                     } else {
                         feedSection
                     }
+                }.map { feedSection ->
                     FeedSectionAndRecommendations(
-                        feedSection = feedSectionUpdated,
-                        recommendations = if (feedSectionUpdated.locked != LockType.UNLOCKED) {
+                        feedSection = feedSection,
+                        recommendations = if (feedSection.locked != LockType.UNLOCKED) {
                             emptyList()
                         } else {
-                            when (feedSectionUpdated.type) {
+                            when (feedSection.type) {
                                 PHYSICAL_ACTIVITY_RECOMMENDATIONS -> tailoredPhysicalActivity
                                 NUTRITION_RECOMMENDATIONS -> tailoredNutrition
                                 MENTAL_WELLBEING_RECOMMENDATIONS -> tailoredPhysicalWellbeing
