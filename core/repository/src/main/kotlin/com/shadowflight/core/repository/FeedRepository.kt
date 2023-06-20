@@ -16,8 +16,6 @@ class FeedRepository @Inject constructor(
 ) {
     private val feedSectionsPipeline = Pipeline(this::getFeedSections)
     val feedSections = feedSectionsPipeline.state
-    val feedSectionsPipelineId: Int
-        get() = feedSectionsPipeline.id
 
     suspend fun reloadFeed() {
         feedSectionsPipeline.reloadRemoteDatasource()
@@ -26,35 +24,19 @@ class FeedRepository @Inject constructor(
     private suspend fun getFeedSections(): List<FeedSection> =
         api.getFeed().unwrap().map(FeedSectionDTO::asEntity)
 
-    suspend fun setFeedSectionAsUnlocked(feedSectionType: FeedSectionType?): Boolean {
-        return if (feedSectionsPipeline.value == null || feedSectionType == null) {
-            false
-        } else {
-            val sectionsUpdated = feedSectionsPipeline.value!!.map { feedSection ->
-                if (feedSection.type == feedSectionType && feedSection.locked == LockType.UNLOCKING) {
-                    feedSection.copy(
-                        type = feedSection.type,
-                        locked = LockType.UNLOCKED,
-                        topic = feedSection.topic
-                    )
-                } else {
-                    feedSection
-                }
+    suspend fun setFeedSectionAsUnlocked(feedSectionType: FeedSectionType) {
+        feedSectionsPipeline.value?.map { feedSection ->
+            if (feedSection.type == feedSectionType) {
+                feedSection.copy(
+                    type = feedSection.type,
+                    locked = LockType.UNLOCKED,
+                    topic = feedSection.topic
+                )
+            } else {
+                feedSection
             }
+        }?.let { sectionsUpdated ->
             feedSectionsPipeline.replaceWithLocal(sectionsUpdated)
-            true
         }
-    }
-
-    suspend fun moveUnlockedFeedSectionAtTop(feedSectionType: FeedSectionType) {
-        val sectionsUpdated = listOf(
-            FeedSection(
-                type = feedSectionType,
-                locked = LockType.UNLOCKING,
-                topic = null
-            )
-        ).plus(feedSectionsPipeline.value!!.filterNot { it.type == feedSectionType })
-
-        feedSectionsPipeline.replaceWithLocal(sectionsUpdated)
     }
 }

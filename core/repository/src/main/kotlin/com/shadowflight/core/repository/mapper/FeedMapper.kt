@@ -1,7 +1,6 @@
 package com.shadowflight.core.repository.mapper
 
 import com.shadowflight.core.model.feed.FeedSection
-import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.LockType
 import com.shadowflight.core.openapi.model.FeedSectionDTO
 

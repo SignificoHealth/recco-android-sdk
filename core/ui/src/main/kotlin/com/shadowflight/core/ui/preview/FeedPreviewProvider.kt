@@ -6,7 +6,7 @@ import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.LockType
 import com.shadowflight.core.model.feed.Topic
 
-class FeedPreviewProvider  {
+class FeedPreviewProvider {
 
     companion object {
         fun data(type: FeedSectionType, locked: Boolean) = FeedSectionAndRecommendations(
