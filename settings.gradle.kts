@@ -60,3 +60,4 @@ include(
     ":feature:article",
     ":feature:onboarding",
 )
+include(":core:base")

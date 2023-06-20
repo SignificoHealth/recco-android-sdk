@@ -28,6 +28,10 @@
       "description": "Expose authentication related resources for an app user."
     },
     {
+      "name": "Metric",
+      "description": "Expose metric related events for an app user."
+    },
+    {
       "name": "Questionnaire",
       "description": "Expose questionnaire related resources for an app user."
     }
@@ -212,6 +216,74 @@
           },
           "required": true
         },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/me/metric/session": {
+      "post": {
+        "tags": [
+          "Metric"
+        ],
+        "summary": "Log session duration event.",
+        "operationId": "sessionEvent",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMetricSession"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/me/metric/login": {
+      "post": {
+        "tags": [
+          "Metric"
+        ],
+        "summary": "Log session login event.",
+        "operationId": "loginEvent",
         "responses": {
           "401": {
             "description": "Unauthorized",
@@ -975,6 +1047,18 @@
           "multichoice",
           "numeric"
         ]
+      },
+      "CreateMetricSession": {
+        "required": [
+          "seconds"
+        ],
+        "type": "object",
+        "properties": {
+          "seconds": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
       },
       "PATReferenceDelete": {
         "required": [
