@@ -15,6 +15,12 @@ import javax.net.ssl.SSLHandshakeException
 
 class ErrorInterceptor : Interceptor {
 
+    private val moshi by lazy {
+        Moshi.Builder()
+            .build()
+            .adapter(ApiErrorDTO::class.java)
+    }
+
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
@@ -49,6 +55,14 @@ class ErrorInterceptor : Interceptor {
 
         return response
     }
+
+    private fun getApiError(responseBody: String): ApiErrorDTO? {
+        return try {
+            moshi.fromJson(responseBody)
+        } catch (exception: java.lang.Exception) {
+            null
+        }
+    }
 }
 
 private fun Response.getErrorMessage(responseBody: String, apiError: ApiErrorDTO? = null): String {
@@ -58,15 +72,4 @@ private fun Response.getErrorMessage(responseBody: String, apiError: ApiErrorDTO
 
 private fun ApiErrorDTO?.string(): String {
     return this?.let { "$errorCode($traceId): $message" } ?: ""
-}
-
-private fun getApiError(responseBody: String): ApiErrorDTO? {
-    return try {
-        Moshi.Builder()
-            .build()
-            .adapter(ApiErrorDTO::class.java)
-            .fromJson(responseBody)
-    } catch (exception: java.lang.Exception) {
-        null
-    }
 }
