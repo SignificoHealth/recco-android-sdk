@@ -77,56 +77,36 @@ class RecommendationRepository @Inject constructor(
 
     val tailoredPhysicalActivity =
         sectionsPipelines[FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS]!!.state
-    val tailoredPhysicalActivityPipelineId
-        get() = sectionsPipelines[FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS]!!.id
 
     val explorePhysicalActivity =
         sectionsPipelines[FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE]!!.state
-    val explorePhysicalActivityPipelineId
-        get() = sectionsPipelines[FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE]!!.id
 
     val tailoredNutrition = sectionsPipelines[FeedSectionType.NUTRITION_RECOMMENDATIONS]!!.state
-    val tailoredNutritionPipelineId
-        get() = sectionsPipelines[FeedSectionType.NUTRITION_RECOMMENDATIONS]!!.id
 
     val exploreNutrition = sectionsPipelines[FeedSectionType.NUTRITION_EXPLORE]!!.state
-    val exploreNutritionPipelineId
-        get() = sectionsPipelines[FeedSectionType.NUTRITION_EXPLORE]!!.id
 
     val tailoredPhysicalWellbeing =
         sectionsPipelines[FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS]!!.state
-    val tailoredPhysicalWellbeingPipelineId
-        get() = sectionsPipelines[FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS]!!.id
 
     val explorePhysicalWellbeing =
         sectionsPipelines[FeedSectionType.MENTAL_WELLBEING_EXPLORE]!!.state
-    val explorePhysicalWellbeingPipelineId
-        get() = sectionsPipelines[FeedSectionType.MENTAL_WELLBEING_EXPLORE]!!.id
 
     val tailoredSleep = sectionsPipelines[FeedSectionType.SLEEP_RECOMMENDATIONS]!!.state
-    val tailoredSleepPipelineId
-        get() = sectionsPipelines[FeedSectionType.SLEEP_RECOMMENDATIONS]!!.id
 
     val exploreSleep = sectionsPipelines[FeedSectionType.SLEEP_EXPLORE]!!.state
-    val exploreSleepPipelineId
-        get() = sectionsPipelines[FeedSectionType.SLEEP_EXPLORE]!!.id
 
     val preferredRecommendations =
         sectionsPipelines[FeedSectionType.PREFERRED_RECOMMENDATIONS]!!.state
-    val preferredRecommendationsPipelineId
-        get() = sectionsPipelines[FeedSectionType.PREFERRED_RECOMMENDATIONS]!!.id
 
     val mostPopular = sectionsPipelines[FeedSectionType.MOST_POPULAR]!!.state
-    val mostPopularPipelineId
-        get() = sectionsPipelines[FeedSectionType.MOST_POPULAR]!!.id
 
     val newestContent = sectionsPipelines[FeedSectionType.NEW_CONTENT]!!.state
-    val newestContentPipelineId
-        get() = sectionsPipelines[FeedSectionType.NEW_CONTENT]!!.id
 
     val starting = sectionsPipelines[FeedSectionType.STARTING_RECOMMENDATIONS]!!.state
-    val startingPipelineId
-        get() = sectionsPipelines[FeedSectionType.STARTING_RECOMMENDATIONS]!!.id
+
+    fun getPipelineId(feedSectionType: FeedSectionType?): Int {
+        return feedSectionType?.let { sectionsPipelines[it]!!.id } ?: 0
+    }
 
     suspend fun reloadAllSections() {
         sectionsPipelines.forEach { (_, pipeline) -> pipeline.reloadRemoteDatasource() }

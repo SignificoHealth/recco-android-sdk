@@ -92,7 +92,7 @@ class FeedViewModel @Inject constructor(
                 .filter { it is GlobalViewEvent.ResetFeedScroll }
                 .collectLatest {
                     val (topic, feedSectionType) = (it as GlobalViewEvent.ResetFeedScroll)
-                    resetPipelineIds(feedSectionType)
+                    resetPipelineIds()
                     moveUnlockedFeedSectionAtTop(feedSectionType)
                     delay(DELAY_TO_PERFORM_SCROLL_ANIM)
                     forceLoadingWhileRefreshingFeedSection(topic!!)
@@ -125,37 +125,18 @@ class FeedViewModel @Inject constructor(
 
     private fun isContentUpdated(feedSectionType: FeedSectionType?): Boolean {
         currentFeedSectionId = feedRepository.feedSectionsPipelineId
-        currentFeedRecommendationsId = getRecommendationsPipelineId(feedSectionType)
+        currentFeedRecommendationsId = recommendationRepository.getPipelineId(feedSectionType)
 
-        return previousFeedSectionId != currentFeedSectionId
+        return currentFeedRecommendationsId != 0
+                && previousFeedSectionId != currentFeedSectionId
                 && previousFeedRecommendationsId != currentFeedRecommendationsId
-                && previousFeedRecommendationsId != 0
-                && currentFeedRecommendationsId != 0
+
     }
 
-    private fun resetPipelineIds(feedSectionType: FeedSectionType?) {
-        previousFeedSectionId = feedRepository.feedSectionsPipelineId
-        previousFeedRecommendationsId = getRecommendationsPipelineId(feedSectionType)
-        currentFeedSectionId = previousFeedSectionId
-        currentFeedRecommendationsId = previousFeedRecommendationsId
+    private fun resetPipelineIds() {
+        previousFeedSectionId = currentFeedSectionId
+        previousFeedRecommendationsId = currentFeedRecommendationsId
     }
-
-    private fun getRecommendationsPipelineId(feedSectionType: FeedSectionType?) =
-        when (feedSectionType) {
-            PHYSICAL_ACTIVITY_RECOMMENDATIONS -> recommendationRepository.tailoredPhysicalActivityPipelineId
-            NUTRITION_RECOMMENDATIONS -> recommendationRepository.tailoredNutritionPipelineId
-            MENTAL_WELLBEING_RECOMMENDATIONS -> recommendationRepository.tailoredPhysicalWellbeingPipelineId
-            SLEEP_RECOMMENDATIONS -> recommendationRepository.tailoredSleepPipelineId
-            PHYSICAL_ACTIVITY_EXPLORE -> recommendationRepository.explorePhysicalActivityPipelineId
-            NUTRITION_EXPLORE -> recommendationRepository.exploreNutritionPipelineId
-            MENTAL_WELLBEING_EXPLORE -> recommendationRepository.explorePhysicalWellbeingPipelineId
-            SLEEP_EXPLORE -> recommendationRepository.exploreSleepPipelineId
-            PREFERRED_RECOMMENDATIONS -> recommendationRepository.preferredRecommendationsPipelineId
-            MOST_POPULAR -> recommendationRepository.mostPopularPipelineId
-            NEW_CONTENT -> recommendationRepository.newestContentPipelineId
-            STARTING_RECOMMENDATIONS -> recommendationRepository.startingPipelineId
-            null -> 0
-        }
 
     private fun refresh() {
         viewModelScope.launch {
@@ -232,7 +213,7 @@ class FeedViewModel @Inject constructor(
             }.collectLatest { sections ->
                 val data = (_viewState.value.data ?: FeedUI())
                 val triggerStateUpdated = if (isContentUpdated(data.feedSectionTypeToUnlock)) {
-                    resetPipelineIds(null)
+                    resetPipelineIds()
                     data.resetScrollTriggerState.also { it.consumed() }
                 } else {
                     data.resetScrollTriggerState

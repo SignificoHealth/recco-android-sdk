@@ -56,6 +56,5 @@ class FeedRepository @Inject constructor(
         ).plus(feedSectionsPipeline.value!!.filterNot { it.type == feedSectionType })
 
         feedSectionsPipeline.replaceWithLocal(sectionsUpdated)
-
     }
 }
