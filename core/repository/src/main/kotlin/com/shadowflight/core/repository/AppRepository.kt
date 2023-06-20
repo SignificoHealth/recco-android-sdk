@@ -29,8 +29,8 @@ class AppRepository @Inject constructor(
 
     fun logoutUser() {
         val apiSecret = authCredentials.sdkConfig.apiSecret
-        val userId = authCredentials.userId ?: return
-        val tokenId = authCredentials.tokenId ?: return
+        val userId = authCredentials.userId ?: return authCredentials.clearCache()
+        val tokenId = authCredentials.tokenId ?: return authCredentials.clearCache()
 
         appScope.launch {
             authCredentials.clearCache()
