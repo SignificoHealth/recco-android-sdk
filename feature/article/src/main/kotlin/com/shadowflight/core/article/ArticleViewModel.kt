@@ -7,7 +7,6 @@ import com.shadowflight.core.article.navigation.idArg
 import com.shadowflight.core.logger.Logger
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Rating
-import com.shadowflight.core.model.recommendation.Status
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.components.UiState
@@ -48,21 +47,10 @@ class ArticleViewModel @Inject constructor(
         }
     }
 
-    private fun setArticleAsSeen() {
-        viewModelScope.launch {
-            recommendationRepository.setRecommendationAsViewed(
-                articleId
-            )
-        }
-    }
-
     private fun initialLoadSubscribe() {
         viewModelScope.launch {
             runCatching { recommendationRepository.getArticle(articleId) }
                 .onSuccess { article ->
-                    if (article.status == Status.NO_INTERACTION) {
-                        setArticleAsSeen()
-                    }
                     _viewState.emit(
                         UiState(
                             isLoading = false,

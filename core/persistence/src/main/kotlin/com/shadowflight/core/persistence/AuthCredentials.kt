@@ -15,6 +15,7 @@ class AuthCredentials @Inject constructor(
     @ApplicationContext context: Context
 ) {
     lateinit var sdkConfig: SDKConfig
+        private set
 
     private val prefs by lazy {
         EncryptedSharedPreferences.create(
@@ -52,8 +53,7 @@ class AuthCredentials @Inject constructor(
         prefs.edit { putString(TOKEN_ID_KEY, null) }
     }
 
-
-    fun logout() {
+    fun clearCache() {
         prefs.edit { putString(USER_ID_KEY, null) }
         pat = null
         prefs.edit { putString(TOKEN_ID_KEY, null) }

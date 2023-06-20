@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import com.shadowflight.core.model.SDKConfig
-import com.shadowflight.core.persistence.AuthCredentials
+import com.shadowflight.core.repository.AppRepository
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
@@ -13,7 +13,7 @@ import dagger.hilt.components.SingletonComponent
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 private interface UIApiInterface {
-    fun getAuthCredentials(): AuthCredentials
+    fun getAppRepository(): AppRepository
 }
 
 object UIApi {
@@ -22,22 +22,20 @@ object UIApi {
     fun init(sdkConfig: SDKConfig, application: Application) {
         this.application = application
 
-        EntryPoints.get(application, UIApiInterface::class.java).getAuthCredentials()
-            .apply {
-                init(sdkConfig)
-            }
+        EntryPoints.get(application, UIApiInterface::class.java).getAppRepository()
+            .init(sdkConfig)
     }
 
     fun login(userId: String) {
         EntryPoints
-            .get(application, UIApiInterface::class.java).getAuthCredentials()
-            .apply { setUserId(userId) }
+            .get(application, UIApiInterface::class.java).getAppRepository()
+            .loginUser(userId)
     }
 
     fun logout() {
         EntryPoints
-            .get(application, UIApiInterface::class.java).getAuthCredentials()
-            .apply { logout() }
+            .get(application, UIApiInterface::class.java).getAppRepository()
+            .logoutUser()
     }
 
     fun navigateToDashboard(context: Context) {
