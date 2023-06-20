@@ -2,7 +2,6 @@ package com.shadowflight.core.repository
 
 import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.model.feed.FeedSectionType
-import com.shadowflight.core.model.feed.LockType
 import com.shadowflight.core.network.http.unwrap
 import com.shadowflight.core.openapi.api.FeedApi
 import com.shadowflight.core.openapi.model.FeedSectionDTO
@@ -29,7 +28,7 @@ class FeedRepository @Inject constructor(
             if (feedSection.type == feedSectionType) {
                 feedSection.copy(
                     type = feedSection.type,
-                    locked = LockType.UNLOCKED,
+                    locked = false,
                     topic = feedSection.topic
                 )
             } else {

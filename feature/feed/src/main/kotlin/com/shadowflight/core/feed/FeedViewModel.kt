@@ -1,6 +1,5 @@
 package com.shadowflight.core.feed
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.logger.Logger
@@ -17,7 +16,6 @@ import com.shadowflight.core.model.feed.FeedSectionType.PREFERRED_RECOMMENDATION
 import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.STARTING_RECOMMENDATIONS
-import com.shadowflight.core.model.feed.LockType
 import com.shadowflight.core.repository.FeedRepository
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.components.UiState
@@ -25,7 +23,6 @@ import com.shadowflight.core.ui.extensions.combine
 import com.shadowflight.core.ui.pipelines.GlobalViewEvent
 import com.shadowflight.core.ui.pipelines.globalViewEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

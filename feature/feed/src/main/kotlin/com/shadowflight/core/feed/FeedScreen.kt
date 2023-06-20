@@ -58,7 +58,6 @@ import com.google.accompanist.insets.ui.Scaffold
 import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
 import com.shadowflight.core.model.feed.FeedSectionType
-import com.shadowflight.core.model.feed.LockType
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
 import com.shadowflight.core.model.recommendation.Recommendation
@@ -243,19 +242,13 @@ private fun FeedSection(
         Spacer(Modifier.height(AppSpacing.dp_16))
 
         Crossfade(
-            targetState = feedSection.locked == LockType.UNLOCKED,
+            targetState = feedSection.locked,
             animationSpec = tween(
                 durationMillis = 1000,
                 easing = LinearEasing,
             )
-        ) { isUnlocked ->
-            if (isUnlocked) {
-                UnlockedItems(
-                    scrollState = scrollState,
-                    section = section,
-                    navigateToArticle = navigateToArticle
-                )
-            } else {
+        ) { isLocked ->
+            if (isLocked) {
                 LockedItems(
                     scrollState = scrollState,
                     feedSection = feedSection,
@@ -263,6 +256,12 @@ private fun FeedSection(
                     openDialog = openDialog,
                     topicDialog = topicDialog,
                     onLockAnimationFinished = onLockAnimationFinished
+                )
+            } else {
+                UnlockedItems(
+                    scrollState = scrollState,
+                    section = section,
+                    navigateToArticle = navigateToArticle
                 )
             }
         }
