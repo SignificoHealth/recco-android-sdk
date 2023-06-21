@@ -28,6 +28,7 @@ import com.shadowflight.core.ui.theme.AppTheme
 @Composable
 fun NumericTextField(
     modifier: Modifier = Modifier,
+    initialValue: String = "",
     onValueChange: (String) -> Unit,
     supportDecimal: Boolean = false,
     maxChars: Int,
@@ -36,7 +37,7 @@ fun NumericTextField(
 ) {
     var textFieldValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(
-            TextFieldValue("")
+            TextFieldValue(initialValue)
         )
     }
     var isFocused by remember { mutableStateOf(false) }
@@ -111,6 +112,7 @@ private fun PreviewInteger() {
     NumericTextField(
         maxChars = 5,
         supportDecimal = false,
+        initialValue = "",
         onValueChange = { }
     )
 }
@@ -121,6 +123,7 @@ private fun PreviewDecimal() {
     NumericTextField(
         maxChars = 5,
         supportDecimal = true,
+        initialValue = "",
         onValueChange = {}
     )
 }
@@ -131,6 +134,7 @@ private fun PreviewWithLabel() {
     NumericTextField(
         maxChars = 5,
         supportDecimal = false,
+        initialValue = "",
         onValueChange = { },
         label = "min."
     )
@@ -142,6 +146,7 @@ private fun PreviewWithHint() {
     NumericTextField(
         maxChars = 5,
         supportDecimal = false,
+        initialValue = "",
         onValueChange = { },
         hint = "0.00"
     )

@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -57,6 +58,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
 import com.shadowflight.core.model.feed.FeedSection
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
+import com.shadowflight.core.model.feed.FeedSectionState
 import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.recommendation.ContentId
@@ -76,6 +78,7 @@ import com.shadowflight.core.ui.components.loadingCardAnimationDrawable
 import com.shadowflight.core.ui.extensions.asResExplanation
 import com.shadowflight.core.ui.extensions.asResTitle
 import com.shadowflight.core.ui.extensions.viewedOverlay
+import com.shadowflight.core.ui.pipelines.GlobalViewEvent
 import com.shadowflight.core.ui.theme.AppSpacing
 import com.shadowflight.core.ui.theme.AppTheme
 import kotlinx.coroutines.coroutineScope
@@ -83,6 +86,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val LOCK_PLACEHOLDER_ELEMENTS = 5
+private val heightCard = 257.dp
+private val widthCard = 145.dp
 
 @Composable
 fun FeedRoute(
@@ -174,7 +179,7 @@ private fun FeedContent(
         feedUI.sections.forEach { section ->
             FeedSection(
                 section = section,
-                feedSectionTypeToUnlock = feedUI.feedSectionTypeToUnlock,
+                feedSectionToUnlock = feedUI.feedSectionToUnlock,
                 navigateToArticle = navigateToArticle,
                 navigateToQuestionnaire = navigateToQuestionnaire,
                 onLockAnimationFinished = onLockAnimationFinished,
@@ -214,7 +219,7 @@ private fun FeedHeader() {
 @Composable
 private fun FeedSection(
     section: FeedSectionAndRecommendations,
-    feedSectionTypeToUnlock: FeedSectionType?,
+    feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock?,
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     onLockAnimationFinished: () -> Unit,
@@ -242,7 +247,7 @@ private fun FeedSection(
         Spacer(Modifier.height(AppSpacing.dp_16))
 
         Crossfade(
-            targetState = feedSection.locked,
+            targetState = feedSection.state == FeedSectionState.LOCKED,
             animationSpec = tween(
                 durationMillis = 1000,
                 easing = LinearEasing,
@@ -252,7 +257,7 @@ private fun FeedSection(
                 LockedItems(
                     scrollState = scrollState,
                     feedSection = feedSection,
-                    feedSectionTypeToUnlock = feedSectionTypeToUnlock,
+                    feedSectionToUnlock = feedSectionToUnlock,
                     openDialog = openDialog,
                     topicDialog = topicDialog,
                     onLockAnimationFinished = onLockAnimationFinished
@@ -261,7 +266,8 @@ private fun FeedSection(
                 UnlockedItems(
                     scrollState = scrollState,
                     section = section,
-                    navigateToArticle = navigateToArticle
+                    navigateToArticle = navigateToArticle,
+                    navigateToQuestionnaire = navigateToQuestionnaire
                 )
             }
         }
@@ -269,7 +275,7 @@ private fun FeedSection(
 
     SideEffect {
         coroutineScope.launch {
-            if (feedSection.type == feedSectionTypeToUnlock) {
+            if (feedSection.type == feedSectionToUnlock?.type) {
                 scrollState.scrollToItem(0)
             }
         }
@@ -280,7 +286,7 @@ private fun FeedSection(
 private fun LockedItems(
     scrollState: LazyListState,
     feedSection: FeedSection,
-    feedSectionTypeToUnlock: FeedSectionType?,
+    feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock?,
     openDialog: MutableState<Boolean>,
     topicDialog: MutableState<Topic?>,
     onLockAnimationFinished: () -> Unit,
@@ -301,7 +307,7 @@ private fun LockedItems(
                         topicDialog.value = topic
                     }
                 },
-                shouldStartAnimation = { feedSection.type == feedSectionTypeToUnlock },
+                shouldStartAnimation = { feedSection.type == feedSectionToUnlock?.type },
                 onAnimationFinished = onLockAnimationFinished
             )
         }
@@ -312,7 +318,8 @@ private fun LockedItems(
 private fun UnlockedItems(
     scrollState: LazyListState,
     section: FeedSectionAndRecommendations,
-    navigateToArticle: (ContentId) -> Unit
+    navigateToArticle: (ContentId) -> Unit,
+    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
 ) {
     LazyRow(
         state = scrollState,
@@ -326,7 +333,17 @@ private fun UnlockedItems(
             items = section.recommendations,
             key = { item -> item.id.itemId }
         ) { recommendation ->
-            Card(recommendation, navigateToArticle)
+            UnlockedCard(recommendation, navigateToArticle)
+        }
+
+        if (section.feedSection.state == FeedSectionState.PARTIALLY_UNLOCKED) {
+            item {
+                PartiallyUnlockedCard {
+                    section.feedSection.topic?.let { topic ->
+                        navigateToQuestionnaire(topic, section.feedSection.type)
+                    }
+                }
+            }
         }
     }
 }
@@ -360,11 +377,11 @@ private fun QuestionnaireStartDialog(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun Card(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
+private fun UnlockedCard(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
     Card(
         modifier = Modifier
-            .height(257.dp)
-            .width(145.dp),
+            .height(heightCard)
+            .width(widthCard),
         elevation = AppTheme.elevation.card,
         onClick = { onClick(recommendation.id) }
     ) {
@@ -402,6 +419,41 @@ private fun Card(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
+private fun PartiallyUnlockedCard(
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .height(heightCard)
+            .width(widthCard),
+        elevation = 0.dp,
+        onClick = onClick,
+        backgroundColor = AppTheme.colors.primary
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(AppSpacing.dp_12),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_refresh),
+                tint = AppTheme.colors.onPrimary,
+                contentDescription = null,
+            )
+            Spacer(Modifier.height(AppSpacing.dp_8))
+            Text(
+                text = stringResource(R.string.review_this_area),
+                style = AppTheme.typography.h3.copy(color = AppTheme.colors.onPrimary),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
 private fun LockedCard(
     onClick: () -> Unit,
     shouldStartAnimation: () -> Boolean,
@@ -419,8 +471,8 @@ private fun LockedCard(
 
     Card(
         modifier = Modifier
-            .height(257.dp)
-            .width(145.dp),
+            .height(heightCard)
+            .width(widthCard),
         elevation = 0.dp,
         onClick = onClick
     ) {
@@ -524,7 +576,7 @@ private fun AppLockIcon(
     )
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFF)
+@Preview(showBackground = true, backgroundColor = 0xFFF, heightDp = 1000)
 @Composable
 private fun Preview(
     @PreviewParameter(FeedUIPreviewProvider::class) uiState: UiState<FeedUI>

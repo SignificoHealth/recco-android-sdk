@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
                         user = user,
                         navController = rememberNavController()
                     )
-
                 } else {
                     AppScreenStateAware(
                         uiState = uiState,

@@ -1,9 +1,9 @@
 package com.shadowflight.core.feed
 
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
-import com.shadowflight.core.model.feed.FeedSectionType
+import com.shadowflight.core.ui.pipelines.GlobalViewEvent
 
 data class FeedUI(
-    val feedSectionTypeToUnlock: FeedSectionType? = null,
+    val feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock? = null,
     val sections: List<FeedSectionAndRecommendations> = emptyList(),
 )

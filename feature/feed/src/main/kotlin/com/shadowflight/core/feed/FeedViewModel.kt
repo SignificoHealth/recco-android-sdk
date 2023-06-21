@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.logger.Logger
 import com.shadowflight.core.model.feed.FeedSectionAndRecommendations
+import com.shadowflight.core.model.feed.FeedSectionState
 import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.MOST_POPULAR
@@ -20,7 +21,7 @@ import com.shadowflight.core.repository.FeedRepository
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.combine
-import com.shadowflight.core.ui.pipelines.GlobalViewEvent
+import com.shadowflight.core.ui.pipelines.GlobalViewEvent.*
 import com.shadowflight.core.ui.pipelines.globalViewEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +30,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -58,17 +59,20 @@ class FeedViewModel @Inject constructor(
         when (userInteract) {
             FeedUserInteract.Retry -> initialLoadOrRetry()
             FeedUserInteract.Refresh -> refresh()
-            FeedUserInteract.RefreshUnlockedFeedSection -> hideLoadingAndClearUnlockingState()
+            FeedUserInteract.RefreshUnlockedFeedSection -> updateFeedSectionState()
         }
     }
 
-    private fun hideLoadingAndClearUnlockingState() {
+    private fun updateFeedSectionState() {
         viewModelScope.launch {
-            _viewState.value.data?.feedSectionTypeToUnlock?.let { feedSectionType ->
+            _viewState.value.data?.feedSectionToUnlock?.let { feedSectionToUnlock ->
                 _viewState.value = _viewState.value.copy(
-                    data = _viewState.value.data?.copy(feedSectionTypeToUnlock = null),
+                    data = _viewState.value.data?.copy(feedSectionToUnlock = null),
                 )
-                feedRepository.setFeedSectionAsUnlocked(feedSectionType)
+                feedRepository.setFeedSectionState(
+                    feedSectionToUnlock.type,
+                    feedSectionToUnlock.state
+                )
             }
         }
     }
@@ -76,15 +80,29 @@ class FeedViewModel @Inject constructor(
     private fun setUpGlobalViewEvents() {
         viewModelScope.launch {
             globalViewEvents
-                .filter { it is GlobalViewEvent.ResetFeedScroll }
-                .collectLatest {
-                    val (topic, feedSectionType) = (it as GlobalViewEvent.ResetFeedScroll)
+                .filterIsInstance<FeedSectionToUnlock>()
+                .collectLatest { feedSectionToUnlock ->
+                    val data = _viewState.value.data ?: return@collectLatest
                     _viewState.value = _viewState.value.copy(
-                        data = _viewState.value.data?.copy(
-                            feedSectionTypeToUnlock = feedSectionType,
-                        ),
+                        data = data.copy(feedSectionToUnlock = feedSectionToUnlock),
                     )
-                    recommendationRepository.reloadSection(topic = topic!!)
+
+                    val previousStateSection = data.sections
+                        .first { it.feedSection.type == feedSectionToUnlock.type }
+                        .feedSection.state
+
+                    // If previous state was already unlocked or partially unlocked we update its state right away
+                    // as the animation for unlocking won't happen. Therefore, the state of the feed won't get updated,
+                    // as the animation was doing that, that's why we need to update here the state for the feed for this
+                    // particular section to avoid showing the card Retake questionnaire.
+                    if (previousStateSection == FeedSectionState.UNLOCKED || previousStateSection == FeedSectionState.PARTIALLY_UNLOCKED) {
+                        feedRepository.setFeedSectionState(
+                            feedSectionToUnlock.type,
+                            feedSectionToUnlock.state
+                        )
+                    }
+
+                    recommendationRepository.reloadSection(topic = feedSectionToUnlock.topic)
                 }
         }
     }

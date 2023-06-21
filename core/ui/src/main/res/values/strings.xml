@@ -14,6 +14,7 @@
     <string name="sleep">Sleep</string>
     <string name="unlock">Unlock</string>
     <string name="no_content_available_title_default">No content available</string>
+    <string name="review_this_area">Review this area</string>
 
     <!-- Errors -->
     <string name="retry">Retry</string>

@@ -41,6 +41,7 @@ import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.model.questionnaire.MultiChoiceQuestion
 import com.shadowflight.core.model.questionnaire.NumericQuestion
+import com.shadowflight.core.model.questionnaire.NumericQuestionFormat
 import com.shadowflight.core.questionnaire.QuestionnaireUserInteract.*
 import com.shadowflight.core.questionnaire.QuestionnaireViewEvent.*
 import com.shadowflight.core.questionnaire.multichoice.MultiChoiceInput
@@ -261,7 +262,12 @@ private fun QuestionnaireContent(
                                     )
                                 },
                                 format = question.format,
-                                maxValue = question.maxValue
+                                maxValue = question.maxValue,
+                                initialValue = if (question.format == NumericQuestionFormat.INTEGER) {
+                                    question.selectedValue?.toInt()?.toString().orEmpty()
+                                } else {
+                                    question.selectedValue?.toString().orEmpty()
+                                }
                             )
                         }
                     }
