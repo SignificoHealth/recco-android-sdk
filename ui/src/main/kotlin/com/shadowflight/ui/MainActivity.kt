@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ui.Scaffold
+import com.shadowflight.core.ui.components.AppCustomLoading
 import com.shadowflight.core.ui.components.AppScreenStateAware
 import com.shadowflight.core.ui.components.AppTopBar
 import com.shadowflight.core.ui.theme.AppTheme
@@ -47,8 +49,11 @@ class MainActivity : AppCompatActivity() {
                             contentPadding = innerPadding,
                             uiState = uiState,
                             retry = { viewModel.onUserInteract(MainUserInteract.Retry) },
-                            content = {}
-                        )
+                            isEmpty = true,
+                            emptyContent = {
+                                AppCustomLoading(modifier = Modifier.weight(1f))
+                            }
+                        ) {}
                     }
                 }
             }

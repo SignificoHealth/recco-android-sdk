@@ -23,6 +23,9 @@ internal val accent20 = accent.copy(alpha = .2f)
 internal val accent10 = accent.copy(alpha = .1f)
 internal val onAccent = Color(0xFF2C2783)
 internal val illustration = Color(0xFFF5B731)
+internal val illustration80 = illustration.copy(alpha = .8f)
+internal val illustration40 = illustration.copy(alpha = .4f)
+internal val illustration20 = illustration.copy(alpha = .2f)
 internal val surface = Color(0xFFDAD7D7)
 internal val onSurface = Color(0xFF383B45)
 
@@ -52,6 +55,9 @@ data class ExtendedColors(
     val accent10: Color,
     val onAccent: Color,
     val illustration: Color,
+    val illustration80: Color,
+    val illustration40: Color,
+    val illustration20: Color,
     val surface: Color,
     val onSurface: Color,
 
@@ -97,6 +103,9 @@ internal val extendedColors = ExtendedColors(
     accent10 = accent10,
     onAccent = onAccent,
     illustration = illustration,
+    illustration80 = illustration80,
+    illustration40 = illustration40,
+    illustration20 = illustration20,
     surface = surface,
     onSurface = onSurface,
     error = error,

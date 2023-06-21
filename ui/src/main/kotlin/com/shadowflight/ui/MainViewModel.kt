@@ -45,7 +45,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             meRepository.me
                 .onStart {
-                    _viewState.value = _viewState.value.copy(error = null, isLoading = true)
+                    _viewState.value = _viewState.value.copy(error = null, isLoading = false)
                 }.catch { error ->
                     _viewState.value = _viewState.value.copy(error = error, isLoading = false)
                     logger.e(error)
