@@ -1,11 +1,12 @@
 package com.shadowflight.core.repository
 
+import com.shadowflight.core.base.di.ApplicationScope
+import com.shadowflight.core.logger.Logger
 import com.shadowflight.core.model.SDKConfig
 import com.shadowflight.core.openapi.api.AuthenticationApi
 import com.shadowflight.core.openapi.api.MetricApi
 import com.shadowflight.core.openapi.model.PATReferenceDeleteDTO
 import com.shadowflight.core.persistence.AuthCredentials
-import com.vilua.core.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,6 +17,7 @@ class AppRepository @Inject constructor(
     private val authenticationApi: AuthenticationApi,
     private val metricApi: MetricApi,
     private val authCredentials: AuthCredentials,
+    private val logger: Logger,
     @ApplicationScope private val appScope: CoroutineScope,
 ) {
     fun init(sdkConfig: SDKConfig) {
@@ -24,7 +26,10 @@ class AppRepository @Inject constructor(
 
     fun loginUser(userId: String) {
         authCredentials.setUserId(userId)
-        appScope.launch { metricApi.loginEvent() }
+        appScope.launch {
+            runCatching { metricApi.loginEvent() }
+                .onFailure { logger.e(it) }
+        }
     }
 
     fun logoutUser() {

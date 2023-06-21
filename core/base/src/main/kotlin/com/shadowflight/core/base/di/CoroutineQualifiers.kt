@@ -1,4 +1,4 @@
-package com.vilua.core.di
+package com.shadowflight.core.base.di
 
 import javax.inject.Qualifier
 

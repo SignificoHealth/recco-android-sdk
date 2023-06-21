@@ -1,5 +1,6 @@
 package com.shadowflight.core.network.di
 
+import com.shadowflight.core.base.di.IoDispatcher
 import com.shadowflight.core.logger.Logger
 import com.shadowflight.core.network.BuildConfig
 import com.shadowflight.core.network.http.ApiEndpoint
@@ -19,6 +20,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -95,7 +97,8 @@ object NetworkModule {
         apiEndpoint: ApiEndpoint,
         logger: Logger,
         authCredentials: AuthCredentials,
-        authenticationApi: AuthenticationApi
+        authenticationApi: AuthenticationApi,
+        @IoDispatcher dispatcher: CoroutineDispatcher,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(apiEndpoint.baseUrl)
@@ -103,8 +106,9 @@ object NetworkModule {
                 buildOkhttp(
                     logger = logger,
                     authInterceptor = AuthInterceptor(
-                        authCredentials,
-                        authenticationApi
+                        authCredentials = authCredentials,
+                        authenticationApi = authenticationApi,
+                        dispatcher = dispatcher
                     )
                 )
             )
