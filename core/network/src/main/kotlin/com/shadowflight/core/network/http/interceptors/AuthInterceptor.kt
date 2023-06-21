@@ -1,18 +1,22 @@
 package com.shadowflight.core.network.http.interceptors
 
+import com.shadowflight.core.base.di.IoDispatcher
 import com.shadowflight.core.model.authentication.PAT
 import com.shadowflight.core.model.authentication.isTokenExpired
 import com.shadowflight.core.network.http.unwrap
 import com.shadowflight.core.openapi.api.AuthenticationApi
 import com.shadowflight.core.persistence.AuthCredentials
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import java.io.IOException
 
 class AuthInterceptor(
     private val authCredentials: AuthCredentials,
-    private val authenticationApi: AuthenticationApi
+    private val authenticationApi: AuthenticationApi,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -26,7 +30,7 @@ class AuthInterceptor(
     }
 
     @Synchronized
-    private fun getPat() = runBlocking(Dispatchers.IO) {
+    private fun getPat() = runBlocking(dispatcher) {
         val pat = authCredentials.pat
 
         if (pat == null || pat.isTokenExpired()) {

@@ -1,8 +1,5 @@
 package com.shadowflight.core.base.di
 
-import com.vilua.core.di.ApplicationScope
-import com.vilua.core.di.DefaultDispatcher
-import com.vilua.core.di.IoDispatcher
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

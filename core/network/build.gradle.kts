@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:base"))
     implementation(project(":core:model"))
     implementation(project(":core:persistence"))
     implementation(project(":core:openapi"))
