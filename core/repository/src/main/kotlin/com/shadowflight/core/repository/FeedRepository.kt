@@ -1,6 +1,7 @@
 package com.shadowflight.core.repository
 
 import com.shadowflight.core.model.feed.FeedSection
+import com.shadowflight.core.model.feed.FeedSectionState
 import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.network.http.unwrap
 import com.shadowflight.core.openapi.api.FeedApi
@@ -23,12 +24,15 @@ class FeedRepository @Inject constructor(
     private suspend fun getFeedSections(): List<FeedSection> =
         api.getFeed().unwrap().map(FeedSectionDTO::asEntity)
 
-    suspend fun setFeedSectionAsUnlocked(feedSectionType: FeedSectionType) {
+    suspend fun setFeedSectionState(
+        feedSectionType: FeedSectionType,
+        feedSectionState: FeedSectionState
+    ) {
         feedSectionsPipeline.value?.map { feedSection ->
             if (feedSection.type == feedSectionType) {
                 feedSection.copy(
                     type = feedSection.type,
-                    locked = false,
+                    state = feedSectionState,
                     topic = feedSection.topic
                 )
             } else {

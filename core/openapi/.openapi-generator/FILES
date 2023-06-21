@@ -13,6 +13,7 @@ src/main/kotlin/com/shadowflight/core/openapi/model/ContentTypeDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/CreateMetricSessionDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/CreateQuestionnaireAnswerDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/FeedSectionDTO.kt
+src/main/kotlin/com/shadowflight/core/openapi/model/FeedSectionStateDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/FeedSectionTypeDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/MultiChoiceAnswerOptionDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/MultiChoiceQuestionDTO.kt

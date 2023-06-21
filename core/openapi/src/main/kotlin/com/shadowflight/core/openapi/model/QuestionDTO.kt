@@ -28,7 +28,9 @@ import com.squareup.moshi.JsonClass
  * @param text 
  * @param type 
  * @param multiChoice 
+ * @param multiChoiceSelectedIds 
  * @param numeric 
+ * @param numericSelected 
  */
 @JsonClass(generateAdapter = true)
 data class QuestionDTO(
@@ -51,6 +53,12 @@ data class QuestionDTO(
     @Json(name = "multiChoice")
     val multiChoice: MultiChoiceQuestionDTO? = null,
 
+    @Json(name = "multiChoiceSelectedIds")
+    val multiChoiceSelectedIds: kotlin.collections.List<kotlin.Int>? = null,
+
     @Json(name = "numeric")
-    val numeric: NumericQuestionDTO? = null
+    val numeric: NumericQuestionDTO? = null,
+
+    @Json(name = "numericSelected")
+    val numericSelected: kotlin.Double? = null
 )

@@ -19,7 +19,13 @@ fun QuestionDTO.asEntity() = when (type) {
         text = text,
         maxOptions = multiChoice!!.maxOptions,
         minOptions = multiChoice!!.minOptions,
-        options = multiChoice!!.options.map(MultiChoiceAnswerOptionDTO::asEntity)
+        options = multiChoice!!.options.map { answerOption ->
+            MultiChoiceAnswerOption(
+                id = answerOption.id,
+                text = answerOption.text,
+                isSelected = multiChoiceSelectedIds.orEmpty().contains(answerOption.id)
+            )
+        }
     )
 
     QuestionAnswerTypeDTO.NUMERIC -> NumericQuestion(
@@ -29,16 +35,10 @@ fun QuestionDTO.asEntity() = when (type) {
         text = text,
         maxValue = numeric!!.maxValue,
         minValue = numeric!!.minValue,
-        selectedValue = null,
+        selectedValue = numericSelected,
         format = numeric!!.format.asEntity()
     )
 }
-
-private fun MultiChoiceAnswerOptionDTO.asEntity() = MultiChoiceAnswerOption(
-    id = id,
-    text = text,
-    isSelected = false
-)
 
 private fun NumericQuestionDTO.Format.asEntity() = when (this) {
     NumericQuestionDTO.Format.HUMAN_HEIGHT -> NumericQuestionFormat.HUMAN_HEIGHT

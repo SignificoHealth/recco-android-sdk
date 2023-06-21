@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shadowflight.core.logger.Logger
+import com.shadowflight.core.model.feed.FeedSectionState
 import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.Topic
 import com.shadowflight.core.questionnaire.QuestionnaireUserInteract.BackClicked
@@ -215,8 +216,20 @@ class QuestionnaireViewModel @Inject constructor(
                     questionnaireRepository.onboardingAnswers(questionnaireUI.questions)
                 }
             }.onSuccess {
-                if (topic != null) {
-                    globalViewEvents.emit(GlobalViewEvent.ResetFeedScroll(topic, feedSectionType))
+                if (topic != null && feedSectionType != null) {
+                    globalViewEvents.emit(
+                        GlobalViewEvent.FeedSectionUnlock(
+                            topic!!,
+                            feedSectionType!!,
+                            feedSectionState = if (questionnaireUI.questions
+                                    .all { it.isAnswerInputValid(requiredToBeAnswered = true) }
+                            ) {
+                                FeedSectionState.UNLOCK
+                            } else {
+                                FeedSectionState.PARTIALLY_UNLOCK
+                            }
+                        )
+                    )
                     _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireSubmitted)
                 } else {
                     _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireOnboardingSubmitted)

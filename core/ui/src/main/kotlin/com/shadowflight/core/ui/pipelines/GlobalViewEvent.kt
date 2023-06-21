@@ -2,6 +2,7 @@ package com.shadowflight.core.ui.pipelines
 
 import android.os.Bundle
 import androidx.annotation.StringRes
+import com.shadowflight.core.model.feed.FeedSectionState
 import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.Topic
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,9 +23,10 @@ sealed class GlobalViewEvent(
         val navArgs: Bundle? = null
     ) : GlobalViewEvent()
 
-    data class ResetFeedScroll(
-        val topic: Topic?,
-        val feedSectionType: FeedSectionType?
+    data class FeedSectionUnlock(
+        val topic: Topic,
+        val feedSectionType: FeedSectionType,
+        val feedSectionState: FeedSectionState
     ) : GlobalViewEvent()
 }
 

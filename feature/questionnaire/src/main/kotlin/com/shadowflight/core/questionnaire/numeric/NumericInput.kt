@@ -22,14 +22,16 @@ import java.util.Locale
 fun NumericInput(
     onValueChange: (String) -> Unit,
     format: NumericQuestionFormat,
-    maxValue: Int
+    maxValue: Int,
+    initialValue: String,
 ) {
     when (format) {
         NumericQuestionFormat.INTEGER, NumericQuestionFormat.DECIMAL -> NumericTextField(
             modifier = Modifier.fillMaxWidth(),
             onValueChange = onValueChange,
             supportDecimal = format == NumericQuestionFormat.DECIMAL,
-            maxChars = maxValue.toString().length
+            maxChars = maxValue.toString().length,
+            initialValue = initialValue
         )
 
         NumericQuestionFormat.HUMAN_HEIGHT -> HumanHeightInput(
@@ -195,7 +197,8 @@ private fun PreviewInteger() {
     NumericInput(
         onValueChange = {},
         format = NumericQuestionFormat.INTEGER,
-        maxValue = 34
+        maxValue = 34,
+        initialValue = ""
     )
 }
 
@@ -205,7 +208,8 @@ private fun PreviewDecimal() {
     NumericInput(
         onValueChange = {},
         format = NumericQuestionFormat.DECIMAL,
-        maxValue = 34
+        maxValue = 34,
+        initialValue = ""
     )
 }
 

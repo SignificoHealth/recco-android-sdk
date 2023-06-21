@@ -1290,20 +1290,35 @@
           "multiChoice": {
             "$ref": "#/components/schemas/MultiChoiceQuestion"
           },
+          "multiChoiceSelectedIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
           "numeric": {
             "$ref": "#/components/schemas/NumericQuestion"
+          },
+          "numericSelected": {
+            "type": "number",
+            "format": "double"
           }
         }
       },
       "FeedSection": {
         "required": [
           "locked",
+          "state",
           "type"
         ],
         "type": "object",
         "properties": {
           "type": {
             "$ref": "#/components/schemas/FeedSectionType"
+          },
+          "state": {
+            "$ref": "#/components/schemas/FeedSectionState"
           },
           "locked": {
             "type": "boolean"
@@ -1312,6 +1327,14 @@
             "$ref": "#/components/schemas/Topic"
           }
         }
+      },
+      "FeedSectionState": {
+        "type": "string",
+        "enum": [
+          "LOCK",
+          "UNLOCK",
+          "PARTIALLY_UNLOCK"
+        ]
       },
       "FeedSectionType": {
         "type": "string",
