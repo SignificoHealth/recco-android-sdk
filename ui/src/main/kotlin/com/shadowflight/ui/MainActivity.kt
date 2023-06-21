@@ -4,10 +4,15 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.insets.ui.Scaffold
 import com.shadowflight.core.ui.components.AppScreenStateAware
+import com.shadowflight.core.ui.components.AppTopBar
 import com.shadowflight.core.ui.theme.AppTheme
 import com.shadowflight.ui.navigation.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,11 +34,22 @@ class MainActivity : AppCompatActivity() {
                         navController = rememberNavController()
                     )
                 } else {
-                    AppScreenStateAware(
-                        uiState = uiState,
-                        retry = { viewModel.onUserInteract(MainUserInteract.Retry) },
-                        content = {}
-                    )
+                    Scaffold(
+                        topBar = {
+                            if (uiState.error != null) {
+                                AppTopBar()
+                            }
+                        },
+                        backgroundColor = AppTheme.colors.background,
+                        contentPadding = WindowInsets.navigationBars.asPaddingValues()
+                    ) { innerPadding ->
+                        AppScreenStateAware(
+                            contentPadding = innerPadding,
+                            uiState = uiState,
+                            retry = { viewModel.onUserInteract(MainUserInteract.Retry) },
+                            content = {}
+                        )
+                    }
                 }
             }
         }
