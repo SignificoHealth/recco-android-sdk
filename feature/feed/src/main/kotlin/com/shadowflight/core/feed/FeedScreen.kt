@@ -217,7 +217,7 @@ private fun FeedHeader() {
 @Composable
 private fun FeedSection(
     section: FeedSectionAndRecommendations,
-    feedSectionToUnlock: GlobalViewEvent.FeedSectionUnlock?,
+    feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock?,
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     onLockAnimationFinished: () -> Unit,
@@ -245,7 +245,7 @@ private fun FeedSection(
         Spacer(Modifier.height(AppSpacing.dp_16))
 
         Crossfade(
-            targetState = feedSection.state == FeedSectionState.LOCK,
+            targetState = feedSection.state == FeedSectionState.LOCKED,
             animationSpec = tween(
                 durationMillis = 1000,
                 easing = LinearEasing,
@@ -273,7 +273,7 @@ private fun FeedSection(
 
     SideEffect {
         coroutineScope.launch {
-            if (feedSection.type == feedSectionToUnlock?.feedSectionType) {
+            if (feedSection.type == feedSectionToUnlock?.type) {
                 scrollState.scrollToItem(0)
             }
         }
@@ -284,7 +284,7 @@ private fun FeedSection(
 private fun LockedItems(
     scrollState: LazyListState,
     feedSection: FeedSection,
-    feedSectionToUnlock: GlobalViewEvent.FeedSectionUnlock?,
+    feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock?,
     openDialog: MutableState<Boolean>,
     topicDialog: MutableState<Topic?>,
     onLockAnimationFinished: () -> Unit,
@@ -305,7 +305,7 @@ private fun LockedItems(
                         topicDialog.value = topic
                     }
                 },
-                shouldStartAnimation = { feedSection.type == feedSectionToUnlock?.feedSectionType },
+                shouldStartAnimation = { feedSection.type == feedSectionToUnlock?.type },
                 onAnimationFinished = onLockAnimationFinished
             )
         }
@@ -334,7 +334,7 @@ private fun UnlockedItems(
             UnlockedCard(recommendation, navigateToArticle)
         }
 
-        if (section.feedSection.state == FeedSectionState.PARTIALLY_UNLOCK) {
+        if (section.feedSection.state == FeedSectionState.PARTIALLY_UNLOCKED) {
             item {
                 PartiallyUnlockedCard {
                     section.feedSection.topic?.let { topic ->

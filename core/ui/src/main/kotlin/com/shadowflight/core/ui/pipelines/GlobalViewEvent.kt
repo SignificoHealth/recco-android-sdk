@@ -23,10 +23,10 @@ sealed class GlobalViewEvent(
         val navArgs: Bundle? = null
     ) : GlobalViewEvent()
 
-    data class FeedSectionUnlock(
+    data class FeedSectionToUnlock(
         val topic: Topic,
-        val feedSectionType: FeedSectionType,
-        val feedSectionState: FeedSectionState
+        val type: FeedSectionType,
+        val state: FeedSectionState
     ) : GlobalViewEvent()
 }
 

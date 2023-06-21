@@ -17,20 +17,20 @@ class FeedUIPreviewProvider :
                     sections = listOf(
                         FeedPreviewProvider.data(
                             type = FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS,
-                            state = FeedSectionState.UNLOCK
+                            state = FeedSectionState.UNLOCKED
                         ),
                         FeedPreviewProvider.data(
                             type = FeedSectionType.SLEEP_RECOMMENDATIONS,
-                            state = FeedSectionState.PARTIALLY_UNLOCK,
+                            state = FeedSectionState.PARTIALLY_UNLOCKED,
                             recommendationsSize = 1
                         ),
                         FeedPreviewProvider.data(
                             type = FeedSectionType.NUTRITION_EXPLORE,
-                            state = FeedSectionState.UNLOCK
+                            state = FeedSectionState.UNLOCKED
                         ),
                         FeedPreviewProvider.data(
                             type = FeedSectionType.SLEEP_RECOMMENDATIONS,
-                            state = FeedSectionState.UNLOCK
+                            state = FeedSectionState.UNLOCKED
                         )
                     )
                 )

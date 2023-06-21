@@ -9,9 +9,9 @@ import com.shadowflight.core.openapi.model.FeedSectionStateDTO
 internal fun FeedSectionDTO.asEntity() = FeedSection(
     type = type.asEntity(),
     state = when (state) {
-        FeedSectionStateDTO.LOCK -> FeedSectionState.LOCK
-        FeedSectionStateDTO.UNLOCK -> FeedSectionState.UNLOCK
-        FeedSectionStateDTO.PARTIALLY_UNLOCK -> FeedSectionState.PARTIALLY_UNLOCK
+        FeedSectionStateDTO.LOCK -> FeedSectionState.LOCKED
+        FeedSectionStateDTO.UNLOCK -> FeedSectionState.UNLOCKED
+        FeedSectionStateDTO.PARTIALLY_UNLOCK -> FeedSectionState.PARTIALLY_UNLOCKED
     },
     topic = topic?.asEntity()
 )

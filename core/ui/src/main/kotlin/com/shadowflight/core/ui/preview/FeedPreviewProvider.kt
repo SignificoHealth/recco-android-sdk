@@ -11,7 +11,7 @@ class FeedPreviewProvider {
     companion object {
         fun data(
             type: FeedSectionType,
-            state: FeedSectionState = FeedSectionState.LOCK,
+            state: FeedSectionState = FeedSectionState.LOCKED,
             recommendationsSize: Int = 10
         ) = FeedSectionAndRecommendations(
             recommendations = List(recommendationsSize) { RecommendationPreviewProvider.data },

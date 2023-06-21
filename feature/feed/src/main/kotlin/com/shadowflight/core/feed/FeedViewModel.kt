@@ -70,8 +70,8 @@ class FeedViewModel @Inject constructor(
                     data = _viewState.value.data?.copy(feedSectionToUnlock = null),
                 )
                 feedRepository.setFeedSectionState(
-                    feedSectionToUnlock.feedSectionType,
-                    feedSectionToUnlock.feedSectionState
+                    feedSectionToUnlock.type,
+                    feedSectionToUnlock.state
                 )
             }
         }
@@ -80,7 +80,7 @@ class FeedViewModel @Inject constructor(
     private fun setUpGlobalViewEvents() {
         viewModelScope.launch {
             globalViewEvents
-                .filterIsInstance<FeedSectionUnlock>()
+                .filterIsInstance<FeedSectionToUnlock>()
                 .collectLatest { feedSectionToUnlock ->
                     val data = _viewState.value.data ?: return@collectLatest
                     _viewState.value = _viewState.value.copy(
@@ -88,16 +88,16 @@ class FeedViewModel @Inject constructor(
                     )
 
                     val previousStateSection = data.sections
-                        .first { it.feedSection.type == feedSectionToUnlock.feedSectionType }
+                        .first { it.feedSection.type == feedSectionToUnlock.type }
                         .feedSection.state
 
                     // If previous state was already unlocked or partially unlocked we update its state right away
                     // as the animation for unlocking won't happen.
 
-                    if (previousStateSection == FeedSectionState.UNLOCK || previousStateSection == FeedSectionState.PARTIALLY_UNLOCK) {
+                    if (previousStateSection == FeedSectionState.UNLOCKED || previousStateSection == FeedSectionState.PARTIALLY_UNLOCKED) {
                         feedRepository.setFeedSectionState(
-                            feedSectionToUnlock.feedSectionType,
-                            feedSectionToUnlock.feedSectionState
+                            feedSectionToUnlock.type,
+                            feedSectionToUnlock.state
                         )
                     }
 
