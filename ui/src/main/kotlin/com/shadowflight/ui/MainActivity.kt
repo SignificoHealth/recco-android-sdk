@@ -5,7 +5,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.StartOffset
 import androidx.compose.animation.core.StartOffsetType
@@ -40,15 +40,14 @@ import com.shadowflight.core.ui.theme.AppTheme
 import com.shadowflight.ui.navigation.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val ANIM_DURATION_DOT = 1000
+private const val ANIM_DURATION = 1000
 private const val TOTAL_DOTS = 4
-private const val START_DELAY_DOT = ANIM_DURATION_DOT / TOTAL_DOTS
-private const val ANIM_DURATION = ANIM_DURATION_DOT - START_DELAY_DOT
+private const val START_DELAY_DOT = (ANIM_DURATION + (ANIM_DURATION / 1.5f)).toInt() / TOTAL_DOTS
 
-// Starting from the highest number, each number represent a dot in the screen.
+// Starting from the lowest number, each number represent a dot in the screen.
 private val DOTS_ANIM_SEQUENCE = listOf(
-    4, 3,
-    1, 2
+    0, 1,
+    3, 2
 )
 
 @AndroidEntryPoint
@@ -115,16 +114,16 @@ class MainActivity : AppCompatActivity() {
     private fun AnimatedDotIcon(delay: Int) {
         val infiniteTransition = rememberInfiniteTransition()
         val color by infiniteTransition.animateColor(
-            initialValue = AppTheme.colors.illustration,
-            targetValue = AppTheme.colors.illustration20,
+            initialValue = AppTheme.colors.illustration20,
+            targetValue = AppTheme.colors.illustration,
             animationSpec = infiniteRepeatable(
                 initialStartOffset = StartOffset(
                     offsetMillis = delay,
-                    offsetType = StartOffsetType.FastForward
+                    offsetType = StartOffsetType.Delay
                 ),
                 animation = tween(
                     durationMillis = ANIM_DURATION,
-                    easing = LinearEasing
+                    easing = FastOutLinearInEasing
                 ),
                 repeatMode = RepeatMode.Reverse,
             )
