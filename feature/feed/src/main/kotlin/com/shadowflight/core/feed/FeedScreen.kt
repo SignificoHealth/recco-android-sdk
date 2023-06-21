@@ -86,6 +86,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val LOCK_PLACEHOLDER_ELEMENTS = 5
+private val heightCard = 257.dp
+private val widthCard = 145.dp
 
 @Composable
 fun FeedRoute(
@@ -378,8 +380,8 @@ private fun QuestionnaireStartDialog(
 private fun UnlockedCard(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
     Card(
         modifier = Modifier
-            .height(257.dp)
-            .width(145.dp),
+            .height(heightCard)
+            .width(widthCard),
         elevation = AppTheme.elevation.card,
         onClick = { onClick(recommendation.id) }
     ) {
@@ -422,8 +424,8 @@ private fun PartiallyUnlockedCard(
 ) {
     Card(
         modifier = Modifier
-            .height(257.dp)
-            .width(145.dp),
+            .height(heightCard)
+            .width(widthCard),
         elevation = 0.dp,
         onClick = onClick,
         backgroundColor = AppTheme.colors.primary
@@ -469,8 +471,8 @@ private fun LockedCard(
 
     Card(
         modifier = Modifier
-            .height(257.dp)
-            .width(145.dp),
+            .height(heightCard)
+            .width(widthCard),
         elevation = 0.dp,
         onClick = onClick
     ) {

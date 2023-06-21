@@ -59,11 +59,11 @@ class FeedViewModel @Inject constructor(
         when (userInteract) {
             FeedUserInteract.Retry -> initialLoadOrRetry()
             FeedUserInteract.Refresh -> refresh()
-            FeedUserInteract.RefreshUnlockedFeedSection -> hideLoadingAndClearUnlockingState()
+            FeedUserInteract.RefreshUnlockedFeedSection -> updateFeedSectionState()
         }
     }
 
-    private fun hideLoadingAndClearUnlockingState() {
+    private fun updateFeedSectionState() {
         viewModelScope.launch {
             _viewState.value.data?.feedSectionToUnlock?.let { feedSectionToUnlock ->
                 _viewState.value = _viewState.value.copy(
@@ -92,8 +92,9 @@ class FeedViewModel @Inject constructor(
                         .feedSection.state
 
                     // If previous state was already unlocked or partially unlocked we update its state right away
-                    // as the animation for unlocking won't happen.
-
+                    // as the animation for unlocking won't happen. Therefore, the state of the feed won't get updated,
+                    // as the animation was doing that, that's why we need to update here the state for the feed for this
+                    // particular section to avoid showing the card Retake questionnaire.
                     if (previousStateSection == FeedSectionState.UNLOCKED || previousStateSection == FeedSectionState.PARTIALLY_UNLOCKED) {
                         feedRepository.setFeedSectionState(
                             feedSectionToUnlock.type,
