@@ -4,10 +4,33 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.StartOffset
+import androidx.compose.animation.core.StartOffsetType
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ui.Scaffold
@@ -16,6 +39,17 @@ import com.shadowflight.core.ui.components.AppTopBar
 import com.shadowflight.core.ui.theme.AppTheme
 import com.shadowflight.ui.navigation.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
+
+private const val ANIM_DURATION_DOT = 1000
+private const val TOTAL_DOTS = 4
+private const val START_DELAY_DOT = ANIM_DURATION_DOT / TOTAL_DOTS
+private const val ANIM_DURATION = ANIM_DURATION_DOT - START_DELAY_DOT
+
+// Starting from the highest number, each number represent a dot in the screen.
+private val DOTS_ANIM_SEQUENCE = listOf(
+    4, 3,
+    1, 2
+)
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -47,11 +81,61 @@ class MainActivity : AppCompatActivity() {
                             contentPadding = innerPadding,
                             uiState = uiState,
                             retry = { viewModel.onUserInteract(MainUserInteract.Retry) },
-                            content = {}
-                        )
+                            isEmpty = true,
+                            emptyContent = { LoadingContent() }
+                        ) {}
                     }
                 }
             }
         }
+    }
+
+    @Composable
+    private fun ColumnScope.LoadingContent() {
+        Box(
+            modifier = Modifier.Companion.weight(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                (0 until TOTAL_DOTS step 2).forEach {
+                    Row {
+                        AnimatedDotIcon(delay = START_DELAY_DOT * DOTS_ANIM_SEQUENCE[it])
+                        AnimatedDotIcon(delay = START_DELAY_DOT * DOTS_ANIM_SEQUENCE[it + 1])
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun AnimatedDotIcon(delay: Int) {
+        val infiniteTransition = rememberInfiniteTransition()
+        val color by infiniteTransition.animateColor(
+            initialValue = AppTheme.colors.illustration,
+            targetValue = AppTheme.colors.illustration20,
+            animationSpec = infiniteRepeatable(
+                initialStartOffset = StartOffset(
+                    offsetMillis = delay,
+                    offsetType = StartOffsetType.FastForward
+                ),
+                animation = tween(
+                    durationMillis = ANIM_DURATION,
+                    easing = LinearEasing
+                ),
+                repeatMode = RepeatMode.Reverse,
+            )
+        )
+
+        Box(
+            modifier = Modifier
+                .padding(4.dp)
+                .size(28.dp)
+                .clip(CircleShape)
+                .background(color)
+        )
     }
 }
