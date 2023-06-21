@@ -510,7 +510,7 @@ private fun AppLockIcon(
     onAnimationFinished: () -> Unit,
 ) {
     val transformationRotateSpec = tween<Float>(
-        durationMillis = 500,
+        durationMillis = 300,
         easing = FastOutSlowInEasing,
     )
     val transformationBounceSpecEnter = tween<Float>(
@@ -533,7 +533,7 @@ private fun AppLockIcon(
         LaunchedEffect(Unit) {
             coroutineScope {
                 launch {
-                    delay(300)
+                    delay(500)
                     animate(
                         initialValue = rotateStart,
                         targetValue = rotateEnd,
