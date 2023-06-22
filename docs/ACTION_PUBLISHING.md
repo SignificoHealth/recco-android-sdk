@@ -1,11 +1,11 @@
-# SHADOWFLIGHT GITHUB ACTION PACKAGES PUBLISHING
+# RECCO GITHUB ACTION PACKAGES PUBLISHING
 
-This document aims to explain Shadowflight SDK publishing process using Github Actions.
+This document aims to explain Recco SDK publishing process using Github Actions.
 
 ## How It Works
 
-The following .yml [file](https://github.com/viluahealthcare/android-shadowflight-sdk/blob/feature/SHAD-142/.github/workflows/android-shadowflight-sdk_prod.yml) is included inside the workflows folder,
-so a pipeline is generated to deal with Shadowflight SDK publishing process.
+The following .yml [file](https://github.com/viluahealthcare/android-shadowflight-sdk/blob/feature/SHAD-142/.github/workflows/android-recco-sdk_prod.yml) is included inside the workflows folder,
+so a pipeline is generated to deal with Recco SDK publishing process.
 
 ## Triggers
 
@@ -17,7 +17,7 @@ This pipeline currently is made from the following steps.
 
 ### Checkout
 
-Once Github Runner is in place, workspace will checkout to Shadowflight repository.
+Once Github Runner is in place, workspace will checkout to Recco repository.
 
 [Checkout action reference](https://github.com/actions/checkout)
 

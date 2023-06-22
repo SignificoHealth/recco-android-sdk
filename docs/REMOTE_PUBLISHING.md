@@ -1,6 +1,6 @@
-# SHADOWFLIGHT REMOTE GITHUB PACKAGES PUBLISHING
+# RECCO REMOTE GITHUB PACKAGES PUBLISHING
 
-This document aims to explain Shadowflight SDK publishing process using Github Packages Registry.
+This document aims to explain Recco SDK publishing process using Github Packages Registry.
 
 ## How It Works
 
@@ -14,7 +14,7 @@ Couple of Gradle Tasks are now generated both for project and module level, thes
 
   ```groovy
   # Convention configuration
-  moduleArtifactId=shadowflight-ui
+  moduleArtifactId=recco-ui
   ```
 
 - Project level gradle.properties file:
@@ -31,7 +31,7 @@ Make sure these files contain the information you expect your publications to at
 
 ## Tasks
 
-In order for Shadowflight SDK to be published to Github Repository Registry, you should focus on the following project level task:
+In order for Recco SDK to be published to Github Repository Registry, you should focus on the following project level task:
 
 - **publishReleasePublicationToGithubPackagesRepository:**
 
@@ -107,6 +107,6 @@ repositories {
 Then, include the dependencies in your module level build.gradle file and sync again.
 
 ```kotlin
-  implementation("com.significo:shadowflight-ui:0.0.1")
-  implementation("com.significo:shadowflight-headless:0.0.1")
+  implementation("com.significo:recco-ui:0.0.1")
+  implementation("com.significo:recco-headless:0.0.1")
 ```
