@@ -19,7 +19,7 @@ class AuthCredentials @Inject constructor(
 
     private val prefs by lazy {
         EncryptedSharedPreferences.create(
-            "${sdkConfig.appName}_shadowflight_sdk.PREFS",
+            "${sdkConfig.appName}_recco_sdk.PREFS",
             MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
             context,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
