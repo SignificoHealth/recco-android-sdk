@@ -106,7 +106,7 @@ class ArticleViewModel @Inject constructor(
                 logger.e(it)
                 globalViewEvents.emit(
                     GlobalViewEvent.ShowToast(
-                        titleRes = R.string.common_error_desc,
+                        titleRes = R.string.recco_common_error_desc,
                         type = ToastMessageType.Error
                     )
                 )
@@ -167,7 +167,7 @@ class ArticleViewModel @Inject constructor(
                 logger.e(it)
                 globalViewEvents.emit(
                     GlobalViewEvent.ShowToast(
-                        titleRes = R.string.common_error_desc,
+                        titleRes = R.string.recco_common_error_desc,
                         type = ToastMessageType.Error
                     )
                 )

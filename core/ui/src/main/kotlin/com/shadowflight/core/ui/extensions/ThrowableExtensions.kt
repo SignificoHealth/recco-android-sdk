@@ -11,22 +11,22 @@ import com.shadowflight.core.ui.components.AppTintedImageNoConnection
 
 @StringRes
 fun Throwable?.asTitleRes(): Int = when (this) {
-    is NoConnectException -> R.string.no_network_connection_error_title
-    else -> R.string.common_error_title
+    is NoConnectException -> R.string.recco_no_network_connection_error_title
+    else -> R.string.recco_common_error_title
 }
 
 @StringRes
 fun Throwable?.asDescriptionRes(): Int = when (this) {
-    is NoConnectException -> R.string.no_network_connection_error_desc
+    is NoConnectException -> R.string.recco_no_network_connection_error_desc
     is ServiceUnavailableException,
-    is InternalServerErrorException -> R.string.server_error
-    else -> R.string.common_error_desc
+    is InternalServerErrorException -> R.string.recco_server_error
+    else -> R.string.recco_common_error_desc
 }
 
 @StringRes
 fun Throwable?.asCtaTextRes(): Int = when (this) {
-    is NoConnectException -> R.string.retry
-    else -> R.string.retry
+    is NoConnectException -> R.string.recco_retry
+    else -> R.string.recco_retry
 }
 
 @DrawableRes

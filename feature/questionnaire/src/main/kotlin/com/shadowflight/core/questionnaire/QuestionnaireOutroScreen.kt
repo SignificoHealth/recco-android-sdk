@@ -40,8 +40,8 @@ internal fun QuestionnaireOnboardingOutroRoute(
 ) {
     QuestionnaireOnboardingOutroScreen(
         imageId = R.drawable.ic_portrait_2,
-        titleTextId = R.string.onboarding_outro_title,
-        bodyTextId = R.string.onboarding_outro_body,
+        titleTextId = R.string.recco_onboarding_outro_title,
+        bodyTextId = R.string.recco_onboarding_outro_body,
         navigateToOutro = navigateToFeed,
     )
 }
@@ -73,7 +73,7 @@ private fun QuestionnaireOnboardingOutroScreen(
         },
         bottomBar = {
             AppPrimaryButton(
-                text = stringResource(R.string.go_to_dashboard),
+                text = stringResource(R.string.recco_go_to_dashboard),
                 onClick = navigateToOutro,
                 modifier = modifier
                     .padding(horizontal = AppSpacing.dp_24)
@@ -134,8 +134,8 @@ private fun QuestionnaireOnboardingOutroScreen(
 private fun OutroPreview() {
     QuestionnaireOnboardingOutroScreen(
         imageId = R.drawable.ic_portrait_2,
-        titleTextId = R.string.onboarding_outro_title,
-        bodyTextId = R.string.onboarding_outro_body,
+        titleTextId = R.string.recco_onboarding_outro_title,
+        bodyTextId = R.string.recco_onboarding_outro_body,
         navigateToOutro = {},
     )
 }

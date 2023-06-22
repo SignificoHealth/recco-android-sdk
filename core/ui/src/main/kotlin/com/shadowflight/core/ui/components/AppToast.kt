@@ -27,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.shadowflight.core.ui.R
 import com.shadowflight.core.ui.extensions.noRippleClickable
@@ -117,7 +116,7 @@ fun ToastContent(
                 Spacer(modifier = Modifier.height(AppSpacing.dp_8))
 
                 Text(
-                    text = data.actionLabel ?: stringResource(R.string.common_error_desc),
+                    text = data.actionLabel ?: stringResource(R.string.recco_common_error_desc),
                     style = subtitleStyle
                 )
             }

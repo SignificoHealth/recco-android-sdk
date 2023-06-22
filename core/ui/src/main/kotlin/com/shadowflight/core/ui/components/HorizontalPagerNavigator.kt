@@ -7,14 +7,11 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -49,9 +46,9 @@ fun HorizontalPagerNavigation(
         val isLast = pagerState.currentPage == pageCount.dec()
 
         val buttonText = if (isLast) {
-            stringResource(id = R.string.onboarding_button_start)
+            stringResource(id = R.string.recco_onboarding_button_start)
         } else {
-            stringResource(id = R.string.onboarding_button_next)
+            stringResource(id = R.string.recco_onboarding_button_next)
         }
 
         val buttonAction = if (!isLast) {

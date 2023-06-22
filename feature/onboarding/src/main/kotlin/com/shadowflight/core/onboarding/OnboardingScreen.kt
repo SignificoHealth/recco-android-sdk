@@ -25,12 +25,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.ui.Scaffold
 import com.shadowflight.core.ui.R.drawable
 import com.shadowflight.core.ui.R.string
@@ -61,22 +59,22 @@ fun OnboardingScreen(
     val pages = listOf<@Composable (PaddingValues) -> Unit>({
         OnboardingPage(
             imageId = drawable.ic_flying,
-            titleTextId = string.onboarding_welcome_title,
-            bodyTextId = string.onboarding_welcome_body,
+            titleTextId = string.recco_onboarding_welcome_title,
+            bodyTextId = string.recco_onboarding_welcome_body,
             contentPadding = it
         )
     }, {
         OnboardingPage(
             imageId = drawable.ic_content,
-            titleTextId = string.onboarding_content_title,
-            bodyTextId = string.onboarding_content_body,
+            titleTextId = string.recco_onboarding_content_title,
+            bodyTextId = string.recco_onboarding_content_body,
             contentPadding = it
         )
     }, {
         OnboardingPage(
             imageId = drawable.ic_portrait_2,
-            titleTextId = string.onboarding_about_title,
-            bodyTextId = string.onboarding_about_body,
+            titleTextId = string.recco_onboarding_about_title,
+            bodyTextId = string.recco_onboarding_about_body,
             contentPadding = it
         )
     })
