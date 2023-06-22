@@ -20,6 +20,7 @@ fun QuestionnaireFooterContent(
     showBack: Boolean,
     nextEnabled: Boolean,
     isLastPage: Boolean,
+    isOnboarding: Boolean,
     isQuestionnaireSubmitLoading: Boolean,
     onBackClicked: () -> Unit,
     onNextClicked: () -> Unit
@@ -50,7 +51,7 @@ fun QuestionnaireFooterContent(
             enabled = nextEnabled,
             onClick = onNextClicked,
             isLoading = isQuestionnaireSubmitLoading,
-            text = stringResource(if (isLastPage) R.string.finish else R.string.next)
+            text = stringResource(if (isLastPage && !isOnboarding) R.string.finish else R.string.next)
         )
     }
 }
@@ -63,6 +64,7 @@ private fun Preview() {
         showBack = true,
         nextEnabled = true,
         isLastPage = false,
+        isOnboarding = false,
         isQuestionnaireSubmitLoading = false,
         onBackClicked = { },
         onNextClicked = {}
@@ -77,6 +79,7 @@ private fun PreviewSubmitting() {
         showBack = true,
         nextEnabled = true,
         isLastPage = true,
+        isOnboarding = false,
         isQuestionnaireSubmitLoading = true,
         onBackClicked = { },
         onNextClicked = {}
@@ -92,9 +95,11 @@ private fun PreviewNoBack() {
         showBack = false,
         nextEnabled = true,
         isLastPage = false,
+        isOnboarding = false,
         isQuestionnaireSubmitLoading = false,
         onBackClicked = { },
-        onNextClicked = {})
+        onNextClicked = {}
+    )
 }
 
 @Preview
@@ -105,7 +110,24 @@ private fun PreviewLastPage() {
         showBack = true,
         nextEnabled = true,
         isLastPage = true,
+        isOnboarding = false,
         isQuestionnaireSubmitLoading = false,
         onBackClicked = { },
-        onNextClicked = {})
+        onNextClicked = {}
+    )
+}
+
+@Preview
+@Composable
+private fun PreviewLastOnboardingPage() {
+    QuestionnaireFooterContent(
+        modifier = Modifier,
+        showBack = true,
+        nextEnabled = true,
+        isLastPage = true,
+        isOnboarding = true,
+        isQuestionnaireSubmitLoading = false,
+        onBackClicked = { },
+        onNextClicked = {}
+    )
 }

@@ -13,6 +13,7 @@ import com.shadowflight.core.model.recommendation.User
 import com.shadowflight.core.onboarding.navigation.OnboardingGraph
 import com.shadowflight.core.onboarding.navigation.onboardingGraph
 import com.shadowflight.core.questionnaire.navigation.navigateToOnboardingQuestionnaire
+import com.shadowflight.core.questionnaire.navigation.navigateToOnboardingQuestionnaireOutro
 import com.shadowflight.core.questionnaire.navigation.navigateToTopicQuestionnaire
 import com.shadowflight.core.questionnaire.navigation.questionnaireGraph
 
@@ -39,7 +40,8 @@ fun AppNavHost(
         questionnaireGraph(
             isOnboardingQuestionnaireCompleted = user.isOnboardingQuestionnaireCompleted,
             navigateUp = navController::navigateUp,
-            navigateToFeed = navController::navigateToFeed
+            navigateToFeed = navController::navigateToFeed,
+            navigateToOutro = navController::navigateToOnboardingQuestionnaireOutro
         )
     }
 }

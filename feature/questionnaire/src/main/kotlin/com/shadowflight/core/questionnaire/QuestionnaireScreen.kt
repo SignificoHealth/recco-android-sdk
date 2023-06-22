@@ -66,7 +66,7 @@ internal fun QuestionnaireRoute(
     topic: Topic?,
     feedSectionType: FeedSectionType?,
     navigateUp: () -> Unit,
-    navigateToFeed: () -> Unit,
+    navigateToOutro: () -> Unit,
     viewModel: QuestionnaireViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
@@ -77,7 +77,7 @@ internal fun QuestionnaireRoute(
         uiState = uiState,
         onUserInteract = { viewModel.onUserInteract(it) },
         navigateUp = navigateUp,
-        navigateToFeed = navigateToFeed,
+        navigateToOutro = navigateToOutro,
         viewEvents = viewModel.viewEvents
     )
 }
@@ -90,7 +90,7 @@ fun QuestionnaireScreen(
     viewEvents: Flow<QuestionnaireViewEvent>,
     onUserInteract: (QuestionnaireUserInteract) -> Unit,
     navigateUp: () -> Unit,
-    navigateToFeed: () -> Unit,
+    navigateToOutro: () -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues(),
 ) {
     val pagerState = rememberPagerState()
@@ -100,7 +100,7 @@ fun QuestionnaireScreen(
         viewEvents.collectLatest { event ->
             when (event) {
                 QuestionnaireSubmitted -> navigateUp()
-                QuestionnaireOnboardingSubmitted -> navigateToFeed()
+                QuestionnaireOnboardingSubmitted -> navigateToOutro()
                 is ScrollTo -> {
                     focusManager.clearFocus()
                     pagerState.scrollToPage(event.page)
@@ -108,7 +108,6 @@ fun QuestionnaireScreen(
             }
         }
     }
-
 
     Scaffold(
         topBar = {
@@ -168,6 +167,7 @@ fun QuestionnaireScreen(
                     showBack = data.showBack,
                     nextEnabled = data.isNextEnabled,
                     isLastPage = data.isLastPage,
+                    isOnboarding = topic == null,
                     isQuestionnaireSubmitLoading = data.isQuestionnaireSubmitLoading,
                     onBackClicked = { onUserInteract(BackClicked) },
                     onNextClicked = { onUserInteract(NextClicked) }
@@ -290,7 +290,7 @@ private fun Preview(
         topic = Topic.NUTRITION,
         uiState = uiState,
         navigateUp = {},
-        navigateToFeed = {},
+        navigateToOutro = {},
         onUserInteract = {},
         viewEvents = flow { }
     )

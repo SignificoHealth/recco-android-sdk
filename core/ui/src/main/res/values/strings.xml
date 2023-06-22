@@ -31,6 +31,7 @@
     <string name="next">Continue</string>
     <string name="finish">Finish</string>
     <string name="about_you">About you</string>
+    <string name="go_to_dashboard">Go to Dashboard</string>
 
     <!-- Questionnaire topics starting dialogs  -->
     <string name="physical_activity_explanation">Some physical activity explanation</string>
@@ -48,4 +49,6 @@
     <string name="onboarding_content_body">We´ll give you health advice, recipes, and exercise to help you live your life at it’s fullest.\n\nWe’ll give you some questions to fine-tune the content you want to see</string>
     <string name="onboarding_about_title">About you</string>
     <string name="onboarding_about_body">Who are you? What are your health interests? What’s your health status?\n\nWe want to know you!</string>
+    <string name="onboarding_outro_title">Great! Glad to get to know you better!</string>
+    <string name="onboarding_outro_body">Now let’s see what we have for you</string>
 </resources>

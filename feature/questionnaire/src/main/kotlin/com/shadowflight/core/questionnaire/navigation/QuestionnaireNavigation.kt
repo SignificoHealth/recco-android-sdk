@@ -8,6 +8,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.shadowflight.core.model.feed.FeedSectionType
 import com.shadowflight.core.model.feed.Topic
+import com.shadowflight.core.questionnaire.QuestionnaireOnboardingOutroRoute
 import com.shadowflight.core.questionnaire.QuestionnaireRoute
 import com.shadowflight.core.ui.extensions.asSerializable
 
@@ -16,11 +17,13 @@ internal const val feedSectionTypeArg = "feedSectionType"
 const val QuestionnaireGraph = "questionnaire_graph"
 private const val QuestionnaireRoute = "questionnaire/{$topicArg}/{$feedSectionTypeArg}"
 private const val QuestionnaireOnboardingRoute = "questionnaire_onboarding"
+private const val QuestionnaireOnboardingOutroRoute = "questionnaire_onboarding_outro"
 
 fun NavGraphBuilder.questionnaireGraph(
     isOnboardingQuestionnaireCompleted: Boolean,
     navigateUp: () -> Unit,
-    navigateToFeed: () -> Unit
+    navigateToFeed: () -> Unit,
+    navigateToOutro: () -> Unit
 ) {
     navigation(
         route = QuestionnaireGraph,
@@ -47,7 +50,7 @@ fun NavGraphBuilder.questionnaireGraph(
                     backStackEntry.arguments?.asSerializable(feedSectionTypeArg)
                 ),
                 navigateUp = navigateUp,
-                navigateToFeed = navigateToFeed
+                navigateToOutro = navigateToOutro
             )
         }
         composable(
@@ -57,6 +60,14 @@ fun NavGraphBuilder.questionnaireGraph(
                 topic = null,
                 feedSectionType = null,
                 navigateUp = navigateUp,
+                navigateToOutro = navigateToOutro
+            )
+        }
+
+        composable(
+            route = QuestionnaireOnboardingOutroRoute
+        ) {
+            QuestionnaireOnboardingOutroRoute(
                 navigateToFeed = navigateToFeed
             )
         }
@@ -80,6 +91,12 @@ fun NavController.navigateToTopicQuestionnaire(
 
 fun NavController.navigateToOnboardingQuestionnaire() {
     navigate(QuestionnaireOnboardingRoute) {
+        popUpTo(0)
+    }
+}
+
+fun NavController.navigateToOnboardingQuestionnaireOutro() {
+    navigate(QuestionnaireOnboardingOutroRoute) {
         popUpTo(0)
     }
 }
