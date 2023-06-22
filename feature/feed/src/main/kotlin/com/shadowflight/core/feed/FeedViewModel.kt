@@ -18,10 +18,11 @@ import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_EXPLORE
 import com.shadowflight.core.model.feed.FeedSectionType.SLEEP_RECOMMENDATIONS
 import com.shadowflight.core.model.feed.FeedSectionType.STARTING_RECOMMENDATIONS
 import com.shadowflight.core.repository.FeedRepository
+import com.shadowflight.core.repository.MetricRepository
 import com.shadowflight.core.repository.RecommendationRepository
 import com.shadowflight.core.ui.components.UiState
 import com.shadowflight.core.ui.extensions.combine
-import com.shadowflight.core.ui.pipelines.GlobalViewEvent.*
+import com.shadowflight.core.ui.pipelines.GlobalViewEvent.FeedSectionToUnlock
 import com.shadowflight.core.ui.pipelines.globalViewEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,6 +42,7 @@ import kotlin.time.Duration.Companion.seconds
 class FeedViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val recommendationRepository: RecommendationRepository,
+    private val metricsRepository: MetricRepository,
     private val logger: Logger
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(UiState<FeedUI>())
@@ -51,6 +53,7 @@ class FeedViewModel @Inject constructor(
     )
 
     init {
+        metricsRepository.openDashboard()
         setUpGlobalViewEvents()
         initialLoadOrRetry()
     }

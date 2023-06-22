@@ -7,10 +7,12 @@ src/main/kotlin/com/shadowflight/core/openapi/api/RecommendationApi.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/ApiErrorDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/AppUserArticleDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/AppUserDTO.kt
+src/main/kotlin/com/shadowflight/core/openapi/model/AppUserMetricActionDTO.kt
+src/main/kotlin/com/shadowflight/core/openapi/model/AppUserMetricCategoryDTO.kt
+src/main/kotlin/com/shadowflight/core/openapi/model/AppUserMetricEventDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/AppUserRecommendationDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/ContentIdDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/ContentTypeDTO.kt
-src/main/kotlin/com/shadowflight/core/openapi/model/CreateMetricSessionDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/CreateQuestionnaireAnswerDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/FeedSectionDTO.kt
 src/main/kotlin/com/shadowflight/core/openapi/model/FeedSectionStateDTO.kt

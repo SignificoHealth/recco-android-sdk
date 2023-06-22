@@ -18,32 +18,20 @@ import retrofit2.Response
 import okhttp3.RequestBody
 import com.squareup.moshi.Json
 import com.shadowflight.core.openapi.model.ApiErrorDTO
-import com.shadowflight.core.openapi.model.CreateMetricSessionDTO
+import com.shadowflight.core.openapi.model.AppUserMetricEventDTO
 
 interface MetricApi {
 
     /**
-     * Log session login event.
+     * Log event.
      * 
      * Responses:
      *  - 401: Unauthorized
      *  - 204: No Content
      *
+     * @param appUserMetricEventDTO 
      * @return [Unit]
      */
-    @POST("api/v1/me/metric/login")
-    suspend fun loginEvent(): Response<Unit>
-
-    /**
-     * Log session duration event.
-     * 
-     * Responses:
-     *  - 401: Unauthorized
-     *  - 204: No Content
-     *
-     * @param createMetricSessionDTO 
-     * @return [Unit]
-     */
-    @POST("api/v1/me/metric/session")
-    suspend fun sessionEvent(@Body createMetricSessionDTO: CreateMetricSessionDTO): Response<Unit>
+    @POST("api/v1/me/metric")
+    suspend fun logEvent(@Body appUserMetricEventDTO: AppUserMetricEventDTO): Response<Unit>
 }
