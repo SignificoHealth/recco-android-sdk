@@ -26,23 +26,23 @@ dependencies {
 gradlePlugin {
     plugins {
         register("androidHilt") {
-            id = "shadowflight.android.hilt"
+            id = "recco.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
         register("androidFeature") {
-            id = "shadowflight.android.feature"
+            id = "recco.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("androidLibrary") {
-            id = "shadowflight.android.library"
+            id = "recco.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidLibraryCompose") {
-            id = "shadowflight.android.library.compose"
+            id = "recco.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
         register("mavenPublish") {
-            id = "shadowflight.android.maven.publish"
+            id = "recco.android.maven.publish"
             implementationClass = "MavenPublishConventionPlugin"
         }
     }

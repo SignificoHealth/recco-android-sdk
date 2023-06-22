@@ -14,7 +14,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             pluginManager.apply {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
-                apply("shadowflight.android.maven.publish")
+                apply("recco.android.maven.publish")
             }
 
             extensions.configure<LibraryExtension> {
