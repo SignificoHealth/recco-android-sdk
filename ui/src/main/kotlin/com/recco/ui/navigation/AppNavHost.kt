@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.recco.bookmark.navigation.bookmarkGraph
+import com.recco.bookmark.navigation.navigateToBookmarks
 import com.recco.core.article.navigation.articleGraph
 import com.recco.core.article.navigation.navigateToArticle
 import com.recco.core.feed.navigation.FeedGraph
@@ -34,7 +36,8 @@ fun AppNavHost(
         onboardingGraph(navigateToQuestionnaire = navController::navigateToOnboardingQuestionnaire)
         feedGraph(
             navigateToArticle = navController::navigateToArticle,
-            navigateToQuestionnaire = navController::navigateToTopicQuestionnaire
+            navigateToQuestionnaire = navController::navigateToTopicQuestionnaire,
+            navigateToBookmarks = navController::navigateToBookmarks
         )
         articleGraph(navigateUp = navController::navigateUp)
         questionnaireGraph(
@@ -42,6 +45,10 @@ fun AppNavHost(
             navigateUp = navController::navigateUp,
             navigateToFeed = navController::navigateToFeed,
             navigateToOutro = navController::navigateToOnboardingQuestionnaireOutro
+        )
+        bookmarkGraph(
+            navigateToArticle = navController::navigateToArticle,
+            navigateUp = navController::navigateUp
         )
     }
 }

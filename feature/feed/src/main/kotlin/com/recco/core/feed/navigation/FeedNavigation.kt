@@ -15,13 +15,14 @@ const val FeedRoute = "feed"
 fun NavGraphBuilder.feedGraph(
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
+    navigateToBookmarks: () -> Unit
 ) {
     navigation(
         route = FeedGraph,
         startDestination = FeedRoute
     ) {
         composable(route = FeedRoute) {
-            FeedRoute(navigateToArticle, navigateToQuestionnaire)
+            FeedRoute(navigateToArticle, navigateToQuestionnaire, navigateToBookmarks)
         }
     }
 }

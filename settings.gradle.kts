@@ -48,6 +48,7 @@ include(
     ":ui",
     //":headless",
     ":showcase",
+    ":core:base",
     ":core:logger",
     ":core:openapi",
     ":core:network",
@@ -59,5 +60,5 @@ include(
     ":feature:feed",
     ":feature:article",
     ":feature:onboarding",
+    ":feature:bookmark"
 )
-include(":core:base")

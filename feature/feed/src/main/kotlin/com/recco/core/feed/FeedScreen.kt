@@ -11,6 +11,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +51,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -63,22 +63,20 @@ import com.recco.core.model.feed.FeedSectionState
 import com.recco.core.model.feed.FeedSectionType
 import com.recco.core.model.feed.Topic
 import com.recco.core.model.recommendation.ContentId
-import com.recco.core.model.recommendation.Recommendation
-import com.recco.core.model.recommendation.Status
 import com.recco.core.ui.R
 import com.recco.core.ui.components.AppAlertDialog
-import com.recco.core.ui.components.AppAsyncImage
 import com.recco.core.ui.components.AppEmptyContent
+import com.recco.core.ui.components.AppRecommendationCard
 import com.recco.core.ui.components.AppScreenStateAware
 import com.recco.core.ui.components.AppTintedImagePeopleDigital
 import com.recco.core.ui.components.AppTintedImagePottedPlant2
 import com.recco.core.ui.components.AppTopBar
 import com.recco.core.ui.components.EmptyState
 import com.recco.core.ui.components.UiState
-import com.recco.core.ui.components.loadingCardAnimationDrawable
+import com.recco.core.ui.components.heightRecommendationCard
+import com.recco.core.ui.components.widthRecommendationCard
 import com.recco.core.ui.extensions.asResExplanation
 import com.recco.core.ui.extensions.asResTitle
-import com.recco.core.ui.extensions.viewedOverlay
 import com.recco.core.ui.pipelines.GlobalViewEvent
 import com.recco.core.ui.theme.AppSpacing
 import com.recco.core.ui.theme.AppTheme
@@ -87,13 +85,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val LOCK_PLACEHOLDER_ELEMENTS = 5
-private val heightCard = 257.dp
-private val widthCard = 145.dp
 
 @Composable
 fun FeedRoute(
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
+    navigateToBookmarks: () -> Unit,
     viewModel: FeedViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle()
@@ -101,6 +98,7 @@ fun FeedRoute(
         uiState = uiState,
         onUserInteract = { viewModel.onUserInteract(it) },
         navigateToQuestionnaire = navigateToQuestionnaire,
+        navigateToBookmarks = navigateToBookmarks,
         navigateToArticle = navigateToArticle
     )
 }
@@ -111,6 +109,7 @@ private fun FeedScreen(
     onUserInteract: (FeedUserInteract) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
+    navigateToBookmarks: () -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
     val scrollState = rememberScrollState()
@@ -143,13 +142,14 @@ private fun FeedScreen(
             },
             loadingHeaderContent = {
                 Spacer(Modifier.height(AppSpacing.dp_40))
-                FeedHeader()
+                FeedHeader(navigateToBookmarks)
                 Spacer(Modifier.height(AppSpacing.dp_40))
             }
         ) { data ->
             FeedContent(
                 feedUI = data,
                 navigateToArticle = navigateToArticle,
+                navigateToBookmarks = navigateToBookmarks,
                 navigateToQuestionnaire = { topic, feedSectionType ->
                     navigateToQuestionnaire(topic, feedSectionType)
                 },
@@ -166,6 +166,7 @@ private fun FeedContent(
     feedUI: FeedUI,
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
+    navigateToBookmarks: () -> Unit,
     onLockAnimationFinished: () -> Unit,
 ) {
     Column(
@@ -174,7 +175,7 @@ private fun FeedContent(
             .background(AppTheme.colors.background)
     ) {
         Spacer(Modifier.height(AppSpacing.dp_40))
-        FeedHeader()
+        FeedHeader(navigateToBookmarks)
         Spacer(Modifier.height(AppSpacing.dp_40))
 
         feedUI.sections.forEach { section ->
@@ -191,7 +192,9 @@ private fun FeedContent(
 }
 
 @Composable
-private fun FeedHeader() {
+private fun FeedHeader(
+    navigateToBookmarks: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -202,6 +205,14 @@ private fun FeedHeader() {
                     .weight(1f)
                     .padding(start = AppSpacing.dp_24, end = AppSpacing.dp_12)
             ) {
+                Icon(
+                    modifier = Modifier.clickable { navigateToBookmarks() },
+                    painter = painterResource(id = R.drawable.ic_bookmark_filled),
+                    tint = AppTheme.colors.accent,
+                    contentDescription = null,
+                )
+                Spacer(Modifier.height(AppSpacing.dp_16))
+
                 Text(
                     text = stringResource(R.string.recco_welcome_back),
                     style = AppTheme.typography.h1
@@ -334,7 +345,7 @@ private fun UnlockedItems(
             items = section.recommendations,
             key = { item -> item.id.itemId }
         ) { recommendation ->
-            UnlockedCard(recommendation, navigateToArticle)
+            AppRecommendationCard(recommendation, navigateToArticle)
         }
 
         if (section.feedSection.state == FeedSectionState.PARTIALLY_UNLOCKED) {
@@ -376,49 +387,6 @@ private fun QuestionnaireStartDialog(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun UnlockedCard(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
-    Card(
-        modifier = Modifier
-            .height(heightCard)
-            .width(widthCard),
-        elevation = AppTheme.elevation.card,
-        onClick = { onClick(recommendation.id) }
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            AppAsyncImage(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .run {
-                        if (recommendation.status == Status.VIEWED) {
-                            viewedOverlay(AppTheme.colors.background)
-                        } else {
-                            this
-                        }
-                    },
-                data = recommendation.imageUrl,
-                contentScale = ContentScale.Crop,
-                loadingAnimationDrawable = loadingCardAnimationDrawable()
-            )
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(AppTheme.colors.background)
-                    .padding(AppSpacing.dp_12)
-                    .align(Alignment.BottomCenter),
-                text = recommendation.headline,
-                style = AppTheme.typography.body3,
-                minLines = 2,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -427,8 +395,8 @@ private fun PartiallyUnlockedCard(
 ) {
     Card(
         modifier = Modifier
-            .height(heightCard)
-            .width(widthCard),
+            .height(heightRecommendationCard)
+            .width(widthRecommendationCard),
         elevation = 0.dp,
         onClick = onClick,
         backgroundColor = AppTheme.colors.primary
@@ -474,8 +442,8 @@ private fun LockedCard(
 
     Card(
         modifier = Modifier
-            .height(heightCard)
-            .width(widthCard),
+            .height(heightRecommendationCard)
+            .width(widthRecommendationCard),
         elevation = 0.dp,
         onClick = onClick
     ) {
@@ -589,5 +557,6 @@ private fun Preview(
         onUserInteract = {},
         navigateToQuestionnaire = { _, _ -> },
         navigateToArticle = {},
+        navigateToBookmarks = {}
     )
 }

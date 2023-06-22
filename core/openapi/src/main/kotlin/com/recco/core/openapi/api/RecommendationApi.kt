@@ -55,6 +55,18 @@ interface RecommendationApi {
     suspend fun getArticle(@Query("itemId") itemId: kotlin.String, @Query("catalogId") catalogId: kotlin.String): Response<AppUserArticleDTO>
 
     /**
+     * A list of bookmarked recommendations.
+     * 
+     * Responses:
+     *  - 401: Unauthorized
+     *  - 200: OK
+     *
+     * @return [kotlin.collections.List<AppUserRecommendationDTO>]
+     */
+    @GET("api/v1/me/recommendations/bookmarked")
+    suspend fun getBookmarkedRecommendations(): Response<kotlin.collections.List<AppUserRecommendationDTO>>
+
+    /**
      * A list of most popular content.
      * 
      * Responses:

@@ -678,6 +678,45 @@
         ]
       }
     },
+    "/api/v1/me/recommendations/bookmarked": {
+      "get": {
+        "tags": [
+          "Recommendation"
+        ],
+        "summary": "A list of bookmarked recommendations.",
+        "operationId": "getBookmarkedRecommendations",
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AppUserRecommendation"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/v1/me/recommendations/articles": {
       "get": {
         "tags": [
