@@ -44,7 +44,7 @@
     <string name="recco_onboarding_button_next">Next</string>
     <string name="recco_onboarding_button_start">Start</string>
     <string name="recco_onboarding_welcome_title">Well hello there!</string>
-    <string name="recco_onboarding_welcome_body">Welcome to Shadowflight.\n\nWe’ll give you customized health advice for a better life.\n\nAll advice will be stored here. Come back every time you want!</string>
+    <string name="recco_onboarding_welcome_body">Welcome to Recco.\n\nWe’ll give you customized health advice for a better life.\n\nAll advice will be stored here. Come back every time you want!</string>
     <string name="recco_onboarding_content_title">Cool content</string>
     <string name="recco_onboarding_content_body">We´ll give you health advice, recipes, and exercise to help you live your life at it’s fullest.\n\nWe’ll give you some questions to fine-tune the content you want to see</string>
     <string name="recco_onboarding_about_title">About you</string>
