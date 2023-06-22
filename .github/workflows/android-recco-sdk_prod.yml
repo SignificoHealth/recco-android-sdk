@@ -1,5 +1,5 @@
 ---
-name: android-shadowflight-sdk_prod
+name: android-recco-sdk_prod
 on:
   push:
     tags: ["*"]
