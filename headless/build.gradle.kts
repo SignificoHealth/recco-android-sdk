@@ -1,9 +1,9 @@
 plugins {
-    id("shadowflight.android.library")
+    id("recco.android.library")
 }
 
 android {
-    namespace = "com.shadowflight.headless"
+    namespace = "com.recco.headless"
 }
 
 dependencies {

@@ -42,7 +42,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "android-shadowflight-sdk"
+rootProject.name = "android-recco-sdk"
 
 include(
     ":ui",

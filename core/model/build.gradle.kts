@@ -1,12 +1,12 @@
 plugins {
-    id("shadowflight.android.library")
-    id("shadowflight.android.hilt")
+    id("recco.android.library")
+    id("recco.android.hilt")
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
-    namespace = "com.shadowflight.core.model"
+    namespace = "com.recco.core.model"
 }
 
 dependencies {

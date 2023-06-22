@@ -1,6 +1,6 @@
-# SHADOWFLIGHT LOCAL MAVEN PUBLISHING
+# RECCO LOCAL MAVEN PUBLISHING
 
-This document aims to explain Shadowflight SDK publishing process using MavenLocal.
+This document aims to explain Recco SDK publishing process using MavenLocal.
 
 ## How It Works
 
@@ -14,7 +14,7 @@ Couple of Gradle Tasks are now generated both for project and module level, thes
 
   ```groovy
   # Convention configuration
-  moduleArtifactId=shadowflight-ui
+  moduleArtifactId=recco-ui
   ```
 
 - Project level gradle.properties file:
@@ -31,7 +31,7 @@ Make sure these files contain the information you expect your publications to at
 
 ## Tasks
 
-In order for Shadowflight SDK to be published locally, you should focus on the following project level tasks:
+In order for Recco SDK to be published locally, you should focus on the following project level tasks:
 
 - **publishDebugPublicationToMavenLocal:** (INTERNAL ONLY)
 
@@ -71,6 +71,6 @@ repositories {
 Then, include the dependencies in your module level build.gradle file.
 
 ```kotlin
-    implementation("com.significo:shadowflight-ui:0.0.1")
-    implementation("com.significo:shadowflight-headless:0.0.1")
+    implementation("com.significo:recco-ui:0.0.1")
+    implementation("com.significo:recco-headless:0.0.1")
 ```

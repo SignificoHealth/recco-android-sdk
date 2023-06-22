@@ -1,5 +1,5 @@
 import com.android.build.gradle.LibraryExtension
-import com.shadowflight.sdk.configureAndroidCompose
+import com.recco.sdk.configureAndroidCompose
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -8,7 +8,7 @@ import org.gradle.kotlin.dsl.configure
 class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply("shadowflight.android.library")
+            pluginManager.apply("recco.android.library")
 
             extensions.configure<LibraryExtension> {
                 configureAndroidCompose(this)

@@ -11,9 +11,9 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply {
-                apply("shadowflight.android.library")
-                apply("shadowflight.android.library.compose")
-                apply("shadowflight.android.hilt")
+                apply("recco.android.library")
+                apply("recco.android.library.compose")
+                apply("recco.android.hilt")
             }
 
             extensions.configure<LibraryExtension> {

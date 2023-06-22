@@ -1,9 +1,9 @@
 plugins {
-    id("shadowflight.android.feature")
+    id("recco.android.feature")
 }
 
 android {
-    namespace = "com.shadowflight.core.questionnaire"
+    namespace = "com.recco.core.questionnaire"
 }
 
 dependencies {

@@ -1,6 +1,6 @@
 import com.android.build.api.dsl.LibraryExtension
-import com.shadowflight.sdk.configureDocsAndSources
-import com.shadowflight.sdk.configureMavenPublish
+import com.recco.sdk.configureDocsAndSources
+import com.recco.sdk.configureMavenPublish
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension

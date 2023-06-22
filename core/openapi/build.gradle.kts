@@ -1,11 +1,11 @@
 plugins {
-    id("shadowflight.android.library")
+    id("recco.android.library")
     alias(libs.plugins.ksp)
     alias(libs.plugins.openapi)
 }
 
 android {
-    namespace = "com.shadowflight.core.openapi"
+    namespace = "com.recco.core.openapi"
 }
 
 dependencies {
@@ -20,7 +20,7 @@ dependencies {
 }
 
 private val pathOpenAPI = "$rootDir/core/openapi"
-private val pathOpenAPIGeneratedContent = "$pathOpenAPI/src/main/kotlin/com/shadowflight/openapi"
+private val pathOpenAPIGeneratedContent = "$pathOpenAPI/src/main/kotlin/com/recco/openapi"
 
 openApiGenerate {
     inputSpec.set("$pathOpenAPI/openapi.json")

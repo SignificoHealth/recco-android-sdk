@@ -1,5 +1,5 @@
 import com.android.build.gradle.LibraryExtension
-import com.shadowflight.sdk.configureKotlinAndroid
+import com.recco.sdk.configureKotlinAndroid
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -14,7 +14,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             pluginManager.apply {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
-                apply("shadowflight.android.maven.publish")
+                apply("recco.android.maven.publish")
             }
 
             extensions.configure<LibraryExtension> {
