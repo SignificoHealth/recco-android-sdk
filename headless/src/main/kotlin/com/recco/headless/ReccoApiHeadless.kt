@@ -1,6 +1,6 @@
 package com.recco.headless
 
-object HeadlessAPI {
+object ReccoApiHeadless {
     fun getRecommendations() {
 
     }

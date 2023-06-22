@@ -12,29 +12,29 @@ import dagger.hilt.components.SingletonComponent
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
-private interface UIApiInterface {
+private interface ReccoApiUIInterface {
     fun getAppRepository(): AppRepository
 }
 
-object UIApi {
+object ReccoApiUI {
     private lateinit var application: Application
 
     fun init(sdkConfig: SDKConfig, application: Application) {
         this.application = application
 
-        EntryPoints.get(application, UIApiInterface::class.java).getAppRepository()
+        EntryPoints.get(application, ReccoApiUIInterface::class.java).getAppRepository()
             .init(sdkConfig)
     }
 
     fun login(userId: String) {
         EntryPoints
-            .get(application, UIApiInterface::class.java).getAppRepository()
+            .get(application, ReccoApiUIInterface::class.java).getAppRepository()
             .loginUser(userId)
     }
 
     fun logout() {
         EntryPoints
-            .get(application, UIApiInterface::class.java).getAppRepository()
+            .get(application, ReccoApiUIInterface::class.java).getAppRepository()
             .logoutUser()
     }
 

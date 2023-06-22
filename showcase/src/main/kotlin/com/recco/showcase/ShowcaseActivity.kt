@@ -22,7 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.recco.ui.UIApi
+import com.recco.ui.ReccoApiUI
 
 @OptIn(ExperimentalMaterial3Api::class)
 class ShowcaseActivity : ComponentActivity() {
@@ -69,7 +69,7 @@ class ShowcaseActivity : ComponentActivity() {
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                UIApi.login(userId = textField)
+                ReccoApiUI.login(userId = textField)
                 with(prefs.edit()) {
                     putString(USER_ID_KEY, textField)
                     apply()
@@ -86,7 +86,7 @@ class ShowcaseActivity : ComponentActivity() {
         Spacer(Modifier.height(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { UIApi.navigateToDashboard(this@ShowcaseActivity) }) {
+            onClick = { ReccoApiUI.navigateToDashboard(this@ShowcaseActivity) }) {
             Text(text = "Open SDK")
         }
 
@@ -95,7 +95,7 @@ class ShowcaseActivity : ComponentActivity() {
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                UIApi.logout()
+                ReccoApiUI.logout()
                 with(prefs.edit()) {
                     putString(USER_ID_KEY, null)
                     apply()
