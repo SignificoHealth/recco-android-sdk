@@ -38,9 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -630,8 +628,8 @@ private fun PreviewEmptyState() {
         emptyContent = {
             AppEmptyContent(
                 emptyState = EmptyState(
-                    titleRes = R.string.no_network_connection_error_title,
-                    description = stringResource(R.string.no_network_connection_error_desc),
+                    titleRes = R.string.recco_no_network_connection_error_title,
+                    description = stringResource(R.string.recco_no_network_connection_error_desc),
                     drawableRes = R.drawable.ic_no_connection
                 )
             )

@@ -135,7 +135,7 @@ private fun FeedScreen(
                 ) {
                     AppEmptyContent(
                         emptyState = EmptyState(
-                            titleRes = R.string.no_content_available_title_default,
+                            titleRes = R.string.recco_no_content_available_title_default,
                             drawableRes = R.drawable.bg_people_1,
                         )
                     )
@@ -203,11 +203,11 @@ private fun FeedHeader() {
                     .padding(start = AppSpacing.dp_24, end = AppSpacing.dp_12)
             ) {
                 Text(
-                    text = stringResource(R.string.welcome_back),
+                    text = stringResource(R.string.recco_welcome_back),
                     style = AppTheme.typography.h1
                 )
                 Text(
-                    text = stringResource(R.string.lets_make_toda_better),
+                    text = stringResource(R.string.recco_lets_make_toda_better),
                     style = AppTheme.typography.body1
                 )
             }
@@ -371,7 +371,7 @@ private fun QuestionnaireStartDialog(
         },
         titleRes = topic.asResTitle(),
         descriptionRes = topic.asResExplanation(),
-        textButtonPrimaryRes = R.string.start,
+        textButtonPrimaryRes = R.string.recco_start,
         onClickPrimary = onClick
     )
 }
@@ -447,7 +447,7 @@ private fun PartiallyUnlockedCard(
             )
             Spacer(Modifier.height(AppSpacing.dp_8))
             Text(
-                text = stringResource(R.string.review_this_area),
+                text = stringResource(R.string.recco_review_this_area),
                 style = AppTheme.typography.h3.copy(color = AppTheme.colors.onPrimary),
                 textAlign = TextAlign.Center
             )
@@ -499,7 +499,7 @@ private fun LockedCard(
                     onAnimationFinished = onAnimationFinished
                 )
                 Text(
-                    text = stringResource(R.string.unlock),
+                    text = stringResource(R.string.recco_unlock),
                     style = AppTheme.typography.h3
                 )
             }

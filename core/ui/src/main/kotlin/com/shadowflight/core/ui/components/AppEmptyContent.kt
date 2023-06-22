@@ -94,8 +94,8 @@ fun AppEmptyContent(
 private fun PreviewWithoutCta() {
     AppEmptyContent(
         emptyState = EmptyState(
-            titleRes = R.string.no_network_connection_error_title,
-            description = stringResource(R.string.no_network_connection_error_desc),
+            titleRes = R.string.recco_no_network_connection_error_title,
+            description = stringResource(R.string.recco_no_network_connection_error_desc),
             drawableRes = R.drawable.ic_no_connection,
         )
     )
@@ -106,9 +106,9 @@ private fun PreviewWithoutCta() {
 private fun PreviewWithoutDescription() {
     AppEmptyContent(
         emptyState = EmptyState(
-            titleRes = R.string.no_network_connection_error_title,
+            titleRes = R.string.recco_no_network_connection_error_title,
             drawableRes = R.drawable.ic_no_connection,
-            ctaTextRes = R.string.reload,
+            ctaTextRes = R.string.recco_reload,
             ctaIconRes = R.drawable.ic_retry,
             onCtaClick = { }
         )
@@ -120,10 +120,10 @@ private fun PreviewWithoutDescription() {
 private fun PreviewFull() {
     AppEmptyContent(
         emptyState = EmptyState(
-            titleRes = R.string.no_network_connection_error_title,
-            description = stringResource(R.string.no_network_connection_error_desc),
+            titleRes = R.string.recco_no_network_connection_error_title,
+            description = stringResource(R.string.recco_no_network_connection_error_desc),
             drawableRes = R.drawable.ic_no_connection,
-            ctaTextRes = R.string.reload,
+            ctaTextRes = R.string.recco_reload,
             ctaIconRes = R.drawable.ic_retry,
             onCtaClick = { }
         )
@@ -138,13 +138,13 @@ private fun PreviewCustomImageSize() {
             .size(145.dp)
             .aspectRatio(4 / 3f),
         emptyState = EmptyState(
-            titleRes = R.string.no_network_connection_error_title,
-            description = stringResource(R.string.no_network_connection_error_desc),
+            titleRes = R.string.recco_no_network_connection_error_title,
+            description = stringResource(R.string.recco_no_network_connection_error_desc),
             drawableRes = null,
             drawableComposable = {
                 AppTintedImageNoConnection(tint = AppTheme.colors.error)
             },
-            ctaTextRes = R.string.reload,
+            ctaTextRes = R.string.recco_reload,
             ctaIconRes = R.drawable.ic_retry,
             onCtaClick = { }
         ),

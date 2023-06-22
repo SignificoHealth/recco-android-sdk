@@ -246,7 +246,7 @@ class QuestionnaireViewModel @Inject constructor(
                 logger.e(e)
                 globalViewEvents.emit(
                     GlobalViewEvent.ShowToast(
-                        titleRes = R.string.common_error_desc,
+                        titleRes = R.string.recco_common_error_desc,
                         type = ToastMessageType.Error
                     )
                 )

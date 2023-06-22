@@ -9,50 +9,50 @@ import com.shadowflight.core.model.feed.FeedSectionType.*
 @Composable
 fun FeedSectionType.asSectionTitle(): String = when (this) {
     PHYSICAL_ACTIVITY_RECOMMENDATIONS -> stringResource(
-        R.string.recommended_for_you_topic,
-        stringResource(R.string.physical_activity)
+        R.string.recco_recommended_for_you_topic,
+        stringResource(R.string.recco_physical_activity)
     )
 
     NUTRITION_RECOMMENDATIONS -> stringResource(
-        R.string.recommended_for_you_topic,
-        stringResource(R.string.nutrition)
+        R.string.recco_recommended_for_you_topic,
+        stringResource(R.string.recco_nutrition)
     )
 
     MENTAL_WELLBEING_RECOMMENDATIONS -> stringResource(
-        R.string.recommended_for_you_topic,
-        stringResource(R.string.mental_wellbeing)
+        R.string.recco_recommended_for_you_topic,
+        stringResource(R.string.recco_mental_wellbeing)
     )
 
     SLEEP_RECOMMENDATIONS -> stringResource(
-        R.string.recommended_for_you_topic,
-        stringResource(R.string.sleep)
+        R.string.recco_recommended_for_you_topic,
+        stringResource(R.string.recco_sleep)
     )
 
     PHYSICAL_ACTIVITY_EXPLORE -> stringResource(
-        R.string.explore_topic,
-        stringResource(R.string.physical_activity)
+        R.string.recco_explore_topic,
+        stringResource(R.string.recco_physical_activity)
     )
 
     NUTRITION_EXPLORE -> stringResource(
-        R.string.explore_topic,
-        stringResource(R.string.nutrition)
+        R.string.recco_explore_topic,
+        stringResource(R.string.recco_nutrition)
     )
 
     MENTAL_WELLBEING_EXPLORE -> stringResource(
-        R.string.explore_topic,
-        stringResource(R.string.mental_wellbeing)
+        R.string.recco_explore_topic,
+        stringResource(R.string.recco_mental_wellbeing)
     )
 
     SLEEP_EXPLORE -> stringResource(
-        R.string.explore_topic,
-        stringResource(R.string.sleep)
+        R.string.recco_explore_topic,
+        stringResource(R.string.recco_sleep)
     )
 
-    STARTING_RECOMMENDATIONS -> stringResource(R.string.start_here)
+    STARTING_RECOMMENDATIONS -> stringResource(R.string.recco_start_here)
 
-    PREFERRED_RECOMMENDATIONS -> stringResource(R.string.you_may_also_like)
+    PREFERRED_RECOMMENDATIONS -> stringResource(R.string.recco_you_may_also_like)
 
-    MOST_POPULAR -> stringResource(R.string.trending)
+    MOST_POPULAR -> stringResource(R.string.recco_trending)
 
-    NEW_CONTENT -> stringResource(R.string.news_for_your)
+    NEW_CONTENT -> stringResource(R.string.recco_news_for_your)
 }
