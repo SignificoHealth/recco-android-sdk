@@ -1,9 +1,9 @@
 plugins {
-    id("shadowflight.android.feature")
+    id("recco.android.feature")
 }
 
 android {
-    namespace = "com.shadowflight.feature.article"
+    namespace = "com.recco.feature.article"
 }
 
 dependencies {

@@ -1,11 +1,11 @@
 plugins {
-    id("shadowflight.android.feature")
-    id("shadowflight.android.hilt")
+    id("recco.android.feature")
+    id("recco.android.hilt")
 
 }
 
 android {
-    namespace = "com.shadowflight.ui"
+    namespace = "com.recco.ui"
 }
 
 dependencies {

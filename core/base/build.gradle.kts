@@ -1,8 +1,8 @@
 plugins {
-    id("shadowflight.android.library")
-    id("shadowflight.android.hilt")
+    id("recco.android.library")
+    id("recco.android.hilt")
 }
 
 android {
-    namespace = "com.shadowflight.core.base"
+    namespace = "com.recco.core.base"
 }

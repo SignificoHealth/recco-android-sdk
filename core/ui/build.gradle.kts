@@ -1,11 +1,11 @@
 plugins {
-    id("shadowflight.android.library.compose")
+    id("recco.android.library.compose")
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     // Changed namespace due to inconsistency building release variant
-    namespace = "com.shadowflight.core.ui"
+    namespace = "com.recco.core.ui"
 }
 
 dependencies {

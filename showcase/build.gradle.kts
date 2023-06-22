@@ -7,12 +7,12 @@ plugins {
 }
 
 android {
-    namespace = "com.shadowflight.showcase"
+    namespace = "com.recco.showcase"
 
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.shadowflight.showcase"
+        applicationId = "com.recco.showcase"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -63,8 +63,8 @@ android {
 
 dependencies {
     implementation(project(":ui"))
-    // implementation("com.significo:shadowflight-ui:0.0.1")
-    // implementation("com.significo:shadowflight-headless:0.0.1")
+    // implementation("com.significo:recco-ui:0.0.1")
+    // implementation("com.significo:recco-headless:0.0.1")
 
     implementation("com.google.dagger:hilt-android:2.46.1")
     kapt("com.google.dagger:hilt-android-compiler:2.46.1")
