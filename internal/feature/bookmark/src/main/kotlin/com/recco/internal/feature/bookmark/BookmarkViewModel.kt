@@ -27,7 +27,7 @@ class BookmarkViewModel @Inject constructor(
     val viewState: StateFlow<UiState<BookmarkUI>> = _viewState.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(stopTimeout = 5.seconds),
-        initialValue = UiState(isLoading = false)
+        initialValue = UiState()
     )
 
     init {
