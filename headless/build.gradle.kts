@@ -7,5 +7,5 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:network"))
+    implementation(project(":internal:core:network"))
 }

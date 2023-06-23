@@ -1,0 +1,13 @@
+{
+  "generatorName": "kotlin",
+  "useCoroutines": "true",
+  "library": "jvm-retrofit2",
+  "moshiCodeGen": "true",
+  "enumPropertyNaming": "UPPERCASE",
+  "sortModelPropertiesByRequiredFlag": "true",
+  "sortParamsByRequiredFlag": "true",
+  "packageName": "com.recco.internal.core.openapi",
+  "apiPackage": "com.recco.internal.core.openapi.api",
+  "modelPackage": "com.recco.internal.core.openapi.model",
+  "modelNameSuffix": "DTO"
+}
