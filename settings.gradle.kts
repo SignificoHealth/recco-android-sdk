@@ -33,7 +33,7 @@ dependencyResolutionManagement {
 
         maven {
             name = "GithubPackages"
-            url = uri("https://maven.pkg.github.com/viluahealthcare/android-shadowflight-sdk")
+            url = uri("https://maven.pkg.github.com/viluahealthcare/android-recco-sdk")
             credentials {
                 username = githubUsername
                 password = githubSecret
@@ -42,7 +42,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "android-recco-sdk"
+rootProject.name = "recco-android-sdk"
 
 include(
     "api:ui",
