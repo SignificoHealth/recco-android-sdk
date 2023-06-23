@@ -42,7 +42,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "android-recco-sdk"
+rootProject.name = "recco-android-sdk"
 
 include(
     ":ui",
