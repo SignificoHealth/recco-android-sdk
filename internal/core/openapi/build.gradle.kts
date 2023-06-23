@@ -19,8 +19,8 @@ dependencies {
     implementation(libs.retrofit.converter.moshi)
 }
 
-private val pathOpenAPI = "$rootDir/core/openapi"
-private val pathOpenAPIGeneratedContent = "$pathOpenAPI/src/main/kotlin/com/recco/openapi"
+private val pathOpenAPI = "$rootDir/internal/core/openapi"
+private val pathOpenAPIGeneratedContent = "$pathOpenAPI/src/main/kotlin/com/recco/internal/core/openapi"
 
 openApiGenerate {
     inputSpec.set("$pathOpenAPI/openapi.json")
@@ -46,7 +46,7 @@ tasks.named("openApiGenerate") {
 tasks.register("openApiClean") {
     doFirst {
         project.delete(
-            fileTree("$pathOpenAPIGeneratedContent"),
+            fileTree(pathOpenAPIGeneratedContent),
         )
     }
 }
