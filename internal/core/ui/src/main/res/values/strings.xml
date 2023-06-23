@@ -53,4 +53,5 @@
 
     <!-- Bookmarks -->
     <string name="recco_bookmarks">Bookmarks</string>
+    <string name="recco_bookmarks_empty_title">You\'ve no bookmarks yet</string>
 </resources>

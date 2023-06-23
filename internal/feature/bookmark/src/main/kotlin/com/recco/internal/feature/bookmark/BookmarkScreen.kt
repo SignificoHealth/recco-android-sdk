@@ -1,5 +1,6 @@
 package com.recco.internal.feature.bookmark
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,14 +8,20 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,12 +29,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.ui.R
-import com.recco.internal.core.ui.components.AppEmptyContent
 import com.recco.internal.core.ui.components.AppRecommendationCard
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.BackIconButton
-import com.recco.internal.core.ui.components.EmptyState
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
@@ -77,11 +82,21 @@ private fun BookmarkScreen(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    AppEmptyContent(
-                        emptyState = EmptyState(
-                            titleRes = R.string.recco_no_content_available_title_default,
-                            drawableRes = R.drawable.bg_people_1,
-                        )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(AppSpacing.dp_32),
+                        text = stringResource(id = R.string.recco_bookmarks_empty_title),
+                        style = AppTheme.typography.body1,
+                        textAlign = TextAlign.Center
+                    )
+                    Image(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = AppSpacing.dp_40),
+                        contentScale = ContentScale.FillWidth,
+                        painter = painterResource(id = R.drawable.ic_bookmark_empty_state),
+                        contentDescription = null
                     )
                 }
             }
