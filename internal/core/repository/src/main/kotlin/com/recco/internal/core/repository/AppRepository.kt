@@ -23,7 +23,7 @@ class AppRepository @Inject constructor(
     private val logger: Logger,
     @ApplicationScope private val appScope: CoroutineScope,
 ) {
-    fun init(sdkConfig: com.recco.api.model.SDKConfig) {
+    fun init(sdkConfig: SDKConfig) {
         authCredentials.init(sdkConfig)
     }
 

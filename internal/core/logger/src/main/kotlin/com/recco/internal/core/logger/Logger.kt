@@ -1,22 +1,24 @@
 package com.recco.internal.core.logger
 
-import android.util.Log
+import com.recco.api.model.ReccoLogger
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class Logger @Inject constructor() {
+    private var clientLogger: ReccoLogger? = null
+
+    fun setupClientLogger(logger: ReccoLogger?) {
+        this.clientLogger = logger
+    }
+
     fun e(e: Throwable, tag: String? = null, message: String? = null) {
-        if (BuildConfig.DEBUG) {
-            Log.e(tag, message, e)
-        } else {
-            // TODO send logs to Sentry in prod
-        }
+        clientLogger?.e(e, tag, message)
     }
 
     fun d(message: String, tag: String? = null) {
         if (BuildConfig.DEBUG) {
-            Log.d(tag, message)
-        } else {
-            // TODO send logs to Sentry in prod
+            clientLogger?.d(message, tag)
         }
     }
 }
