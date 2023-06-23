@@ -1,4 +1,4 @@
-package com.recco.internal.core.model
+package com.recco.api.model
 
 data class SDKConfig(
     val appName: String,

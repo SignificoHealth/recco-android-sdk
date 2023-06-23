@@ -46,8 +46,9 @@ rootProject.name = "android-recco-sdk"
 
 include(
     "api:ui",
+    "api:model",
     //":headless",
-    ":showcase",
+    "showcase",
     "internal:core:base",
     "internal:core:logger",
     "internal:core:openapi",

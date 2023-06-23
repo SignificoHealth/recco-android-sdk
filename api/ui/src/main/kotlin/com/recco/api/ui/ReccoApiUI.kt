@@ -3,7 +3,7 @@ package com.recco.api.ui
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import com.recco.internal.core.model.SDKConfig
+import com.recco.api.model.SDKConfig
 import com.recco.internal.core.repository.AppRepository
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
@@ -19,7 +19,7 @@ private interface ReccoApiUIInterface {
 object ReccoApiUI {
     private lateinit var application: Application
 
-    fun init(sdkConfig: SDKConfig, application: Application) {
+    fun init(sdkConfig: com.recco.api.model.SDKConfig, application: Application) {
         this.application = application
 
         EntryPoints.get(application, ReccoApiUIInterface::class.java).getAppRepository()

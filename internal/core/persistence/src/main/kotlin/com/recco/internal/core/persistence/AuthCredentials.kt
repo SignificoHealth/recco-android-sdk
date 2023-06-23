@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import com.recco.internal.core.model.SDKConfig
+import com.recco.api.model.SDKConfig
 import com.recco.internal.core.model.authentication.PAT
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class AuthCredentials @Inject constructor(
     @ApplicationContext context: Context
 ) {
-    lateinit var sdkConfig: SDKConfig
+    lateinit var sdkConfig: com.recco.api.model.SDKConfig
         private set
 
     private val prefs by lazy {
@@ -38,7 +38,7 @@ class AuthCredentials @Inject constructor(
         get() = prefs.getString(TOKEN_ID_KEY, null)
         private set
 
-    fun init(sdkConfig: SDKConfig) {
+    fun init(sdkConfig: com.recco.api.model.SDKConfig) {
         this.sdkConfig = sdkConfig
     }
 

@@ -9,7 +9,8 @@ android {
 }
 
 dependencies {
-    api(project(":internal:core:model"))
+    api(project(":api:model"))
+    implementation(project(":internal:core:model"))
     implementation(project(":internal:core:logger"))
     implementation(project(":internal:core:repository"))
     implementation(project(":internal:core:ui"))

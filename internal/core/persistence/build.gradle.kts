@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":api:model"))
     implementation(project(":internal:core:model"))
     implementation(project(":internal:core:logger"))
 
