@@ -1,8 +1,8 @@
 package com.recco.showcase
 
 import android.app.Application
-import com.recco.core.model.SDKConfig
-import com.recco.ui.ReccoApiUI
+import com.recco.internal.core.model.SDKConfig
+import com.recco.api.ui.ReccoApiUI
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

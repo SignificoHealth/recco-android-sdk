@@ -45,20 +45,20 @@ dependencyResolutionManagement {
 rootProject.name = "android-recco-sdk"
 
 include(
-    ":ui",
+    "api:ui",
     //":headless",
     ":showcase",
-    ":core:base",
-    ":core:logger",
-    ":core:openapi",
-    ":core:network",
-    ":core:persistence",
-    ":core:ui",
-    ":core:model",
-    ":core:repository",
-    ":feature:questionnaire",
-    ":feature:feed",
-    ":feature:article",
-    ":feature:onboarding",
-    ":feature:bookmark"
+    "internal:core:base",
+    "internal:core:logger",
+    "internal:core:openapi",
+    "internal:core:network",
+    "internal:core:persistence",
+    "internal:core:ui",
+    "internal:core:model",
+    "internal:core:repository",
+    "internal:feature:questionnaire",
+    "internal:feature:feed",
+    "internal:feature:article",
+    "internal:feature:onboarding",
+    "internal:feature:bookmark"
 )

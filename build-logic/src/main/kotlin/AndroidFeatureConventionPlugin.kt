@@ -25,7 +25,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             val libs = the<LibrariesForLibs>()
 
             dependencies {
-                "implementation"(project(":core:ui"))
+                "implementation"(project(":internal:core:ui"))
 
                 "implementation"(libs.androidx.lifecycle.runtime.compose)
                 "implementation"(libs.androidx.lifecycle.viewmodel.compose)

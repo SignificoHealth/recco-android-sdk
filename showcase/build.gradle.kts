@@ -62,7 +62,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":ui"))
+    implementation(project(":api:ui"))
     // implementation("com.significo:recco-ui:0.0.1")
     // implementation("com.significo:recco-headless:0.0.1")
 
