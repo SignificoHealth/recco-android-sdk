@@ -118,7 +118,8 @@ fun QuestionnaireScreen(
                     { BackIconButton(onClick = navigateUp) }
                 } else {
                     {}
-                }
+                },
+                isQuestionnaire = true
             )
         },
         backgroundColor = AppTheme.colors.background,

@@ -13,7 +13,6 @@ import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -43,7 +42,8 @@ fun AppTopBar(
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = { CloseIconButton() },
     backgroundColor: Color = AppTheme.colors.background,
-    elevation: Dp = AppBarDefaults.TopAppBarElevation
+    elevation: Dp = AppBarDefaults.TopAppBarElevation,
+    isQuestionnaire: Boolean = false
 ) {
     Surface(
         modifier = Modifier
@@ -62,7 +62,6 @@ fun AppTopBar(
                 Box(
                     modifier = Modifier
                         .layoutId("navigationIcon")
-                        .padding(start = 4.dp)
                 ) {
                     CompositionLocalProvider(
                         LocalContentAlpha provides 1f, content = navigationIcon
@@ -71,7 +70,7 @@ fun AppTopBar(
                 Box(
                     modifier = Modifier
                         .layoutId("title")
-                        .padding(horizontal = 4.dp)
+                        .padding(end = 4.dp)
                 ) {
                     CompositionLocalProvider(
                         LocalContentAlpha provides 1f,
@@ -79,9 +78,13 @@ fun AppTopBar(
                             Text(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = AppSpacing.dp_8),
+                                    .padding(end = AppSpacing.dp_8),
                                 text = title.orEmpty(),
-                                style = AppTheme.typography.h4,
+                                style = if (isQuestionnaire) {
+                                    AppTheme.typography.h3
+                                } else {
+                                    AppTheme.typography.h4
+                                },
                                 textAlign = titleAlign,
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1
@@ -248,5 +251,17 @@ private fun PreviewWithBackAndActionIconsAndLongTitle() {
         actions = {
             CloseIconButton(onClick = {})
         }
+    )
+}
+
+@Preview
+@Composable
+private fun PreviewBarInQuestionnareScreen() {
+    AppTopBar(
+        title = "About you",
+        actions = {
+            CloseIconButton(onClick = {})
+        },
+        isQuestionnaire = true
     )
 }
