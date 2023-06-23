@@ -118,6 +118,17 @@ class RecommendationRepository @Inject constructor(
         sectionsPipelines[sectionType]?.reloadRemoteDatasource()
     }
 
+    private val bookmarksPipeline = Pipeline {
+        api.getBookmarkedRecommendations().unwrap()
+            .map(AppUserRecommendationDTO::asEntity)
+    }
+
+    val bookmarks = bookmarksPipeline.state
+
+    suspend fun reloadBookmarks() {
+        bookmarksPipeline.reloadRemoteDatasource()
+    }
+
     suspend fun getArticle(contentId: ContentId): Article =
         api.getArticle(itemId = contentId.itemId, catalogId = contentId.catalogId)
             .unwrap().asEntity()
@@ -131,6 +142,7 @@ class RecommendationRepository @Inject constructor(
             )
         )
         updateSections(contentId = contentId, bookmarked = bookmarked)
+        reloadBookmarks()
     }
 
     suspend fun setRecommendationRating(contentId: ContentId, rating: Rating) {
@@ -145,13 +157,6 @@ class RecommendationRepository @Inject constructor(
     }
 
     suspend fun setRecommendationAsViewed(contentId: ContentId) {
-        api.setStatus(
-            UpdateStatusDTO(
-                contentId = contentId.asDTO(),
-                contentType = ContentTypeDTO.ARTICLES,
-                status = StatusDTO.VIEWED
-            )
-        )
         updateSections(contentId = contentId, status = Status.VIEWED)
     }
 

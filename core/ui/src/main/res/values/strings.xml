@@ -25,7 +25,6 @@
     <string name="recco_no_network_connection_error_desc">Please check your network connection and try again.</string>
     <string name="recco_server_error">Service temporarily unavailable. Please try again later.</string>
 
-
     <!-- Questionnaire -->
     <string name="recco_multiple_answers_possible">Multiple answers possible</string>
     <string name="recco_next">Continue</string>
@@ -51,4 +50,7 @@
     <string name="recco_onboarding_about_body">Who are you? What are your health interests? What’s your health status?\n\nWe want to know you!</string>
     <string name="recco_onboarding_outro_title">Great! Glad to get to know you better!</string>
     <string name="recco_onboarding_outro_body">Now let’s see what we have for you</string>
+
+    <!-- Bookmarks -->
+    <string name="recco_bookmarks">Bookmarks</string>
 </resources>

@@ -17,4 +17,5 @@ dependencies {
     implementation(project(":feature:onboarding"))
     implementation(project(":feature:article"))
     implementation(project(":feature:questionnaire"))
+    implementation(project(":feature:bookmark"))
 }

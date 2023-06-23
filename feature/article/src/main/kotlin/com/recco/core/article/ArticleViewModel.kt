@@ -51,6 +51,8 @@ class ArticleViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching { recommendationRepository.getArticle(articleId) }
                 .onSuccess { article ->
+                    recommendationRepository.setRecommendationAsViewed(articleId)
+
                     _viewState.emit(
                         UiState(
                             isLoading = false,
