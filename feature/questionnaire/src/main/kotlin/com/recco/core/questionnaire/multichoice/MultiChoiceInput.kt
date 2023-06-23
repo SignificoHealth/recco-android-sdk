@@ -3,6 +3,7 @@ package com.recco.core.questionnaire.multichoice
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -36,7 +37,7 @@ fun MultiChoiceInput(
     OutlinedButton(
         modifier = modifier
             .fillMaxWidth()
-            .height(48.dp),
+            .defaultMinSize(minHeight = 48.dp),
         onClick = onClick,
         shape = RoundedCornerShape(AppSpacing.dp_8),
         border = BorderStroke(
