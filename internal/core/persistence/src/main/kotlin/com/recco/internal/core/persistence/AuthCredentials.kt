@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class AuthCredentials @Inject constructor(
     @ApplicationContext context: Context
 ) {
-    lateinit var sdkConfig: com.recco.api.model.SDKConfig
+    lateinit var sdkConfig: SDKConfig
         private set
 
     private val prefs by lazy {
@@ -38,7 +38,7 @@ class AuthCredentials @Inject constructor(
         get() = prefs.getString(TOKEN_ID_KEY, null)
         private set
 
-    fun init(sdkConfig: com.recco.api.model.SDKConfig) {
+    fun init(sdkConfig: SDKConfig) {
         this.sdkConfig = sdkConfig
     }
 

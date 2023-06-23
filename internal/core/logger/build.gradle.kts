@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.recco.internal.core.logger"
 }
+
+dependencies {
+    implementation(project(":api:model"))
+}
