@@ -9,14 +9,18 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ui.Scaffold
+import com.recco.api.ui.navigation.AppNavHost
 import com.recco.internal.core.ui.components.AppCustomLoading
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTopBar
+import com.recco.internal.core.ui.components.GlobalToastEvent
+import com.recco.internal.core.ui.pipelines.GlobalViewEvent
+import com.recco.internal.core.ui.pipelines.globalViewEvents
 import com.recco.internal.core.ui.theme.AppTheme
-import com.recco.api.ui.navigation.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,6 +32,8 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val uiState by viewModel.viewState.collectAsStateWithLifecycle()
+            val viewEvents = globalViewEvents.collectAsStateWithLifecycle(GlobalViewEvent.NoOp)
+
             AppTheme {
                 val user = uiState.data?.user
                 if (user != null) {
@@ -55,6 +61,18 @@ class MainActivity : AppCompatActivity() {
                             }
                         ) {}
                     }
+                }
+            }
+
+            when (val event = viewEvents.value) {
+                is GlobalViewEvent.ShowToast -> {
+                    GlobalToastEvent(
+                        type = event.type,
+                        title = stringResource(id = event.titleRes),
+                        description = event.subtitleRes?.let {
+                            stringResource(id = it)
+                        }
+                    )
                 }
             }
         }

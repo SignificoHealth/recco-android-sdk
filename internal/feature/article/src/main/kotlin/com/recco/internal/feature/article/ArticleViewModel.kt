@@ -3,16 +3,14 @@ package com.recco.internal.feature.article
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.recco.internal.feature.article.navigation.idArg
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.repository.RecommendationRepository
-import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.core.ui.pipelines.GlobalViewEvent
-import com.recco.internal.core.ui.pipelines.ToastMessageType
 import com.recco.internal.core.ui.pipelines.globalViewEvents
+import com.recco.internal.core.ui.pipelines.showErrorToast
+import com.recco.internal.feature.article.navigation.idArg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -106,12 +104,7 @@ class ArticleViewModel @Inject constructor(
                 )
             }.onFailure {
                 logger.e(it)
-                globalViewEvents.emit(
-                    GlobalViewEvent.ShowToast(
-                        titleRes = R.string.recco_common_error_desc,
-                        type = ToastMessageType.Error
-                    )
-                )
+                globalViewEvents.emit(showErrorToast(it))
             }
         }
     }
@@ -167,12 +160,7 @@ class ArticleViewModel @Inject constructor(
                 )
             }.onFailure {
                 logger.e(it)
-                globalViewEvents.emit(
-                    GlobalViewEvent.ShowToast(
-                        titleRes = R.string.recco_common_error_desc,
-                        type = ToastMessageType.Error
-                    )
-                )
+                globalViewEvents.emit(showErrorToast(it))
             }
         }
     }

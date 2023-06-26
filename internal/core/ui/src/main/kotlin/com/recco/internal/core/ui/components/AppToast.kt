@@ -20,6 +20,7 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,9 +34,35 @@ import com.recco.internal.core.ui.extensions.noRippleClickable
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.core.ui.theme.elevation
+import java.util.UUID
 
 enum class ToastType {
-    Error
+    Reward, Confirmation, Error
+}
+
+@Composable
+fun GlobalToastEvent(
+    id: UUID = UUID.randomUUID(),
+    title: String,
+    description: String?,
+    type: ToastType
+) {
+
+    // Host state decoupling allows managing different Toast visual element compositions.
+    val hostState = SnackbarHostState()
+
+    AppToast(
+        snackbarHostState = hostState,
+        toastType = type,
+        onClick = {}
+    )
+
+    LaunchedEffect(key1 = id) {
+        hostState.showSnackbar(
+            message = title,
+            actionLabel = description
+        )
+    }
 }
 
 @Composable
@@ -70,6 +97,8 @@ fun ToastElement(
         ToastType.Error -> {
             ToastContent(data = data, resIcon = R.drawable.ic_error)
         }
+
+        else -> {}
     }
 }
 
@@ -123,7 +152,6 @@ fun ToastContent(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

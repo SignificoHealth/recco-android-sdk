@@ -7,6 +7,11 @@ import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.feed.FeedSectionState
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
+import com.recco.internal.core.repository.QuestionnaireRepository
+import com.recco.internal.core.ui.components.UiState
+import com.recco.internal.core.ui.pipelines.GlobalViewEvent
+import com.recco.internal.core.ui.pipelines.globalViewEvents
+import com.recco.internal.core.ui.pipelines.showErrorToast
 import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.BackClicked
 import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.ClickOnMultiChoiceAnswerOption
 import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.NextClicked
@@ -14,12 +19,6 @@ import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.Retry
 import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.WriteOnNumericQuestion
 import com.recco.internal.feature.questionnaire.navigation.feedSectionTypeArg
 import com.recco.internal.feature.questionnaire.navigation.topicArg
-import com.recco.internal.core.repository.QuestionnaireRepository
-import com.recco.internal.core.ui.R
-import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.core.ui.pipelines.GlobalViewEvent
-import com.recco.internal.core.ui.pipelines.ToastMessageType
-import com.recco.internal.core.ui.pipelines.globalViewEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -244,12 +243,7 @@ class QuestionnaireViewModel @Inject constructor(
                 )
             }.onFailure { e ->
                 logger.e(e)
-                globalViewEvents.emit(
-                    GlobalViewEvent.ShowToast(
-                        titleRes = R.string.recco_common_error_desc,
-                        type = ToastMessageType.Error
-                    )
-                )
+                globalViewEvents.emit(showErrorToast(e))
                 _viewState.emit(
                     uiState.copy(
                         data = questionnaireUI.copy(
