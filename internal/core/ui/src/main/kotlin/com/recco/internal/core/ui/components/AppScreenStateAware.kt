@@ -630,7 +630,7 @@ private fun PreviewEmptyState() {
                 emptyState = EmptyState(
                     titleRes = R.string.recco_no_network_connection_error_title,
                     description = stringResource(R.string.recco_no_network_connection_error_desc),
-                    drawableRes = R.drawable.ic_no_connection
+                    drawableRes = R.drawable.recco_ic_no_connection
                 )
             )
         },

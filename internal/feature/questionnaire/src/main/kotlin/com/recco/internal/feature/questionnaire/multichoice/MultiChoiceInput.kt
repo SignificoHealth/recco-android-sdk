@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -75,9 +74,9 @@ fun MultiChoiceInput(
                 modifier = Modifier.size(24.dp),
                 painter = painterResource(
                     if (selected) {
-                        R.drawable.ic_checkmark
+                        R.drawable.recco_ic_checkmark
                     } else {
-                        R.drawable.ic_add
+                        R.drawable.recco_ic_add
                     }
                 ),
                 contentDescription = null,

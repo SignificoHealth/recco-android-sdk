@@ -37,7 +37,7 @@ fun QuestionnaireFooterContent(
         ) {
             Row {
                 AppSecondaryButton(
-                    iconStartRes = R.drawable.ic_chevron_back,
+                    iconStartRes = R.drawable.recco_ic_chevron_back,
                     onClick = onBackClicked,
                     text = null,
                     enabled = !isQuestionnaireSubmitLoading

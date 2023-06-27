@@ -153,7 +153,7 @@ fun BackIconButton(
         onClick = onClick,
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_back),
+            painter = painterResource(id = R.drawable.recco_ic_back),
             tint = iconTint,
             contentDescription = null,
         )
@@ -173,7 +173,7 @@ fun CloseIconButton(
         onClick = { onClick(context) },
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_close),
+            painter = painterResource(id = R.drawable.recco_ic_close),
             tint = iconTint,
             contentDescription = null,
         )

@@ -39,7 +39,7 @@ internal fun QuestionnaireOnboardingOutroRoute(
     navigateToFeed: () -> Unit
 ) {
     QuestionnaireOnboardingOutroScreen(
-        imageId = R.drawable.ic_portrait_2,
+        imageId = R.drawable.recco_ic_portrait_2,
         titleTextId = R.string.recco_onboarding_outro_title,
         bodyTextId = R.string.recco_onboarding_outro_body,
         navigateToOutro = navigateToFeed,
@@ -133,7 +133,7 @@ private fun QuestionnaireOnboardingOutroScreen(
 @Composable
 private fun OutroPreview() {
     QuestionnaireOnboardingOutroScreen(
-        imageId = R.drawable.ic_portrait_2,
+        imageId = R.drawable.recco_ic_portrait_2,
         titleTextId = R.string.recco_onboarding_outro_title,
         bodyTextId = R.string.recco_onboarding_outro_body,
         navigateToOutro = {},
