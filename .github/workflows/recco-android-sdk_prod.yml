@@ -1,5 +1,5 @@
 ---
-name: android-recco-sdk_prod
+name: recco-android-sdk_prod
 on:
   push:
     tags: ["*"]
