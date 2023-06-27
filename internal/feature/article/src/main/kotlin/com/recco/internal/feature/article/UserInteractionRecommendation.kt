@@ -83,9 +83,9 @@ fun UserInteractionRecommendationCard(
                             .clickable { toggleBookmarkState() },
                         painter = painterResource(
                             if (userInteraction.isBookmarked) {
-                                R.drawable.ic_bookmark_filled
+                                R.drawable.recco_ic_bookmark_filled
                             } else {
-                                R.drawable.ic_bookmark_outline
+                                R.drawable.recco_ic_bookmark_outline
                             }
                         ),
                         contentDescription = null,
@@ -126,9 +126,9 @@ fun UserInteractionRecommendationCard(
                             ),
                         painter = painterResource(
                             if (userInteraction.rating == Rating.LIKE) {
-                                R.drawable.ic_thumbs_up_filled
+                                R.drawable.recco_ic_thumbs_up_filled
                             } else {
-                                R.drawable.ic_thumbs_up_outline
+                                R.drawable.recco_ic_thumbs_up_outline
                             }
                         ),
                         contentDescription = null,
@@ -163,9 +163,9 @@ fun UserInteractionRecommendationCard(
                             ),
                         painter = painterResource(
                             if (userInteraction.rating == Rating.DISLIKE) {
-                                R.drawable.ic_thumbs_down_filled
+                                R.drawable.recco_ic_thumbs_down_filled
                             } else {
-                                R.drawable.ic_thumbs_down_outline
+                                R.drawable.recco_ic_thumbs_down_outline
                             }
                         ),
                         contentDescription = null,

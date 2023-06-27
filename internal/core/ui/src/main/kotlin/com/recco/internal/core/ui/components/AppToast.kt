@@ -95,7 +95,7 @@ fun ToastElement(
 ) {
     when (type) {
         ToastType.Error -> {
-            ToastContent(data = data, resIcon = R.drawable.ic_error)
+            ToastContent(data = data, resIcon = R.drawable.recco_ic_error)
         }
 
         else -> {}
@@ -108,7 +108,7 @@ fun ToastContent(
     backgroundColor: Color = Color.White,
     titleStyle: TextStyle = AppTheme.typography.h4,
     subtitleStyle: TextStyle = AppTheme.typography.body2,
-    @DrawableRes resIcon: Int = R.drawable.ic_error
+    @DrawableRes resIcon: Int = R.drawable.recco_ic_error
 ) {
     Card(
         modifier = Modifier

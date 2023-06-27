@@ -57,11 +57,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
-import com.recco.internal.feature.feed.FeedUI
-import com.recco.internal.feature.feed.FeedUIPreviewProvider
-import com.recco.internal.feature.feed.FeedUserInteract
-import com.recco.internal.feature.feed.FeedViewModel
-import com.recco.internal.feature.feed.asSectionTitle
 import com.recco.internal.core.model.feed.FeedSection
 import com.recco.internal.core.model.feed.FeedSectionAndRecommendations
 import com.recco.internal.core.model.feed.FeedSectionState
@@ -140,7 +135,7 @@ private fun FeedScreen(
                     AppEmptyContent(
                         emptyState = EmptyState(
                             titleRes = R.string.recco_no_content_available_title_default,
-                            drawableRes = R.drawable.bg_people_1,
+                            drawableRes = R.drawable.recco_bg_people_1,
                         )
                     )
                 }
@@ -212,7 +207,7 @@ private fun FeedHeader(
             ) {
                 Icon(
                     modifier = Modifier.clickable { navigateToBookmarks() },
-                    painter = painterResource(id = R.drawable.ic_bookmark_filled),
+                    painter = painterResource(id = R.drawable.recco_ic_bookmark_filled),
                     tint = AppTheme.colors.accent,
                     contentDescription = null,
                 )
@@ -414,7 +409,7 @@ private fun PartiallyUnlockedCard(
             verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_refresh),
+                painter = painterResource(id = R.drawable.recco_ic_refresh),
                 tint = AppTheme.colors.onPrimary,
                 contentDescription = null,
             )
@@ -438,9 +433,9 @@ private fun LockedCard(
     val cardRes = remember {
         mutableStateOf(
             listOf(
-                R.drawable.bg_no_rec_1,
-                R.drawable.bg_no_rec_2,
-                R.drawable.bg_no_rec_3
+                R.drawable.recco_bg_no_rec_1,
+                R.drawable.recco_bg_no_rec_2,
+                R.drawable.recco_bg_no_rec_3
             ).random()
         )
     }
@@ -497,7 +492,7 @@ private fun AppLockIcon(
         dampingRatio = DampingRatioHighBouncy,
         stiffness = StiffnessMedium
     )
-    val iconRes = remember { mutableStateOf(R.drawable.ic_lock) }
+    val iconRes = remember { mutableStateOf(R.drawable.recco_ic_lock) }
     val rotateStart = 0f
     val rotateEnd = -20f
     val rotate = remember { mutableStateOf(rotateStart) }
@@ -517,7 +512,7 @@ private fun AppLockIcon(
                     ) { value: Float, _: Float ->
                         rotate.value = value
                     }
-                    iconRes.value = R.drawable.ic_unlock
+                    iconRes.value = R.drawable.recco_ic_unlock
                     animate(
                         initialValue = scaleStart,
                         targetValue = scaleEnd,

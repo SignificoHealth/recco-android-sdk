@@ -94,7 +94,7 @@ private fun AppPrimaryButtonActiveWithEndIconOverLightBackgroundPreview() {
         isOverBackground = false,
         text = "Button",
         iconStartRes = null,
-        iconEndRes = R.drawable.ic_retry,
+        iconEndRes = R.drawable.recco_ic_retry,
         enabled = true,
         onClick = {}
     )
@@ -108,7 +108,7 @@ private fun AppPrimaryButtonInactiveWithEndIconOverLightBackgroundPreview() {
         isOverBackground = false,
         text = "Button",
         iconStartRes = null,
-        iconEndRes = R.drawable.ic_retry,
+        iconEndRes = R.drawable.recco_ic_retry,
         enabled = false,
         onClick = {}
     )
@@ -121,7 +121,7 @@ private fun AppPrimaryButtonActiveWithStartIconOverLightBackgroundPreview() {
         modifier = Modifier.fillMaxWidth(),
         isOverBackground = false,
         text = "Button",
-        iconStartRes = R.drawable.ic_retry,
+        iconStartRes = R.drawable.recco_ic_retry,
         iconEndRes = null,
         enabled = true,
         onClick = {}
@@ -135,7 +135,7 @@ private fun AppPrimaryButtonInactiveWithStartIconOverLightBackgroundPreview() {
         modifier = Modifier.fillMaxWidth(),
         isOverBackground = false,
         text = "Button",
-        iconStartRes = R.drawable.ic_retry,
+        iconStartRes = R.drawable.recco_ic_retry,
         iconEndRes = null,
         enabled = false,
         onClick = {}
@@ -178,7 +178,7 @@ private fun AppPrimaryButtonActiveWithEndIconOverDarkBackgroundPreview() {
         isOverBackground = true,
         text = "Button",
         iconStartRes = null,
-        iconEndRes = R.drawable.ic_retry,
+        iconEndRes = R.drawable.recco_ic_retry,
         enabled = true,
         onClick = {}
     )
@@ -192,7 +192,7 @@ private fun AppPrimaryButtonInactiveWithEndIconOverDarkBackgroundPreview() {
         isOverBackground = true,
         text = "Button",
         iconStartRes = null,
-        iconEndRes = R.drawable.ic_retry,
+        iconEndRes = R.drawable.recco_ic_retry,
         enabled = false,
         onClick = {}
     )
@@ -205,7 +205,7 @@ private fun AppPrimaryButtonActiveWithStartIconOverDarkBackgroundPreview() {
         modifier = Modifier.fillMaxWidth(),
         isOverBackground = true,
         text = "Button",
-        iconStartRes = R.drawable.ic_retry,
+        iconStartRes = R.drawable.recco_ic_retry,
         iconEndRes = null,
         enabled = true,
         onClick = {}
@@ -219,7 +219,7 @@ private fun AppPrimaryButtonInactiveWithStartIconOverDarkBackgroundPreview() {
         modifier = Modifier.fillMaxWidth(),
         isOverBackground = true,
         text = "Button",
-        iconStartRes = R.drawable.ic_retry,
+        iconStartRes = R.drawable.recco_ic_retry,
         iconEndRes = null,
         enabled = false,
         onClick = {}

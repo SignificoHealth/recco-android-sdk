@@ -41,7 +41,7 @@ const val ASPECT_RATIO_10_4 = 10f / 4f // 0.4
 fun AppAsyncImage(
     modifier: Modifier,
     data: Any?,
-    @DrawableRes placeholderRes: Int? = R.drawable.bg_image_placeholder,
+    @DrawableRes placeholderRes: Int? = R.drawable.recco_bg_image_placeholder,
     placeholderContent: (@Composable () -> Unit)? = null,
     loadingAnimationDrawable: AnimationDrawable? = loadingAnimationDrawable(),
     loadingContent: (@Composable () -> Unit)? = null,
@@ -105,13 +105,13 @@ fun AppAsyncImage(
 fun loadingAnimationDrawable() = loadingAnimationDrawable(
     context = LocalContext.current,
     loadingResImages = listOf(
-        R.drawable.bg_loading_1,
-        R.drawable.bg_loading_2,
-        R.drawable.bg_loading_3,
-        R.drawable.bg_loading_4,
-        R.drawable.bg_loading_5,
-        R.drawable.bg_loading_6,
-        R.drawable.bg_loading_7,
+        R.drawable.recco_bg_loading_1,
+        R.drawable.recco_bg_loading_2,
+        R.drawable.recco_bg_loading_3,
+        R.drawable.recco_bg_loading_4,
+        R.drawable.recco_bg_loading_5,
+        R.drawable.recco_bg_loading_6,
+        R.drawable.recco_bg_loading_7,
     )
 )
 
@@ -119,13 +119,13 @@ fun loadingAnimationDrawable() = loadingAnimationDrawable(
 fun loadingCardAnimationDrawable() = loadingAnimationDrawable(
     context = LocalContext.current,
     loadingResImages = listOf(
-        R.drawable.bg_loading_card_1,
-        R.drawable.bg_loading_card_2,
-        R.drawable.bg_loading_card_3,
-        R.drawable.bg_loading_card_4,
-        R.drawable.bg_loading_card_5,
-        R.drawable.bg_loading_card_6,
-        R.drawable.bg_loading_card_7,
+        R.drawable.recco_bg_loading_card_1,
+        R.drawable.recco_bg_loading_card_2,
+        R.drawable.recco_bg_loading_card_3,
+        R.drawable.recco_bg_loading_card_4,
+        R.drawable.recco_bg_loading_card_5,
+        R.drawable.recco_bg_loading_card_6,
+        R.drawable.recco_bg_loading_card_7,
     )
 )
 

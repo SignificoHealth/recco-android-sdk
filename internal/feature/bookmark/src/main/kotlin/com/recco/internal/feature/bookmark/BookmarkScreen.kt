@@ -95,7 +95,7 @@ private fun BookmarkScreen(
                             .fillMaxWidth()
                             .padding(horizontal = AppSpacing.dp_40),
                         contentScale = ContentScale.FillWidth,
-                        painter = painterResource(id = R.drawable.ic_bookmark_empty_state),
+                        painter = painterResource(id = R.drawable.recco_ic_bookmark_empty_state),
                         contentDescription = null
                     )
                 }

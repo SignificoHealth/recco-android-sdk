@@ -31,8 +31,8 @@ fun Throwable?.asCtaTextRes(): Int = when (this) {
 
 @DrawableRes
 fun Throwable?.asCtaIconRes(): Int = when (this) {
-    is NoConnectException -> R.drawable.ic_retry
-    else -> R.drawable.ic_retry
+    is NoConnectException -> R.drawable.recco_ic_retry
+    else -> R.drawable.recco_ic_retry
 }
 
 @DrawableRes
