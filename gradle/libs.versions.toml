@@ -34,7 +34,7 @@ moshi = "1.15.0"
 okhttp = "4.11.0"
 openapi = "6.6.0"
 retrofit = "2.9.0"
-security = "1.0.0"
+security = "1.1.0-alpha06"
 
 [libraries]
 accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "accompanist" }
