@@ -5,7 +5,6 @@ import java.util.Locale
 
 fun Locale.toUnitSystem() =
     when (country.uppercase(Locale.ROOT)) {
-        "US" -> UnitSystem.IMPERIAL_US
-        "GB", "MM", "LR" -> UnitSystem.IMPERIAL_GB // UK, Myanmar, Liberia
+        "US", "GB", "MM", "LR" -> UnitSystem.IMPERIAL
         else -> UnitSystem.METRIC
     }
