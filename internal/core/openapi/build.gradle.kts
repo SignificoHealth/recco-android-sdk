@@ -6,6 +6,12 @@ plugins {
 
 android {
     namespace = "com.recco.internal.core.openapi"
+
+    buildTypes {
+        named("release") {
+            consumerProguardFiles("consumer-proguard-rules.pro")
+        }
+    }
 }
 
 dependencies {
