@@ -15,6 +15,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
                 apply("recco.android.maven.publish")
+                apply("de.mannodermaus.android-junit5")
             }
 
             extensions.configure<LibraryExtension> {
@@ -25,9 +26,13 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             dependencies {
                 "implementation"(libs.kotlinx.coroutines.android)
-
                 "implementation"(libs.androidx.annotation)
                 "implementation"(libs.androidx.core)
+
+                "testImplementation"(libs.junit.api)
+                "testRuntimeOnly"(libs.junit.engine)
+                "testImplementation"(libs.mockito)
+                "testImplementation"(libs.coroutines.test)
             }
         }
     }
