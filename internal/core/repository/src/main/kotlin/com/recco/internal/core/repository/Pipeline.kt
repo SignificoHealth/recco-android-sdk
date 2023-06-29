@@ -38,9 +38,9 @@ internal class Pipeline<T>(private val remoteDatasource: suspend () -> T) {
     private fun clearValue() {
         value = null
     }
-}
 
-private data class PipelineUpdate<T>(
-    val datasource: suspend () -> T,
-    val id: Int = Random.nextInt()
-)
+    private data class PipelineUpdate<T>(
+        val datasource: suspend () -> T,
+        val id: Int = Random.nextInt()
+    )
+}

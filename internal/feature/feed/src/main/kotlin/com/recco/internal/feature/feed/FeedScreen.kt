@@ -57,7 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
-import com.recco.internal.core.model.LoadingStateIn
+import com.recco.internal.core.model.FlowDataState
 import com.recco.internal.core.model.feed.FeedSection
 import com.recco.internal.core.model.feed.FeedSectionAndRecommendations
 import com.recco.internal.core.model.feed.FeedSectionState
@@ -79,6 +79,7 @@ import com.recco.internal.core.ui.components.heightRecommendationCard
 import com.recco.internal.core.ui.components.widthRecommendationCard
 import com.recco.internal.core.ui.extensions.asResExplanation
 import com.recco.internal.core.ui.extensions.asResTitle
+import com.recco.internal.core.ui.extensions.shimmerEffect
 import com.recco.internal.core.ui.pipelines.GlobalViewEvent
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
@@ -87,6 +88,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val LOCK_PLACEHOLDER_ELEMENTS = 5
+private const val LOADING_PLACEHOLDER_ELEMENTS = 3
 
 @Composable
 fun FeedRoute(
@@ -181,16 +183,24 @@ private fun FeedContent(
         Spacer(Modifier.height(AppSpacing.dp_40))
 
         feedUI.sections.forEach { section ->
-            if (section.recommendations is LoadingStateIn.Loading) {
-                FeedSectionLoading(section = section)
-            } else {
-                FeedSection(
-                    section = section,
-                    feedSectionToUnlock = feedUI.feedSectionToUnlock,
-                    navigateToArticle = navigateToArticle,
-                    navigateToQuestionnaire = navigateToQuestionnaire,
-                    onLockAnimationFinished = onLockAnimationFinished,
+            Crossfade(
+                targetState = section.recommendations is FlowDataState.Loading,
+                animationSpec = tween(
+                    durationMillis = 1000,
+                    easing = LinearEasing,
                 )
+            ) { isLoading ->
+                if (isLoading) {
+                    FeedSectionLoading(section = section)
+                } else {
+                    FeedSection(
+                        section = section,
+                        feedSectionToUnlock = feedUI.feedSectionToUnlock,
+                        navigateToArticle = navigateToArticle,
+                        navigateToQuestionnaire = navigateToQuestionnaire,
+                        onLockAnimationFinished = onLockAnimationFinished,
+                    )
+                }
             }
             Spacer(Modifier.height(AppSpacing.dp_40))
         }
@@ -328,20 +338,17 @@ private fun LoadingItems() {
             end = AppSpacing.dp_24
         )
     ) {
-        items(LOCK_PLACEHOLDER_ELEMENTS) {
+        items(LOADING_PLACEHOLDER_ELEMENTS) {
             Card(
                 modifier = Modifier
                     .height(heightRecommendationCard)
                     .width(widthRecommendationCard),
-                elevation = 0.dp,
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(AppTheme.colors.illustration)
-                ) {
-
-                }
+                        .shimmerEffect(index = it)
+                )
             }
         }
     }
@@ -387,7 +394,7 @@ private fun UnlockedItems(
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
 ) {
     val recommendations =
-        (section.recommendations as LoadingStateIn.Success<List<Recommendation>>).data
+        (section.recommendations as FlowDataState.Success<List<Recommendation>>).data
     LazyRow(
         state = scrollState,
         horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8),

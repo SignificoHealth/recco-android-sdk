@@ -1,7 +1,6 @@
 package com.recco.internal.core.repository
 
-import com.recco.internal.core.base.di.ApplicationScope
-import com.recco.internal.core.model.LoadingStateIn
+import com.recco.internal.core.model.FlowDataState
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.recommendation.Article
@@ -18,62 +17,58 @@ import com.recco.internal.core.openapi.model.UpdateRatingDTO
 import com.recco.internal.core.repository.mapper.asDTO
 import com.recco.internal.core.repository.mapper.asEntity
 import dagger.hilt.android.scopes.ActivityRetainedScoped
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 @ActivityRetainedScoped
 class RecommendationRepository @Inject constructor(
-    private val api: RecommendationApi,
-    @ApplicationScope private val appScope: CoroutineScope,
+    private val api: RecommendationApi
 ) {
     private val sectionsPipelines = mapOf(
-        FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS to PipelineLoading(appScope) {
-            delay(5000)
+        FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS to PipelineStateAware {
             api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_ACTIVITY).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE to PipelineLoading(appScope) {
+        FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE to PipelineStateAware {
             api.exploreContentByTopic(TopicDTO.PHYSICAL_ACTIVITY).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.NUTRITION_RECOMMENDATIONS to PipelineLoading(appScope) {
+        FeedSectionType.NUTRITION_RECOMMENDATIONS to PipelineStateAware {
             api.getTailoredRecommendationsByTopic(TopicDTO.NUTRITION).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.NUTRITION_EXPLORE to PipelineLoading(appScope) {
+        FeedSectionType.NUTRITION_EXPLORE to PipelineStateAware {
             api.exploreContentByTopic(TopicDTO.NUTRITION).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS to PipelineLoading(appScope) {
+        FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS to PipelineStateAware {
             api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.MENTAL_WELLBEING_EXPLORE to PipelineLoading(appScope) {
+        FeedSectionType.MENTAL_WELLBEING_EXPLORE to PipelineStateAware {
             api.exploreContentByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.SLEEP_RECOMMENDATIONS to PipelineLoading(appScope) {
+        FeedSectionType.SLEEP_RECOMMENDATIONS to PipelineStateAware {
             api.getTailoredRecommendationsByTopic(TopicDTO.SLEEP).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.SLEEP_EXPLORE to PipelineLoading(appScope) {
+        FeedSectionType.SLEEP_EXPLORE to PipelineStateAware {
             api.exploreContentByTopic(TopicDTO.SLEEP).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.PREFERRED_RECOMMENDATIONS to PipelineLoading(appScope) {
+        FeedSectionType.PREFERRED_RECOMMENDATIONS to PipelineStateAware {
             api.getUserPreferredRecommendations().unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.MOST_POPULAR to PipelineLoading(appScope) {
+        FeedSectionType.MOST_POPULAR to PipelineStateAware {
             api.getMostPopularContent().unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.NEW_CONTENT to PipelineLoading(appScope) {
+        FeedSectionType.NEW_CONTENT to PipelineStateAware {
             api.getNewestContent().unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
-        FeedSectionType.STARTING_RECOMMENDATIONS to PipelineLoading(appScope) {
+        FeedSectionType.STARTING_RECOMMENDATIONS to PipelineStateAware {
             api.getStartingRecommendations().unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         }
@@ -171,13 +166,13 @@ class RecommendationRepository @Inject constructor(
         rating: Rating? = null
     ) {
         sectionsPipelines
-            .filter { (_, pipeline) -> pipeline.value is LoadingStateIn.Success }
+            .filter { (_, pipeline) -> pipeline.value is FlowDataState.Success }
             .filter { (_, pipeline) ->
-                val data = (pipeline.value as LoadingStateIn.Success).data
+                val data = (pipeline.value as FlowDataState.Success).data
                 data.any { it.id == contentId }
             }
             .forEach { (_, pipeline) ->
-                val data = (pipeline.value as LoadingStateIn.Success).data
+                val data = (pipeline.value as FlowDataState.Success).data
                 pipeline.replaceWithLocal(
                     data.map { recommendation ->
                         if (recommendation.id == contentId) {
