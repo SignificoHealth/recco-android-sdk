@@ -57,12 +57,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
+import com.recco.internal.core.model.LoadingStateIn
 import com.recco.internal.core.model.feed.FeedSection
 import com.recco.internal.core.model.feed.FeedSectionAndRecommendations
 import com.recco.internal.core.model.feed.FeedSectionState
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.Recommendation
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppAlertDialog
 import com.recco.internal.core.ui.components.AppEmptyContent
@@ -179,13 +181,17 @@ private fun FeedContent(
         Spacer(Modifier.height(AppSpacing.dp_40))
 
         feedUI.sections.forEach { section ->
-            FeedSection(
-                section = section,
-                feedSectionToUnlock = feedUI.feedSectionToUnlock,
-                navigateToArticle = navigateToArticle,
-                navigateToQuestionnaire = navigateToQuestionnaire,
-                onLockAnimationFinished = onLockAnimationFinished,
-            )
+            if (section.recommendations is LoadingStateIn.Loading) {
+                FeedSectionLoading(section = section)
+            } else {
+                FeedSection(
+                    section = section,
+                    feedSectionToUnlock = feedUI.feedSectionToUnlock,
+                    navigateToArticle = navigateToArticle,
+                    navigateToQuestionnaire = navigateToQuestionnaire,
+                    onLockAnimationFinished = onLockAnimationFinished,
+                )
+            }
             Spacer(Modifier.height(AppSpacing.dp_40))
         }
     }
@@ -225,6 +231,24 @@ private fun FeedHeader(
 
             AppTintedImagePottedPlant2()
         }
+    }
+}
+
+@Composable
+private fun FeedSectionLoading(
+    section: FeedSectionAndRecommendations,
+) {
+    val feedSection = section.feedSection
+
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            modifier = Modifier.padding(start = AppSpacing.dp_24),
+            text = feedSection.type.asSectionTitle(),
+            style = AppTheme.typography.h4
+        )
+        Spacer(Modifier.height(AppSpacing.dp_16))
+        LoadingItems()
     }
 }
 
@@ -295,6 +319,35 @@ private fun FeedSection(
 }
 
 @Composable
+private fun LoadingItems() {
+    LazyRow(
+        state = rememberLazyListState(),
+        horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8),
+        contentPadding = PaddingValues(
+            start = AppSpacing.dp_24,
+            end = AppSpacing.dp_24
+        )
+    ) {
+        items(LOCK_PLACEHOLDER_ELEMENTS) {
+            Card(
+                modifier = Modifier
+                    .height(heightRecommendationCard)
+                    .width(widthRecommendationCard),
+                elevation = 0.dp,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(AppTheme.colors.illustration)
+                ) {
+
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun LockedItems(
     scrollState: LazyListState,
     feedSection: FeedSection,
@@ -333,6 +386,8 @@ private fun UnlockedItems(
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
 ) {
+    val recommendations =
+        (section.recommendations as LoadingStateIn.Success<List<Recommendation>>).data
     LazyRow(
         state = scrollState,
         horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8),
@@ -342,7 +397,7 @@ private fun UnlockedItems(
         )
     ) {
         items(
-            items = section.recommendations,
+            items = recommendations,
             key = { item -> item.id.itemId }
         ) { recommendation ->
             AppRecommendationCard(recommendation, navigateToArticle)
