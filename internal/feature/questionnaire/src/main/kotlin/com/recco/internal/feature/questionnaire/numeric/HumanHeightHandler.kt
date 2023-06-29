@@ -1,43 +1,44 @@
 package com.recco.internal.feature.questionnaire.numeric
 
 import com.recco.internal.core.model.questionnaire.UnitSystem
+import com.recco.internal.core.model.questionnaire.centimetersToFeetWithNoInches
+import com.recco.internal.core.model.questionnaire.centimetersToMeters
 import com.recco.internal.core.model.questionnaire.centimetersToMillimeters
+import com.recco.internal.core.model.questionnaire.centimetersToRemainingInches
 import com.recco.internal.core.model.questionnaire.feetToMillimeters
 import com.recco.internal.core.model.questionnaire.inchesToMillimeters
 import com.recco.internal.core.model.questionnaire.metersToMillimeters
-import com.recco.internal.core.model.questionnaire.millimetersToFeet
-import com.recco.internal.core.model.questionnaire.millimetersToMeters
 
 class HumanHeightHandler(
     private val unitSystem: UnitSystem
 ) {
     val bigUnitLabel = when (unitSystem) {
-        UnitSystem.IMPERIAL_US,
-        UnitSystem.IMPERIAL_GB -> "ft"
+        UnitSystem.IMPERIAL -> "ft"
         UnitSystem.METRIC -> "cm"
     }
 
     val smallUnitLabel = when (unitSystem) {
-        UnitSystem.IMPERIAL_US,
-        UnitSystem.IMPERIAL_GB -> "in"
+        UnitSystem.IMPERIAL -> "in"
         UnitSystem.METRIC -> "cm"
     }
 
     val smallUnitChars = 2
 
-    fun getBigUnitValue(millimeters: Int): Double = when (unitSystem) {
-        UnitSystem.IMPERIAL_US,
-        UnitSystem.IMPERIAL_GB -> millimeters.millimetersToFeet()
+    fun getBigUnitValue(centimeters: Int): Int = when (unitSystem) {
+        UnitSystem.IMPERIAL -> centimeters.centimetersToFeetWithNoInches()
+        UnitSystem.METRIC -> centimeters.centimetersToMeters()
+    }
 
-        UnitSystem.METRIC -> millimeters.millimetersToMeters()
+    fun getSmallUnitValue(centimeters: Int): Int = when (unitSystem) {
+        UnitSystem.IMPERIAL -> centimeters.centimetersToRemainingInches()
+        UnitSystem.METRIC -> throw IllegalStateException("Does not apply")
     }
 
     fun getCentimeters(bigValue: Double?, smallValue: Double?): Int =
         getMillimeters(bigValue, smallValue) / 10
 
     private fun getMillimeters(bigValue: Double?, smallValue: Double?): Int = when (unitSystem) {
-        UnitSystem.IMPERIAL_US,
-        UnitSystem.IMPERIAL_GB -> (bigValue?.feetToMillimeters()
+        UnitSystem.IMPERIAL -> (bigValue?.feetToMillimeters()
             ?: 0) + (smallValue?.inchesToMillimeters() ?: 0)
 
         UnitSystem.METRIC -> (bigValue?.metersToMillimeters()

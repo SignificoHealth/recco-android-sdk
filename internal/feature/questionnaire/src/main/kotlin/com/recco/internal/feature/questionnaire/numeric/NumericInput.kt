@@ -36,12 +36,14 @@ fun NumericInput(
 
         NumericQuestionFormat.HUMAN_HEIGHT -> HumanHeightInput(
             onValueChange = onValueChange,
-            maxValue = maxValue
+            maxValue = maxValue,
+            initialValue = initialValue
         )
 
         NumericQuestionFormat.HUMAN_WEIGHT -> HumanWeightInput(
             onValueChange = onValueChange,
-            maxValue = maxValue
+            maxValue = maxValue,
+            initialValue = initialValue
         )
     }
 }
@@ -51,6 +53,7 @@ private fun HumanHeightInput(
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit,
     maxValue: Int,
+    initialValue: String,
     handler: HumanHeightHandler = HumanHeightHandler(Locale.getDefault().toUnitSystem())
 ) {
     Row(
@@ -58,8 +61,20 @@ private fun HumanHeightInput(
         horizontalArrangement = Arrangement.Center
     ) {
         if (handler.bigUnitLabel != handler.smallUnitLabel) {
-            var bigUnitValue: String? by remember { mutableStateOf(null) }
-            var smallUnitValue: String? by remember { mutableStateOf(null) }
+            var bigUnitValue: String? by remember {
+                mutableStateOf(
+                    initialValue.toIntOrNull()?.let { initialValue ->
+                        handler.getBigUnitValue(initialValue)
+                    }?.toString().orEmpty()
+                )
+            }
+            var smallUnitValue: String? by remember {
+                mutableStateOf(
+                    initialValue.toIntOrNull()?.let { initialValue ->
+                        handler.getSmallUnitValue(initialValue)
+                    }?.toString().orEmpty()
+                )
+            }
 
             NumericTextField(
                 modifier = Modifier.weight(.5f),
@@ -73,8 +88,9 @@ private fun HumanHeightInput(
                     )
                 },
                 supportDecimal = false,
-                maxChars = handler.getBigUnitValue(maxValue).toInt().toString().length,
-                label = handler.bigUnitLabel
+                maxChars = handler.getBigUnitValue(maxValue).toString().length,
+                label = handler.bigUnitLabel,
+                initialValue = bigUnitValue.orEmpty()
             )
             Spacer(modifier = Modifier.width(AppSpacing.dp_24))
 
@@ -90,7 +106,8 @@ private fun HumanHeightInput(
                     )
                 },
                 maxChars = handler.smallUnitChars,
-                label = handler.smallUnitLabel
+                label = handler.smallUnitLabel,
+                initialValue = smallUnitValue.orEmpty()
             )
         } else {
             var smallUnitValue: String? by remember { mutableStateOf(null) }
@@ -106,7 +123,8 @@ private fun HumanHeightInput(
                     )
                 },
                 maxChars = 3,
-                label = handler.smallUnitLabel
+                label = handler.smallUnitLabel,
+                initialValue = initialValue
             )
         }
     }
@@ -116,78 +134,39 @@ private fun HumanHeightInput(
 private fun HumanWeightInput(
     onValueChange: (String) -> Unit,
     maxValue: Int,
-    handler: HumanWeightHandler = HumanWeightHandler(Locale.getDefault().toUnitSystem())
+    handler: HumanWeightHandler = HumanWeightHandler(Locale.getDefault().toUnitSystem()),
+    initialValue: String
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        if (handler.smallUnitLabel != null) {
-            var bigUnitValue: String? by remember { mutableStateOf(null) }
-            var smallUnitValue: String? by remember { mutableStateOf(null) }
-
-            Row(Modifier.weight(.15f)) {}
-            NumericTextField(
-                modifier = Modifier.weight(.5f),
-                supportDecimal = handler.bigUnitDecimals,
-                label = handler.bigUnitLabel,
-                hint = if (handler.bigUnitDecimals) "0.00" else "0",
-                maxChars = if (handler.bigUnitDecimals) {
-                    handler.getBigUnitValue(maxValue).toInt().toString().length + 3
-                } else {
-                    handler.getBigUnitValue(maxValue).toInt().toString().length
-                },
-                onValueChange = { newValue ->
-                    bigUnitValue = newValue
-                    onValueChange(
-                        handler.getKilograms(
-                            bigValue = bigUnitValue?.toDoubleOrNull(),
-                            smallValue = smallUnitValue?.toDoubleOrNull()
-                        ).toString()
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.width(AppSpacing.dp_24))
-            NumericTextField(
-                modifier = Modifier.weight(.5f),
-                hint = "0",
-                label = handler.smallUnitLabel,
-                maxChars = handler.smallUnitChars,
-                onValueChange = { newValue ->
-                    smallUnitValue = newValue
-                    onValueChange(
-                        handler.getKilograms(
-                            bigValue = bigUnitValue?.toDoubleOrNull(),
-                            smallValue = smallUnitValue?.toDoubleOrNull()
-                        ).toString()
-                    )
-                }
-            )
-            Row(Modifier.weight(.15f)) {}
-        } else {
-            var bigUnitValue: String? by remember { mutableStateOf(null) }
-
-            NumericTextField(
-                modifier = Modifier.fillMaxWidth(),
-                supportDecimal = handler.bigUnitDecimals,
-                label = handler.bigUnitLabel,
-                hint = if (handler.bigUnitDecimals) "0.00" else "0",
-                maxChars = if (handler.bigUnitDecimals) {
-                    handler.getBigUnitValue(maxValue).toInt().toString().length + 3
-                } else {
-                    handler.getBigUnitValue(maxValue).toInt().toString().length
-                },
-                onValueChange = { newValue ->
-                    bigUnitValue = newValue
-                    onValueChange(
-                        handler.getKilograms(
-                            bigValue = bigUnitValue?.toDoubleOrNull(),
-                            smallValue = null
-                        ).toString()
-                    )
-                }
+        var bigUnitValue: String? by remember {
+            mutableStateOf(
+                initialValue.toIntOrNull()?.let { initialValue ->
+                    handler.getBigUnitValue(initialValue)
+                }?.toString().orEmpty()
             )
         }
+
+        NumericTextField(
+            modifier = Modifier.fillMaxWidth(),
+            supportDecimal = handler.bigUnitDecimals,
+            label = handler.bigUnitLabel,
+            hint = if (handler.bigUnitDecimals) "0.00" else "0",
+            maxChars = if (handler.bigUnitDecimals) {
+                handler.getBigUnitValue(maxValue).toInt().toString().length + 3
+            } else {
+                handler.getBigUnitValue(maxValue).toInt().toString().length
+            },
+            onValueChange = { newValue ->
+                bigUnitValue = newValue
+                onValueChange(
+                    handler.getKilograms(bigValue = bigUnitValue?.toDoubleOrNull()).toString()
+                )
+            },
+            initialValue = bigUnitValue.orEmpty()
+        )
     }
 }
 
@@ -219,7 +198,8 @@ private fun PreviewHeightImperial() {
     HumanHeightInput(
         onValueChange = {},
         maxValue = 34,
-        handler = HumanHeightHandler(UnitSystem.IMPERIAL_US)
+        initialValue = "150",
+        handler = HumanHeightHandler(UnitSystem.IMPERIAL)
     )
 }
 
@@ -229,6 +209,7 @@ private fun PreviewHeightMetric() {
     HumanHeightInput(
         onValueChange = {},
         maxValue = 34,
+        initialValue = "200",
         handler = HumanHeightHandler(UnitSystem.METRIC)
     )
 }
@@ -239,7 +220,8 @@ private fun PreviewWeightImperial() {
     HumanWeightInput(
         onValueChange = {},
         maxValue = 34,
-        handler = HumanWeightHandler(UnitSystem.IMPERIAL_US)
+        initialValue = "300",
+        handler = HumanWeightHandler(UnitSystem.IMPERIAL)
     )
 }
 
@@ -249,6 +231,7 @@ private fun PreviewWeightMetric() {
     HumanWeightInput(
         onValueChange = {},
         maxValue = 34,
+        initialValue = "300",
         handler = HumanWeightHandler(UnitSystem.METRIC)
     )
 }
