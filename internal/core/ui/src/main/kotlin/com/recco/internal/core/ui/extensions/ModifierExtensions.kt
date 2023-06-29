@@ -66,13 +66,10 @@ fun Modifier.shimmerEffect(
         targetValue = 3 * size.value.height.toFloat(),
         animationSpec = infiniteRepeatable(
             initialStartOffset = StartOffset(
-                offsetMillis = index * syncRatio,
+                offsetMillis = delayMillis + (index * syncRatio),
                 offsetType = StartOffsetType.Delay
             ),
-            animation = tween(
-                durationMillis = durationMillis,
-                delayMillis = delayMillis
-            ),
+            animation = tween(durationMillis),
             repeatMode = RepeatMode.Restart
         )
     )
