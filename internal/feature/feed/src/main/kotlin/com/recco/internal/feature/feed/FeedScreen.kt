@@ -190,19 +190,21 @@ private fun FeedContent(
                     easing = LinearEasing,
                 )
             ) { isLoading ->
-                if (isLoading) {
-                    FeedSectionLoading(section = section)
-                } else {
-                    FeedSection(
-                        section = section,
-                        feedSectionToUnlock = feedUI.feedSectionToUnlock,
-                        navigateToArticle = navigateToArticle,
-                        navigateToQuestionnaire = navigateToQuestionnaire,
-                        onLockAnimationFinished = onLockAnimationFinished,
-                    )
+                Column {
+                    if (isLoading) {
+                        FeedSectionLoading(section = section)
+                    } else {
+                        FeedSection(
+                            section = section,
+                            feedSectionToUnlock = feedUI.feedSectionToUnlock,
+                            navigateToArticle = navigateToArticle,
+                            navigateToQuestionnaire = navigateToQuestionnaire,
+                            onLockAnimationFinished = onLockAnimationFinished,
+                        )
+                    }
+                    Spacer(Modifier.height(AppSpacing.dp_40))
                 }
             }
-            Spacer(Modifier.height(AppSpacing.dp_40))
         }
     }
 }
@@ -248,13 +250,10 @@ private fun FeedHeader(
 private fun FeedSectionLoading(
     section: FeedSectionAndRecommendations,
 ) {
-    val feedSection = section.feedSection
-
-
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.padding(start = AppSpacing.dp_24),
-            text = feedSection.type.asSectionTitle(),
+            text = section.feedSection.type.asSectionTitle(),
             style = AppTheme.typography.h4
         )
         Spacer(Modifier.height(AppSpacing.dp_16))
@@ -343,6 +342,7 @@ private fun LoadingItems() {
                 modifier = Modifier
                     .height(heightRecommendationCard)
                     .width(widthRecommendationCard),
+                elevation = AppTheme.elevation.card,
             ) {
                 Box(
                     modifier = Modifier
