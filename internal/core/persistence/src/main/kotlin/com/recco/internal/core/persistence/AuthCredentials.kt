@@ -10,6 +10,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private const val RECCO_SDK_PREFS = "recco_sdk.prefs"
+
 @Singleton
 class AuthCredentials @Inject constructor(
     @ApplicationContext context: Context
@@ -19,7 +21,7 @@ class AuthCredentials @Inject constructor(
 
     private val prefs by lazy {
         EncryptedSharedPreferences.create(
-            "${sdkConfig.appName}_recco_sdk.PREFS",
+            RECCO_SDK_PREFS,
             MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
             context,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
