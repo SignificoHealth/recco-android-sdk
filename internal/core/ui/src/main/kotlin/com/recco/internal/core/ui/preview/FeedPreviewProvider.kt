@@ -1,5 +1,6 @@
 package com.recco.internal.core.ui.preview
 
+import com.recco.internal.core.model.FlowDataState
 import com.recco.internal.core.model.feed.FeedSection
 import com.recco.internal.core.model.feed.FeedSectionAndRecommendations
 import com.recco.internal.core.model.feed.FeedSectionState
@@ -12,9 +13,14 @@ class FeedPreviewProvider {
         fun data(
             type: FeedSectionType,
             state: FeedSectionState = FeedSectionState.LOCKED,
-            recommendationsSize: Int = 10
+            recommendationsSize: Int = 10,
+            isRecommendationsLoading: Boolean = false
         ) = FeedSectionAndRecommendations(
-            recommendations = List(recommendationsSize) { RecommendationPreviewProvider.data },
+            recommendations = if (isRecommendationsLoading) {
+                FlowDataState.Loading
+            } else {
+                FlowDataState.Success(List(recommendationsSize) { RecommendationPreviewProvider.data })
+            },
             feedSection = FeedSection(
                 type = type,
                 state = state,

@@ -7,11 +7,9 @@ import com.recco.internal.core.network.http.unwrap
 import com.recco.internal.core.openapi.api.AuthenticationApi
 import com.recco.internal.core.persistence.AuthCredentials
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
-import java.io.IOException
 
 class AuthInterceptor(
     private val authCredentials: AuthCredentials,
