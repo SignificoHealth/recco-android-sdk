@@ -5,12 +5,18 @@
 
 You can add new custom properties in the `openapi-generator-config.json` file to customize the output content through the `.mustache` files.
 
-### OpenApi references:
+#### OpenApi references:
 - [Kotlin generator](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/kotlin.md)
 - [Swagger Editor](https://editor.swagger.io/)
 - [OpenApi templates](https://openapi-generator.tech/docs/templating)
 - [OpenApi customization](https://openapi-generator.tech/docs/customization)
 - [Mustache manual](https://jgonggrijp.gitlab.io/wontache/mustache.5.html)
+
+## Frontitude
+
+[Frontitude](https://www.frontitude.com) provides design and product teams with a single source of truth for managing product copy.
+
+See [**Frontitude CLI**](./docs/FRONTITUDE_CLI.md) to know how to update your `strings.xml`.
 
 ## Maven Publishing
 
