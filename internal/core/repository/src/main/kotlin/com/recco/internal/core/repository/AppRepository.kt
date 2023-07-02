@@ -1,8 +1,8 @@
 package com.recco.internal.core.repository
 
+import com.recco.api.model.SDKConfig
 import com.recco.internal.core.base.di.ApplicationScope
 import com.recco.internal.core.logger.Logger
-import com.recco.api.model.SDKConfig
 import com.recco.internal.core.openapi.api.AuthenticationApi
 import com.recco.internal.core.openapi.api.MetricApi
 import com.recco.internal.core.openapi.model.AppUserMetricActionDTO
@@ -47,14 +47,16 @@ class AppRepository @Inject constructor(
         val tokenId = authCredentials.tokenId ?: return authCredentials.clearCache()
 
         appScope.launch {
-            authCredentials.clearCache()
-            authenticationApi.logout(
-                authorization = "Bearer $apiSecret",
-                clientUserId = userId,
-                paTReferenceDeleteDTO = PATReferenceDeleteDTO(
-                    tokenId = tokenId
+            runCatching {
+                authCredentials.clearCache()
+                authenticationApi.logout(
+                    authorization = "Bearer $apiSecret",
+                    clientUserId = userId,
+                    paTReferenceDeleteDTO = PATReferenceDeleteDTO(
+                        tokenId = tokenId
+                    )
                 )
-            )
+            }.onFailure { logger.e(it) }
         }
     }
 }
