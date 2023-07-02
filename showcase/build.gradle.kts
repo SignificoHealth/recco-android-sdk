@@ -65,7 +65,6 @@ android {
 dependencies {
     implementation(project(":api:ui"))
     // implementation("com.significo:recco-ui:0.0.1")
-    // implementation("com.significo:recco-headless:0.0.1")
 
     implementation("com.google.dagger:hilt-android:2.46.1")
     kapt("com.google.dagger:hilt-android-compiler:2.46.1")
