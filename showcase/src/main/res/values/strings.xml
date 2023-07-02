@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">android-recco-sdk</string>
+    <string name="app_name">recco showcase</string>
+    <string name="wellcome_message"><![CDATA[Hello! We are the <b>Significo</b> and we want to share with you our exciting new product: <b>Recco!</b>]]></string>
+    <string name="open_recco">Open Recco</string>
+    <string name="login_message">Please create any User ID you want to be able to identify you as a User in the SDK.</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="user_id">User ID</string>
+
 </resources>
