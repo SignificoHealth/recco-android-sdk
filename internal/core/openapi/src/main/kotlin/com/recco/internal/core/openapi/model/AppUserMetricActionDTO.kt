@@ -25,14 +25,14 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = false)
 enum class AppUserMetricActionDTO(val value: kotlin.String) {
 
-    @Json(name = "LOGIN")
-    LOGIN("LOGIN"),
+    @Json(name = "login")
+    LOGIN("login"),
 
-    @Json(name = "DURATION")
-    DURATION("DURATION"),
+    @Json(name = "duration")
+    DURATION("duration"),
 
-    @Json(name = "VIEW")
-    VIEW("VIEW");
+    @Json(name = "view")
+    VIEW("view");
 
     /**
      * Override toString() to avoid using the enum variable name as the value, and instead use

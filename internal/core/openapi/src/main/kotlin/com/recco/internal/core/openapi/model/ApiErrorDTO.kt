@@ -42,12 +42,12 @@ data class ApiErrorDTO(
      */
     @JsonClass(generateAdapter = false)
     enum class ErrorCode(val value: kotlin.String) {
-        @Json(name = "UNKNOWN") UNKNOWN("UNKNOWN"),
-        @Json(name = "RESOURCE_NOT_FOUND") RESOURCE_NOT_FOUND("RESOURCE_NOT_FOUND"),
-        @Json(name = "UNAUTHORIZED") UNAUTHORIZED("UNAUTHORIZED"),
-        @Json(name = "APP_DISABLED") APP_DISABLED("APP_DISABLED"),
-        @Json(name = "BAD_REQUEST") BAD_REQUEST("BAD_REQUEST"),
-        @Json(name = "CONFLICT") CONFLICT("CONFLICT");
+        @Json(name = "unknown") UNKNOWN("unknown"),
+        @Json(name = "resource_not_found") RESOURCE_NOT_FOUND("resource_not_found"),
+        @Json(name = "unauthorized") UNAUTHORIZED("unauthorized"),
+        @Json(name = "app_disabled") APP_DISABLED("app_disabled"),
+        @Json(name = "bad_request") BAD_REQUEST("bad_request"),
+        @Json(name = "conflict") CONFLICT("conflict");
     }
 }
 

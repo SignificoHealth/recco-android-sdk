@@ -24,7 +24,6 @@ import com.squareup.moshi.JsonClass
  *
  * @param type 
  * @param state 
- * @param locked 
  * @param topic 
  */
 @JsonClass(generateAdapter = true)
@@ -35,9 +34,6 @@ data class FeedSectionDTO(
 
     @Json(name = "state")
     val state: FeedSectionStateDTO,
-
-    @Json(name = "locked")
-    val locked: kotlin.Boolean,
 
     @Json(name = "topic")
     val topic: TopicDTO? = null

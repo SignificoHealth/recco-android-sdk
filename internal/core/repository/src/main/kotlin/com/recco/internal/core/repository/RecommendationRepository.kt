@@ -41,11 +41,11 @@ class RecommendationRepository @Inject constructor(
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS to PipelineStateAware {
-            api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
+            api.getTailoredRecommendationsByTopic(TopicDTO.MENTAL_WELLBEING).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.MENTAL_WELLBEING_EXPLORE to PipelineStateAware {
-            api.exploreContentByTopic(TopicDTO.PHYSICAL_WELLBEING).unwrap()
+            api.exploreContentByTopic(TopicDTO.MENTAL_WELLBEING).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.SLEEP_RECOMMENDATIONS to PipelineStateAware {
