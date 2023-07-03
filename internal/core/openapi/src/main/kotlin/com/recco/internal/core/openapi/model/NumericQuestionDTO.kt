@@ -42,10 +42,10 @@ data class NumericQuestionDTO(
      */
     @JsonClass(generateAdapter = false)
     enum class Format(val value: kotlin.String) {
-        @Json(name = "HUMAN_HEIGHT") HUMAN_HEIGHT("HUMAN_HEIGHT"),
-        @Json(name = "HUMAN_WEIGHT") HUMAN_WEIGHT("HUMAN_WEIGHT"),
-        @Json(name = "INTEGER") INTEGER("INTEGER"),
-        @Json(name = "DECIMAL") DECIMAL("DECIMAL");
+        @Json(name = "human_height") HUMAN_HEIGHT("human_height"),
+        @Json(name = "human_weight") HUMAN_WEIGHT("human_weight"),
+        @Json(name = "integer") INTEGER("integer"),
+        @Json(name = "decimal") DECIMAL("decimal");
     }
 }
 

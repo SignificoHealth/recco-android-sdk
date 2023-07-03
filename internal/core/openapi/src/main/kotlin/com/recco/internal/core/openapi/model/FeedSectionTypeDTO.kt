@@ -19,47 +19,47 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
- * Values: PHYSICAL_ACTIVITY_RECOMMENDATIONS,NUTRITION_RECOMMENDATIONS,PHYSICAL_WELLBEING_RECOMMENDATIONS,SLEEP_RECOMMENDATIONS,PREFERRED_RECOMMENDATIONS,MOST_POPULAR,NEW_CONTENT,PHYSICAL_ACTIVITY_EXPLORE,NUTRITION_EXPLORE,PHYSICAL_WELLBEING_EXPLORE,SLEEP_EXPLORE,STARTING_RECOMMENDATIONS
+ * Values: PHYSICAL_ACTIVITY_RECOMMENDATIONS,NUTRITION_RECOMMENDATIONS,MENTAL_WELLBEING_RECOMMENDATIONS,SLEEP_RECOMMENDATIONS,PREFERRED_RECOMMENDATIONS,MOST_POPULAR,NEW_CONTENT,PHYSICAL_ACTIVITY_EXPLORE,NUTRITION_EXPLORE,MENTAL_WELLBEING_EXPLORE,SLEEP_EXPLORE,STARTING_RECOMMENDATIONS
  */
 @Suppress("RemoveRedundantQualifierName")
 @JsonClass(generateAdapter = false)
 enum class FeedSectionTypeDTO(val value: kotlin.String) {
 
-    @Json(name = "PHYSICAL_ACTIVITY_RECOMMENDATIONS")
-    PHYSICAL_ACTIVITY_RECOMMENDATIONS("PHYSICAL_ACTIVITY_RECOMMENDATIONS"),
+    @Json(name = "physical_activity_recommendations")
+    PHYSICAL_ACTIVITY_RECOMMENDATIONS("physical_activity_recommendations"),
 
-    @Json(name = "NUTRITION_RECOMMENDATIONS")
-    NUTRITION_RECOMMENDATIONS("NUTRITION_RECOMMENDATIONS"),
+    @Json(name = "nutrition_recommendations")
+    NUTRITION_RECOMMENDATIONS("nutrition_recommendations"),
 
-    @Json(name = "PHYSICAL_WELLBEING_RECOMMENDATIONS")
-    PHYSICAL_WELLBEING_RECOMMENDATIONS("PHYSICAL_WELLBEING_RECOMMENDATIONS"),
+    @Json(name = "mental_wellbeing_recommendations")
+    MENTAL_WELLBEING_RECOMMENDATIONS("mental_wellbeing_recommendations"),
 
-    @Json(name = "SLEEP_RECOMMENDATIONS")
-    SLEEP_RECOMMENDATIONS("SLEEP_RECOMMENDATIONS"),
+    @Json(name = "sleep_recommendations")
+    SLEEP_RECOMMENDATIONS("sleep_recommendations"),
 
-    @Json(name = "PREFERRED_RECOMMENDATIONS")
-    PREFERRED_RECOMMENDATIONS("PREFERRED_RECOMMENDATIONS"),
+    @Json(name = "preferred_recommendations")
+    PREFERRED_RECOMMENDATIONS("preferred_recommendations"),
 
-    @Json(name = "MOST_POPULAR")
-    MOST_POPULAR("MOST_POPULAR"),
+    @Json(name = "most_popular")
+    MOST_POPULAR("most_popular"),
 
-    @Json(name = "NEW_CONTENT")
-    NEW_CONTENT("NEW_CONTENT"),
+    @Json(name = "new_content")
+    NEW_CONTENT("new_content"),
 
-    @Json(name = "PHYSICAL_ACTIVITY_EXPLORE")
-    PHYSICAL_ACTIVITY_EXPLORE("PHYSICAL_ACTIVITY_EXPLORE"),
+    @Json(name = "physical_activity_explore")
+    PHYSICAL_ACTIVITY_EXPLORE("physical_activity_explore"),
 
-    @Json(name = "NUTRITION_EXPLORE")
-    NUTRITION_EXPLORE("NUTRITION_EXPLORE"),
+    @Json(name = "nutrition_explore")
+    NUTRITION_EXPLORE("nutrition_explore"),
 
-    @Json(name = "PHYSICAL_WELLBEING_EXPLORE")
-    PHYSICAL_WELLBEING_EXPLORE("PHYSICAL_WELLBEING_EXPLORE"),
+    @Json(name = "mental_wellbeing_explore")
+    MENTAL_WELLBEING_EXPLORE("mental_wellbeing_explore"),
 
-    @Json(name = "SLEEP_EXPLORE")
-    SLEEP_EXPLORE("SLEEP_EXPLORE"),
+    @Json(name = "sleep_explore")
+    SLEEP_EXPLORE("sleep_explore"),
 
-    @Json(name = "STARTING_RECOMMENDATIONS")
-    STARTING_RECOMMENDATIONS("STARTING_RECOMMENDATIONS");
+    @Json(name = "starting_recommendations")
+    STARTING_RECOMMENDATIONS("starting_recommendations");
 
     /**
      * Override toString() to avoid using the enum variable name as the value, and instead use

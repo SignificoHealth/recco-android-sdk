@@ -19,23 +19,23 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
- * Values: PHYSICAL_ACTIVITY,NUTRITION,PHYSICAL_WELLBEING,SLEEP
+ * Values: PHYSICAL_ACTIVITY,NUTRITION,MENTAL_WELLBEING,SLEEP
  */
 @Suppress("RemoveRedundantQualifierName")
 @JsonClass(generateAdapter = false)
 enum class TopicDTO(val value: kotlin.String) {
 
-    @Json(name = "PHYSICAL_ACTIVITY")
-    PHYSICAL_ACTIVITY("PHYSICAL_ACTIVITY"),
+    @Json(name = "physical_activity")
+    PHYSICAL_ACTIVITY("physical_activity"),
 
-    @Json(name = "NUTRITION")
-    NUTRITION("NUTRITION"),
+    @Json(name = "nutrition")
+    NUTRITION("nutrition"),
 
-    @Json(name = "PHYSICAL_WELLBEING")
-    PHYSICAL_WELLBEING("PHYSICAL_WELLBEING"),
+    @Json(name = "mental_wellbeing")
+    MENTAL_WELLBEING("mental_wellbeing"),
 
-    @Json(name = "SLEEP")
-    SLEEP("SLEEP");
+    @Json(name = "sleep")
+    SLEEP("sleep");
 
     /**
      * Override toString() to avoid using the enum variable name as the value, and instead use

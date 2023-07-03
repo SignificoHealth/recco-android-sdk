@@ -25,14 +25,14 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = false)
 enum class FeedSectionStateDTO(val value: kotlin.String) {
 
-    @Json(name = "LOCK")
-    LOCK("LOCK"),
+    @Json(name = "lock")
+    LOCK("lock"),
 
-    @Json(name = "UNLOCK")
-    UNLOCK("UNLOCK"),
+    @Json(name = "unlock")
+    UNLOCK("unlock"),
 
-    @Json(name = "PARTIALLY_UNLOCK")
-    PARTIALLY_UNLOCK("PARTIALLY_UNLOCK");
+    @Json(name = "partially_unlock")
+    PARTIALLY_UNLOCK("partially_unlock");
 
     /**
      * Override toString() to avoid using the enum variable name as the value, and instead use

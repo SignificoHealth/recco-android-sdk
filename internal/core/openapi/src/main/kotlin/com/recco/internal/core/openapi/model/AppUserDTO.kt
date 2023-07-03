@@ -20,6 +20,7 @@ import com.squareup.moshi.JsonClass
  * 
  *
  * @param id 
+ * @param clientUserId 
  * @param isOnboardingQuestionnaireCompleted 
  */
 @JsonClass(generateAdapter = true)
@@ -27,6 +28,9 @@ data class AppUserDTO(
 
     @Json(name = "id")
     val id: kotlin.String,
+
+    @Json(name = "clientUserId")
+    val clientUserId: kotlin.String,
 
     @Json(name = "isOnboardingQuestionnaireCompleted")
     val isOnboardingQuestionnaireCompleted: kotlin.Boolean

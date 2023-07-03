@@ -29,4 +29,3 @@ src/main/kotlin/com/recco/internal/core/openapi/model/StatusDTO.kt
 src/main/kotlin/com/recco/internal/core/openapi/model/TopicDTO.kt
 src/main/kotlin/com/recco/internal/core/openapi/model/UpdateBookmarkDTO.kt
 src/main/kotlin/com/recco/internal/core/openapi/model/UpdateRatingDTO.kt
-src/main/kotlin/com/recco/internal/core/openapi/model/UpdateStatusDTO.kt

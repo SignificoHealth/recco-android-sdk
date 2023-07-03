@@ -23,7 +23,6 @@ import com.recco.internal.core.openapi.model.AppUserRecommendationDTO
 import com.recco.internal.core.openapi.model.TopicDTO
 import com.recco.internal.core.openapi.model.UpdateBookmarkDTO
 import com.recco.internal.core.openapi.model.UpdateRatingDTO
-import com.recco.internal.core.openapi.model.UpdateStatusDTO
 
 interface RecommendationApi {
 
@@ -152,17 +151,4 @@ interface RecommendationApi {
      */
     @PUT("api/v1/me/recommendations/rating")
     suspend fun setRating(@Body updateRatingDTO: UpdateRatingDTO): Response<Unit>
-
-    /**
-     * Set recommendation status.
-     * 
-     * Responses:
-     *  - 401: Unauthorized
-     *  - 204: No Content
-     *
-     * @param updateStatusDTO 
-     * @return [Unit]
-     */
-    @PUT("api/v1/me/recommendations/status")
-    suspend fun setStatus(@Body updateStatusDTO: UpdateStatusDTO): Response<Unit>
 }
