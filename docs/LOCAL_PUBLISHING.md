@@ -72,5 +72,4 @@ Then, include the dependencies in your module level build.gradle file.
 
 ```kotlin
     implementation("com.significo:recco-ui:0.0.1")
-    implementation("com.significo:recco-headless:0.0.1")
 ```
