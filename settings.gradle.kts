@@ -56,6 +56,7 @@ include(
     "internal:core:ui",
     "internal:core:model",
     "internal:core:repository",
+    ":internal:core:test",
     "internal:feature:questionnaire",
     "internal:feature:feed",
     "internal:feature:article",
