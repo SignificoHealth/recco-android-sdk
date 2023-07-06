@@ -31,7 +31,7 @@ class ArticleViewModel @Inject constructor(
         initialLoadSubscribe()
     }
 
-    fun onUserInteract(userInteract: ArticleUserInteract) {
+    internal fun onUserInteract(userInteract: ArticleUserInteract) {
         when (userInteract) {
             ArticleUserInteract.Retry -> initialLoadSubscribe()
             ArticleUserInteract.ToggleBookmarkState -> toggleBookmarkState()

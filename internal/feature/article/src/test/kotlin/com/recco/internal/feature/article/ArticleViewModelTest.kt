@@ -64,9 +64,20 @@ class ArticleViewModelTest {
         events = mutableListOf()
     }
 
-    /**
-     *  onFailure
-     */
+    @Test
+    fun `onFailure emits exceptions while logging during initial load`() = runTest {
+        // When
+        repository.stubForInitialFailure()
+        onViewModelInteraction(1, ArticleUserInteract.Retry)
+
+        // Then
+        verifyBlocking(logger, times(2)) {
+            e(staticThrowableForTesting, null, null)
+        }
+
+        assert( events.first() == expectedWithError)
+    }
+
     @Test
     fun `onFailure emits exceptions while logging them if Retry`() = runTest {
         // When
@@ -96,7 +107,7 @@ class ArticleViewModelTest {
     }
 
     @Test
-    fun `onFailure emits exceptions while logging them on ToggleDislikeState`() = runTest {
+    fun `onFailure emits exceptions while logging them if ToggleDislikeState`() = runTest {
         // When
         repository.stubForToggleRatingFailure()
         onViewModelInteraction(3, ArticleUserInteract.ToggleDislikeState)
@@ -110,7 +121,7 @@ class ArticleViewModelTest {
     }
 
     @Test
-    fun `onFailure emits exceptions while logging them on ToggleBookmarkState`() = runTest {
+    fun `onFailure emits exceptions while logging them if ToggleBookmarkState`() = runTest {
         // When
         repository.stubForToggleBookmarkFailure()
         onViewModelInteraction(3, ArticleUserInteract.ToggleBookmarkState)
@@ -123,9 +134,6 @@ class ArticleViewModelTest {
         }
     }
 
-    /**
-     *  onSuccess
-     */
     @Test
     fun `initial state event emitted is Loading`() = runTest {
         // When
@@ -410,8 +418,8 @@ class ArticleViewModelTest {
     }
 
     /**
-     * @param eventsToDrop avoids collecting Loading or initialSubscribe events when needed
-     * @param eventsToDrop defines userInteraction taking place
+     * @param eventsToDrop avoids collecting Loading or initialSubscribe events when needed.
+     * @param userInteraction defines userInteraction taking place.
      */
     private fun TestScope.onViewModelInteraction(
         eventsToDrop: Int,

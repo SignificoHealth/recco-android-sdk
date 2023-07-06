@@ -34,7 +34,7 @@ class BookmarkViewModel @Inject constructor(
         initialLoadOrRetry()
     }
 
-    fun onUserInteract(userInteract: BookmarkUserInteract) {
+    internal fun onUserInteract(userInteract: BookmarkUserInteract) {
         when (userInteract) {
             BookmarkUserInteract.Retry -> initialLoadOrRetry()
             BookmarkUserInteract.Refresh -> refresh()
@@ -43,7 +43,7 @@ class BookmarkViewModel @Inject constructor(
 
     private fun refresh() {
         viewModelScope.launch {
-            _viewState.value = _viewState.value.copy(error = null, isLoading = true)
+            _viewState.emit(viewState.value.copy(error = null, isLoading = true))
             recommendationRepository.reloadBookmarks()
         }
     }
@@ -51,16 +51,18 @@ class BookmarkViewModel @Inject constructor(
     private fun initialLoadOrRetry() {
         viewModelScope.launch {
             recommendationRepository.bookmarks.onStart {
-                _viewState.value = _viewState.value.copy(error = null, isLoading = true)
+                _viewState.emit(viewState.value.copy(error = null, isLoading = true))
             }.catch { error ->
-                _viewState.value = _viewState.value.copy(error = error, isLoading = false)
+                _viewState.emit(_viewState.value.copy(error = error, isLoading = false))
                 logger.e(error)
             }.collectLatest { recommendations ->
                 val data = (_viewState.value.data ?: BookmarkUI())
-                _viewState.value = _viewState.value.copy(
-                    isLoading = false,
-                    error = null,
-                    data = data.copy(recommendations = recommendations),
+                _viewState.emit(
+                    _viewState.value.copy(
+                        isLoading = false,
+                        error = null,
+                        data = data.copy(recommendations = recommendations),
+                    )
                 )
             }
         }
