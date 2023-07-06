@@ -11,7 +11,7 @@ class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
     companion object {
         val data
             get() = Recommendation(
-                id = ContentPreviewProvider.data,
+                id = ContentIdPreviewProvider.data,
                 rating = Rating.LIKE,
                 status = Status.VIEWED,
                 headline = "Some headline",

@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":internal:core:ui"))
+
     compileOnly(libs.junit.engine)
 
     implementation(libs.junit.api)

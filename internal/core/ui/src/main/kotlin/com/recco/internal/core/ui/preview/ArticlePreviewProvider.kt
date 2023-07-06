@@ -11,7 +11,7 @@ class ArticlePreviewProvider {
             status: Status = Status.NO_INTERACTION,
             bookmarked: Boolean = false
         ) = Article(
-            id = ContentPreviewProvider.data,
+            id = ContentIdPreviewProvider.data,
             rating = rating,
             status = status,
             isBookmarked = bookmarked,
