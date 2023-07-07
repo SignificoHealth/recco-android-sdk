@@ -8,20 +8,13 @@ import com.recco.internal.core.model.questionnaire.MultiChoiceQuestion
 import com.recco.internal.core.model.questionnaire.NumericQuestion
 import com.recco.internal.core.repository.QuestionnaireRepository
 import com.recco.internal.core.test.CoroutineTestExtension
+import com.recco.internal.core.test.extensions.onViewModelInteraction
 import com.recco.internal.core.test.utils.expectedUiStateWithError
 import com.recco.internal.core.test.utils.expectedUiStateWithLoading
 import com.recco.internal.core.test.utils.staticThrowableForTesting
-import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -34,15 +27,12 @@ import org.mockito.kotlin.verifyBlocking
 @ExtendWith(CoroutineTestExtension::class)
 class QuestionnaireViewModelTest {
     private lateinit var repository: QuestionnaireRepository
-    private lateinit var events: MutableList<UiState<QuestionnaireUI>>
-
     private val logger = mock<Logger>()
     private val savedStateHandle = mock<SavedStateHandle>()
 
     @BeforeEach
     fun setup() {
         repository = mock()
-        events = mutableListOf()
         savedStateHandle.stub()
     }
 
@@ -50,7 +40,7 @@ class QuestionnaireViewModelTest {
     fun `initial state event emitted is Loading`() = runTest {
         // When
         repository.stubForInitialSuccess(questions)
-        onViewModelInteraction(eventsToDrop = 0)
+        val events = onViewModelInteraction(eventsToDrop = 0)
 
         // Then
         assertThat(events.first()).isEqualTo(expectedUiStateWithLoading)
@@ -60,7 +50,7 @@ class QuestionnaireViewModelTest {
     fun `onFailure emits exceptions on Initial Load`() = runTest {
         // When
         repository.stubForInitialFailure()
-        onViewModelInteraction(eventsToDrop = 1)
+        val events = onViewModelInteraction(eventsToDrop = 1)
 
         // Then
         verifyBlocking(logger, times(1)) {
@@ -76,7 +66,7 @@ class QuestionnaireViewModelTest {
     fun `onFailure emits exceptions while logging them if Retry`() = runTest {
         // When
         repository.stubForInitialFailure()
-        onViewModelInteraction(eventsToDrop = 3, Retry)
+        val events =  onViewModelInteraction(eventsToDrop = 3, Retry)
 
         // Then
         verifyBlocking(logger, times(2)) {
@@ -93,7 +83,7 @@ class QuestionnaireViewModelTest {
         // When
         repository.stubForInitialSuccess(questions)
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 2,
             ClickOnMultiChoiceAnswerOption(
                 question = multiChoiceQuestion,
@@ -115,7 +105,7 @@ class QuestionnaireViewModelTest {
         // When
         repository.stubForInitialSuccess(questions)
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 2,
             WriteOnNumericQuestion(
                 question = numericQuestion,
@@ -136,7 +126,7 @@ class QuestionnaireViewModelTest {
         // When
         repository.stubForInitialSuccess(questions)
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 2,
             NextClicked
         )
@@ -158,7 +148,7 @@ class QuestionnaireViewModelTest {
             stubForSendAnswersSuccess()
         }
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 5,
             ClickOnMultiChoiceAnswerOption(
                 question = multiChoiceQuestion,
@@ -188,7 +178,7 @@ class QuestionnaireViewModelTest {
             stubForSendAnswersFailure()
         }
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 5,
             ClickOnMultiChoiceAnswerOption(
                 question = multiChoiceQuestion,
@@ -219,7 +209,7 @@ class QuestionnaireViewModelTest {
             stubForSendAnswersSuccess()
         }
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 4,
             ClickOnMultiChoiceAnswerOption(
                 question = multiChoiceQuestion,
@@ -238,18 +228,12 @@ class QuestionnaireViewModelTest {
     }
 
     private fun TestScope.onViewModelInteraction(
-        eventsToDrop: Int = 0,
+        eventsToDrop: Int,
         vararg userInteractions: QuestionnaireUserInteract
-    ) {
-        QuestionnaireViewModel(repository, logger, savedStateHandle).also { sut ->
-            sut.viewState
-                .drop(eventsToDrop)
-                .onEach(events::add)
-                .launchIn(CoroutineScope(UnconfinedTestDispatcher(testScheduler)))
-                .invokeOnCompletion { cancel() }
-            userInteractions.forEach { sut.onUserInteract(it) }
-        }
-        runCurrent()
+    ) = QuestionnaireViewModel(repository, logger, savedStateHandle).run {
+        onViewModelInteraction(
+            viewState = viewState,
+            eventsToDrop = eventsToDrop,
+            runInteractions = { userInteractions.forEach { onUserInteract(it) } })
     }
-
 }

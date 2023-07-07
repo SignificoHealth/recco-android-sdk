@@ -7,20 +7,13 @@ import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.test.CoroutineTestExtension
+import com.recco.internal.core.test.extensions.onViewModelInteraction
 import com.recco.internal.core.test.utils.expectedUiStateWithData
 import com.recco.internal.core.test.utils.expectedUiStateWithError
 import com.recco.internal.core.test.utils.expectedUiStateWithLoading
 import com.recco.internal.core.test.utils.staticThrowableForTesting
-import com.recco.internal.core.ui.components.UiState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -34,15 +27,12 @@ import org.mockito.kotlin.verifyBlocking
 @ExtendWith(CoroutineTestExtension::class)
 class ArticleViewModelTest {
     private lateinit var repository: RecommendationRepository
-    private lateinit var events: MutableList<UiState<ArticleUI>>
-
     private val logger = mock<Logger>()
     private val savedStateHandle = mock<SavedStateHandle>()
 
     @BeforeEach
     fun setup() {
         repository = mock()
-        events = mutableListOf()
         savedStateHandle.stub()
     }
 
@@ -50,7 +40,7 @@ class ArticleViewModelTest {
     fun `onFailure emits exceptions while logging during initial load`() = runTest {
         // When
         repository.stubForInitialFailure()
-        onViewModelInteraction(1, ArticleUserInteract.Retry)
+        val events = onViewModelInteraction(1, ArticleUserInteract.Retry)
 
         // Then
         verifyBlocking(logger, times(2)) {
@@ -64,7 +54,7 @@ class ArticleViewModelTest {
     fun `onFailure emits exceptions while logging them if Retry`() = runTest {
         // When
         repository.stubForInitialFailure()
-        onViewModelInteraction(3, ArticleUserInteract.Retry)
+        val events = onViewModelInteraction(3, ArticleUserInteract.Retry)
 
         // Then
         verifyBlocking(logger, times(2)) {
@@ -80,7 +70,7 @@ class ArticleViewModelTest {
     fun `onFailure emits exceptions while logging them if ToggleLikeState`() = runTest {
         // When
         repository.stubForToggleRatingFailure()
-        onViewModelInteraction(3, ArticleUserInteract.ToggleLikeState)
+        val events = onViewModelInteraction(3, ArticleUserInteract.ToggleLikeState)
 
         // Then
         events.fastForEach {
@@ -96,7 +86,7 @@ class ArticleViewModelTest {
     fun `onFailure emits exceptions while logging them if ToggleDislikeState`() = runTest {
         // When
         repository.stubForToggleRatingFailure()
-        onViewModelInteraction(3, ArticleUserInteract.ToggleDislikeState)
+        val events = onViewModelInteraction(3, ArticleUserInteract.ToggleDislikeState)
 
         // Then
         events.fastForEach {
@@ -112,7 +102,7 @@ class ArticleViewModelTest {
     fun `onFailure emits exceptions while logging them if ToggleBookmarkState`() = runTest {
         // When
         repository.stubForToggleBookmarkFailure()
-        onViewModelInteraction(3, ArticleUserInteract.ToggleBookmarkState)
+        val events = onViewModelInteraction(3, ArticleUserInteract.ToggleBookmarkState)
 
         // Then
         events.fastForEach {
@@ -128,7 +118,7 @@ class ArticleViewModelTest {
     fun `initial state event emitted is Loading`() = runTest {
         // When
         repository.stubForSuccessWithLikedAndBookmarkedArticle()
-        onViewModelInteraction(0, ArticleUserInteract.Retry)
+        val events = onViewModelInteraction(0, ArticleUserInteract.Retry)
 
         // Then
         assertThat(events.first()).isEqualTo(expectedUiStateWithLoading)
@@ -143,7 +133,7 @@ class ArticleViewModelTest {
 
         // When
         repository.stubForSuccessWithLikedAndBookmarkedArticle()
-        onViewModelInteraction(1, ArticleUserInteract.Retry)
+        val events = onViewModelInteraction(1, ArticleUserInteract.Retry)
 
         // Then
         assertThat(events.first()).isEqualTo(expectedUiState)
@@ -165,7 +155,7 @@ class ArticleViewModelTest {
 
         // When
         repository.stubForSuccessWithLikedAndBookmarkedArticle()
-        onViewModelInteraction(2, ArticleUserInteract.ToggleBookmarkState)
+        val events = onViewModelInteraction(2, ArticleUserInteract.ToggleBookmarkState)
 
         // Then
         assertThat(events.first()).isEqualTo(expectedUiState)
@@ -188,7 +178,7 @@ class ArticleViewModelTest {
 
         // When
         repository.stubForSuccessWithNonBookmarkedArticle()
-        onViewModelInteraction(2, ArticleUserInteract.ToggleBookmarkState)
+        val events = onViewModelInteraction(2, ArticleUserInteract.ToggleBookmarkState)
 
         // Then
         assertThat(events.first()).isEqualTo(expectedUiState)
@@ -220,7 +210,7 @@ class ArticleViewModelTest {
 
         // When
         repository.stubForSuccessWithLikedAndBookmarkedArticle()
-        onViewModelInteraction(2, ArticleUserInteract.ToggleLikeState)
+        val events = onViewModelInteraction(2, ArticleUserInteract.ToggleLikeState)
 
         // Then
         events.forEachIndexed { index, uiState ->
@@ -257,7 +247,7 @@ class ArticleViewModelTest {
 
         // When
         repository.stubForSuccessWithDislikedArticle()
-        onViewModelInteraction(2, ArticleUserInteract.ToggleDislikeState)
+        val events = onViewModelInteraction(2, ArticleUserInteract.ToggleDislikeState)
 
         // Then
         events.forEachIndexed { index, uiState ->
@@ -294,7 +284,7 @@ class ArticleViewModelTest {
 
         // When
         repository.stubForSuccessWithLikedAndBookmarkedArticle()
-        onViewModelInteraction(2, ArticleUserInteract.ToggleDislikeState)
+        val events = onViewModelInteraction(2, ArticleUserInteract.ToggleDislikeState)
 
         // Then
         events.forEachIndexed { index, uiState ->
@@ -330,7 +320,7 @@ class ArticleViewModelTest {
 
         // When
         repository.stubForSuccessWithDislikedArticle()
-        onViewModelInteraction(2, ArticleUserInteract.ToggleLikeState)
+        val events = onViewModelInteraction(2, ArticleUserInteract.ToggleLikeState)
 
 
         // Then
@@ -367,7 +357,7 @@ class ArticleViewModelTest {
 
         // When
         repository.stubForSuccessWithNonRatedArticle()
-        onViewModelInteraction(2, ArticleUserInteract.ToggleLikeState)
+        val events = onViewModelInteraction(2, ArticleUserInteract.ToggleLikeState)
 
         // Then
         events.forEachIndexed { index, uiState ->
@@ -403,7 +393,7 @@ class ArticleViewModelTest {
 
         // When
         repository.stubForSuccessWithNonRatedArticle()
-        onViewModelInteraction(2, ArticleUserInteract.ToggleDislikeState)
+        val events = onViewModelInteraction(2, ArticleUserInteract.ToggleDislikeState)
 
         // Then
         events.forEachIndexed { index, uiState ->
@@ -414,22 +404,14 @@ class ArticleViewModelTest {
         }
     }
 
-    /**
-     * @param eventsToDrop avoids collecting Loading or initialSubscribe events when needed.
-     * @param userInteraction defines userInteraction taking place.
-     */
     private fun TestScope.onViewModelInteraction(
         eventsToDrop: Int,
-        userInteraction: ArticleUserInteract
-    ) {
-        ArticleViewModel(savedStateHandle, repository, logger).also { sut ->
-            sut.viewState
-                .drop(eventsToDrop)
-                .onEach(events::add)
-                .launchIn(CoroutineScope(UnconfinedTestDispatcher(testScheduler)))
-                .invokeOnCompletion { cancel() }
-            sut.onUserInteract(userInteraction)
-        }
-        runCurrent()
+        vararg userInteractions: ArticleUserInteract
+    ) = ArticleViewModel(savedStateHandle, repository, logger).run {
+        onViewModelInteraction(
+            viewState = viewState,
+            eventsToDrop = eventsToDrop,
+            runInteractions = { userInteractions.forEach { onUserInteract(it) } })
     }
+
 }

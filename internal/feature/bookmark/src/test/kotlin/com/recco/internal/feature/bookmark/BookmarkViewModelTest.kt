@@ -5,20 +5,13 @@ import com.google.common.truth.Truth.assertThat
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.test.CoroutineTestExtension
+import com.recco.internal.core.test.extensions.onViewModelInteraction
 import com.recco.internal.core.test.utils.expectedUiStateWithData
 import com.recco.internal.core.test.utils.expectedUiStateWithError
 import com.recco.internal.core.test.utils.expectedUiStateWithLoading
 import com.recco.internal.core.test.utils.staticThrowableForTesting
-import com.recco.internal.core.ui.components.UiState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -32,21 +25,18 @@ import org.mockito.kotlin.verifyBlocking
 class BookmarkViewModelTest {
 
     private lateinit var repository: RecommendationRepository
-    private lateinit var events: MutableList<UiState<BookmarkUI>>
-
     private val logger = mock<Logger> {}
 
     @BeforeEach
     fun setup() {
         repository = mock()
-        events = mutableListOf()
     }
 
     @Test
     fun `onFailure emits exceptions while logging them if init fails and Retry`() = runTest {
         // When
         repository.stubRepositoryForError()
-        onViewModelInteraction(1, BookmarkUserInteract.Retry)
+        val events = onViewModelInteraction(1, BookmarkUserInteract.Retry)
 
         // Then
         assertThat(events).isNotEmpty()
@@ -63,7 +53,7 @@ class BookmarkViewModelTest {
     fun `onFailure emits exceptions while logging them if init fails and Refresh`() = runTest {
         // When
         repository.stubRepositoryForError()
-        onViewModelInteraction(1, BookmarkUserInteract.Refresh)
+        val events = onViewModelInteraction(1, BookmarkUserInteract.Refresh)
 
         // Then
 
@@ -81,7 +71,7 @@ class BookmarkViewModelTest {
     fun `viewState initial state matches Loading`() = runTest {
         // When
         repository.stubRepositoryForSuccess()
-        onViewModelInteraction(0, BookmarkUserInteract.Retry)
+        val events = onViewModelInteraction(0, BookmarkUserInteract.Retry)
 
         // Then
         assertThat(events.first()).isEqualTo(expectedUiStateWithLoading)
@@ -91,7 +81,7 @@ class BookmarkViewModelTest {
     fun `viewState carries data when bookmarks pipeline emits correctly`() = runTest {
         // When
         repository.stubRepositoryForSuccess()
-        onViewModelInteraction(1, BookmarkUserInteract.Retry)
+        val events = onViewModelInteraction(1, BookmarkUserInteract.Retry)
 
         // Then
         assertThat(events.first()).isEqualTo(expectedUiStateWithData(bookmarkUI))
@@ -101,7 +91,7 @@ class BookmarkViewModelTest {
     fun `onRefresh updates viewState as expected and repository is triggered`() = runTest {
         // When
         repository.stubRepositoryForSuccess()
-        onViewModelInteraction(1, BookmarkUserInteract.Refresh)
+        val events = onViewModelInteraction(1, BookmarkUserInteract.Refresh)
 
         // Then
         verifyBlocking(repository) {
@@ -115,29 +105,19 @@ class BookmarkViewModelTest {
     fun `onRetry updates viewState as expected`() = runTest {
         // When
         repository.stubRepositoryForSuccess()
-        onViewModelInteraction(1, BookmarkUserInteract.Retry)
+        val events = onViewModelInteraction(1, BookmarkUserInteract.Retry)
 
         // Then
         assertThat(events.first()).isEqualTo(expectedUiStateWithData(bookmarkUI))
     }
 
-    /**
-     * @param eventsToDrop avoids collecting Loading or initialSubscribe events when needed.
-     * @param userInteraction defines userInteraction taking place.
-     */
     private fun TestScope.onViewModelInteraction(
         eventsToDrop: Int,
-        userInteraction: BookmarkUserInteract
-    ) {
-
-        BookmarkViewModel(repository, logger).also { sut ->
-            sut.viewState
-                .drop(eventsToDrop)
-                .onEach(events::add)
-                .launchIn(CoroutineScope(UnconfinedTestDispatcher(testScheduler)))
-                .invokeOnCompletion { cancel() }
-            sut.onUserInteract(userInteraction)
-        }
-        runCurrent()
+        vararg userInteractions: BookmarkUserInteract
+    ) = BookmarkViewModel(repository, logger).run {
+        onViewModelInteraction(
+            viewState = viewState,
+            eventsToDrop = eventsToDrop,
+            runInteractions = { userInteractions.forEach { onUserInteract(it) } })
     }
 }
