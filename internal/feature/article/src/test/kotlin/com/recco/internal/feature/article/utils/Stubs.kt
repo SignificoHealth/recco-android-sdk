@@ -2,11 +2,11 @@ package com.recco.internal.feature.article.utils
 
 import com.recco.internal.core.model.recommendation.Article
 import com.recco.internal.core.repository.RecommendationRepository
+import com.recco.internal.core.test.utils.staticThrowableForTesting
 import com.recco.internal.feature.article.model.dislikedArticle
 import com.recco.internal.feature.article.model.likedArticle
 import com.recco.internal.feature.article.model.nonBookmarkedArticle
 import com.recco.internal.feature.article.model.rawArticle
-import com.recco.internal.feature.article.model.staticThrowableForTesting
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow

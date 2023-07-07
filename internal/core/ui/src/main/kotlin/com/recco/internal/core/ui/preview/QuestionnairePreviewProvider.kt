@@ -10,7 +10,8 @@ class QuestionnairePreviewProvider {
     companion object {
         fun multiChoice(
             maxOptions: Int = 2,
-            questionnaireId: String = UUID.randomUUID().toString()
+            questionnaireId: String = UUID.randomUUID().toString(),
+            isFirstSelected: Boolean = true
         ) = listOf(
             MultiChoiceQuestion(
                 questionnaireId = questionnaireId,
@@ -20,7 +21,7 @@ class QuestionnairePreviewProvider {
                 maxOptions = maxOptions,
                 minOptions = 1,
                 options = listOf(
-                    MultiChoiceAnswerOption(id = 1, text = "Answer 1", isSelected = true),
+                    MultiChoiceAnswerOption(id = 1, text = "Answer 1", isSelected = isFirstSelected),
                     MultiChoiceAnswerOption(id = 2, text = "Answer 2", isSelected = false)
                 )
             )

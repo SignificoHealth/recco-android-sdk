@@ -52,10 +52,13 @@ class QuestionnaireViewModel @Inject constructor(
             Retry -> initialLoadSubscribe()
             is ClickOnMultiChoiceAnswerOption -> clickOnMultiChoiceAnswerOption(userInteract)
             is WriteOnNumericQuestion -> writeOnNumericQuestion(userInteract)
-            BackClicked -> scrollTo(Adjustment.BACKWARD)
-            NextClicked -> {
+            BackClicked -> viewModelScope.launch {
+                scrollTo(Adjustment.BACKWARD)
+            }
+
+            NextClicked -> viewModelScope.launch {
                 val uiState = _viewState.value
-                val questionnaireUI = uiState.data ?: return
+                val questionnaireUI = uiState.data ?: return@launch
 
                 if (questionnaireUI.currentPage == questionnaireUI.questions.size - 1) {
                     submitQuestionnaire()
@@ -66,43 +69,39 @@ class QuestionnaireViewModel @Inject constructor(
         }
     }
 
-    private fun scrollTo(adjustment: Adjustment) {
+    private suspend fun scrollTo(adjustment: Adjustment) {
         val uiState = _viewState.value
         val questionnaireUI = uiState.data ?: return
 
         val newPage = questionnaireUI.currentPage + adjustment.value
         if (newPage < 0) return
 
-        viewModelScope.launch {
-            _viewEvents.emit(QuestionnaireViewEvent.ScrollTo(newPage))
-        }
+        _viewEvents.emit(QuestionnaireViewEvent.ScrollTo(newPage))
 
-        viewModelScope.launch {
-            val questions = questionnaireUI.questions
-            _viewState.emit(
-                uiState.copy(
-                    data = questionnaireUI.copy(
-                        progress = (newPage.toFloat() + 1) / questions.size.toFloat(),
-                        currentPage = newPage,
-                        showBack = newPage != 0,
-                        isNextEnabled = questions[newPage].isAnswerInputValid(
-                            requiredToBeAnswered = isOnboarding
-                        ),
-                        isLastPage = newPage == questions.size - 1,
-                        isFirstPage = newPage == 0
-                    )
+        val questions = questionnaireUI.questions
+        _viewState.emit(
+            uiState.copy(
+                data = questionnaireUI.copy(
+                    progress = (newPage.toFloat() + 1) / questions.size.toFloat(),
+                    currentPage = newPage,
+                    showBack = newPage != 0,
+                    isNextEnabled = questions[newPage].isAnswerInputValid(
+                        requiredToBeAnswered = isOnboarding
+                    ),
+                    isLastPage = newPage == questions.size - 1,
+                    isFirstPage = newPage == 0
                 )
             )
-        }
+        )
     }
 
     private fun initialLoadSubscribe() {
         viewModelScope.launch {
             runCatching {
-                if (topic != null) {
-                    questionnaireRepository.getQuestionnaireByTopic(topic!!)
-                } else {
+                if (isOnboarding) {
                     questionnaireRepository.getOnboarding()
+                } else {
+                    questionnaireRepository.getQuestionnaireByTopic(topic!!)
                 }
             }.onSuccess { questions ->
                 _viewState.emit(
@@ -123,28 +122,28 @@ class QuestionnaireViewModel @Inject constructor(
     }
 
     private fun clickOnMultiChoiceAnswerOption(input: ClickOnMultiChoiceAnswerOption) {
-        val uiState = _viewState.value
-        val questionnaireUI = _viewState.value.data ?: return
-        val (question, selectedOption) = input
-
-        val updatedQuestion = question.copy(
-            options = question.options.map {
-                when {
-                    it.id == selectedOption.id -> {
-                        if (question.isSingleChoice) {
-                            it.copy(isSelected = true)
-                        } else {
-                            it.copy(isSelected = !selectedOption.isSelected)
-                        }
-                    }
-
-                    question.isSingleChoice -> it.copy(isSelected = false)
-                    else -> it
-                }
-            }
-        )
-
         viewModelScope.launch {
+            val uiState = _viewState.value
+            val questionnaireUI = _viewState.value.data ?: return@launch
+            val (question, selectedOption) = input
+
+            val updatedQuestion = question.copy(
+                options = question.options.map {
+                    when {
+                        it.id == selectedOption.id -> {
+                            if (question.isSingleChoice) {
+                                it.copy(isSelected = true)
+                            } else {
+                                it.copy(isSelected = !selectedOption.isSelected)
+                            }
+                        }
+
+                        question.isSingleChoice -> it.copy(isSelected = false)
+                        else -> it
+                    }
+                }
+            )
+
             _viewState.emit(
                 uiState.copy(
                     data = questionnaireUI.copy(
@@ -161,10 +160,8 @@ class QuestionnaireViewModel @Inject constructor(
                     )
                 )
             )
-        }
 
-        if (question.isSingleChoice && !questionnaireUI.isLastPage) {
-            viewModelScope.launch {
+            if (question.isSingleChoice && !questionnaireUI.isLastPage) {
                 delay(timeMillis = 300)
                 onUserInteract(NextClicked)
             }
@@ -172,12 +169,12 @@ class QuestionnaireViewModel @Inject constructor(
     }
 
     private fun writeOnNumericQuestion(input: WriteOnNumericQuestion) {
-        val uiState = _viewState.value
-        val questionnaireUI = _viewState.value.data ?: return
-        val (question, selectedValue) = input
-        val updatedQuestion = question.copy(selectedValue = selectedValue.toDoubleOrNull())
-
         viewModelScope.launch {
+            val uiState = _viewState.value
+            val questionnaireUI = _viewState.value.data ?: return@launch
+            val (question, selectedValue) = input
+            val updatedQuestion = question.copy(selectedValue = selectedValue.toDoubleOrNull())
+
             _viewState.emit(
                 uiState.copy(
                     data = questionnaireUI.copy(
@@ -196,62 +193,60 @@ class QuestionnaireViewModel @Inject constructor(
         }
     }
 
-    private fun submitQuestionnaire() {
+    private suspend fun submitQuestionnaire() {
         val uiState = _viewState.value
         val questionnaireUI = _viewState.value.data ?: return
 
-        viewModelScope.launch {
+        _viewState.emit(
+            uiState.copy(
+                data = questionnaireUI.copy(
+                    isQuestionnaireSubmitLoading = true
+                )
+            )
+        )
+        runCatching {
+            if (isOnboarding) {
+                questionnaireRepository.onboardingAnswers(questionnaireUI.questions)
+            } else {
+                questionnaireRepository.answers(questionnaireUI.questions)
+            }
+        }.onSuccess {
+            if (!isOnboarding && feedSectionType != null) {
+                globalViewEvents.emit(
+                    GlobalViewEvent.FeedSectionToUnlock(
+                        topic!!,
+                        feedSectionType!!,
+                        state = if (questionnaireUI.questions
+                                .all { it.isAnswerInputValid(requiredToBeAnswered = true) }
+                        ) {
+                            FeedSectionState.UNLOCKED
+                        } else {
+                            FeedSectionState.PARTIALLY_UNLOCKED
+                        }
+                    )
+                )
+                _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireSubmitted)
+            } else {
+                _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireOnboardingSubmitted)
+            }
+
             _viewState.emit(
                 uiState.copy(
                     data = questionnaireUI.copy(
-                        isQuestionnaireSubmitLoading = true
+                        isQuestionnaireSubmitLoading = false
                     )
                 )
             )
-            runCatching {
-                if (topic != null) {
-                    questionnaireRepository.answers(questionnaireUI.questions)
-                } else {
-                    questionnaireRepository.onboardingAnswers(questionnaireUI.questions)
-                }
-            }.onSuccess {
-                if (topic != null && feedSectionType != null) {
-                    globalViewEvents.emit(
-                        GlobalViewEvent.FeedSectionToUnlock(
-                            topic!!,
-                            feedSectionType!!,
-                            state = if (questionnaireUI.questions
-                                    .all { it.isAnswerInputValid(requiredToBeAnswered = true) }
-                            ) {
-                                FeedSectionState.UNLOCKED
-                            } else {
-                                FeedSectionState.PARTIALLY_UNLOCKED
-                            }
-                        )
-                    )
-                    _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireSubmitted)
-                } else {
-                    _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireOnboardingSubmitted)
-                }
-
-                _viewState.emit(
-                    uiState.copy(
-                        data = questionnaireUI.copy(
-                            isQuestionnaireSubmitLoading = false
-                        )
+        }.onFailure { e ->
+            logger.e(e)
+            globalViewEvents.emit(showErrorToast(e))
+            _viewState.emit(
+                uiState.copy(
+                    data = questionnaireUI.copy(
+                        isQuestionnaireSubmitLoading = false
                     )
                 )
-            }.onFailure { e ->
-                logger.e(e)
-                globalViewEvents.emit(showErrorToast(e))
-                _viewState.emit(
-                    uiState.copy(
-                        data = questionnaireUI.copy(
-                            isQuestionnaireSubmitLoading = false
-                        )
-                    )
-                )
-            }
+            )
         }
     }
 }
