@@ -1,45 +1,50 @@
-package com.recco.internal.feature.article.utils
+package com.recco.internal.feature.article
 
+import androidx.lifecycle.SavedStateHandle
 import com.recco.internal.core.model.recommendation.Article
+import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.test.utils.staticThrowableForTesting
-import com.recco.internal.feature.article.model.dislikedArticle
-import com.recco.internal.feature.article.model.likedArticle
-import com.recco.internal.feature.article.model.nonBookmarkedArticle
-import com.recco.internal.feature.article.model.rawArticle
+import com.recco.internal.core.ui.preview.ContentIdPreviewProvider
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
 
+internal fun SavedStateHandle.stub() {
+    stub {
+        on { it.get<ContentId>(any()) } doReturn (ContentIdPreviewProvider.data)
+    }
+}
 
 internal fun RecommendationRepository.stubForSuccessWithLikedAndBookmarkedArticle() {
-    stubRepositoryForSuccess(likedArticle)
+    stubRepositoryForSuccess(createArticle(rating = Rating.LIKE))
 }
 
 internal fun RecommendationRepository.stubForSuccessWithDislikedArticle() {
-    stubRepositoryForSuccess(dislikedArticle)
+    stubRepositoryForSuccess(createArticle(rating = Rating.DISLIKE))
 }
 
 internal fun RecommendationRepository.stubForSuccessWithNonRatedArticle() {
-    stubRepositoryForSuccess(rawArticle)
+    stubRepositoryForSuccess(createArticle())
 }
 
 internal fun RecommendationRepository.stubForSuccessWithNonBookmarkedArticle() {
-    stubRepositoryForSuccess(nonBookmarkedArticle)
+    stubRepositoryForSuccess(createArticle(isBookmarked = false))
 }
 
 internal fun RecommendationRepository.stubForInitialFailure() {
-    this.stub {
+    stub {
         onBlocking { it.getArticle(any()) } doThrow staticThrowableForTesting
         onBlocking { it.setRecommendationAsViewed(any()) } doThrow staticThrowableForTesting
     }
 }
 
 internal fun RecommendationRepository.stubForToggleRatingFailure() {
-    this.stub {
+    stub {
         onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
-        onBlocking { it.getArticle(any()) } doReturn likedArticle
+        onBlocking { it.getArticle(any()) } doReturn createArticle(rating = Rating.LIKE)
         onBlocking {
             it.setRecommendationRating(
                 any(),
@@ -50,9 +55,9 @@ internal fun RecommendationRepository.stubForToggleRatingFailure() {
 }
 
 internal fun RecommendationRepository.stubForToggleBookmarkFailure() {
-    this.stub {
+    stub {
         onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
-        onBlocking { it.getArticle(any()) } doReturn likedArticle
+        onBlocking { it.getArticle(any()) } doReturn createArticle(rating = Rating.LIKE)
         onBlocking {
             it.setBookmarkRecommendation(
                 any(),
@@ -63,7 +68,7 @@ internal fun RecommendationRepository.stubForToggleBookmarkFailure() {
 }
 
 private fun RecommendationRepository.stubRepositoryForSuccess(article: Article) {
-    this.stub {
+    stub {
         onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
         onBlocking { it.getArticle(any()) } doReturn article
         onBlocking { it.setBookmarkRecommendation(any(), any()) } doReturn Unit

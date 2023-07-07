@@ -33,6 +33,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 "testRuntimeOnly"(libs.junit.engine)
                 "testImplementation"(libs.mockito)
                 "testImplementation"(libs.coroutines.test)
+                "testImplementation"(libs.truth)
             }
         }
     }

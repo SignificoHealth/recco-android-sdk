@@ -2,39 +2,23 @@ package com.recco.internal.feature.questionnaire
 
 import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.SavedStateHandle
+import com.google.common.truth.Truth.assertThat
 import com.recco.internal.core.logger.Logger
-import com.recco.internal.core.model.feed.FeedSectionType
-import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.questionnaire.MultiChoiceQuestion
 import com.recco.internal.core.model.questionnaire.NumericQuestion
 import com.recco.internal.core.repository.QuestionnaireRepository
 import com.recco.internal.core.test.CoroutineTestExtension
+import com.recco.internal.core.test.extensions.onViewModelInteraction
 import com.recco.internal.core.test.utils.expectedUiStateWithError
 import com.recco.internal.core.test.utils.expectedUiStateWithLoading
 import com.recco.internal.core.test.utils.staticThrowableForTesting
-import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.core.ui.preview.QuestionnairePreviewProvider
 import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.*
-import com.recco.internal.feature.questionnaire.navigation.feedSectionTypeArg
-import com.recco.internal.feature.questionnaire.navigation.topicArg
-import com.recco.internal.feature.questionnaire.utils.stubForInitialFailure
-import com.recco.internal.feature.questionnaire.utils.stubForInitialSuccess
-import com.recco.internal.feature.questionnaire.utils.stubForSendAnswersFailure
-import com.recco.internal.feature.questionnaire.utils.stubForSendAnswersSuccess
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verifyBlocking
@@ -43,61 +27,54 @@ import org.mockito.kotlin.verifyBlocking
 @ExtendWith(CoroutineTestExtension::class)
 class QuestionnaireViewModelTest {
     private lateinit var repository: QuestionnaireRepository
-    private lateinit var events: MutableList<UiState<QuestionnaireUI>>
-
     private val logger = mock<Logger>()
-    private val savedStateHandle = mock<SavedStateHandle> {
-        on { it.get<Topic>(topicArg) } doReturn (Topic.SLEEP)
-        on { it.get<FeedSectionType>(feedSectionTypeArg) } doReturn (FeedSectionType.SLEEP_RECOMMENDATIONS)
-    }
-
-    private val multiChoiceQuestion =
-        QuestionnairePreviewProvider.multiChoice(isFirstSelected = false).first()
-    private val numericQuestion = QuestionnairePreviewProvider.numeric().first()
-    private val questions = listOf(multiChoiceQuestion, numericQuestion)
+    private val savedStateHandle = mock<SavedStateHandle>().apply { stub() }
 
     @BeforeEach
     fun setup() {
         repository = mock()
-        events = mutableListOf()
     }
 
     @Test
     fun `initial state event emitted is Loading`() = runTest {
         // When
         repository.stubForInitialSuccess(questions)
-        onViewModelInteraction(eventsToDrop = 0)
+        val events = onViewModelInteraction(eventsToDrop = 0)
 
         // Then
-        assert(events.first() == expectedUiStateWithLoading)
+        assertThat(events.first()).isEqualTo(expectedUiStateWithLoading)
     }
 
     @Test
     fun `onFailure emits exceptions on Initial Load`() = runTest {
         // When
         repository.stubForInitialFailure()
-        onViewModelInteraction(eventsToDrop = 1)
+        val events = onViewModelInteraction(eventsToDrop = 1)
 
         // Then
         verifyBlocking(logger, times(1)) {
             e(staticThrowableForTesting, null, null)
         }
 
-        events.fastForEach { assert(it == expectedUiStateWithError) }
+        events.fastForEach {
+            assertThat(events.first()).isEqualTo(expectedUiStateWithError)
+        }
     }
 
     @Test
     fun `onFailure emits exceptions while logging them if Retry`() = runTest {
         // When
         repository.stubForInitialFailure()
-        onViewModelInteraction(eventsToDrop = 3, Retry)
+        val events =  onViewModelInteraction(eventsToDrop = 3, Retry)
 
         // Then
         verifyBlocking(logger, times(2)) {
             e(staticThrowableForTesting, null, null)
         }
 
-        events.fastForEach { assert(it == expectedUiStateWithError) }
+        events.fastForEach {
+            assertThat(events.first()).isEqualTo(expectedUiStateWithError)
+        }
     }
 
     @Test
@@ -105,7 +82,7 @@ class QuestionnaireViewModelTest {
         // When
         repository.stubForInitialSuccess(questions)
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 2,
             ClickOnMultiChoiceAnswerOption(
                 question = multiChoiceQuestion,
@@ -115,10 +92,10 @@ class QuestionnaireViewModelTest {
 
         // Then
         events.first().data!!.apply {
-            assert(progress == .5f)
-            assert(isNextEnabled)
-            assert(!isLastPage)
-            assert((questions.first() as MultiChoiceQuestion).options.first().isSelected)
+            assertThat(progress).isEqualTo(.5f)
+            assertThat(isLastPage).isFalse()
+            assertThat(isNextEnabled).isTrue()
+            assertThat((questions.first() as MultiChoiceQuestion).options.first().isSelected).isTrue()
         }
     }
 
@@ -127,7 +104,7 @@ class QuestionnaireViewModelTest {
         // When
         repository.stubForInitialSuccess(questions)
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 2,
             WriteOnNumericQuestion(
                 question = numericQuestion,
@@ -137,9 +114,9 @@ class QuestionnaireViewModelTest {
 
         // Then
         events.first().data!!.apply {
-            assert(progress == .5f)
-            assert(!isNextEnabled)
-            assert((questions[1] as NumericQuestion).selectedValue == 345.0)
+            assertThat(progress).isEqualTo(.5f)
+            assertThat((questions[1] as NumericQuestion).selectedValue).isEqualTo(345.0)
+            assertThat(isNextEnabled).isFalse()
         }
     }
 
@@ -148,16 +125,16 @@ class QuestionnaireViewModelTest {
         // When
         repository.stubForInitialSuccess(questions)
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 2,
             NextClicked
         )
 
         // Then
         events.first().data!!.apply {
-            assert(progress == 1f)
-            assert(isNextEnabled)
-            assert(isLastPage)
+            assertThat(progress).isEqualTo(1f)
+            assertThat(isLastPage).isTrue()
+            assertThat(isNextEnabled).isTrue()
         }
     }
 
@@ -170,7 +147,7 @@ class QuestionnaireViewModelTest {
             stubForSendAnswersSuccess()
         }
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 5,
             ClickOnMultiChoiceAnswerOption(
                 question = multiChoiceQuestion,
@@ -188,8 +165,8 @@ class QuestionnaireViewModelTest {
             e(staticThrowableForTesting, null, null)
         }
 
-        assert(events[0].data!!.isQuestionnaireSubmitLoading)
-        assert(!events[1].data!!.isQuestionnaireSubmitLoading)
+        assertThat(events[0].data?.isQuestionnaireSubmitLoading).isTrue()
+        assertThat(events[1].data?.isQuestionnaireSubmitLoading).isFalse()
     }
 
     @Test
@@ -200,7 +177,7 @@ class QuestionnaireViewModelTest {
             stubForSendAnswersFailure()
         }
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 5,
             ClickOnMultiChoiceAnswerOption(
                 question = multiChoiceQuestion,
@@ -219,8 +196,8 @@ class QuestionnaireViewModelTest {
             e(staticThrowableForTesting, null, null)
         }
 
-        assert(events[0].data!!.isQuestionnaireSubmitLoading)
-        assert(!events[1].data!!.isQuestionnaireSubmitLoading)
+        assertThat(events[0].data?.isQuestionnaireSubmitLoading).isTrue()
+        assertThat(events[1].data?.isQuestionnaireSubmitLoading).isFalse()
     }
 
     @Test
@@ -231,7 +208,7 @@ class QuestionnaireViewModelTest {
             stubForSendAnswersSuccess()
         }
 
-        onViewModelInteraction(
+        val events = onViewModelInteraction(
             eventsToDrop = 4,
             ClickOnMultiChoiceAnswerOption(
                 question = multiChoiceQuestion,
@@ -243,25 +220,19 @@ class QuestionnaireViewModelTest {
 
         // Then
         events.first().data!!.apply {
-            assert(progress == .5f)
-            assert(!showBack)
-            assert(isFirstPage)
+            assertThat(progress).isEqualTo(.5f)
+            assertThat(showBack).isFalse()
+            assertThat(isFirstPage).isTrue()
         }
     }
 
     private fun TestScope.onViewModelInteraction(
-        eventsToDrop: Int = 0,
+        eventsToDrop: Int,
         vararg userInteractions: QuestionnaireUserInteract
-    ) {
-        QuestionnaireViewModel(repository, logger, savedStateHandle).also { sut ->
-            sut.viewState
-                .drop(eventsToDrop)
-                .onEach(events::add)
-                .launchIn(CoroutineScope(UnconfinedTestDispatcher(testScheduler)))
-                .invokeOnCompletion { cancel() }
-            userInteractions.forEach { sut.onUserInteract(it) }
-        }
-        runCurrent()
+    ) = QuestionnaireViewModel(repository, logger, savedStateHandle).run {
+        onViewModelInteraction(
+            viewState = viewState,
+            eventsToDrop = eventsToDrop,
+            runInteractions = { userInteractions.forEach { onUserInteract(it) } })
     }
-
 }
