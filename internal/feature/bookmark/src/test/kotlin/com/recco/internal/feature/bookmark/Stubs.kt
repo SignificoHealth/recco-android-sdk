@@ -7,14 +7,14 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.stub
 
 internal fun RecommendationRepository.stubRepositoryForSuccess() {
-    this.stub {
+    stub {
         onBlocking { it.bookmarks } doReturn flow { emit(bookmarkUI.recommendations) }
         onBlocking { it.reloadBookmarks() } doReturn Unit
     }
 }
 
 internal fun RecommendationRepository.stubRepositoryForError() {
-    this.stub {
+    stub {
         onBlocking { it.bookmarks } doReturn flow { throw staticThrowableForTesting }
     }
 }

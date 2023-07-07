@@ -14,7 +14,7 @@ import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
 
 internal fun SavedStateHandle.stub() {
-    this.stub {
+    stub {
         on { it.get<Topic>(topicArg) } doReturn (Topic.SLEEP)
         on { it.get<FeedSectionType>(feedSectionTypeArg) } doReturn (FeedSectionType.SLEEP_RECOMMENDATIONS)
     }
@@ -22,28 +22,28 @@ internal fun SavedStateHandle.stub() {
 
 
 internal fun QuestionnaireRepository.stubForInitialFailure() {
-    this.stub {
+    stub {
         onBlocking { it.getOnboarding() } doThrow staticThrowableForTesting
         onBlocking { it.getQuestionnaireByTopic(any()) } doThrow staticThrowableForTesting
     }
 }
 
 internal fun QuestionnaireRepository.stubForInitialSuccess(mockAnswers: List<Question>) {
-    this.stub {
+    stub {
         onBlocking { it.getOnboarding() } doReturn mockAnswers
         onBlocking { it.getQuestionnaireByTopic(any()) } doReturn mockAnswers
     }
 }
 
 internal fun QuestionnaireRepository.stubForSendAnswersSuccess() {
-    this.stub {
+    stub {
         onBlocking { it.answers(any()) } doReturn Unit
         onBlocking { it.onboardingAnswers(any()) } doReturn Unit
     }
 }
 
 internal fun QuestionnaireRepository.stubForSendAnswersFailure() {
-    this.stub {
+    stub {
         onBlocking { it.answers(any()) } doThrow staticThrowableForTesting
         onBlocking { it.onboardingAnswers(any()) } doThrow staticThrowableForTesting
     }

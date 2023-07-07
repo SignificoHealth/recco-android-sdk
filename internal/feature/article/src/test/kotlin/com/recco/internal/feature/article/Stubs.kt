@@ -13,7 +13,7 @@ import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
 
 internal fun SavedStateHandle.stub() {
-    this.stub {
+    stub {
         on { it.get<ContentId>(any()) } doReturn (ContentIdPreviewProvider.data)
     }
 }
@@ -35,14 +35,14 @@ internal fun RecommendationRepository.stubForSuccessWithNonBookmarkedArticle() {
 }
 
 internal fun RecommendationRepository.stubForInitialFailure() {
-    this.stub {
+    stub {
         onBlocking { it.getArticle(any()) } doThrow staticThrowableForTesting
         onBlocking { it.setRecommendationAsViewed(any()) } doThrow staticThrowableForTesting
     }
 }
 
 internal fun RecommendationRepository.stubForToggleRatingFailure() {
-    this.stub {
+    stub {
         onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
         onBlocking { it.getArticle(any()) } doReturn createArticle(rating = Rating.LIKE)
         onBlocking {
@@ -55,7 +55,7 @@ internal fun RecommendationRepository.stubForToggleRatingFailure() {
 }
 
 internal fun RecommendationRepository.stubForToggleBookmarkFailure() {
-    this.stub {
+    stub {
         onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
         onBlocking { it.getArticle(any()) } doReturn createArticle(rating = Rating.LIKE)
         onBlocking {
@@ -68,7 +68,7 @@ internal fun RecommendationRepository.stubForToggleBookmarkFailure() {
 }
 
 private fun RecommendationRepository.stubRepositoryForSuccess(article: Article) {
-    this.stub {
+    stub {
         onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
         onBlocking { it.getArticle(any()) } doReturn article
         onBlocking { it.setBookmarkRecommendation(any(), any()) } doReturn Unit
