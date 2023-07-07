@@ -28,12 +28,11 @@ import org.mockito.kotlin.verifyBlocking
 class ArticleViewModelTest {
     private lateinit var repository: RecommendationRepository
     private val logger = mock<Logger>()
-    private val savedStateHandle = mock<SavedStateHandle>()
+    private val savedStateHandle = mock<SavedStateHandle>().apply { stub() }
 
     @BeforeEach
     fun setup() {
         repository = mock()
-        savedStateHandle.stub()
     }
 
     @Test
