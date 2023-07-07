@@ -13,14 +13,9 @@ import com.recco.internal.core.test.utils.expectedUiStateWithError
 import com.recco.internal.core.test.utils.expectedUiStateWithLoading
 import com.recco.internal.core.test.utils.staticThrowableForTesting
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.core.ui.preview.QuestionnairePreviewProvider
 import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.*
 import com.recco.internal.feature.questionnaire.navigation.feedSectionTypeArg
 import com.recco.internal.feature.questionnaire.navigation.topicArg
-import com.recco.internal.feature.questionnaire.utils.stubForInitialFailure
-import com.recco.internal.feature.questionnaire.utils.stubForInitialSuccess
-import com.recco.internal.feature.questionnaire.utils.stubForSendAnswersFailure
-import com.recco.internal.feature.questionnaire.utils.stubForSendAnswersSuccess
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -46,20 +41,13 @@ class QuestionnaireViewModelTest {
     private lateinit var events: MutableList<UiState<QuestionnaireUI>>
 
     private val logger = mock<Logger>()
-    private val savedStateHandle = mock<SavedStateHandle> {
-        on { it.get<Topic>(topicArg) } doReturn (Topic.SLEEP)
-        on { it.get<FeedSectionType>(feedSectionTypeArg) } doReturn (FeedSectionType.SLEEP_RECOMMENDATIONS)
-    }
-
-    private val multiChoiceQuestion =
-        QuestionnairePreviewProvider.multiChoice(isFirstSelected = false).first()
-    private val numericQuestion = QuestionnairePreviewProvider.numeric().first()
-    private val questions = listOf(multiChoiceQuestion, numericQuestion)
+    private val savedStateHandle = mock<SavedStateHandle>()
 
     @BeforeEach
     fun setup() {
         repository = mock()
         events = mutableListOf()
+        savedStateHandle.stub()
     }
 
     @Test

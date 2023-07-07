@@ -1,12 +1,25 @@
-package com.recco.internal.feature.questionnaire.utils
+package com.recco.internal.feature.questionnaire
 
+import androidx.lifecycle.SavedStateHandle
+import com.recco.internal.core.model.feed.FeedSectionType
+import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.questionnaire.Question
 import com.recco.internal.core.repository.QuestionnaireRepository
 import com.recco.internal.core.test.utils.staticThrowableForTesting
+import com.recco.internal.feature.questionnaire.navigation.feedSectionTypeArg
+import com.recco.internal.feature.questionnaire.navigation.topicArg
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
+
+internal fun SavedStateHandle.stub() {
+    this.stub {
+        on { it.get<Topic>(topicArg) } doReturn (Topic.SLEEP)
+        on { it.get<FeedSectionType>(feedSectionTypeArg) } doReturn (FeedSectionType.SLEEP_RECOMMENDATIONS)
+    }
+}
+
 
 internal fun QuestionnaireRepository.stubForInitialFailure() {
     this.stub {

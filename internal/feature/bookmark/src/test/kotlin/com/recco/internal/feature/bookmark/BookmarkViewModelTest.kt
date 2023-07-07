@@ -4,13 +4,11 @@ import androidx.compose.ui.util.fastForEach
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.test.CoroutineTestExtension
+import com.recco.internal.core.test.utils.expectedUiStateWithData
+import com.recco.internal.core.test.utils.expectedUiStateWithError
+import com.recco.internal.core.test.utils.expectedUiStateWithLoading
+import com.recco.internal.core.test.utils.staticThrowableForTesting
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.feature.bookmark.model.expectedWithData
-import com.recco.internal.feature.bookmark.model.expectedWithError
-import com.recco.internal.feature.bookmark.model.expectedWithLoading
-import com.recco.internal.feature.bookmark.model.staticThrowableForTesting
-import com.recco.internal.feature.bookmark.utils.stubRepositoryForError
-import com.recco.internal.feature.bookmark.utils.stubRepositoryForSuccess
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -51,7 +49,7 @@ class BookmarkViewModelTest {
 
         // Then
         assert(events.isNotEmpty())
-        events.fastForEach { assert(it == expectedWithError) }
+        events.fastForEach { assert(it == expectedUiStateWithError) }
 
         verifyBlocking(logger, times(2)) {
             e(staticThrowableForTesting, null, null)
@@ -66,7 +64,7 @@ class BookmarkViewModelTest {
 
         // Then
         assert(events.isNotEmpty())
-        events.fastForEach { assert(it == expectedWithError) }
+        events.fastForEach { assert(it == expectedUiStateWithError) }
 
         verifyBlocking(logger, times(1)) {
             e(staticThrowableForTesting, null, null)
@@ -80,7 +78,7 @@ class BookmarkViewModelTest {
         onViewModelInteraction(0, BookmarkUserInteract.Retry)
 
         // Then
-        assert(events.first() == expectedWithLoading)
+        assert(events.first() == expectedUiStateWithLoading)
     }
 
     @Test
@@ -90,7 +88,7 @@ class BookmarkViewModelTest {
         onViewModelInteraction(1, BookmarkUserInteract.Retry)
 
         // Then
-        assert(events.first() == expectedWithData)
+        assert(events.first() == expectedUiStateWithData(bookmarkUI))
     }
 
     @Test
@@ -104,7 +102,7 @@ class BookmarkViewModelTest {
             reloadBookmarks()
         }
 
-        assert(events.first() == expectedWithData)
+        assert(events.first() == expectedUiStateWithData(bookmarkUI))
     }
 
     @Test
@@ -114,7 +112,7 @@ class BookmarkViewModelTest {
         onViewModelInteraction(1, BookmarkUserInteract.Retry)
 
         // Then
-        assert(events.first() == expectedWithData)
+        assert(events.first() == expectedUiStateWithData(bookmarkUI))
     }
 
     /**
