@@ -2,6 +2,7 @@ package com.recco.internal.feature.article
 
 import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.SavedStateHandle
+import com.google.common.truth.Truth.assertThat
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.repository.RecommendationRepository
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verifyBlocking
+
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(CoroutineTestExtension::class)
@@ -55,7 +57,7 @@ class ArticleViewModelTest {
             e(staticThrowableForTesting, null, null)
         }
 
-        assert(events.first() == expectedUiStateWithError)
+        assertThat(events.first()).isEqualTo(expectedUiStateWithError)
     }
 
     @Test
@@ -69,7 +71,9 @@ class ArticleViewModelTest {
             e(staticThrowableForTesting, null, null)
         }
 
-        events.fastForEach { assert(it == expectedUiStateWithError) }
+        events.fastForEach {
+            assertThat(events.first()).isEqualTo(expectedUiStateWithError)
+        }
     }
 
     @Test
@@ -79,7 +83,9 @@ class ArticleViewModelTest {
         onViewModelInteraction(3, ArticleUserInteract.ToggleLikeState)
 
         // Then
-        events.fastForEach { assert(it == expectedUiStateWithError) }
+        events.fastForEach {
+            assertThat(events.first()).isEqualTo(expectedUiStateWithError)
+        }
 
         verifyBlocking(logger, times(1)) {
             e(staticThrowableForTesting, null, null)
@@ -93,7 +99,9 @@ class ArticleViewModelTest {
         onViewModelInteraction(3, ArticleUserInteract.ToggleDislikeState)
 
         // Then
-        events.fastForEach { assert(it == expectedUiStateWithError) }
+        events.fastForEach {
+            assertThat(events.first()).isEqualTo(expectedUiStateWithError)
+        }
 
         verifyBlocking(logger, times(1)) {
             e(staticThrowableForTesting, null, null)
@@ -107,7 +115,9 @@ class ArticleViewModelTest {
         onViewModelInteraction(3, ArticleUserInteract.ToggleBookmarkState)
 
         // Then
-        events.fastForEach { assert(it == expectedUiStateWithError) }
+        events.fastForEach {
+            assertThat(events.first()).isEqualTo(expectedUiStateWithError)
+        }
 
         verifyBlocking(logger, times(1)) {
             e(staticThrowableForTesting, null, null)
@@ -121,7 +131,7 @@ class ArticleViewModelTest {
         onViewModelInteraction(0, ArticleUserInteract.Retry)
 
         // Then
-        assert(events.first() == expectedUiStateWithLoading)
+        assertThat(events.first()).isEqualTo(expectedUiStateWithLoading)
     }
 
     @Test
@@ -136,7 +146,7 @@ class ArticleViewModelTest {
         onViewModelInteraction(1, ArticleUserInteract.Retry)
 
         // Then
-        assert(events.first() == expectedUiState)
+        assertThat(events.first()).isEqualTo(expectedUiState)
     }
 
     @Test
@@ -158,7 +168,7 @@ class ArticleViewModelTest {
         onViewModelInteraction(2, ArticleUserInteract.ToggleBookmarkState)
 
         // Then
-        assert(events.first() == expectedUiState)
+        assertThat(events.first()).isEqualTo(expectedUiState)
     }
 
     @Test
@@ -181,7 +191,7 @@ class ArticleViewModelTest {
         onViewModelInteraction(2, ArticleUserInteract.ToggleBookmarkState)
 
         // Then
-        assert(events.first() == expectedUiState)
+        assertThat(events.first()).isEqualTo(expectedUiState)
     }
 
     @Test
@@ -322,11 +332,12 @@ class ArticleViewModelTest {
         repository.stubForSuccessWithDislikedArticle()
         onViewModelInteraction(2, ArticleUserInteract.ToggleLikeState)
 
+
         // Then
         events.forEachIndexed { index, uiState ->
             when (index) {
-                0 -> assert(uiState == dislikedUiState)
-                1 -> assert(uiState == expectedUiState)
+                0 -> assertThat(uiState).isEqualTo(dislikedUiState)
+                1 -> assertThat(uiState).isEqualTo(expectedUiState)
             }
         }
     }
@@ -361,8 +372,8 @@ class ArticleViewModelTest {
         // Then
         events.forEachIndexed { index, uiState ->
             when (index) {
-                0 -> assert(uiState == nonRatedUiState)
-                1 -> assert(uiState == expectedUiState)
+                0 -> assertThat(uiState).isEqualTo(nonRatedUiState)
+                1 -> assertThat(uiState).isEqualTo(expectedUiState)
             }
         }
     }
@@ -397,8 +408,8 @@ class ArticleViewModelTest {
         // Then
         events.forEachIndexed { index, uiState ->
             when (index) {
-                0 -> assert(uiState == nonRatedUiState)
-                1 -> assert(uiState == expectedUiState)
+                0 -> assertThat(uiState).isEqualTo(nonRatedUiState)
+                1 -> assertThat(uiState).isEqualTo(expectedUiState)
             }
         }
     }
