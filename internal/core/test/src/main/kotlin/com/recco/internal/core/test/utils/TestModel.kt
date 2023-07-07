@@ -11,14 +11,14 @@ fun <T> expectedUiStateWithData(data: T) = UiState(
     error = null
 )
 
-val expectedWithLoading = UiState(
+val expectedUiStateWithLoading = UiState(
     isLoading = true,
     data = null,
     error = null
 )
 
 val staticThrowableForTesting = IllegalStateException()
-val expectedWithError = UiState(
+val expectedUiStateWithError = UiState(
     isLoading = false,
     data = null,
     error = staticThrowableForTesting

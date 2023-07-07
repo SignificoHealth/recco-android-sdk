@@ -9,8 +9,8 @@ import com.recco.internal.core.model.questionnaire.MultiChoiceQuestion
 import com.recco.internal.core.model.questionnaire.NumericQuestion
 import com.recco.internal.core.repository.QuestionnaireRepository
 import com.recco.internal.core.test.CoroutineTestExtension
-import com.recco.internal.core.test.utils.expectedWithError
-import com.recco.internal.core.test.utils.expectedWithLoading
+import com.recco.internal.core.test.utils.expectedUiStateWithError
+import com.recco.internal.core.test.utils.expectedUiStateWithLoading
 import com.recco.internal.core.test.utils.staticThrowableForTesting
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.preview.QuestionnairePreviewProvider
@@ -69,7 +69,7 @@ class QuestionnaireViewModelTest {
         onViewModelInteraction(eventsToDrop = 0)
 
         // Then
-        assert(events.first() == expectedWithLoading)
+        assert(events.first() == expectedUiStateWithLoading)
     }
 
     @Test
@@ -83,7 +83,7 @@ class QuestionnaireViewModelTest {
             e(staticThrowableForTesting, null, null)
         }
 
-        events.fastForEach { assert(it == expectedWithError) }
+        events.fastForEach { assert(it == expectedUiStateWithError) }
     }
 
     @Test
@@ -97,7 +97,7 @@ class QuestionnaireViewModelTest {
             e(staticThrowableForTesting, null, null)
         }
 
-        events.fastForEach { assert(it == expectedWithError) }
+        events.fastForEach { assert(it == expectedUiStateWithError) }
     }
 
     @Test

@@ -8,8 +8,8 @@ import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.test.CoroutineTestExtension
 import com.recco.internal.core.test.utils.expectedUiStateWithData
-import com.recco.internal.core.test.utils.expectedWithError
-import com.recco.internal.core.test.utils.expectedWithLoading
+import com.recco.internal.core.test.utils.expectedUiStateWithError
+import com.recco.internal.core.test.utils.expectedUiStateWithLoading
 import com.recco.internal.core.test.utils.staticThrowableForTesting
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.preview.ContentIdPreviewProvider
@@ -75,7 +75,7 @@ class ArticleViewModelTest {
             e(staticThrowableForTesting, null, null)
         }
 
-        assert( events.first() == expectedWithError)
+        assert( events.first() == expectedUiStateWithError)
     }
 
     @Test
@@ -89,7 +89,7 @@ class ArticleViewModelTest {
             e(staticThrowableForTesting, null, null)
         }
 
-        events.fastForEach { assert(it == expectedWithError) }
+        events.fastForEach { assert(it == expectedUiStateWithError) }
     }
 
     @Test
@@ -99,7 +99,7 @@ class ArticleViewModelTest {
         onViewModelInteraction(3, ArticleUserInteract.ToggleLikeState)
 
         // Then
-        events.fastForEach { assert(it == expectedWithError) }
+        events.fastForEach { assert(it == expectedUiStateWithError) }
 
         verifyBlocking(logger, times(1)) {
             e(staticThrowableForTesting, null, null)
@@ -113,7 +113,7 @@ class ArticleViewModelTest {
         onViewModelInteraction(3, ArticleUserInteract.ToggleDislikeState)
 
         // Then
-        events.fastForEach { assert(it == expectedWithError) }
+        events.fastForEach { assert(it == expectedUiStateWithError) }
 
         verifyBlocking(logger, times(1)) {
             e(staticThrowableForTesting, null, null)
@@ -127,7 +127,7 @@ class ArticleViewModelTest {
         onViewModelInteraction(3, ArticleUserInteract.ToggleBookmarkState)
 
         // Then
-        events.fastForEach { assert(it == expectedWithError) }
+        events.fastForEach { assert(it == expectedUiStateWithError) }
 
         verifyBlocking(logger, times(1)) {
             e(staticThrowableForTesting, null, null)
@@ -141,7 +141,7 @@ class ArticleViewModelTest {
         onViewModelInteraction(0, ArticleUserInteract.Retry)
 
         // Then
-        assert(events.first() == expectedWithLoading)
+        assert(events.first() == expectedUiStateWithLoading)
     }
 
     @Test
