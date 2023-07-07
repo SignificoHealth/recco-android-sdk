@@ -98,10 +98,10 @@ class QuestionnaireViewModel @Inject constructor(
     private fun initialLoadSubscribe() {
         viewModelScope.launch {
             runCatching {
-                if (topic != null) {
-                    questionnaireRepository.getQuestionnaireByTopic(topic!!)
-                } else {
+                if (isOnboarding) {
                     questionnaireRepository.getOnboarding()
+                } else {
+                    questionnaireRepository.getQuestionnaireByTopic(topic!!)
                 }
             }.onSuccess { questions ->
                 _viewState.emit(
@@ -205,13 +205,13 @@ class QuestionnaireViewModel @Inject constructor(
             )
         )
         runCatching {
-            if (topic != null) {
-                questionnaireRepository.answers(questionnaireUI.questions)
-            } else {
+            if (isOnboarding) {
                 questionnaireRepository.onboardingAnswers(questionnaireUI.questions)
+            } else {
+                questionnaireRepository.answers(questionnaireUI.questions)
             }
         }.onSuccess {
-            if (topic != null && feedSectionType != null) {
+            if (!isOnboarding && feedSectionType != null) {
                 globalViewEvents.emit(
                     GlobalViewEvent.FeedSectionToUnlock(
                         topic!!,
