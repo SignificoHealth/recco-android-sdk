@@ -63,7 +63,7 @@ private fun BookmarkScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = stringResource(id = R.string.recco_bookmarks),
+                title = stringResource(id = R.string.recco_bookmarks_title),
                 navigationIcon = { BackIconButton(onClick = navigateUp) }
             )
         },
@@ -86,7 +86,7 @@ private fun BookmarkScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(AppSpacing.dp_32),
-                        text = stringResource(id = R.string.recco_bookmarks_empty_title),
+                        text = stringResource(id = R.string.recco_bookmarks_empty_state_title),
                         style = AppTheme.typography.body1,
                         textAlign = TextAlign.Center
                     )

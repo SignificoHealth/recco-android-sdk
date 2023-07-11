@@ -112,7 +112,7 @@ fun QuestionnaireScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = topic?.asTitle() ?: stringResource(id = R.string.recco_about_you),
+                title = topic?.asTitle() ?: stringResource(id = R.string.recco_questionnaire_about_you),
                 elevation = 0.dp,
                 navigationIcon = if (topic != null) {
                     { BackIconButton(onClick = navigateUp) }
@@ -227,7 +227,7 @@ private fun QuestionnaireContent(
                             if (!question.isSingleChoice) {
                                 Spacer(Modifier.height(AppSpacing.dp_16))
                                 Text(
-                                    text = stringResource(R.string.recco_multiple_answers_possible),
+                                    text = stringResource(R.string.recco_questionnaire_multiple_answers),
                                     style = AppTheme.typography.body3.copy(color = AppTheme.colors.primary20)
                                 )
                             }

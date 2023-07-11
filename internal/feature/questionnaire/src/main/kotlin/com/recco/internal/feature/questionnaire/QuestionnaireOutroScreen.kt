@@ -73,7 +73,7 @@ private fun QuestionnaireOnboardingOutroScreen(
         },
         bottomBar = {
             AppPrimaryButton(
-                text = stringResource(R.string.recco_go_to_dashboard),
+                text = stringResource(R.string.recco_questionnaire_go_to_dashboard),
                 onClick = navigateToOutro,
                 modifier = modifier
                     .padding(horizontal = AppSpacing.dp_24)

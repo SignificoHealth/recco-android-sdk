@@ -11,22 +11,22 @@ import com.recco.internal.core.ui.components.AppTintedImageNoConnection
 
 @StringRes
 fun Throwable?.asTitleRes(): Int = when (this) {
-    is NoConnectException -> R.string.recco_no_network_connection_error_title
-    else -> R.string.recco_common_error_title
+    is NoConnectException -> R.string.recco_error_connection_title
+    else -> R.string.recco_error_connection_title
 }
 
 @StringRes
 fun Throwable?.asDescriptionRes(): Int = when (this) {
-    is NoConnectException -> R.string.recco_no_network_connection_error_desc
+    is NoConnectException -> R.string.recco_error_connection_body
     is ServiceUnavailableException,
-    is InternalServerErrorException -> R.string.recco_server_error
-    else -> R.string.recco_common_error_desc
+    is InternalServerErrorException -> R.string.recco_error_connection_body
+    else -> R.string.recco_error_connection_body
 }
 
 @StringRes
 fun Throwable?.asCtaTextRes(): Int = when (this) {
-    is NoConnectException -> R.string.recco_retry
-    else -> R.string.recco_retry
+    is NoConnectException -> R.string.recco_error_reload
+    else -> R.string.recco_error_reload
 }
 
 @DrawableRes

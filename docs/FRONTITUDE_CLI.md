@@ -10,7 +10,7 @@
 - Log in using your Figma account: `$ frontitude login`. To log out run: `$ frontitude logout`
 - Initialize the CLI, and choose the project and the output file type: `$ frontitude init`
     - Supported file types: JSON (.json), XLIFF (.xliff, .xlf), Android XML (.xml).
-- To pull the latest copy from your connected sources: `$ frontitude pull`
+- To pull the latest copy from your connected sources: `$ frontitude pull --include-translations --has-key`
     - Use `--dry-run` to display the results in the CLI without creating or updating the files
 
 ### Other commands:

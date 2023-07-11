@@ -1,0 +1,10 @@
+{
+	"library": false,
+	"projects": [
+		{
+			"name": "Recco UI",
+			"id": "8875863b-4c41-439d-8849-ad1c946de1e3"
+		}
+	],
+	"filePath": "./strings.xml"
+}

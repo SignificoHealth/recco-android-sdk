@@ -1,57 +1,53 @@
-<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
-    <!-- Feed -->
-    <string name="recco_welcome_back">Welcome back</string>
-    <string name="recco_lets_make_toda_better">Let\'s make today even better than yesterday!</string>
-    <string name="recco_start_here">Start here</string>
-    <string name="recco_trending">Trending</string>
-    <string name="recco_recommended_for_you_topic">Recommended For You: %s</string>
-    <string name="recco_explore_topic">Explore &amp; Improve Your %s</string>
-    <string name="recco_you_may_also_like">You May Also Like…</string>
-    <string name="recco_news_for_your">New for You</string>
-    <string name="recco_physical_activity">Physical activity</string>
-    <string name="recco_nutrition">Nutrition</string>
-    <string name="recco_mental_wellbeing">Mental health</string>
-    <string name="recco_sleep">Sleep</string>
-    <string name="recco_unlock">Unlock</string>
-    <string name="recco_no_content_available_title_default">No content available</string>
-    <string name="recco_review_this_area">Review this area</string>
-
-    <!-- Errors -->
-    <string name="recco_retry">Retry</string>
-    <string name="recco_reload">Reload</string>
-    <string name="recco_common_error_title">Sorry!</string>
-    <string name="recco_common_error_desc">Something went wrong</string>
-    <string name="recco_no_network_connection_error_title">No connection</string>
-    <string name="recco_no_network_connection_error_desc">Please check your network connection and try again.</string>
-    <string name="recco_server_error">Service temporarily unavailable. Please try again later.</string>
-
-    <!-- Questionnaire -->
-    <string name="recco_multiple_answers_possible">Multiple answers possible</string>
-    <string name="recco_next">Continue</string>
-    <string name="recco_finish">Finish</string>
-    <string name="recco_about_you">About you</string>
-    <string name="recco_go_to_dashboard">Go to Dashboard</string>
-
-    <!-- Questionnaire topics starting dialogs  -->
-    <string name="recco_physical_activity_explanation">Some physical activity explanation</string>
-    <string name="recco_nutrition_explanation">Some nutrition explanation</string>
-    <string name="recco_mental_wellbeing_explanation">Mental health encompasses emotional, psychological, and social well-being, influencing cognition, perception, and behavior. It likewise determines how an individual handles stress, interpersonal relationships, and decision-making.</string>
-    <string name="recco_sleep_explanation">Some sleep explanation</string>
-    <string name="recco_start">Start</string>
-
-    <!-- Onboarding -->
-    <string name="recco_onboarding_button_next">Next</string>
-    <string name="recco_onboarding_button_start">Start</string>
-    <string name="recco_onboarding_welcome_title">Well hello there!</string>
-    <string name="recco_onboarding_welcome_body">Welcome to Recco.\n\nWe’ll give you customized health advice for a better life.\n\nAll advice will be stored here. Come back every time you want!</string>
-    <string name="recco_onboarding_content_title">Cool content</string>
-    <string name="recco_onboarding_content_body">We´ll give you health advice, recipes, and exercise to help you live your life at it’s fullest.\n\nWe’ll give you some questions to fine-tune the content you want to see</string>
-    <string name="recco_onboarding_about_title">About you</string>
-    <string name="recco_onboarding_about_body">Who are you? What are your health interests? What’s your health status?\n\nWe want to know you!</string>
-    <string name="recco_onboarding_outro_title">Great! Glad to get to know you better!</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="error.notification.subtitle">Something went wrong</string>
+    <string name="error.notification.title">Sorry!</string>
+    <string name="questionnaire.numeric.label.cm">cm.</string>
+    <string name="questionnaire.numeric.label.ft">ft.</string>
+    <string name="questionnaire.numeric.label.in">in.</string>
+    <string name="questionnaire.numeric.label.kg">kg.</string>
+    <string name="questionnaire.numeric.label.lb">lb.</string>
+    <string name="questionnaire.numeric.label.min">min.</string>
+    <string name="questionnaire.numeric.label.st">st.</string>
+    <string name="recco_bookmarks_empty_state_title">You have no bookmarks yet</string>
+    <string name="recco_bookmarks_title">Bookmarks</string>
+    <string name="recco_continue_button">Continue</string>
+    <string name="recco_dashboard_alert_mental_wellbeing_body">Your mental health includes your emotional, psychological, and social well-being.\n\nHow you feel influences your thoughts and your behaviors, so let\'s help you feel good more often!</string>
+    <string name="recco_dashboard_alert_mental_wellbeing_title">Mental Health</string>
+    <string name="recco_dashboard_alert_nutrition_body">How you eat the majority of the time affects your long-term health, so let\'s make health eating easier!</string>
+    <string name="recco_dashboard_alert_nutrition_title">Eating behavior</string>
+    <string name="recco_dashboard_alert_physical_activity_body">Your activity levels affect your mood and body, so let\'s get you moving in ways that are fun and sustainable!</string>
+    <string name="recco_dashboard_alert_physical_activity_title">Physical Activity</string>
+    <string name="recco_dashboard_alert_sleep_body">Optimal sleep balances your hormones and improves your mental and physical health. Let\'s help you sleep better each night!</string>
+    <string name="recco_dashboard_alert_sleep_title">Sleep</string>
+    <string name="recco_dashboard_explore_topic">Explore &amp; Learn</string>
+    <string name="recco_dashboard_new_for_you">New for You</string>
+    <string name="recco_dashboard_recommended_for_you_topic">Recommended For You: Section name</string>
+    <string name="recco_dashboard_review_area">Review this area</string>
+    <string name="recco_dashboard_start_here">Quick Wins!</string>
+    <string name="recco_dashboard_trending">Popular Articles</string>
+    <string name="recco_dashboard_unlock">Unlock it</string>
+    <string name="recco_dashboard_welcome_back_body">Let\'s see how we can improve your health today!</string>
+    <string name="recco_dashboard_welcome_back_title">Great to see you</string>
+    <string name="recco_dashboard_you_may_also_like">Totally You</string>
+    <string name="recco_error_connection_body">Take a breath and try again later</string>
+    <string name="recco_error_connection_title">No connection</string>
+    <string name="recco_error_reload">Reload</string>
+    <string name="recco_finish_button">Finish</string>
+    <string name="recco_next">Next</string>
+    <string name="recco_onboarding_go_to_dashboard">Go to dashboard</string>
     <string name="recco_onboarding_outro_body">Now let’s see what we have for you</string>
-
-    <!-- Bookmarks -->
-    <string name="recco_bookmarks">Bookmarks</string>
-    <string name="recco_bookmarks_empty_title">You\'ve no bookmarks yet</string>
+    <string name="recco_onboarding_outro_title">Great! Glad to get to know you better!</string>
+    <string name="recco_onboarding_page1_body">Welcome to Recco, the personalized health improvement app.\n\nComplete surveys to get customized health advice for improving your life all around!</string>
+    <string name="recco_onboarding_page1_title">Well hello there!</string>
+    <string name="recco_onboarding_page2_body">Enough about Recco – let\'s talk about you!\n\nWhat\'s important to you? What are your health goals? And how are you doing right now?</string>
+    <string name="recco_onboarding_page2_title">All About You</string>
+    <string name="recco_onboarding_page3_body">The more surveys you complete, the more accurate your health score and customized health recommendations will be.\n\nYou\'ll also get fun and interesting content to help you make positive changes right away!</string>
+    <string name="recco_onboarding_page3_title">Let\'s Grow Together</string>
+    <string name="recco_questionnaire_about_you">About you</string>
+    <string name="recco_questionnaire_go_to_dashboard">Go to dashboard</string>
+    <string name="recco_questionnaire_multiple_answers">Multiple answers possible</string>
+    <string name="recco_questionnaire_outro_body">Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</string>
+    <string name="recco_questionnaire_outro_title">Great! We’re done with the first part!</string>
+    <string name="recco_start">Start</string>
 </resources>
