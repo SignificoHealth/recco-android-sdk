@@ -80,4 +80,6 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     implementation("com.github.viluahealthcare:compose-html:1.0.3")
+
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.4.3")
 }

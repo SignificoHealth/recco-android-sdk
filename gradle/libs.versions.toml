@@ -37,6 +37,7 @@ okhttp = "4.11.0"
 openapi = "6.6.0"
 retrofit = "2.9.0"
 security = "1.1.0-alpha06"
+google-fonts = "1.4.3"
 
 junit-plugin = "1.9.3.0"
 junit = "5.9.3"
@@ -125,6 +126,8 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 
 security = { module = "androidx.security:security-crypto", version.ref = "security" }
+
+google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "google-fonts" }
 
 junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }

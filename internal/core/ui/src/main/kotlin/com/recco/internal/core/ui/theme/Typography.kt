@@ -10,17 +10,24 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
 import com.recco.internal.core.ui.R
 
+private val provider = GoogleFont.Provider(
+    providerAuthority = "com.google.android.gms.fonts",
+    providerPackage = "com.google.android.gms",
+    certificates = R.array.com_google_android_gms_fonts_certs
+)
+private val fontName = GoogleFont("Poppins")
 private val poppins = FontFamily(
-    Font(R.font.poppins_regular, FontWeight.Normal),
-    Font(R.font.poppins_medium, FontWeight.Medium),
-    Font(R.font.poppins_semi_bold, FontWeight.SemiBold),
-    Font(R.font.poppins_bold, FontWeight.Bold)
+    Font(googleFont = fontName, fontProvider = provider, FontWeight.Normal),
+    Font(googleFont = fontName, fontProvider = provider, FontWeight.Medium),
+    Font(googleFont = fontName, fontProvider = provider, FontWeight.SemiBold),
+    Font(googleFont = fontName, fontProvider = provider, FontWeight.Bold)
 )
 
 private val h1 = TextStyle(
