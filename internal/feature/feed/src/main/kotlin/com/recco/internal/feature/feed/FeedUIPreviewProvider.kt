@@ -13,34 +13,39 @@ class FeedUIPreviewProvider :
         get() = sequenceOf(
             UiState(
                 isLoading = false,
-                data = FeedUI(
-                    sections = listOf(
-                        FeedPreviewProvider.data(
-                            type = FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS,
-                            state = FeedSectionState.UNLOCKED
-                        ),
-                        FeedPreviewProvider.data(
-                            type = FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS,
-                            state = FeedSectionState.UNLOCKED,
-                            isRecommendationsLoading = true,
-                        ),
-                        FeedPreviewProvider.data(
-                            type = FeedSectionType.SLEEP_RECOMMENDATIONS,
-                            state = FeedSectionState.PARTIALLY_UNLOCKED,
-                            recommendationsSize = 1
-                        ),
-                        FeedPreviewProvider.data(
-                            type = FeedSectionType.NUTRITION_EXPLORE,
-                            state = FeedSectionState.UNLOCKED
-                        ),
-                        FeedPreviewProvider.data(
-                            type = FeedSectionType.SLEEP_RECOMMENDATIONS,
-                            state = FeedSectionState.UNLOCKED
-                        )
-                    )
-                )
+                data = data(),
             ),
             UiState(isLoading = true),
             UiState(isLoading = false, error = Throwable())
         )
+
+    companion object {
+        fun data() = FeedUI(
+            sections = listOf(
+                FeedPreviewProvider.data(
+                    type = FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS,
+                    state = FeedSectionState.UNLOCKED
+                ),
+                FeedPreviewProvider.data(
+                    type = FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS,
+                    state = FeedSectionState.UNLOCKED,
+                    isRecommendationsLoading = true,
+                ),
+                FeedPreviewProvider.data(
+                    type = FeedSectionType.SLEEP_RECOMMENDATIONS,
+                    state = FeedSectionState.PARTIALLY_UNLOCKED,
+                    recommendationsSize = 1
+                ),
+                FeedPreviewProvider.data(
+                    type = FeedSectionType.NUTRITION_EXPLORE,
+                    state = FeedSectionState.UNLOCKED
+                ),
+                FeedPreviewProvider.data(
+                    type = FeedSectionType.SLEEP_RECOMMENDATIONS,
+                    state = FeedSectionState.UNLOCKED
+                )
+            )
+        )
+    }
+
 }

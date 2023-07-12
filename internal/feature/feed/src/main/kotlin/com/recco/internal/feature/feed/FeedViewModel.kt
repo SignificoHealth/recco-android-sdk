@@ -42,7 +42,7 @@ import kotlin.time.Duration.Companion.seconds
 class FeedViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val recommendationRepository: RecommendationRepository,
-    private val metricsRepository: MetricRepository,
+    metricsRepository: MetricRepository,
     private val logger: Logger
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(UiState<FeedUI>())
@@ -53,7 +53,7 @@ class FeedViewModel @Inject constructor(
     )
 
     init {
-        metricsRepository.openDashboard()
+        runCatching { metricsRepository.openDashboard() }.onFailure(logger::e)
         setUpGlobalViewEvents()
         initialLoadOrRetry()
     }
