@@ -22,7 +22,7 @@
     <string name="recco_dashboard_alert_sleep_title">Sleep</string>
     <string name="recco_dashboard_explore_topic">Explore &amp; Learn</string>
     <string name="recco_dashboard_new_for_you">New for You</string>
-    <string name="recco_dashboard_recommended_for_you_topic">Recommended For You: Section name</string>
+    <string name="recco_dashboard_recommended_for_you_topic">Recommended For You: &lt;xliff:g id="section_name&gt;%1$s&lt;/xliff:g&gt;</string>
     <string name="recco_dashboard_review_area">Review this area</string>
     <string name="recco_dashboard_start_here">Quick Wins!</string>
     <string name="recco_dashboard_trending">Popular Articles</string>
