@@ -4,7 +4,7 @@ This document aims to explain Recco SDK publishing process using Github Actions.
 
 ## How It Works
 
-The following .yml [file](https://github.com/viluahealthcare/android-shadowflight-sdk/blob/feature/SHAD-142/.github/workflows/android-recco-sdk_prod.yml) is included inside the workflows folder,
+The following .yml [file](https://github.com/viluahealthcare/recco-android-sdk/blob/main/.github/workflows/recco-android-sdk_prod.yml) is included inside the workflows folder,
 so a pipeline is generated to deal with Recco SDK publishing process.
 
 ## Triggers

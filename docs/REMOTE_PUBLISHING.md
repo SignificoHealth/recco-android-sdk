@@ -41,7 +41,7 @@ In order for Recco SDK to be published to Github Repository Registry, you should
 
 ## Checking Results
 
-Visit [Packages](https://github.com/orgs/viluahealthcare/packages?repo_name=android-shadowflight-sdk) section in Github.
+Visit [Packages](https://github.com/orgs/viluahealthcare/packages?repo_name=recco-android-sdk) section in Github.
 
 ## Usage
 
@@ -53,7 +53,7 @@ To do so, you should read the following documentation on [personal access tokens
 
 You'll probably end up following these steps below:
 
-- Visit [repository](https://github.com/viluahealthcare/android-shadowflight-sdk/)
+- Visit [repository](https://github.com/viluahealthcare/recco-android-sdk/)
 - Access [profile](https://github.com/settings/profile)
 - Open [Developer settings](https://github.com/settings/apps)
   - Tokens (classic) section
@@ -79,7 +79,7 @@ repositories {
   ...
   maven {
     name = "GithubPackages"
-    url = uri("https://maven.pkg.github.com/viluahealthcare/android-shadowflight-sdk")
+    url = uri("https://maven.pkg.github.com/viluahealthcare/recco-android-sdk")
     credentials {
       username = extra["gprUser"].toString()
       password = extra["gprKey"].toString()
@@ -95,7 +95,7 @@ repositories {
   ...
   maven {
     name = "GithubPackages"
-    url = uri("https://maven.pkg.github.com/viluahealthcare/android-shadowflight-sdk")
+    url = uri("https://maven.pkg.github.com/viluahealthcare/recco-android-sdk")
     credentials {
       username = gprUser
       password = gprKey
