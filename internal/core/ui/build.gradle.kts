@@ -10,7 +10,9 @@ android {
 
 dependencies {
     implementation(project(":internal:core:model"))
+
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.google.fonts)
 
     api(libs.androidx.activity.compose)
 
