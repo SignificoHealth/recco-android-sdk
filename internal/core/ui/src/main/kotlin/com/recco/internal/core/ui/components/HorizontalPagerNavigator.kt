@@ -46,9 +46,9 @@ fun HorizontalPagerNavigation(
         val isLast = pagerState.currentPage == pageCount.dec()
 
         val buttonText = if (isLast) {
-            stringResource(id = R.string.recco_onboarding_button_start)
+            stringResource(id = R.string.recco_start)
         } else {
-            stringResource(id = R.string.recco_onboarding_button_next)
+            stringResource(id = R.string.recco_next)
         }
 
         val buttonAction = if (!isLast) {

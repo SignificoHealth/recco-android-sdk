@@ -145,7 +145,7 @@ fun ToastContent(
                 Spacer(modifier = Modifier.height(AppSpacing.dp_8))
 
                 Text(
-                    text = data.actionLabel ?: stringResource(R.string.recco_common_error_desc),
+                    text = data.actionLabel ?: stringResource(R.string.recco_error_connection_body),
                     style = subtitleStyle
                 )
             }

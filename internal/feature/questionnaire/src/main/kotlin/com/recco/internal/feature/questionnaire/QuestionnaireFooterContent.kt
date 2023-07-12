@@ -51,7 +51,7 @@ fun QuestionnaireFooterContent(
             enabled = nextEnabled,
             onClick = onNextClicked,
             isLoading = isQuestionnaireSubmitLoading,
-            text = stringResource(if (isLastPage && !isOnboarding) R.string.recco_finish else R.string.recco_next)
+            text = stringResource(if (isLastPage && !isOnboarding) R.string.recco_finish_button else R.string.recco_continue_button)
         )
     }
 }

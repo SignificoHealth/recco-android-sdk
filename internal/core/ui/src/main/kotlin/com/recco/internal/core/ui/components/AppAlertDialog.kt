@@ -144,8 +144,8 @@ private fun Preview() {
 
     AppAlertDialog(
         openDialog = openDialog,
-        titleRes = R.string.recco_mental_wellbeing,
-        descriptionRes = R.string.recco_mental_wellbeing_explanation,
+        titleRes = R.string.recco_dashboard_alert_mental_wellbeing_title,
+        descriptionRes = R.string.recco_dashboard_alert_mental_wellbeing_body,
         textButtonPrimaryRes = R.string.recco_start,
         onClickPrimary = {})
 }
@@ -169,8 +169,8 @@ private fun PreviewWithHeader() {
                 )
             }
         },
-        titleRes = R.string.recco_mental_wellbeing,
-        descriptionRes = R.string.recco_mental_wellbeing_explanation,
+        titleRes = R.string.recco_dashboard_alert_mental_wellbeing_title,
+        descriptionRes = R.string.recco_dashboard_alert_mental_wellbeing_body,
         textButtonPrimaryRes = R.string.recco_start,
         onClickPrimary = {}
     )

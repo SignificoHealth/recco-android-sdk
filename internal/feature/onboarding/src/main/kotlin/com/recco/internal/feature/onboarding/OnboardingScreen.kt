@@ -60,22 +60,22 @@ fun OnboardingScreen(
     val pages = listOf<@Composable (PaddingValues) -> Unit>({
         OnboardingPage(
             imageId = drawable.recco_ic_flying,
-            titleTextId = string.recco_onboarding_welcome_title,
-            bodyTextId = string.recco_onboarding_welcome_body,
+            titleTextId = string.recco_onboarding_page1_title,
+            bodyTextId = string.recco_onboarding_page1_body,
             contentPadding = it
         )
     }, {
         OnboardingPage(
             imageId = drawable.recco_ic_content,
-            titleTextId = string.recco_onboarding_content_title,
-            bodyTextId = string.recco_onboarding_content_body,
+            titleTextId = string.recco_onboarding_page2_title,
+            bodyTextId = string.recco_onboarding_page2_body,
             contentPadding = it
         )
     }, {
         OnboardingPage(
             imageId = drawable.recco_ic_portrait_2,
-            titleTextId = string.recco_onboarding_about_title,
-            bodyTextId = string.recco_onboarding_about_body,
+            titleTextId = string.recco_onboarding_page3_title,
+            bodyTextId = string.recco_onboarding_page3_body,
             contentPadding = it
         )
     })

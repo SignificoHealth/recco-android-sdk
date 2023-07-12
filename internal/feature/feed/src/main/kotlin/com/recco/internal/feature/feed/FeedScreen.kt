@@ -131,19 +131,6 @@ private fun FeedScreen(
             isEmpty = uiState.data?.sections.orEmpty().isEmpty(),
             retry = { onUserInteract(FeedUserInteract.Retry) },
             refresh = { onUserInteract(FeedUserInteract.Refresh) },
-            emptyContent = {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    AppEmptyContent(
-                        emptyState = EmptyState(
-                            titleRes = R.string.recco_no_content_available_title_default,
-                            drawableRes = R.drawable.recco_bg_people_1,
-                        )
-                    )
-                }
-            },
             loadingHeaderContent = {
                 Spacer(Modifier.height(AppSpacing.dp_40))
                 FeedHeader(navigateToBookmarks)
@@ -232,11 +219,11 @@ private fun FeedHeader(
                 Spacer(Modifier.height(AppSpacing.dp_16))
 
                 Text(
-                    text = stringResource(R.string.recco_welcome_back),
+                    text = stringResource(R.string.recco_dashboard_welcome_back_title),
                     style = AppTheme.typography.h1
                 )
                 Text(
-                    text = stringResource(R.string.recco_lets_make_toda_better),
+                    text = stringResource(R.string.recco_dashboard_welcome_back_body),
                     style = AppTheme.typography.body1
                 )
             }
@@ -477,7 +464,7 @@ private fun PartiallyUnlockedCard(
             )
             Spacer(Modifier.height(AppSpacing.dp_8))
             Text(
-                text = stringResource(R.string.recco_review_this_area),
+                text = stringResource(R.string.recco_dashboard_review_area),
                 style = AppTheme.typography.h3.copy(color = AppTheme.colors.onPrimary),
                 textAlign = TextAlign.Center
             )
@@ -529,7 +516,7 @@ private fun LockedCard(
                     onAnimationFinished = onAnimationFinished
                 )
                 Text(
-                    text = stringResource(R.string.recco_unlock),
+                    text = stringResource(R.string.recco_dashboard_unlock),
                     style = AppTheme.typography.h3
                 )
             }
