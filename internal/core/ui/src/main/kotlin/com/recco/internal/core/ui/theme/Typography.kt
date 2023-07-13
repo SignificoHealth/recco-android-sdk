@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
+import com.recco.api.model.ReccoPalette
 import com.recco.internal.core.ui.R
 
 private val provider = GoogleFont.Provider(
@@ -30,11 +31,13 @@ private val poppins = FontFamily(
     Font(googleFont = fontName, fontProvider = provider, FontWeight.Bold)
 )
 
+private val textColor = ReccoPalette.Default.lightColors.primary
+
 private val h1 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 28.sp,
-    color = primary,
+    color = textColor,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
@@ -42,7 +45,7 @@ private val h2 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.Medium,
     fontSize = 24.sp,
-    color = primary,
+    color = textColor,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
@@ -50,7 +53,7 @@ private val h3 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.Bold,
     fontSize = 17.sp,
-    color = primary,
+    color = textColor,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
@@ -58,7 +61,7 @@ private val h4 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 17.sp,
-    color = primary,
+    color = textColor,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
@@ -66,7 +69,7 @@ private val body1 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.Normal,
     fontSize = 17.sp,
-    color = primary,
+    color = textColor,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
@@ -76,7 +79,7 @@ private val body2 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.Medium,
     fontSize = 15.sp,
-    color = primary,
+    color = textColor,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
@@ -87,7 +90,7 @@ private val body3 = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 12.sp,
-    color = primary,
+    color = textColor,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
@@ -95,7 +98,7 @@ private val cta = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 16.sp,
-    color = primary,
+    color = textColor,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
@@ -103,7 +106,7 @@ private val labelSmall = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 13.sp,
-    color = primary,
+    color = textColor,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
@@ -111,7 +114,7 @@ private val contentTitle = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.Medium,
     fontSize = 12.sp,
-    color = primary,
+    color = textColor,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 
@@ -119,7 +122,7 @@ private val numberBig = TextStyle(
     fontFamily = poppins,
     fontWeight = FontWeight.SemiBold,
     fontSize = 22.sp,
-    color = primary,
+    color = textColor,
     platformStyle = PlatformTextStyle(includeFontPadding = false)
 )
 

@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import com.recco.api.model.ReccoLogger
-import com.recco.api.model.SDKConfig
+import com.recco.api.model.ReccoConfig
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.repository.AppRepository
 import dagger.hilt.EntryPoint
@@ -23,7 +23,7 @@ object ReccoApiUI {
     private lateinit var application: Application
 
     fun init(
-        sdkConfig: SDKConfig,
+        sdkConfig: ReccoConfig,
         application: Application,
         logger: ReccoLogger? = null
     ) {
