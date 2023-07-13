@@ -50,7 +50,6 @@ import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.extensions.noRippleClickable
 import com.recco.internal.core.ui.extensions.setupLoadStates
 import com.recco.internal.core.ui.theme.AppSpacing
-import com.recco.internal.core.ui.theme.AppTheme
 import kotlinx.coroutines.flow.flowOf
 import java.lang.Float.min
 
@@ -84,7 +83,6 @@ fun <T> AppScreenStateAware(
     isEmpty: Boolean = false,
     retry: () -> Unit,
     refresh: (() -> Unit)? = null,
-    colorStatusBar: Color = AppTheme.colors.primary,
     loadingHeaderContent: @Composable (() -> Unit)? = null,
     backgroundContent: @Composable (() -> Unit)? = null,
     animatedContentShapeContent: @Composable (() -> Unit)? = null,
@@ -98,42 +96,73 @@ fun <T> AppScreenStateAware(
     val isAnimatedContentCollapsed = rememberSaveable { mutableStateOf(false) }
     val isError = uiState.error != null
 
-    AppTheme(colorStatusBar = colorStatusBar) {
-        if (isFloatingHeader) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = contentPadding.calculateTopPadding())
-            ) {
-                backgroundContent?.invoke()
+    if (isFloatingHeader) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = contentPadding.calculateTopPadding())
+        ) {
+            backgroundContent?.invoke()
 
-                AppScreenStateAwareContent(
-                    uiState = uiState,
-                    isAnimatedContentCollapsed = isAnimatedContentCollapsed,
-                    modifier = modifier,
+            AppScreenStateAwareContent(
+                uiState = uiState,
+                isAnimatedContentCollapsed = isAnimatedContentCollapsed,
+                modifier = modifier,
+                isFloatingHeader = true,
+                isFloatingFooter = isFloatingFooter,
+                scrollState = scrollState,
+                animatedContentShapeContent = animatedContentShapeContent,
+                animatedContent = animatedContent,
+                isFirstLoading = isFirstLoading,
+                isEmpty = isEmpty,
+                retry = retry,
+                refresh = refresh ?: {},
+                loadingHeaderContent = loadingHeaderContent,
+                emptyContent = emptyContent,
+                enablePullToRefresh = enablePullToRefresh,
+                avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
+                footerContent = footerContent,
+                content = content
+            )
+
+            headerContent?.let {
+                HeaderContent(
+                    isFirstLoading = isFirstLoading.value || isEmpty || isError,
+                    isAnimatedContentCollapsed = isAnimatedContentCollapsed.value,
                     isFloatingHeader = true,
-                    isFloatingFooter = isFloatingFooter,
-                    scrollState = scrollState,
-                    animatedContentShapeContent = animatedContentShapeContent,
-                    animatedContent = animatedContent,
-                    isFirstLoading = isFirstLoading,
-                    isEmpty = isEmpty,
-                    retry = retry,
-                    refresh = refresh ?: {},
-                    loadingHeaderContent = loadingHeaderContent,
-                    emptyContent = emptyContent,
-                    enablePullToRefresh = enablePullToRefresh,
-                    avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                    colorStatusBar = colorStatusBar,
-                    footerContent = footerContent,
-                    content = content
+                    content = { isAnimatedContentCollapsed ->
+                        uiState.data?.let { data ->
+                            headerContent.invoke(data, isAnimatedContentCollapsed)
+                        }
+                    }
                 )
+            }
 
+            if (isFloatingFooter) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter),
+                    contentAlignment = Alignment.Center
+                ) {
+                    uiState.data?.let { footerContent?.invoke(it) }
+                }
+            }
+        }
+    } else {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = contentPadding.calculateTopPadding())
+        ) {
+            backgroundContent?.invoke()
+
+            Column(modifier = Modifier.fillMaxSize()) {
                 headerContent?.let {
                     HeaderContent(
-                        isFirstLoading = isFirstLoading.value || isEmpty || isError,
+                        isFirstLoading = isFirstLoading.value,
                         isAnimatedContentCollapsed = isAnimatedContentCollapsed.value,
-                        isFloatingHeader = true,
+                        isFloatingHeader = false,
                         content = { isAnimatedContentCollapsed ->
                             uiState.data?.let { data ->
                                 headerContent.invoke(data, isAnimatedContentCollapsed)
@@ -142,71 +171,36 @@ fun <T> AppScreenStateAware(
                     )
                 }
 
-                if (isFloatingFooter) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.BottomCenter),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        uiState.data?.let { footerContent?.invoke(it) }
-                    }
-                }
+                AppScreenStateAwareContent(
+                    isAnimatedContentCollapsed = isAnimatedContentCollapsed,
+                    modifier = modifier,
+                    isFloatingHeader = false,
+                    isFloatingFooter = isFloatingFooter,
+                    scrollState = scrollState,
+                    animatedContentShapeContent = animatedContentShapeContent,
+                    animatedContent = animatedContent,
+                    isFirstLoading = isFirstLoading,
+                    isEmpty = isEmpty,
+                    uiState = uiState,
+                    retry = retry,
+                    refresh = refresh ?: {},
+                    loadingHeaderContent = loadingHeaderContent,
+                    emptyContent = emptyContent,
+                    enablePullToRefresh = enablePullToRefresh,
+                    avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
+                    footerContent = footerContent,
+                    content = content
+                )
             }
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = contentPadding.calculateTopPadding())
-            ) {
-                backgroundContent?.invoke()
 
-                Column(modifier = Modifier.fillMaxSize()) {
-                    headerContent?.let {
-                        HeaderContent(
-                            isFirstLoading = isFirstLoading.value,
-                            isAnimatedContentCollapsed = isAnimatedContentCollapsed.value,
-                            isFloatingHeader = false,
-                            content = { isAnimatedContentCollapsed ->
-                                uiState.data?.let { data ->
-                                    headerContent.invoke(data, isAnimatedContentCollapsed)
-                                }
-                            }
-                        )
-                    }
-
-                    AppScreenStateAwareContent(
-                        isAnimatedContentCollapsed = isAnimatedContentCollapsed,
-                        modifier = modifier,
-                        isFloatingHeader = false,
-                        isFloatingFooter = isFloatingFooter,
-                        scrollState = scrollState,
-                        animatedContentShapeContent = animatedContentShapeContent,
-                        animatedContent = animatedContent,
-                        isFirstLoading = isFirstLoading,
-                        isEmpty = isEmpty,
-                        uiState = uiState,
-                        retry = retry,
-                        refresh = refresh ?: {},
-                        loadingHeaderContent = loadingHeaderContent,
-                        emptyContent = emptyContent,
-                        enablePullToRefresh = enablePullToRefresh,
-                        avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                        colorStatusBar = colorStatusBar,
-                        footerContent = footerContent,
-                        content = content
-                    )
-                }
-
-                if (isFloatingFooter) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.BottomCenter),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        uiState.data?.let { footerContent?.invoke(it) }
-                    }
+            if (isFloatingFooter) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter),
+                    contentAlignment = Alignment.Center
+                ) {
+                    uiState.data?.let { footerContent?.invoke(it) }
                 }
             }
         }
@@ -286,7 +280,6 @@ private fun <T> AppScreenStateAwareContent(
     refresh: () -> Unit,
     enablePullToRefresh: Boolean,
     avoidClickingWhenRefreshing: Boolean,
-    colorStatusBar: Color,
     loadingHeaderContent: @Composable (() -> Unit)? = null,
     animatedContentShapeContent: @Composable (() -> Unit)?,
     animatedContent: @Composable ((uiStateData: T) -> Unit)?,
@@ -323,8 +316,7 @@ private fun <T> AppScreenStateAwareContent(
                         swipeRefreshState = swipeRefreshState,
                         enablePullToRefresh = enablePullToRefresh,
                         avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                        refresh = refresh,
-                        colorStatusBar = colorStatusBar
+                        refresh = refresh
                     ) {
                         Column(
                             modifier = Modifier
@@ -345,8 +337,7 @@ private fun <T> AppScreenStateAwareContent(
                         swipeRefreshState = swipeRefreshState,
                         enablePullToRefresh = enablePullToRefresh,
                         avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                        refresh = refresh,
-                        colorStatusBar = colorStatusBar,
+                        refresh = refresh
                     ) {
                         Column(modifier = Modifier.fillMaxSize()) {
                             Column(
@@ -432,7 +423,6 @@ fun AppScreenStateAwarePaginatedList(
     emptyState: EmptyState? = null,
     retry: () -> Unit,
     refresh: () -> Unit,
-    colorStatusBar: Color = Color.White,
     headerContent: @Composable (() -> Unit)? = null,
     content: LazyListScope.() -> Unit
 ) {
@@ -445,8 +435,7 @@ fun AppScreenStateAwarePaginatedList(
             swipeRefreshState = swipeRefreshState,
             enablePullToRefresh = enablePullToRefresh,
             avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-            refresh = refresh,
-            colorStatusBar = colorStatusBar
+            refresh = refresh
         ) {
             LazyColumn(
                 modifier = modifier.fillMaxSize(),
@@ -499,8 +488,7 @@ fun AppScreenStateAwarePaginatedGrid(
         swipeRefreshState = swipeRefreshState,
         enablePullToRefresh = enablePullToRefresh,
         avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-        refresh = refresh,
-        colorStatusBar = colorStatusBar
+        refresh = refresh
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             headerContent?.invoke()
@@ -539,44 +527,41 @@ private fun SwipeRefreshContent(
     swipeRefreshState: SwipeRefreshState,
     refresh: () -> Unit,
     avoidClickingWhenRefreshing: Boolean,
-    colorStatusBar: Color,
     content: @Composable () -> Unit
 ) {
-    AppTheme(colorStatusBar = colorStatusBar) {
-        SwipeRefresh(
-            modifier = modifier,
-            swipeEnabled = enablePullToRefresh,
-            state = swipeRefreshState,
-            onRefresh = { refresh() },
-            indicator = { state, refreshTrigger ->
-                when {
-                    !enablePullToRefresh -> {
-                        AppSwipeRefreshLoadingIndicator(
-                            state = state,
-                            refreshTrigger = refreshTrigger,
-                            elevation = 0.dp
-                        )
-                    }
+    SwipeRefresh(
+        modifier = modifier,
+        swipeEnabled = enablePullToRefresh,
+        state = swipeRefreshState,
+        onRefresh = { refresh() },
+        indicator = { state, refreshTrigger ->
+            when {
+                !enablePullToRefresh -> {
+                    AppSwipeRefreshLoadingIndicator(
+                        state = state,
+                        refreshTrigger = refreshTrigger,
+                        elevation = 0.dp
+                    )
+                }
 
-                    avoidClickingWhenRefreshing && state.isRefreshing -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .noRippleClickable { },
-                            contentAlignment = Alignment.TopCenter
-                        ) {
-                            AppSwipeRefreshLoadingIndicator(state, refreshTrigger)
-                        }
-                    }
-
-                    else -> {
+                avoidClickingWhenRefreshing && state.isRefreshing -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .noRippleClickable { },
+                        contentAlignment = Alignment.TopCenter
+                    ) {
                         AppSwipeRefreshLoadingIndicator(state, refreshTrigger)
                     }
                 }
-            },
-            content = content
-        )
-    }
+
+                else -> {
+                    AppSwipeRefreshLoadingIndicator(state, refreshTrigger)
+                }
+            }
+        },
+        content = content
+    )
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF)

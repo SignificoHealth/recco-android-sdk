@@ -23,9 +23,14 @@ class AppRepository @Inject constructor(
     private val logger: Logger,
     @ApplicationScope private val appScope: CoroutineScope,
 ) {
+    private lateinit var sdkConfig: SDKConfig
+
     fun init(sdkConfig: SDKConfig) {
+        this.sdkConfig = sdkConfig
         authCredentials.init(sdkConfig)
     }
+
+    fun getSDKConfig() = sdkConfig
 
     fun loginUser(userId: String) {
         authCredentials.setUserId(userId)

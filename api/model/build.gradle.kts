@@ -1,7 +1,6 @@
 plugins {
-    id("recco.android.feature")
+    id("recco.android.library")
     id("recco.android.hilt")
-
 }
 
 android {
