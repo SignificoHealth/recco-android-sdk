@@ -1,6 +1,6 @@
 package com.recco.internal.core.repository
 
-import com.recco.api.model.SDKConfig
+import com.recco.api.model.ReccoConfig
 import com.recco.internal.core.base.di.ApplicationScope
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.openapi.api.AuthenticationApi
@@ -23,9 +23,9 @@ class AppRepository @Inject constructor(
     private val logger: Logger,
     @ApplicationScope private val appScope: CoroutineScope,
 ) {
-    private lateinit var sdkConfig: SDKConfig
+    private lateinit var sdkConfig: ReccoConfig
 
-    fun init(sdkConfig: SDKConfig) {
+    fun init(sdkConfig: ReccoConfig) {
         this.sdkConfig = sdkConfig
         authCredentials.init(sdkConfig)
     }

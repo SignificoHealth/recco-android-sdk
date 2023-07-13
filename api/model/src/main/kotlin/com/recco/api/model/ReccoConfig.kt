@@ -1,7 +1,7 @@
 package com.recco.api.model
 
-data class SDKConfig(
+data class ReccoConfig(
     val appName: String,
     val apiSecret: String,
-    val palette: Palette = Palette.DEFAULT
+    val palette: ReccoPalette = ReccoPalette.Default
 )
