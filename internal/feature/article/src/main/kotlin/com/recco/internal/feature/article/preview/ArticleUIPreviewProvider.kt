@@ -1,11 +1,13 @@
-package com.recco.internal.feature.article
+package com.recco.internal.feature.article.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.preview.ArticlePreviewProvider
+import com.recco.internal.feature.article.ArticleUI
+import com.recco.internal.feature.article.UserInteractionRecommendation
 
-class ArticleUIPreviewProvider :
+internal class ArticleUIPreviewProvider :
     PreviewParameterProvider<UiState<ArticleUI>> {
     override val values
         get() = sequenceOf(

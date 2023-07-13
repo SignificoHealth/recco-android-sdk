@@ -19,7 +19,7 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
-class BookmarkViewModel @Inject constructor(
+internal class BookmarkViewModel @Inject constructor(
     private val recommendationRepository: RecommendationRepository,
     private val logger: Logger
 ) : ViewModel() {
@@ -34,7 +34,7 @@ class BookmarkViewModel @Inject constructor(
         initialLoadOrRetry()
     }
 
-    internal fun onUserInteract(userInteract: BookmarkUserInteract) {
+    fun onUserInteract(userInteract: BookmarkUserInteract) {
         when (userInteract) {
             BookmarkUserInteract.Retry -> initialLoadOrRetry()
             BookmarkUserInteract.Refresh -> refresh()

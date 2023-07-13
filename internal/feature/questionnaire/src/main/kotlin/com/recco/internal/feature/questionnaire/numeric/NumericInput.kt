@@ -19,7 +19,7 @@ import com.recco.internal.core.ui.theme.AppSpacing
 import java.util.Locale
 
 @Composable
-fun NumericInput(
+internal fun NumericInput(
     onValueChange: (String) -> Unit,
     format: NumericQuestionFormat,
     maxValue: Int,

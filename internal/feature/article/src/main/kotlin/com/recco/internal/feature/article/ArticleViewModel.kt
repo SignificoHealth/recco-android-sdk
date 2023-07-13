@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ArticleViewModel @Inject constructor(
+internal class ArticleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val recommendationRepository: RecommendationRepository,
     private val logger: Logger
@@ -31,7 +31,7 @@ class ArticleViewModel @Inject constructor(
         initialLoadSubscribe()
     }
 
-    internal fun onUserInteract(userInteract: ArticleUserInteract) {
+    fun onUserInteract(userInteract: ArticleUserInteract) {
         when (userInteract) {
             ArticleUserInteract.Retry -> initialLoadSubscribe()
             ArticleUserInteract.ToggleBookmarkState -> toggleBookmarkState()

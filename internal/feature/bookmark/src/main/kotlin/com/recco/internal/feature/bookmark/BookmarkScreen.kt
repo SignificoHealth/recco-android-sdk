@@ -38,7 +38,7 @@ import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 
 @Composable
-fun BookmarkRoute(
+internal fun BookmarkRoute(
     navigateToArticle: (ContentId) -> Unit,
     navigateUp: () -> Unit,
     viewModel: BookmarkViewModel = hiltViewModel()

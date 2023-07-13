@@ -40,7 +40,7 @@ import com.recco.internal.core.ui.theme.AppTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingRoute(
+internal fun OnboardingRoute(
     navigateToQuestionnaire: () -> Unit
 ) {
     val pagerState = rememberPagerState(0)
@@ -52,7 +52,7 @@ fun OnboardingRoute(
 }
 
 @Composable
-fun OnboardingScreen(
+private fun OnboardingScreen(
     navigateToQuestionnaire: () -> Unit,
     pagerState: PagerState = rememberPagerState()
 ) {
@@ -152,10 +152,7 @@ private fun OnboardingPage(
     }
 }
 
-@Preview(
-    showBackground = true,
-    name = "FlyingIntro"
-)
+@Preview
 @Composable
 private fun AppOnboardingScreenOnePreview() {
     AppTheme {

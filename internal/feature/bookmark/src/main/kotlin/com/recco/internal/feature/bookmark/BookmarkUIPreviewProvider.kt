@@ -1,14 +1,10 @@
 package com.recco.internal.feature.bookmark
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.recco.internal.core.model.feed.FeedSectionState
-import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.core.ui.preview.FeedPreviewProvider
 import com.recco.internal.core.ui.preview.RecommendationPreviewProvider
 
-class BookmarkUIPreviewProvider :
-    PreviewParameterProvider<UiState<BookmarkUI>> {
+internal class BookmarkUIPreviewProvider : PreviewParameterProvider<UiState<BookmarkUI>> {
 
     override val values
         get() = sequenceOf(

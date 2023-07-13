@@ -40,6 +40,7 @@ import com.recco.internal.core.ui.extensions.isEndReached
 import com.recco.internal.core.ui.extensions.openUrlInBrowser
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
+import com.recco.internal.feature.article.preview.ArticleUIPreviewProvider
 
 @Composable
 internal fun ArticleRoute(

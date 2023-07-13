@@ -129,7 +129,7 @@ private fun QuestionnaireOnboardingOutroScreen(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun OutroPreview() {
     QuestionnaireOnboardingOutroScreen(

@@ -2,7 +2,7 @@ package com.recco.internal.feature.questionnaire
 
 import com.recco.internal.core.model.questionnaire.Question
 
-data class QuestionnaireUI(
+internal data class QuestionnaireUI(
     val questions: List<Question>,
     val progress: Float = 0f,
     val currentPage: Int = 0,

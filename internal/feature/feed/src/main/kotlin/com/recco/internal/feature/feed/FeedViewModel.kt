@@ -39,7 +39,7 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
-class FeedViewModel @Inject constructor(
+internal class FeedViewModel @Inject constructor(
     private val feedRepository: FeedRepository,
     private val recommendationRepository: RecommendationRepository,
     metricsRepository: MetricRepository,

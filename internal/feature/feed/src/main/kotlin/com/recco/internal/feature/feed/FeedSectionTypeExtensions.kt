@@ -20,7 +20,7 @@ import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.extensions.removeHTML
 
 @Composable
-fun FeedSectionType.asSectionTitle(): String = when (this) {
+internal fun FeedSectionType.asSectionTitle(): String = when (this) {
     PHYSICAL_ACTIVITY_RECOMMENDATIONS -> {
         stringResource(
             R.string.recco_dashboard_recommended_for_you_topic,

@@ -23,14 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppProgressLoading
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
+import com.recco.internal.feature.article.preview.UserInteractionRecommendationPreviewProvider
 
-data class UserInteractionRecommendation(
+internal data class UserInteractionRecommendation(
     val rating: Rating,
     val isBookmarked: Boolean = false,
     val isBookmarkLoading: Boolean = false,
@@ -39,7 +41,7 @@ data class UserInteractionRecommendation(
 )
 
 @Composable
-fun UserInteractionRecommendationCard(
+internal fun UserInteractionRecommendationCard(
     modifier: Modifier = Modifier,
     isScrollEndReached: Boolean = false,
     userInteraction: UserInteractionRecommendation,
@@ -181,85 +183,11 @@ fun UserInteractionRecommendationCard(
 
 @Composable
 @Preview
-private fun BookmarkLoadingPreview() {
+private fun Preview(
+    @PreviewParameter(UserInteractionRecommendationPreviewProvider::class) userInteraction: UserInteractionRecommendation
+) {
     UserInteractionRecommendationCard(
-        userInteraction = UserInteractionRecommendation(
-            rating = Rating.LIKE,
-            isBookmarked = true,
-            isBookmarkLoading = true,
-        ),
-        toggleBookmarkState = {},
-        toggleLikeState = {},
-        toggleDislikeState = {}
-    )
-}
-
-@Composable
-@Preview
-private fun LikeLoadingPreview() {
-    UserInteractionRecommendationCard(
-        userInteraction = UserInteractionRecommendation(
-            rating = Rating.LIKE,
-            isBookmarked = true,
-            isLikeLoading = true
-        ),
-        toggleBookmarkState = {},
-        toggleLikeState = {},
-        toggleDislikeState = {}
-    )
-}
-
-@Composable
-@Preview
-private fun DislikeLoadingPreview() {
-    UserInteractionRecommendationCard(
-        userInteraction = UserInteractionRecommendation(
-            rating = Rating.LIKE,
-            isBookmarked = true,
-            isDislikeLoading = true
-        ),
-        toggleBookmarkState = {},
-        toggleLikeState = {},
-        toggleDislikeState = {}
-    )
-}
-
-@Composable
-@Preview
-private fun LikedAndBookmarkedPreview() {
-    UserInteractionRecommendationCard(
-        userInteraction = UserInteractionRecommendation(
-            rating = Rating.LIKE,
-            isBookmarked = true
-        ),
-        toggleBookmarkState = {},
-        toggleLikeState = {},
-        toggleDislikeState = {}
-    )
-}
-
-@Composable
-@Preview
-private fun DislikedAndNoBookmarkedPreview() {
-    UserInteractionRecommendationCard(
-        userInteraction = UserInteractionRecommendation(
-            rating = Rating.DISLIKE,
-            isBookmarked = false
-        ),
-        toggleBookmarkState = {},
-        toggleLikeState = {},
-        toggleDislikeState = {}
-    )
-}
-
-@Composable
-@Preview
-private fun NoRatedPreview() {
-    UserInteractionRecommendationCard(
-        userInteraction = UserInteractionRecommendation(
-            rating = Rating.NOT_RATED,
-            isBookmarked = true
-        ),
+        userInteraction = userInteraction,
         toggleBookmarkState = {},
         toggleLikeState = {},
         toggleDislikeState = {}

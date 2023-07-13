@@ -4,7 +4,7 @@ import com.recco.internal.core.model.questionnaire.MultiChoiceAnswerOption
 import com.recco.internal.core.model.questionnaire.MultiChoiceQuestion
 import com.recco.internal.core.model.questionnaire.NumericQuestion
 
-sealed class QuestionnaireUserInteract {
+internal sealed class QuestionnaireUserInteract {
     object Retry : QuestionnaireUserInteract()
     object BackClicked : QuestionnaireUserInteract()
     object NextClicked : QuestionnaireUserInteract()

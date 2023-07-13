@@ -6,7 +6,7 @@ import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.preview.FeedPreviewProvider
 
-class FeedUIPreviewProvider :
+internal class FeedUIPreviewProvider :
     PreviewParameterProvider<UiState<FeedUI>> {
 
     override val values

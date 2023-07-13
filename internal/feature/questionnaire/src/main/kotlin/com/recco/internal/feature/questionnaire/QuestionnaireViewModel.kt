@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class QuestionnaireViewModel @Inject constructor(
+internal class QuestionnaireViewModel @Inject constructor(
     private val questionnaireRepository: QuestionnaireRepository,
     private val logger: Logger,
     savedStateHandle: SavedStateHandle
@@ -251,7 +251,7 @@ class QuestionnaireViewModel @Inject constructor(
     }
 }
 
-enum class Adjustment(val value: Int) {
+internal enum class Adjustment(val value: Int) {
     FORWARD(+1),
     BACKWARD(-1)
 }

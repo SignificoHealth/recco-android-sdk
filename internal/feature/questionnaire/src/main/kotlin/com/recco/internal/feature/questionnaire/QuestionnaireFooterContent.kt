@@ -15,7 +15,7 @@ import com.recco.internal.core.ui.components.AppSecondaryButton
 import com.recco.internal.core.ui.theme.AppSpacing
 
 @Composable
-fun QuestionnaireFooterContent(
+internal fun QuestionnaireFooterContent(
     modifier: Modifier = Modifier,
     showBack: Boolean,
     nextEnabled: Boolean,

@@ -26,7 +26,7 @@ import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 
 @Composable
-fun MultiChoiceInput(
+internal fun MultiChoiceInput(
     modifier: Modifier = Modifier,
     selected: Boolean,
     singleChoice: Boolean = false,

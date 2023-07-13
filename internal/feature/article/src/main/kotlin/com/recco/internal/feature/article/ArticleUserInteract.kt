@@ -1,6 +1,6 @@
 package com.recco.internal.feature.article
 
-sealed class ArticleUserInteract {
+internal sealed class ArticleUserInteract {
     object Retry : ArticleUserInteract()
     object ToggleBookmarkState : ArticleUserInteract()
     object ToggleLikeState : ArticleUserInteract()

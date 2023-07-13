@@ -9,7 +9,7 @@ import com.recco.internal.core.model.questionnaire.feetToMillimeters
 import com.recco.internal.core.model.questionnaire.inchesToMillimeters
 import com.recco.internal.core.model.questionnaire.metersToMillimeters
 
-class HumanHeightHandler(
+internal class HumanHeightHandler(
     private val unitSystem: UnitSystem
 ) {
     val bigUnitLabel = when (unitSystem) {

@@ -84,7 +84,7 @@ internal fun QuestionnaireRoute(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun QuestionnaireScreen(
+private fun QuestionnaireScreen(
     topic: Topic?,
     uiState: UiState<QuestionnaireUI>,
     viewEvents: Flow<QuestionnaireViewEvent>,

@@ -91,7 +91,7 @@ private const val LOCK_PLACEHOLDER_ELEMENTS = 5
 private const val LOADING_PLACEHOLDER_ELEMENTS = 3
 
 @Composable
-fun FeedRoute(
+internal fun FeedRoute(
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     navigateToBookmarks: () -> Unit,

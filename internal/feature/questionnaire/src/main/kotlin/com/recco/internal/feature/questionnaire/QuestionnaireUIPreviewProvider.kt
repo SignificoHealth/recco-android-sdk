@@ -4,7 +4,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.preview.QuestionnairePreviewProvider
 
-class QuestionnaireUIStatePreviewProvider :
+internal class QuestionnaireUIStatePreviewProvider :
     PreviewParameterProvider<UiState<QuestionnaireUI>> {
     override val values
         get() = sequenceOf(

@@ -6,7 +6,7 @@ import com.recco.internal.core.model.questionnaire.kilogramsToPounds
 import com.recco.internal.core.model.questionnaire.kilogramsToGrams
 import com.recco.internal.core.model.questionnaire.poundsToGrams
 
-class HumanWeightHandler(
+internal class HumanWeightHandler(
     private val unitSystem: UnitSystem
 ) {
     val bigUnitLabel = when (unitSystem) {

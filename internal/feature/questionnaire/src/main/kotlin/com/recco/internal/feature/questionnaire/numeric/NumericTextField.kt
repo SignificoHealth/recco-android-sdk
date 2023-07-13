@@ -26,7 +26,7 @@ import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 
 @Composable
-fun NumericTextField(
+internal fun NumericTextField(
     modifier: Modifier = Modifier,
     initialValue: String = "",
     onValueChange: (String) -> Unit,
