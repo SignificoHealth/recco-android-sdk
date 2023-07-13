@@ -6,12 +6,11 @@ import com.recco.internal.core.model.questionnaire.NumericQuestion
 import com.recco.internal.core.model.questionnaire.NumericQuestionFormat
 import com.recco.internal.core.model.questionnaire.Question
 import com.recco.internal.core.openapi.model.CreateQuestionnaireAnswerDTO
-import com.recco.internal.core.openapi.model.MultiChoiceAnswerOptionDTO
 import com.recco.internal.core.openapi.model.NumericQuestionDTO
 import com.recco.internal.core.openapi.model.QuestionAnswerTypeDTO
 import com.recco.internal.core.openapi.model.QuestionDTO
 
-fun QuestionDTO.asEntity() = when (type) {
+internal fun QuestionDTO.asEntity() = when (type) {
     QuestionAnswerTypeDTO.MULTICHOICE -> MultiChoiceQuestion(
         questionnaireId = questionnaireId,
         id = id,

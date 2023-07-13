@@ -13,7 +13,7 @@ import java.net.ConnectException
 import java.net.HttpURLConnection
 import javax.net.ssl.SSLHandshakeException
 
-class ErrorInterceptor : Interceptor {
+internal class ErrorInterceptor : Interceptor {
 
     private val moshi by lazy {
         Moshi.Builder()

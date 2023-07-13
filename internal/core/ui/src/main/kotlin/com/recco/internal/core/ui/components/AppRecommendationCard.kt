@@ -33,7 +33,7 @@ val widthRecommendationCard = 145.dp
 @Composable
 fun AppRecommendationCard(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
     Card(
-        modifier = androidx.compose.ui.Modifier
+        modifier = Modifier
             .height(heightRecommendationCard)
             .width(widthRecommendationCard),
         elevation = AppTheme.elevation.card,

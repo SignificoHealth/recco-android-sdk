@@ -3,7 +3,7 @@ package com.recco.internal.core.repository.mapper
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.openapi.model.FeedSectionTypeDTO
 
-fun FeedSectionTypeDTO.asEntity() = when (this) {
+internal fun FeedSectionTypeDTO.asEntity() = when (this) {
     FeedSectionTypeDTO.PHYSICAL_ACTIVITY_RECOMMENDATIONS -> FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS
     FeedSectionTypeDTO.NUTRITION_RECOMMENDATIONS -> FeedSectionType.NUTRITION_RECOMMENDATIONS
     FeedSectionTypeDTO.MENTAL_WELLBEING_RECOMMENDATIONS -> FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS

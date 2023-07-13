@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import com.recco.internal.core.model.feed.FeedSectionState
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
-import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.ToastType
 import com.recco.internal.core.ui.extensions.asDescriptionRes
 import com.recco.internal.core.ui.extensions.asTitleRes

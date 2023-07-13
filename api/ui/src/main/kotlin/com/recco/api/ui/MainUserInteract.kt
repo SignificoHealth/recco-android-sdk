@@ -1,5 +1,5 @@
 package com.recco.api.ui
 
-sealed class MainUserInteract {
+internal sealed class MainUserInteract {
     object Retry : MainUserInteract()
 }

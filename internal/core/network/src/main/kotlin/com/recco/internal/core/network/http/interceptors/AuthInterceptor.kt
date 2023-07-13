@@ -11,7 +11,7 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class AuthInterceptor(
+internal class AuthInterceptor(
     private val authCredentials: AuthCredentials,
     private val authenticationApi: AuthenticationApi,
     @IoDispatcher private val dispatcher: CoroutineDispatcher,

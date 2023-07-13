@@ -19,7 +19,7 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+internal class MainViewModel @Inject constructor(
     private val meRepository: MeRepository,
     private val logger: Logger
 ) : ViewModel() {

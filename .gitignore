@@ -14,3 +14,7 @@ local.properties
 
 # VSCode
 .vscode
+
+# OpenApi
+internal/core/openapi/docs/
+internal/core/openapi/.openapi-generator/

@@ -5,10 +5,3 @@ plugins {
 android {
     namespace = "com.recco.internal.feature.questionnaire"
 }
-
-dependencies {
-    implementation(project(":internal:core:ui"))
-    implementation(project(":internal:core:logger"))
-    implementation(project(":internal:core:model"))
-    implementation(project(":internal:core:repository"))
-}

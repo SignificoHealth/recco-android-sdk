@@ -18,12 +18,10 @@ import androidx.compose.ui.zIndex
 import com.recco.internal.core.ui.extensions.isEndReached
 import com.recco.internal.core.ui.theme.AppTheme
 
-private val DEFAULT_ELEVATION = 4.dp
-
 @Composable
 fun AppElevatedBottomContent(scrollState: ScrollState, content: @Composable () -> Unit) {
     val animateElevation = animateDpAsState(
-        targetValue = if (scrollState.isEndReached()) 0.dp else DEFAULT_ELEVATION
+        targetValue = if (scrollState.isEndReached()) 0.dp else AppTheme.elevation.default
     )
 
     Surface(
@@ -38,7 +36,7 @@ fun AppElevatedBottomContent(scrollState: ScrollState, content: @Composable () -
 fun AppElevatedBottomContent(content: @Composable () -> Unit) {
     Surface(
         modifier = Modifier.zIndex(4f),
-        elevation = DEFAULT_ELEVATION
+        elevation = AppTheme.elevation.default
     ) {
         content()
     }
@@ -47,7 +45,7 @@ fun AppElevatedBottomContent(content: @Composable () -> Unit) {
 @Composable
 fun BoxScope.AppBottomShadow(scrollState: ScrollState) {
     val animateElevation = animateDpAsState(
-        targetValue = if (scrollState.isEndReached()) 0.dp else DEFAULT_ELEVATION / 2
+        targetValue = if (scrollState.isEndReached()) 0.dp else AppTheme.elevation.default / 2
     )
 
     Spacer(

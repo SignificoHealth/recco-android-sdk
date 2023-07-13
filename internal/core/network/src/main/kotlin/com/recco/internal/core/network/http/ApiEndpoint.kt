@@ -1,5 +1,6 @@
 package com.recco.internal.core.network.http
 
+
 enum class ApiEndpoint(
     val baseUrl: String
 ) {

@@ -23,8 +23,6 @@ import androidx.compose.ui.zIndex
 import com.recco.internal.core.ui.extensions.isTopReached
 import com.recco.internal.core.ui.theme.AppTheme
 
-private val DEFAULT_ELEVATION = 4.dp
-
 @Composable
 fun AppElevatedTopContent(
     scrollState: LazyListState,
@@ -37,7 +35,7 @@ fun AppElevatedTopContent(
         derivedStateOf { showElevationCondition() }
     }
     val animateElevation = animateDpAsState(
-        targetValue = if (showElevation) DEFAULT_ELEVATION else 0.dp
+        targetValue = if (showElevation) AppTheme.elevation.default else 0.dp
     )
 
     ElevatedContent(
@@ -60,7 +58,7 @@ fun AppElevatedTopContent(
         derivedStateOf { showElevationCondition() }
     }
     val animateElevation = animateDpAsState(
-        targetValue = if (showElevation) DEFAULT_ELEVATION else 0.dp
+        targetValue = if (showElevation) AppTheme.elevation.default else 0.dp
     )
 
     ElevatedContent(
@@ -80,7 +78,7 @@ fun AppElevatedTopContent(
     ElevatedContent(
         modifier = modifier,
         color = color,
-        elevation = DEFAULT_ELEVATION,
+        elevation = AppTheme.elevation.default,
         content = content
     )
 }
@@ -105,7 +103,7 @@ private fun ElevatedContent(
 @Composable
 fun BoxScope.AppTopShadow(scrollState: ScrollState) {
     val animateElevation = animateDpAsState(
-        targetValue = if (scrollState.isTopReached()) 0.dp else DEFAULT_ELEVATION
+        targetValue = if (scrollState.isTopReached()) 0.dp else AppTheme.elevation.default
     )
 
     TopShadow(animateElevation.value)
@@ -114,7 +112,7 @@ fun BoxScope.AppTopShadow(scrollState: ScrollState) {
 @Composable
 fun BoxScope.AppTopShadow(scrollState: LazyListState) {
     val animateElevation = animateDpAsState(
-        targetValue = if (scrollState.isTopReached()) 0.dp else DEFAULT_ELEVATION
+        targetValue = if (scrollState.isTopReached()) 0.dp else AppTheme.elevation.default
     )
 
     TopShadow(animateElevation.value)

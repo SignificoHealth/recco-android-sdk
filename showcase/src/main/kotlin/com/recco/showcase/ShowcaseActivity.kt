@@ -223,11 +223,11 @@ class ShowcaseActivity : ComponentActivity() {
     }
 
     companion object {
-        const val USER_ID_KEY = "user_id_key"
+        private const val USER_ID_KEY = "user_id_key"
     }
 }
 
-sealed class Screen {
+private sealed class Screen {
     object LoginForm : Screen()
     object Logout : Screen()
 }

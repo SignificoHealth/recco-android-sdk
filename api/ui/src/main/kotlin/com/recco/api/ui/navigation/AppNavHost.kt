@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.recco.internal.feature.bookmark.navigation.bookmarkGraph
-import com.recco.internal.feature.bookmark.navigation.navigateToBookmarks
+import com.recco.internal.core.model.recommendation.User
 import com.recco.internal.feature.article.navigation.articleGraph
 import com.recco.internal.feature.article.navigation.navigateToArticle
+import com.recco.internal.feature.bookmark.navigation.bookmarkGraph
+import com.recco.internal.feature.bookmark.navigation.navigateToBookmarks
 import com.recco.internal.feature.feed.navigation.FeedGraph
 import com.recco.internal.feature.feed.navigation.feedGraph
 import com.recco.internal.feature.feed.navigation.navigateToFeed
-import com.recco.internal.core.model.recommendation.User
 import com.recco.internal.feature.onboarding.navigation.OnboardingGraph
 import com.recco.internal.feature.onboarding.navigation.onboardingGraph
 import com.recco.internal.feature.questionnaire.navigation.navigateToOnboardingQuestionnaire
@@ -20,7 +20,7 @@ import com.recco.internal.feature.questionnaire.navigation.navigateToTopicQuesti
 import com.recco.internal.feature.questionnaire.navigation.questionnaireGraph
 
 @Composable
-fun AppNavHost(
+internal fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     user: User

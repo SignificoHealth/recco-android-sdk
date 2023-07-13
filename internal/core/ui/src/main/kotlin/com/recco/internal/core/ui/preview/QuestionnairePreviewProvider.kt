@@ -21,7 +21,11 @@ class QuestionnairePreviewProvider {
                 maxOptions = maxOptions,
                 minOptions = 1,
                 options = listOf(
-                    MultiChoiceAnswerOption(id = 1, text = "Answer 1", isSelected = isFirstSelected),
+                    MultiChoiceAnswerOption(
+                        id = 1,
+                        text = "Answer 1",
+                        isSelected = isFirstSelected
+                    ),
                     MultiChoiceAnswerOption(id = 2, text = "Answer 2", isSelected = false)
                 )
             )

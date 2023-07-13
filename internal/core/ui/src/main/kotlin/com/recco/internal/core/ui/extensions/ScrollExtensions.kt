@@ -2,7 +2,12 @@ package com.recco.internal.core.ui.extensions
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 
 private const val SCROLLING_OFFSET = 20
@@ -74,7 +79,7 @@ fun ScrollState.isEndReached(): Boolean {
 /**
  * Detect if the scroll has reached the top
  */
-fun  ScrollState.isTopReached(): Boolean {
+fun ScrollState.isTopReached(): Boolean {
     return this.value < EDGE_REACHED_OFFSET
 }
 

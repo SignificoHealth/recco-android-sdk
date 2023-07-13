@@ -5,7 +5,6 @@ import com.recco.internal.core.model.feed.FeedSectionState
 import com.recco.internal.core.openapi.model.FeedSectionDTO
 import com.recco.internal.core.openapi.model.FeedSectionStateDTO
 
-
 internal fun FeedSectionDTO.asEntity() = FeedSection(
     type = type.asEntity(),
     state = when (state) {
