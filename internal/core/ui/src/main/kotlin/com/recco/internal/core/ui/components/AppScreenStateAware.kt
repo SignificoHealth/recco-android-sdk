@@ -2,11 +2,9 @@ package com.recco.internal.core.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -16,17 +14,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.pullRefreshIndicatorTransform
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,9 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
@@ -286,177 +275,152 @@ private fun <T> AppScreenStateAwareContent(
     footerContent: @Composable ((uiStateData: T) -> Unit)? = null,
     isFloatingFooter: Boolean = false,
 ) {
-    val pullRefreshState =
-        rememberPullRefreshState(refreshing = uiState.isLoading, onRefresh = { refresh() })
-    val rotation = animateFloatAsState(pullRefreshState.progress * 120)
+    // threshold needs to be smaller than offset so the behaviour keeps less bouncy
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = uiState.isLoading,
+        refreshingOffset = 76.dp,
+        refreshThreshold = 52.dp,
+        onRefresh = { refresh() }
+    )
 
-    //val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = uiState.isLoading)
-    //swipeRefreshState.isRefreshing = uiState.isLoading
     val animatedContentHeight = rememberSaveable { mutableStateOf(0f) }
 
-    Box(
-        Modifier
-            .fillMaxSize()
-            .pullRefresh(pullRefreshState)
-    ) {
-        Crossfade(targetState = uiState.isLoading && isFirstLoading.value) { isInitialLoading ->
-            if (isInitialLoading) {
-                HeaderAwareContent(isFloatingHeader) {
-                    loadingHeaderContent?.invoke()
-                    AppProgressLoadingCircled(modifier = modifier.padding(top = AppSpacing.dp_24))
+    Crossfade(targetState = uiState.isLoading && isFirstLoading.value) { isInitialLoading ->
+        if (isInitialLoading) {
+            HeaderAwareContent(isFloatingHeader) {
+                loadingHeaderContent?.invoke()
+                AppProgressLoadingCircled(modifier = modifier.padding(top = AppSpacing.dp_24))
+            }
+            return@Crossfade
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pullRefresh(pullRefreshState)
+        ) {
+            when {
+                uiState.error != null -> {
+                    HeaderAwareContent(isFloatingHeader) {
+                        AppErrorContent(
+                            throwable = uiState.error,
+                            retry = retry,
+                            scrollState = rememberScrollState()
+                        )
+                    }
                 }
-            } else {
-                when {
-                    uiState.error != null -> {
-                        HeaderAwareContent(isFloatingHeader) {
-                            AppErrorContent(
-                                throwable = uiState.error,
-                                retry = retry,
-                                scrollState = rememberScrollState()
-                            )
-                        }
+
+                isEmpty -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                    ) { emptyContent?.invoke(this) }
+                }
+
+                else -> {
+                    LaunchedEffect(Unit) {
+                        isFirstLoading.value = false
                     }
 
-                    isEmpty -> {
-                        SwipeRefreshContent(
-                            modifier = modifier,
-                            refreshing = uiState.isLoading,
-                            pullRefreshState = pullRefreshState,
-                            enablePullToRefresh = enablePullToRefresh,
-                            avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                            refresh = refresh
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .verticalScroll(rememberScrollState())
-                            ) {
-
-                                emptyContent?.invoke(this)
-                            }
-                        }
-                    }
-
-                    else -> {
-                        LaunchedEffect(Unit) {
-                            isFirstLoading.value = false
-                        }
-
-                        SwipeRefreshContent(
-                            modifier = modifier,
-                            pullRefreshState = pullRefreshState,
-                            refreshing = uiState.isLoading,
-                            enablePullToRefresh = enablePullToRefresh,
-                            avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                            refresh = refresh
-                        ) {
-                            Column(modifier = Modifier.fillMaxSize()) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .weight(1f)
-                                        .let {
-                                            if (scrollState != null) {
-                                                it.verticalScroll(scrollState)
-                                            } else {
-                                                it
-                                            }
-                                        }
-                                ) {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .let {
                                     if (scrollState != null) {
-                                        Box(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            contentAlignment = Alignment.BottomCenter
-                                        ) {
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .onGloballyPositioned { coordinates ->
-                                                        val height =
-                                                            coordinates.size.height.toFloat()
-                                                        // If there is no animated content we specify a default height
-                                                        // in order to allow elevate the header when scrolling
-                                                        animatedContentHeight.value =
-                                                            if (height <= 0f) 10f else height
-                                                    }
-                                                    .graphicsLayer {
-                                                        val scrollValue =
-                                                            scrollState.value.toFloat()
-                                                        val height = animatedContentHeight.value
-                                                        if (height > 0f) {
-                                                            alpha = min(
-                                                                1f,
-                                                                1f - ((scrollValue / height)) * 1.3f
-                                                            )
-                                                            isAnimatedContentCollapsed.value =
-                                                                alpha <= 0
-                                                            translationY = 0.5f * scrollState.value
-                                                        }
-                                                    }
-                                            ) {
-                                                uiState.data?.let { animatedContent?.invoke(it) }
-                                            }
-                                            animatedContentShapeContent?.invoke()
-                                        }
-                                    }
-
-                                    uiState.data?.let { content(it) }
-                                }
-
-                                if (!isFloatingFooter) {
-                                    if (scrollState != null) {
-                                        AppElevatedBottomContent(scrollState = scrollState) {
-                                            uiState.data?.let { footerContent?.invoke(it) }
-                                        }
+                                        it.verticalScroll(scrollState)
                                     } else {
-                                        uiState.data?.let { footerContent?.invoke(it) }
+                                        it
                                     }
                                 }
+
+                        ) {
+                            if (scrollState != null) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    contentAlignment = Alignment.BottomCenter
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .onGloballyPositioned { coordinates ->
+                                                val height =
+                                                    coordinates.size.height.toFloat()
+                                                // If there is no animated content we specify a default height
+                                                // in order to allow elevate the header when scrolling
+                                                animatedContentHeight.value =
+                                                    if (height <= 0f) 10f else height
+                                            }
+                                            .graphicsLayer {
+                                                val scrollValue =
+                                                    scrollState.value.toFloat()
+                                                val height = animatedContentHeight.value
+                                                if (height > 0f) {
+                                                    alpha = min(
+                                                        1f,
+                                                        1f - ((scrollValue / height)) * 1.3f
+                                                    )
+                                                    isAnimatedContentCollapsed.value =
+                                                        alpha <= 0
+                                                    translationY = 0.5f * scrollState.value
+                                                }
+                                            }
+                                    ) {
+                                        uiState.data?.let { animatedContent?.invoke(it) }
+                                    }
+                                    animatedContentShapeContent?.invoke()
+                                }
+                            }
+
+                            uiState.data?.let { content(it) }
+                        }
+
+                        if (!isFloatingFooter) {
+                            if (scrollState != null) {
+                                AppElevatedBottomContent(scrollState = scrollState) {
+                                    uiState.data?.let { footerContent?.invoke(it) }
+                                }
+                            } else {
+                                uiState.data?.let { footerContent?.invoke(it) }
                             }
                         }
+                    }
+
+                }
+            }
+
+            when {
+                !enablePullToRefresh -> {}
+
+                avoidClickingWhenRefreshing && uiState.isLoading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .noRippleClickable { }
+                    ) {
+                        ReccoPullRefreshIndicator(
+                            state = pullRefreshState,
+                            modifier = Modifier.align(Alignment.TopCenter)
+                        )
+                    }
+                }
+
+                else -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        ReccoPullRefreshIndicator(
+                            state = pullRefreshState,
+                            modifier = Modifier.align(Alignment.TopCenter)
+                        )
                     }
                 }
             }
         }
-
-        if (enablePullToRefresh) {
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .clipToBounds()
-            ) {
-                ReccoPullRefreshIndicator(
-                    refreshing = uiState.isLoading,
-                    state = pullRefreshState,
-                    modifier = Modifier.align(Alignment.TopCenter)
-                )
-            }
-        }
-
     }
 }
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun SwipeRefreshContent(
-    modifier: Modifier = Modifier,
-    refreshing: Boolean,
-    enablePullToRefresh: Boolean,
-    pullRefreshState: PullRefreshState,
-    refresh: () -> Unit,
-    avoidClickingWhenRefreshing: Boolean,
-    content: @Composable () -> Unit
-) {
-
-
-
-            /**/
-
-
-        content.invoke()
-    }
-
-
 
 @Preview(showBackground = true, backgroundColor = 0xFFF)
 @Composable
@@ -526,6 +490,7 @@ private fun Preview() {
     AppScreenStateAware(
         scrollState = rememberScrollState(),
         uiState = UiState<Unit>(isLoading = true),
+        enablePullToRefresh = true,
         retry = { },
         refresh = { },
     ) {
