@@ -275,6 +275,9 @@ private fun <T> AppScreenStateAwareContent(
     footerContent: @Composable ((uiStateData: T) -> Unit)? = null,
     isFloatingFooter: Boolean = false,
 ) {
+
+    val isPullRefreshEnabled = remember { mutableStateOf(enablePullToRefresh)  }
+
     // threshold needs to be smaller than offset so the behaviour keeps less bouncy
     val pullRefreshState = rememberPullRefreshState(
         refreshing = uiState.isLoading,
@@ -293,34 +296,44 @@ private fun <T> AppScreenStateAwareContent(
             }
             return@Crossfade
         }
+        when {
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .pullRefresh(pullRefreshState)
-        ) {
-            when {
-                uiState.error != null -> {
-                    HeaderAwareContent(isFloatingHeader) {
-                        AppErrorContent(
-                            throwable = uiState.error,
-                            retry = retry,
-                            scrollState = rememberScrollState()
-                        )
-                    }
+            uiState.error != null -> {
+                LaunchedEffect(Unit) {
+                    isPullRefreshEnabled.value = false
                 }
 
-                isEmpty -> {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                    ) { emptyContent?.invoke(this) }
+                HeaderAwareContent(isFloatingHeader) {
+                    AppErrorContent(
+                        throwable = uiState.error,
+                        retry = retry,
+                        scrollState = rememberScrollState()
+                    )
+                }
+            }
+
+            isEmpty -> {
+                LaunchedEffect(Unit) {
+                    isPullRefreshEnabled.value = false
                 }
 
-                else -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) { emptyContent?.invoke(this) }
+            }
+
+            else -> {
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .pullRefresh(pullRefreshState)
+                ) {
                     LaunchedEffect(Unit) {
                         isFirstLoading.value = false
+                        isPullRefreshEnabled.value = true
                     }
 
                     Column(modifier = Modifier.fillMaxSize()) {
@@ -388,33 +401,32 @@ private fun <T> AppScreenStateAwareContent(
                         }
                     }
 
-                }
-            }
+                    when {
+                        !isPullRefreshEnabled.value -> {}
 
-            when {
-                !enablePullToRefresh -> {}
+                        avoidClickingWhenRefreshing && uiState.isLoading -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .noRippleClickable { }
+                            ) {
+                                ReccoPullRefreshIndicator(
+                                    state = pullRefreshState,
+                                    modifier = Modifier.align(Alignment.TopCenter)
+                                )
+                            }
+                        }
 
-                avoidClickingWhenRefreshing && uiState.isLoading -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .noRippleClickable { }
-                    ) {
-                        ReccoPullRefreshIndicator(
-                            state = pullRefreshState,
-                            modifier = Modifier.align(Alignment.TopCenter)
-                        )
-                    }
-                }
-
-                else -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        ReccoPullRefreshIndicator(
-                            state = pullRefreshState,
-                            modifier = Modifier.align(Alignment.TopCenter)
-                        )
+                        isPullRefreshEnabled.value -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                            ) {
+                                ReccoPullRefreshIndicator(
+                                    state = pullRefreshState,
+                                    modifier = Modifier.align(Alignment.TopCenter)
+                                )
+                            }
+                        }
                     }
                 }
             }
