@@ -69,7 +69,7 @@ repositories {
   ...
   maven {
     name = "GithubPackages"
-    url = uri("https://maven.pkg.github.com/viluahealthcare/recco-android-sdk")
+    url = uri("https://maven.pkg.github.com/sf-recco/android-sdk")
     credentials {
       username = extra["gprUser"].toString()
       password = extra["gprKey"].toString()

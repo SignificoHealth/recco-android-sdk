@@ -30,7 +30,7 @@ internal fun Project.configureMavenPublish(extension: PublishingExtension) {
         repositories {
             maven {
                 name = "GithubPackages"
-                url = uri("https://maven.pkg.github.com/viluahealthcare/recco-android-sdk")
+                url = uri("https://maven.pkg.github.com/sf-recco/android-sdk")
                 credentials {
                     username = System.getenv("USERNAME")
                     password = System.getenv("TOKEN")
