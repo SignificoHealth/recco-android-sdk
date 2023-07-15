@@ -91,7 +91,11 @@ internal fun UserInteractionRecommendationCard(
                             }
                         ),
                         contentDescription = null,
-                        tint = AppTheme.colors.accent,
+                        tint = if (userInteraction.isBookmarked) {
+                            AppTheme.colors.accent
+                        } else {
+                            AppTheme.colors.primary
+                        },
                     )
                 }
             }
@@ -134,9 +138,15 @@ internal fun UserInteractionRecommendationCard(
                             }
                         ),
                         contentDescription = null,
-                        tint = AppTheme.colors.accent.copy(
-                            alpha = if (userInteraction.isDislikeLoading) alphaDisabledColor else 1f
-                        ),
+                        tint = if (userInteraction.rating == Rating.LIKE) {
+                            AppTheme.colors.accent.copy(
+                                alpha = if (userInteraction.isDislikeLoading) alphaDisabledColor else 1f
+                            )
+                        } else {
+                            AppTheme.colors.primary.copy(
+                                alpha = if (userInteraction.isDislikeLoading) alphaDisabledColor else 1f
+                            )
+                        },
                     )
                 }
             }
@@ -171,9 +181,15 @@ internal fun UserInteractionRecommendationCard(
                             }
                         ),
                         contentDescription = null,
-                        tint = AppTheme.colors.accent.copy(
-                            alpha = if (userInteraction.isLikeLoading) alphaDisabledColor else 1f
-                        ),
+                        tint = if (userInteraction.rating == Rating.DISLIKE) {
+                            AppTheme.colors.accent.copy(
+                                alpha = if (userInteraction.isDislikeLoading) alphaDisabledColor else 1f
+                            )
+                        } else {
+                            AppTheme.colors.primary.copy(
+                                alpha = if (userInteraction.isDislikeLoading) alphaDisabledColor else 1f
+                            )
+                        },
                     )
                 }
             }
@@ -186,10 +202,27 @@ internal fun UserInteractionRecommendationCard(
 private fun Preview(
     @PreviewParameter(UserInteractionRecommendationPreviewProvider::class) userInteraction: UserInteractionRecommendation
 ) {
-    UserInteractionRecommendationCard(
-        userInteraction = userInteraction,
-        toggleBookmarkState = {},
-        toggleLikeState = {},
-        toggleDislikeState = {}
-    )
+    AppTheme {
+        UserInteractionRecommendationCard(
+            userInteraction = userInteraction,
+            toggleBookmarkState = {},
+            toggleLikeState = {},
+            toggleDislikeState = {}
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun PreviewDark(
+    @PreviewParameter(UserInteractionRecommendationPreviewProvider::class) userInteraction: UserInteractionRecommendation
+) {
+    AppTheme(darkTheme = true) {
+        UserInteractionRecommendationCard(
+            userInteraction = userInteraction,
+            toggleBookmarkState = {},
+            toggleLikeState = {},
+            toggleDislikeState = {}
+        )
+    }
 }

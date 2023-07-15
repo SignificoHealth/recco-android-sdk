@@ -46,6 +46,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -57,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
+import com.recco.api.model.ReccoPalette
 import com.recco.internal.core.model.FlowDataState
 import com.recco.internal.core.model.feed.FeedSection
 import com.recco.internal.core.model.feed.FeedSectionAndRecommendations
@@ -494,7 +496,8 @@ private fun LockedCard(
             .height(heightRecommendationCard)
             .width(widthRecommendationCard),
         elevation = 0.dp,
-        onClick = onClick
+        onClick = onClick,
+        backgroundColor = AppTheme.colors.background
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -592,20 +595,42 @@ private fun AppLockIcon(
                 this.rotationZ = rotate.value
             },
         painter = painterResource(iconRes.value),
-        contentDescription = null
+        contentDescription = null,
+        tint = AppTheme.colors.primary
     )
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFF, heightDp = 1000)
+@Preview(showBackground = true, backgroundColor = 0xFFF, heightDp = 1250)
 @Composable
 private fun Preview(
     @PreviewParameter(FeedUIPreviewProvider::class) uiState: UiState<FeedUI>
 ) {
-    FeedScreen(
-        uiState = uiState,
-        onUserInteract = {},
-        navigateToQuestionnaire = { _, _ -> },
-        navigateToArticle = {},
-        navigateToBookmarks = {}
-    )
+    AppTheme {
+        FeedScreen(
+            uiState = uiState,
+            onUserInteract = {},
+            navigateToQuestionnaire = { _, _ -> },
+            navigateToArticle = {},
+            navigateToBookmarks = {}
+        )
+    }
+
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFF, heightDp = 1250)
+@Composable
+private fun PreviewDark(
+    @PreviewParameter(FeedUIPreviewProvider::class) uiState: UiState<FeedUI>
+) {
+    AppTheme(
+        darkTheme = true
+    ) {
+        FeedScreen(
+            uiState = uiState,
+            onUserInteract = {},
+            navigateToQuestionnaire = { _, _ -> },
+            navigateToArticle = {},
+            navigateToBookmarks = {}
+        )
+    }
 }

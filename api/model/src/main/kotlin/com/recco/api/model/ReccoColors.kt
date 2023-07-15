@@ -11,7 +11,5 @@ data class ReccoColors(
     val onBackground: Color,
     val accent: Color,
     val onAccent: Color,
-    val illustration: Color,
-    val surface: Color,
-    val onSurface: Color
+    val illustration: Color
 )

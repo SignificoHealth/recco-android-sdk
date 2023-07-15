@@ -31,7 +31,11 @@ val widthRecommendationCard = 145.dp
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AppRecommendationCard(recommendation: Recommendation, onClick: (ContentId) -> Unit) {
+fun AppRecommendationCard(
+    recommendation: Recommendation,
+    onClick: (ContentId) -> Unit,
+    applyViewedOverlay: Boolean = true
+) {
     Card(
         modifier = Modifier
             .height(heightRecommendationCard)
@@ -46,7 +50,7 @@ fun AppRecommendationCard(recommendation: Recommendation, onClick: (ContentId) -
                 modifier = Modifier
                     .fillMaxSize()
                     .run {
-                        if (recommendation.status == Status.VIEWED) {
+                        if (recommendation.status == Status.VIEWED && applyViewedOverlay) {
                             viewedOverlay(AppTheme.colors.background)
                         } else {
                             this
@@ -79,8 +83,23 @@ fun AppRecommendationCard(recommendation: Recommendation, onClick: (ContentId) -
 private fun Preview(
     @PreviewParameter(RecommendationPreviewProvider::class) recommendation: Recommendation
 ) {
-    AppRecommendationCard(
-        recommendation = recommendation,
-        onClick = {}
-    )
+    AppTheme {
+        AppRecommendationCard(
+            recommendation = recommendation,
+            onClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewDark(
+    @PreviewParameter(RecommendationPreviewProvider::class) recommendation: Recommendation
+) {
+    AppTheme(darkTheme = true) {
+        AppRecommendationCard(
+            recommendation = recommendation,
+            onClick = {}
+        )
+    }
 }

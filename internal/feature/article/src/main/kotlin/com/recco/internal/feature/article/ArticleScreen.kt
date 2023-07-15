@@ -141,7 +141,7 @@ private fun ArticleContent(
                     color = AppTheme.colors.accent,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(9.dp)
+                        .height(2.dp)
                 )
                 Spacer(Modifier.height(AppSpacing.dp_32))
 
@@ -172,5 +172,18 @@ private fun ArticleContent(
 private fun Preview(
     @PreviewParameter(ArticleUIPreviewProvider::class) uiState: UiState<ArticleUI>
 ) {
-    ArticleScreen(linkClicked = {}, uiState = uiState, navigateUp = { }, onUserInteract = {})
+    AppTheme {
+        ArticleScreen(linkClicked = {}, uiState = uiState, navigateUp = { }, onUserInteract = {})
+    }
+}
+
+
+@Preview
+@Composable
+private fun PreviewDark(
+    @PreviewParameter(ArticleUIPreviewProvider::class) uiState: UiState<ArticleUI>
+) {
+    AppTheme(darkTheme = true) {
+        ArticleScreen(linkClicked = {}, uiState = uiState, navigateUp = { }, onUserInteract = {})
+    }
 }

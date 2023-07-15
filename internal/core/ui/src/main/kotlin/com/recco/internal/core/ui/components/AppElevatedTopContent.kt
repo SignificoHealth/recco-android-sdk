@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -25,54 +22,8 @@ import com.recco.internal.core.ui.theme.AppTheme
 
 @Composable
 fun AppElevatedTopContent(
-    scrollState: LazyListState,
     modifier: Modifier = Modifier,
-    color: Color = Color.White,
-    showElevationCondition: () -> Boolean = { !scrollState.isTopReached() },
-    content: @Composable () -> Unit
-) {
-    val showElevation by remember {
-        derivedStateOf { showElevationCondition() }
-    }
-    val animateElevation = animateDpAsState(
-        targetValue = if (showElevation) AppTheme.elevation.default else 0.dp
-    )
-
-    ElevatedContent(
-        modifier = modifier,
-        color = color,
-        elevation = animateElevation.value,
-        content = content
-    )
-}
-
-@Composable
-fun AppElevatedTopContent(
-    scrollState: ScrollState,
-    modifier: Modifier = Modifier,
-    color: Color = Color.White,
-    showElevationCondition: () -> Boolean = { !scrollState.isTopReached() },
-    content: @Composable () -> Unit
-) {
-    val showElevation by remember {
-        derivedStateOf { showElevationCondition() }
-    }
-    val animateElevation = animateDpAsState(
-        targetValue = if (showElevation) AppTheme.elevation.default else 0.dp
-    )
-
-    ElevatedContent(
-        modifier = modifier,
-        color = color,
-        elevation = animateElevation.value,
-        content = content
-    )
-}
-
-@Composable
-fun AppElevatedTopContent(
-    modifier: Modifier = Modifier,
-    color: Color = Color.White,
+    color: Color = AppTheme.colors.background,
     content: @Composable () -> Unit
 ) {
     ElevatedContent(

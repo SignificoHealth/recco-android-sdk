@@ -2,8 +2,10 @@ package com.recco.internal.core.ui.theme
 
 import androidx.compose.material.Colors
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.recco.api.model.ReccoColors
+import com.recco.api.model.ReccoPalette
 
 @Immutable
 data class ExtendedColors(
@@ -30,11 +32,9 @@ data class ExtendedColors(
     val illustration20: Color,
     val surface: Color,
     val onSurface: Color,
-
-    val error: Color,
-    val onError: Color,
     val shadow: Color,
-    val lightGrey: Color,
+    val staticLightGrey: Color,
+    val staticDark: Color
 )
 
 fun ReccoColors.asExtendedColors() = ExtendedColors(
@@ -59,12 +59,11 @@ fun ReccoColors.asExtendedColors() = ExtendedColors(
     illustration80 = illustration.copy(alpha = .8f),
     illustration40 = illustration.copy(alpha = .4f),
     illustration20 = illustration.copy(alpha = .2f),
-    surface = surface,
-    onSurface = onSurface,
-    error = Color(0xFFB00020),
-    onError = Color.White,
+    surface = Color(0xFFDAD7D7),
+    onSurface = Color(0xFF383B45),
     shadow = Color(0xFF000000).copy(alpha = .06f),
-    lightGrey = Color(0xFFEBEBEB)
+    staticLightGrey = Color(0xFFEBEBEB),
+    staticDark = Color(0xFF383b45)
 )
 
 fun ExtendedColors.asColor(isLight: Boolean) = Colors(
@@ -74,11 +73,15 @@ fun ExtendedColors.asColor(isLight: Boolean) = Colors(
     primary40,
     background,
     surface,
-    error,
+    primary,
     onPrimary,
     onPrimary,
     onBackground,
     onSurface,
-    onError,
+    onPrimary,
     isLight
 )
+
+internal val LocalExtendedColors = staticCompositionLocalOf {
+    ReccoPalette.Fresh.lightColors.asExtendedColors()
+}

@@ -24,7 +24,6 @@ import com.recco.internal.core.ui.theme.AppTheme
 internal fun AppButton(
     modifier: Modifier = Modifier,
     isPrimary: Boolean = true,
-    isOverBackground: Boolean = false,
     text: String? = null,
     @DrawableRes iconStartRes: Int? = null,
     @DrawableRes iconEndRes: Int? = null,
@@ -33,9 +32,9 @@ internal fun AppButton(
     onClick: () -> Unit,
 ) {
     val isEnabled = enabled && !isLoading
-    val backgroundColor = getBackgroundColor(isOverBackground, isPrimary, isEnabled)
-    val contentColor = getContentColor(isOverBackground, isPrimary, isEnabled)
-    val borderStroke = getBorderStroke(isOverBackground, isPrimary, isEnabled)
+    val backgroundColor = getBackgroundColor(isPrimary, isEnabled)
+    val contentColor = getContentColor(isPrimary, isEnabled)
+    val borderStroke = getBorderStroke(isPrimary, isEnabled)
     val cornerShape = RoundedCornerShape(4.dp)
 
     Button(
@@ -80,6 +79,7 @@ internal fun AppButton(
                         color = contentColor,
                     )
                 }
+
                 else -> iconEndRes?.let {
                     Icon(
                         modifier = Modifier.size(24.dp),
@@ -95,80 +95,58 @@ internal fun AppButton(
 
 @Composable
 private fun getBackgroundColor(
-    isOverBackground: Boolean,
     isPrimary: Boolean,
     enabled: Boolean
 ): Color {
-    val color = when {
-        isOverBackground && isPrimary -> Color.White
-        isOverBackground && !isPrimary -> Color.Transparent
-        !isOverBackground && isPrimary -> AppTheme.colors.primary
-        !isOverBackground && !isPrimary -> Color.Transparent
-        else -> Color.Transparent
+    val color = if (isPrimary) {
+        AppTheme.colors.primary
+    } else {
+        AppTheme.colors.background
     }
 
-    return if (enabled) color else color.copy(alpha = getAlpha(isOverBackground, isPrimary))
+    return if (enabled) color else color.copy(alpha = getAlpha())
 }
 
 @Composable
 private fun getContentColor(
-    isOverBackground: Boolean,
     isPrimary: Boolean,
     enabled: Boolean
 ): Color {
-    val color = when {
-        isOverBackground && isPrimary -> AppTheme.colors.primary10
-        isOverBackground && !isPrimary -> Color.White
-        !isOverBackground && isPrimary -> Color.White
-        !isOverBackground && !isPrimary -> AppTheme.colors.primary
-        else -> Color.Transparent
+    val color = if (isPrimary) {
+        AppTheme.colors.onPrimary
+    } else {
+        AppTheme.colors.primary
     }
 
-    return if (enabled) color else color.copy(alpha = getContentAlpha(isOverBackground, isPrimary))
+    return if (enabled) color else color.copy(alpha = getContentAlpha(isPrimary))
 }
 
 @Composable
-private fun getBorderColor(isOverBackground: Boolean, isPrimary: Boolean, enabled: Boolean): Color {
-    val color = when {
-        isOverBackground && isPrimary -> Color.Transparent
-        isOverBackground && !isPrimary -> AppTheme.colors.primary10
-        !isOverBackground && isPrimary -> Color.Transparent
-        !isOverBackground && !isPrimary -> AppTheme.colors.primary40
-        else -> Color.Transparent
+private fun getBorderColor(isPrimary: Boolean, enabled: Boolean): Color {
+    val color = if (isPrimary) {
+        AppTheme.colors.primary
+    } else {
+        AppTheme.colors.primary10
     }
 
-    return if (enabled) color else color.copy(alpha = getAlpha(isOverBackground, isPrimary))
+    return if (enabled) color else color.copy(alpha = getAlpha())
 }
 
 @Composable
 private fun getBorderStroke(
-    isOverBackground: Boolean,
     isPrimary: Boolean,
     enabled: Boolean
 ): BorderStroke? {
-    val color = getBorderColor(isOverBackground, isPrimary, enabled)
-
-    return when {
-        isOverBackground && !isPrimary -> BorderStroke(1.5.dp, color)
-        !isOverBackground && !isPrimary -> BorderStroke(1.5.dp, color)
-        else -> null
-    }
+    val color = getBorderColor(isPrimary, enabled)
+    return if (isPrimary) null else BorderStroke(1.5.dp, color)
 }
 
 @Composable
-private fun getAlpha(isOverBackground: Boolean, isPrimary: Boolean): Float {
-    return if (isOverBackground) {
-        if (isPrimary) 0.2f else 0.2f
-    } else {
-        if (isPrimary) 0.1f else 0.2f
-    }
+private fun getAlpha(): Float {
+    return 0.2f
 }
 
 @Composable
-private fun getContentAlpha(isOverBackground: Boolean, isPrimary: Boolean): Float {
-    return if (isOverBackground) {
-        if (isPrimary) 0.2f else 0.2f
-    } else {
-        if (isPrimary) 1f else 0.2f
-    }
+private fun getContentAlpha(isPrimary: Boolean): Float {
+    return if (isPrimary) 1f else 0.2f
 }

@@ -84,7 +84,7 @@ private fun QuestionnaireOnboardingOutroScreen(
     ) {
         Column(
             modifier = modifier
-                .background(Color.White)
+                .background(AppTheme.colors.background)
                 .fillMaxSize()
                 .fillMaxWidth()
                 .padding(top = contentPadding.calculateTopPadding())
@@ -131,11 +131,26 @@ private fun QuestionnaireOnboardingOutroScreen(
 
 @Preview
 @Composable
-private fun OutroPreview() {
-    QuestionnaireOnboardingOutroScreen(
-        imageId = R.drawable.recco_ic_portrait_2,
-        titleTextId = R.string.recco_onboarding_outro_title,
-        bodyTextId = R.string.recco_onboarding_outro_body,
-        navigateToOutro = {},
-    )
+private fun Preview() {
+    AppTheme {
+        QuestionnaireOnboardingOutroScreen(
+            imageId = R.drawable.recco_ic_portrait_2,
+            titleTextId = R.string.recco_onboarding_outro_title,
+            bodyTextId = R.string.recco_onboarding_outro_body,
+            navigateToOutro = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewDark() {
+    AppTheme(darkTheme = true) {
+        QuestionnaireOnboardingOutroScreen(
+            imageId = R.drawable.recco_ic_portrait_2,
+            titleTextId = R.string.recco_onboarding_outro_title,
+            bodyTextId = R.string.recco_onboarding_outro_body,
+            navigateToOutro = {},
+        )
+    }
 }

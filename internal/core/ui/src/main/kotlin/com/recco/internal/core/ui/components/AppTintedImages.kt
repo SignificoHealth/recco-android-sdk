@@ -152,7 +152,7 @@ private fun AppTintedImage(
 private fun PreviewAppTintedImagePottedPlant2() {
     Column {
         AppTintedImagePottedPlant2()
-        AppTintedImagePottedPlant2(tint = AppTheme.colors.error)
+        AppTintedImagePottedPlant2(tint = AppTheme.colors.primary)
     }
 }
 
@@ -161,6 +161,6 @@ private fun PreviewAppTintedImagePottedPlant2() {
 private fun PreviewAppTintedImageApple() {
     Column {
         AppTintedImageApple()
-        AppTintedImageApple(tint = AppTheme.colors.error)
+        AppTintedImageApple(tint = AppTheme.colors.primary)
     }
 }

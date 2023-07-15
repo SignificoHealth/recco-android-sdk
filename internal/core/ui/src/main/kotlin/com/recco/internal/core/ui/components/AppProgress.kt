@@ -62,7 +62,7 @@ fun AppProgressLoadingCircled(
             .size(size)
             .shadow(elevation = elevation, shape = CircleShape)
             .clip(CircleShape)
-            .background(Color.White)
+            .background(AppTheme.colors.background)
             .padding(AppSpacing.dp_8),
     ) {
         CircularProgressIndicator(

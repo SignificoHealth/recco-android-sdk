@@ -28,24 +28,15 @@ internal class FeedUIPreviewProvider :
                 ),
                 FeedPreviewProvider.data(
                     type = FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS,
-                    state = FeedSectionState.UNLOCKED,
-                    isRecommendationsLoading = true,
+                    state = FeedSectionState.LOCKED,
+                    recommendationsSize = 1
                 ),
                 FeedPreviewProvider.data(
                     type = FeedSectionType.SLEEP_RECOMMENDATIONS,
                     state = FeedSectionState.PARTIALLY_UNLOCKED,
                     recommendationsSize = 1
-                ),
-                FeedPreviewProvider.data(
-                    type = FeedSectionType.NUTRITION_EXPLORE,
-                    state = FeedSectionState.UNLOCKED
-                ),
-                FeedPreviewProvider.data(
-                    type = FeedSectionType.SLEEP_RECOMMENDATIONS,
-                    state = FeedSectionState.UNLOCKED
                 )
             )
         )
     }
-
 }

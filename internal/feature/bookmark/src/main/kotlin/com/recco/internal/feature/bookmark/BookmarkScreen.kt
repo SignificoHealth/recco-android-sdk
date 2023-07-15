@@ -129,22 +129,38 @@ private fun BookmarksContent(
             columns = GridCells.Fixed(3),
         ) {
             items(feedUI.recommendations) { recommendation ->
-                AppRecommendationCard(recommendation, navigateToArticle)
+                AppRecommendationCard(recommendation, navigateToArticle, applyViewedOverlay = false)
             }
         }
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFF, heightDp = 1000)
+@Preview(showBackground = true, heightDp = 1000)
 @Composable
 private fun Preview(
     @PreviewParameter(BookmarkUIPreviewProvider::class) uiState: UiState<BookmarkUI>
 ) {
-    BookmarkScreen(
-        uiState = uiState,
-        onUserInteract = {},
-        navigateToArticle = {},
-        navigateUp = {}
-    )
+    AppTheme {
+        BookmarkScreen(
+            uiState = uiState,
+            onUserInteract = {},
+            navigateToArticle = {},
+            navigateUp = {}
+        )
+    }
 }
 
+@Preview(showBackground = true, heightDp = 1000)
+@Composable
+private fun PreviewDark(
+    @PreviewParameter(BookmarkUIPreviewProvider::class) uiState: UiState<BookmarkUI>
+) {
+    AppTheme(darkTheme = true) {
+        BookmarkScreen(
+            uiState = uiState,
+            onUserInteract = {},
+            navigateToArticle = {},
+            navigateUp = {}
+        )
+    }
+}

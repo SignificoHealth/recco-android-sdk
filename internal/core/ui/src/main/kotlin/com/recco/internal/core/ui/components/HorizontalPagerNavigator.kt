@@ -41,7 +41,7 @@ fun HorizontalPagerNavigation(
 
     Column(
         modifier = modifier
-            .background(Color.White)
+            .background(AppTheme.colors.background)
     ) {
         val isLast = pagerState.currentPage == pageCount.dec()
 

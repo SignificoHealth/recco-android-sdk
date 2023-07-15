@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.insets.ui.Scaffold
+import com.recco.api.model.ReccoPalette
 import com.recco.internal.core.ui.R.drawable
 import com.recco.internal.core.ui.R.string
 import com.recco.internal.core.ui.components.ASPECT_RATIO_1_1
@@ -152,10 +153,23 @@ private fun OnboardingPage(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
-private fun AppOnboardingScreenOnePreview() {
+private fun PreviewLight() {
     AppTheme {
+        OnboardingScreen(
+            navigateToQuestionnaire = {},
+            pagerState = rememberPagerState(initialPage = 0)
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Preview
+@Composable
+private fun PreviewDark() {
+    AppTheme(darkTheme = true) {
         OnboardingScreen(
             navigateToQuestionnaire = {},
             pagerState = rememberPagerState(initialPage = 0)
