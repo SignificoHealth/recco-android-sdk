@@ -7,13 +7,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.Surface
+import androidx.compose.material.pullrefresh.PullRefreshState
+import androidx.compose.material.pullrefresh.pullRefreshIndicatorTransform
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,13 +27,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.recco.internal.core.ui.theme.AppSpacing
+import com.recco.internal.core.ui.theme.AppSpacing.dp_24
 import com.recco.internal.core.ui.theme.AppTheme
 
 
@@ -114,31 +116,23 @@ fun AppLinearProgress(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AppSwipeRefreshLoadingIndicator(
-    state: SwipeRefreshState,
-    refreshTrigger: Dp,
-    elevation: Dp = 4.dp
+fun ReccoPullRefreshIndicator(
+    state: PullRefreshState,
+    modifier: Modifier = Modifier,
+    scale: Boolean = false,
+    elevation: Dp = AppTheme.elevation.default
 ) {
-    val sizeDp = 48.dp
-    val sizePx = with(LocalDensity.current) { sizeDp.toPx() }
-    val triggerPx = with(LocalDensity.current) { refreshTrigger.toPx().toInt() }
-    val isRefresh = state.indicatorOffset.toInt() > triggerPx
 
-    val offset = when {
-        isRefresh -> triggerPx + (state.indicatorOffset * .1f)
-        state.isRefreshing -> triggerPx
-        else -> state.indicatorOffset  // is swiping
-    }
-    val elevationPx = with(LocalDensity.current) { elevation.toPx() }
-
-    AppProgressLoadingCircled(
-        modifier = Modifier
-            .size(sizeDp)
-            .offset { IntOffset(x = 0, y = -(sizePx + elevationPx).toInt()) }
-            .offset { IntOffset(x = 0, y = offset.toInt()) },
-        elevation = elevation
-    )
+    Surface(
+        modifier = modifier
+            .size(dp_24 * 2)
+            .pullRefreshIndicatorTransform(state, scale)
+            .shadow(elevation = elevation, shape = CircleShape)
+            .clip(CircleShape),
+        elevation = elevation,
+    ) { AppProgressLoadingCircled() }
 }
 
 @Preview
@@ -162,12 +156,16 @@ private fun LinearProgressPreview(
     AppLinearProgress(progress = .5f)
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
 private fun SwipeRefreshLoadingIndicatorPreview(
 ) {
-    AppSwipeRefreshLoadingIndicator(
-        state = SwipeRefreshState(isRefreshing = true),
-        refreshTrigger = 100.dp
+    ReccoPullRefreshIndicator(
+        state = rememberPullRefreshState(
+            refreshing = false,
+            onRefresh = { }
+        ),
     )
 }
+

@@ -14,18 +14,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -34,23 +28,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.SwipeRefreshState
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.extensions.noRippleClickable
-import com.recco.internal.core.ui.extensions.setupLoadStates
 import com.recco.internal.core.ui.theme.AppSpacing
-import kotlinx.coroutines.flow.flowOf
 import java.lang.Float.min
 
 data class UiState<T>(
@@ -267,6 +253,7 @@ private fun HeaderAwareContent(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun <T> AppScreenStateAwareContent(
     modifier: Modifier,
@@ -288,8 +275,17 @@ private fun <T> AppScreenStateAwareContent(
     footerContent: @Composable ((uiStateData: T) -> Unit)? = null,
     isFloatingFooter: Boolean = false,
 ) {
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = uiState.isLoading)
-    swipeRefreshState.isRefreshing = uiState.isLoading
+
+    val isPullRefreshEnabled = remember { mutableStateOf(enablePullToRefresh)  }
+
+    // threshold needs to be smaller than offset so the behaviour keeps less bouncy
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = uiState.isLoading,
+        refreshingOffset = 76.dp,
+        refreshThreshold = 52.dp,
+        onRefresh = { refresh() }
+    )
+
     val animatedContentHeight = rememberSaveable { mutableStateOf(0f) }
 
     Crossfade(targetState = uiState.isLoading && isFirstLoading.value) { isInitialLoading ->
@@ -298,270 +294,144 @@ private fun <T> AppScreenStateAwareContent(
                 loadingHeaderContent?.invoke()
                 AppProgressLoadingCircled(modifier = modifier.padding(top = AppSpacing.dp_24))
             }
-        } else {
-            when {
-                uiState.error != null -> {
-                    HeaderAwareContent(isFloatingHeader) {
-                        AppErrorContent(
-                            throwable = uiState.error,
-                            retry = retry,
-                            scrollState = rememberScrollState()
-                        )
-                    }
+            return@Crossfade
+        }
+        when {
+
+            uiState.error != null -> {
+                LaunchedEffect(Unit) {
+                    isPullRefreshEnabled.value = false
                 }
 
-                isEmpty -> {
-                    SwipeRefreshContent(
-                        modifier = modifier,
-                        swipeRefreshState = swipeRefreshState,
-                        enablePullToRefresh = enablePullToRefresh,
-                        avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                        refresh = refresh
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .verticalScroll(rememberScrollState())
-                        ) {
-                            emptyContent?.invoke(this)
-                        }
-                    }
-                }
-
-                else -> {
-                    LaunchedEffect(Unit) {
-                        isFirstLoading.value = false
-                    }
-                    SwipeRefreshContent(
-                        modifier = modifier,
-                        swipeRefreshState = swipeRefreshState,
-                        enablePullToRefresh = enablePullToRefresh,
-                        avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-                        refresh = refresh
-                    ) {
-                        Column(modifier = Modifier.fillMaxSize()) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f)
-                                    .let {
-                                        if (scrollState != null) {
-                                            it.verticalScroll(scrollState)
-                                        } else {
-                                            it
-                                        }
-                                    }
-                            ) {
-                                if (scrollState != null) {
-                                    Box(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        contentAlignment = Alignment.BottomCenter
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .onGloballyPositioned { coordinates ->
-                                                    val height = coordinates.size.height.toFloat()
-                                                    // If there is no animated content we specify a default height
-                                                    // in order to allow elevate the header when scrolling
-                                                    animatedContentHeight.value =
-                                                        if (height <= 0f) 10f else height
-                                                }
-                                                .graphicsLayer {
-                                                    val scrollValue = scrollState.value.toFloat()
-                                                    val height = animatedContentHeight.value
-                                                    if (height > 0f) {
-                                                        alpha = min(
-                                                            1f,
-                                                            1f - ((scrollValue / height)) * 1.3f
-                                                        )
-                                                        isAnimatedContentCollapsed.value =
-                                                            alpha <= 0
-                                                        translationY = 0.5f * scrollState.value
-                                                    }
-                                                }
-                                        ) {
-                                            uiState.data?.let { animatedContent?.invoke(it) }
-                                        }
-                                        animatedContentShapeContent?.invoke()
-                                    }
-                                }
-
-                                uiState.data?.let { content(it) }
-                            }
-
-                            if (!isFloatingFooter) {
-                                if (scrollState != null) {
-                                    AppElevatedBottomContent(scrollState = scrollState) {
-                                        uiState.data?.let { footerContent?.invoke(it) }
-                                    }
-                                } else {
-                                    uiState.data?.let { footerContent?.invoke(it) }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-/**
- * @param isEmpty Use this parameter only in case you need additional logic to determine when
- * to show the empty state, e.g: when the screen show different sections, not only the paginated one
- */
-@Composable
-fun AppScreenStateAwarePaginatedList(
-    modifier: Modifier = Modifier,
-    emptyStateModifier: Modifier = Modifier,
-    items: LazyPagingItems<*>,
-    scrollState: LazyListState = rememberLazyListState(),
-    enablePullToRefresh: Boolean = true,
-    avoidClickingWhenRefreshing: Boolean = true,
-    isEmpty: Boolean? = null,
-    emptyState: EmptyState? = null,
-    retry: () -> Unit,
-    refresh: () -> Unit,
-    headerContent: @Composable (() -> Unit)? = null,
-    content: LazyListScope.() -> Unit
-) {
-    val swipeRefreshState = rememberSwipeRefreshState(false)
-
-    Column(modifier = Modifier.fillMaxSize()) {
-        headerContent?.invoke()
-
-        SwipeRefreshContent(
-            swipeRefreshState = swipeRefreshState,
-            enablePullToRefresh = enablePullToRefresh,
-            avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-            refresh = refresh
-        ) {
-            LazyColumn(
-                modifier = modifier.fillMaxSize(),
-                state = scrollState,
-            ) {
-                content()
-
-                setupLoadStates(
-                    pagingItems = items,
-                    swipeRefreshState = swipeRefreshState,
-                    isEmptyState = isEmpty,
-                    emptySate = emptyState?.let {
-                        {
-                            AppEmptyContent(
-                                drawableModifier = emptyStateModifier,
-                                emptyState = emptyState
-                            )
-                        }
-                    }
-                )
-            }
-        }
-    }
-}
-
-/**
- * @param isEmpty Use this parameter only in case you need additional logic to determine when
- * to show the empty state, e.g: when the screen show different sections, not only the paginated one
- */
-@Composable
-fun AppScreenStateAwarePaginatedGrid(
-    modifier: Modifier = Modifier,
-    emptyStateModifier: Modifier = Modifier,
-    columns: Int,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-    scrollState: LazyGridState = rememberLazyGridState(),
-    items: LazyPagingItems<*>,
-    enablePullToRefresh: Boolean = true,
-    avoidClickingWhenRefreshing: Boolean = true,
-    isEmpty: Boolean? = null,
-    emptyState: EmptyState? = null,
-    refresh: () -> Unit,
-    colorStatusBar: Color = Color.White,
-    headerContent: @Composable (() -> Unit)? = null,
-    content: LazyGridScope.() -> Unit
-) {
-    val swipeRefreshState = rememberSwipeRefreshState(false)
-
-    SwipeRefreshContent(
-        swipeRefreshState = swipeRefreshState,
-        enablePullToRefresh = enablePullToRefresh,
-        avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
-        refresh = refresh
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            headerContent?.invoke()
-
-            LazyVerticalGrid(
-                modifier = modifier.fillMaxSize(),
-                state = scrollState,
-                columns = GridCells.Fixed(columns),
-                contentPadding = contentPadding
-            ) {
-                content()
-
-                setupLoadStates(
-                    pagingItems = items,
-                    columns = columns,
-                    swipeRefreshState = swipeRefreshState,
-                    isEmptyState = isEmpty,
-                    emptySate = emptyState?.let {
-                        {
-                            AppEmptyContent(
-                                drawableModifier = emptyStateModifier,
-                                emptyState = emptyState
-                            )
-                        }
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SwipeRefreshContent(
-    modifier: Modifier = Modifier,
-    enablePullToRefresh: Boolean,
-    swipeRefreshState: SwipeRefreshState,
-    refresh: () -> Unit,
-    avoidClickingWhenRefreshing: Boolean,
-    content: @Composable () -> Unit
-) {
-    SwipeRefresh(
-        modifier = modifier,
-        swipeEnabled = enablePullToRefresh,
-        state = swipeRefreshState,
-        onRefresh = { refresh() },
-        indicator = { state, refreshTrigger ->
-            when {
-                !enablePullToRefresh -> {
-                    AppSwipeRefreshLoadingIndicator(
-                        state = state,
-                        refreshTrigger = refreshTrigger,
-                        elevation = 0.dp
+                HeaderAwareContent(isFloatingHeader) {
+                    AppErrorContent(
+                        throwable = uiState.error,
+                        retry = retry,
+                        scrollState = rememberScrollState()
                     )
                 }
+            }
 
-                avoidClickingWhenRefreshing && state.isRefreshing -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .noRippleClickable { },
-                        contentAlignment = Alignment.TopCenter
-                    ) {
-                        AppSwipeRefreshLoadingIndicator(state, refreshTrigger)
+            isEmpty -> {
+                LaunchedEffect(Unit) {
+                    isPullRefreshEnabled.value = false
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) { emptyContent?.invoke(this) }
+            }
+
+            else -> {
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .pullRefresh(pullRefreshState)
+                ) {
+                    LaunchedEffect(Unit) {
+                        isFirstLoading.value = false
+                        isPullRefreshEnabled.value = true
+                    }
+
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .let {
+                                    if (scrollState != null) {
+                                        it.verticalScroll(scrollState)
+                                    } else {
+                                        it
+                                    }
+                                }
+
+                        ) {
+                            if (scrollState != null) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    contentAlignment = Alignment.BottomCenter
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .onGloballyPositioned { coordinates ->
+                                                val height =
+                                                    coordinates.size.height.toFloat()
+                                                // If there is no animated content we specify a default height
+                                                // in order to allow elevate the header when scrolling
+                                                animatedContentHeight.value =
+                                                    if (height <= 0f) 10f else height
+                                            }
+                                            .graphicsLayer {
+                                                val scrollValue =
+                                                    scrollState.value.toFloat()
+                                                val height = animatedContentHeight.value
+                                                if (height > 0f) {
+                                                    alpha = min(
+                                                        1f,
+                                                        1f - ((scrollValue / height)) * 1.3f
+                                                    )
+                                                    isAnimatedContentCollapsed.value =
+                                                        alpha <= 0
+                                                    translationY = 0.5f * scrollState.value
+                                                }
+                                            }
+                                    ) {
+                                        uiState.data?.let { animatedContent?.invoke(it) }
+                                    }
+                                    animatedContentShapeContent?.invoke()
+                                }
+                            }
+
+                            uiState.data?.let { content(it) }
+                        }
+
+                        if (!isFloatingFooter) {
+                            if (scrollState != null) {
+                                AppElevatedBottomContent(scrollState = scrollState) {
+                                    uiState.data?.let { footerContent?.invoke(it) }
+                                }
+                            } else {
+                                uiState.data?.let { footerContent?.invoke(it) }
+                            }
+                        }
+                    }
+
+                    when {
+                        !isPullRefreshEnabled.value -> {}
+
+                        avoidClickingWhenRefreshing && uiState.isLoading -> {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .noRippleClickable { }
+                            ) {
+                                ReccoPullRefreshIndicator(
+                                    state = pullRefreshState,
+                                    modifier = Modifier.align(Alignment.TopCenter)
+                                )
+                            }
+                        }
+
+                        isPullRefreshEnabled.value -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                            ) {
+                                ReccoPullRefreshIndicator(
+                                    state = pullRefreshState,
+                                    modifier = Modifier.align(Alignment.TopCenter)
+                                )
+                            }
+                        }
                     }
                 }
-
-                else -> {
-                    AppSwipeRefreshLoadingIndicator(state, refreshTrigger)
-                }
             }
-        },
-        content = content
-    )
+        }
+    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF)
@@ -631,24 +501,11 @@ private fun PreviewEmptyState() {
 private fun Preview() {
     AppScreenStateAware(
         scrollState = rememberScrollState(),
-        uiState = UiState<Unit>(isLoading = false),
+        uiState = UiState<Unit>(isLoading = true),
+        enablePullToRefresh = true,
         retry = { },
         refresh = { },
     ) {
         Text(text = "Some content")
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFF)
-@Composable
-private fun PaginatedPreview() {
-    AppScreenStateAwarePaginatedList(
-        items = flowOf(PagingData.from(listOf("Item"))).collectAsLazyPagingItems(),
-        retry = { },
-        refresh = { }
-    ) {
-        item {
-            Text(text = "Some content")
-        }
     }
 }
