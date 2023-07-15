@@ -53,14 +53,7 @@ Following this approach, integration brings access to services in which the UI s
 
 To be able to work with Recco, some artifacts are needed to be downloaded, to do so:
 
-- [Github Packages][Github-Packages] configuration is needed. Check [Personal Access Token][PAT] section in order to provide a set of valid credentials.
-
-- Configure your gradle.properties file under ~/.gradle/ folder
-
-```groovy
-gprUser=your-github-user-here
-gprKey=your-github-key-here
-```
+- [Github Packages][Github-Packages] configuration is needed
 
 - In order to sync artifacts previously published in Github Packages repository, you need to add the following configuration. Inside settings.gradle.kt file.
 
@@ -69,11 +62,7 @@ repositories {
   ...
   maven {
     name = "GithubPackages"
-    url = uri("https://maven.pkg.github.com/sf-recco/android-sdk")
-    credentials {
-      username = extra["gprUser"].toString()
-      password = extra["gprKey"].toString()
-    }
+    url = uri("https://recco-maiden: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@maven.pkg.github.com/sf-recco/android-sdk")
   }
 }
 ```

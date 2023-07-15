@@ -9,19 +9,6 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-
-    val githubUsername = if (extra.properties.keys.contains("gprUser")) {
-        extra["gprUser"].toString()
-    } else {
-        System.getenv("USERNAME")
-    }
-
-    val githubSecret = if (extra.properties.keys.contains("gprKey")) {
-        extra["gprKey"].toString()
-    } else {
-        System.getenv("GHPR_PAT")
-    }
-
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         // Uncomment for artifacts to be resolved from .m2 directory
@@ -33,11 +20,7 @@ dependencyResolutionManagement {
 
         maven {
             name = "GithubPackages"
-            url = uri("https://maven.pkg.github.com/sf-recco/android-sdk")
-            credentials {
-                username = githubUsername
-                password = githubSecret
-            }
+            url = uri("https://recco-maiden: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@maven.pkg.github.com/sf-recco/android-sdk")
         }
     }
 }
