@@ -2,7 +2,6 @@ package com.recco.showcase
 
 import android.app.Application
 import android.util.Log
-import androidx.compose.ui.graphics.Color
 import com.recco.api.model.ReccoConfig
 import com.recco.api.model.ReccoLogger
 import com.recco.api.model.ReccoPalette
@@ -17,17 +16,17 @@ class ShowcaseApp : Application() {
         // local: BRBzgGrjAMdvPdXdrIEs1QMtjjKlF3Dfp81sYwWuF1VnTNKUKxQlBvamcU0SqZ4GTAmClvo
         // staging: yvU5m39iXgVtOOKSQqz8neU5mP5HkOamKKMhcX5FDdBE6s6lmrdkC87XQr5dApi5r-vVOFo
         ReccoPalette.Custom(
-            lightColors = ReccoPalette.Default.lightColors,
-            darkColors = ReccoPalette.Default.darkColors
+            lightColors = ReccoPalette.Fresh.lightColors,
+            darkColors = ReccoPalette.Fresh.darkColors
         )
         ReccoApiUI.init(
             sdkConfig = ReccoConfig(
                 appName = "Showcase",
                 apiSecret = "yvU5m39iXgVtOOKSQqz8neU5mP5HkOamKKMhcX5FDdBE6s6lmrdkC87XQr5dApi5r-vVOFo",
-/*                palette = ReccoPalette.Custom(
-                    lightColors = ReccoPalette.Default.lightColors.copy(primary = Color(0xFFFFEB3B)),
-                    darkColors = ReccoPalette.Default.darkColors
-                )*/
+                /*                palette = ReccoPalette.Custom(
+                                    lightColors = ReccoPalette.Default.lightColors.copy(primary = Color(0xFFFFEB3B)),
+                                    darkColors = ReccoPalette.Default.darkColors
+                                )*/
             ),
             application = this,
             logger = object : ReccoLogger {

@@ -94,41 +94,79 @@ internal fun MultiChoiceInput(
 @Composable
 private fun PreviewMultiChoice() {
     var selected by remember { mutableStateOf(false) }
-    MultiChoiceInput(
-        selected = selected,
-        text = "Sales Representative",
-        onClick = {
-            selected = !selected
-        }
-    )
+    AppTheme {
+        MultiChoiceInput(
+            selected = selected,
+            text = "Sales Representative",
+            onClick = {
+                selected = !selected
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewMultiChoiceDark() {
+    var selected by remember { mutableStateOf(false) }
+    AppTheme(darkTheme = true) {
+        MultiChoiceInput(
+            selected = selected,
+            text = "Sales Representative",
+            onClick = {
+                selected = !selected
+            }
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun PreviewSelectedMultiChoice() {
-    var selected by remember { mutableStateOf(false) }
+    var selected by remember { mutableStateOf(true) }
 
-    MultiChoiceInput(
-        selected = selected,
-        text = "Sales Representative",
-        onClick = {
-            selected = !selected
-        }
-    )
+    AppTheme {
+        MultiChoiceInput(
+            selected = selected,
+            text = "Sales Representative",
+            onClick = {
+                selected = !selected
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSelectedMultiChoiceDark() {
+    var selected by remember { mutableStateOf(true) }
+
+    AppTheme(darkTheme = true) {
+        MultiChoiceInput(
+            selected = selected,
+            text = "Sales Representative",
+            onClick = {
+                selected = !selected
+            }
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun PreviewSingleChoice() {
     var selected by remember { mutableStateOf(false) }
-    MultiChoiceInput(
-        singleChoice = true,
-        selected = selected,
-        text = "Sales Representative",
-        onClick = {
-            selected = !selected
-        }
-    )
+
+    AppTheme {
+        MultiChoiceInput(
+            singleChoice = true,
+            selected = selected,
+            text = "Sales Representative",
+            onClick = {
+                selected = !selected
+            }
+        )
+    }
 }
 
 @Preview
@@ -136,14 +174,16 @@ private fun PreviewSingleChoice() {
 private fun PreviewSelectedSingleChoice() {
     var selected by remember { mutableStateOf(false) }
 
-    MultiChoiceInput(
-        singleChoice = true,
-        selected = selected,
-        text = "Sales Representative",
-        onClick = {
-            selected = !selected
-        }
-    )
+    AppTheme {
+        MultiChoiceInput(
+            singleChoice = true,
+            selected = selected,
+            text = "Sales Representative",
+            onClick = {
+                selected = !selected
+            }
+        )
+    }
 }
 
 
@@ -151,11 +191,14 @@ private fun PreviewSelectedSingleChoice() {
 @Composable
 private fun PreviewLargeText() {
     var selected by remember { mutableStateOf(false) }
-    MultiChoiceInput(
-        selected = selected,
-        text = "I've already done something, but I'm not doing anything now.I'm doing something about it now and I intend to do something in the future.",
-        onClick = {
-            selected = !selected
-        }
-    )
+
+    AppTheme {
+        MultiChoiceInput(
+            selected = selected,
+            text = "I've already done something, but I'm not doing anything now.I'm doing something about it now and I intend to do something in the future.",
+            onClick = {
+                selected = !selected
+            }
+        )
+    }
 }

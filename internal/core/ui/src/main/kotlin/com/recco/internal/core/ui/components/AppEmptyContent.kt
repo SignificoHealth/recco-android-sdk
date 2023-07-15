@@ -148,7 +148,7 @@ private fun PreviewCustomImageSize() {
             description = stringResource(R.string.recco_error_connection_body),
             drawableRes = null,
             drawableComposable = {
-                AppTintedImageNoConnection(tint = AppTheme.colors.error)
+                AppTintedImageNoConnection(tint = AppTheme.colors.primary)
             },
             ctaTextRes = R.string.recco_error_reload,
             ctaIconRes = R.drawable.recco_ic_retry,

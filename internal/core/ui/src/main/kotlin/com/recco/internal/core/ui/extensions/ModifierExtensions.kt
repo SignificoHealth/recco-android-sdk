@@ -52,13 +52,13 @@ fun Modifier.shimmerEffect(
 ): Modifier = composed {
     val size = remember { mutableStateOf(IntSize.Zero) }
     val shimmerColors = listOf(
-        AppTheme.colors.lightGrey,
-        AppTheme.colors.lightGrey,
-        AppTheme.colors.lightGrey.copy(alpha = .6f),
-        AppTheme.colors.lightGrey.copy(alpha = .2f),
-        AppTheme.colors.lightGrey.copy(alpha = .6f),
-        AppTheme.colors.lightGrey,
-        AppTheme.colors.lightGrey,
+        AppTheme.colors.staticLightGrey,
+        AppTheme.colors.staticLightGrey,
+        AppTheme.colors.staticLightGrey.copy(alpha = .6f),
+        AppTheme.colors.staticLightGrey.copy(alpha = .2f),
+        AppTheme.colors.staticLightGrey.copy(alpha = .6f),
+        AppTheme.colors.staticLightGrey,
+        AppTheme.colors.staticLightGrey,
     )
     val transition = rememberInfiniteTransition()
     val translateAnimation = transition.animateFloat(

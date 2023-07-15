@@ -64,7 +64,6 @@ import kotlinx.coroutines.flow.flow
 @Composable
 internal fun QuestionnaireRoute(
     topic: Topic?,
-    feedSectionType: FeedSectionType?,
     navigateUp: () -> Unit,
     navigateToOutro: () -> Unit,
     viewModel: QuestionnaireViewModel = hiltViewModel()
@@ -112,7 +111,8 @@ private fun QuestionnaireScreen(
     Scaffold(
         topBar = {
             AppTopBar(
-                title = topic?.asTitle() ?: stringResource(id = R.string.recco_questionnaire_about_you),
+                title = topic?.asTitle()
+                    ?: stringResource(id = R.string.recco_questionnaire_about_you),
                 elevation = 0.dp,
                 navigationIcon = if (topic != null) {
                     { BackIconButton(onClick = navigateUp) }
@@ -220,7 +220,10 @@ private fun QuestionnaireContent(
                         .fillMaxSize()
                 ) {
                     Spacer(Modifier.height(AppSpacing.dp_32))
-                    Text(text = question.text, style = AppTheme.typography.cta)
+                    Text(
+                        text = question.text,
+                        style = AppTheme.typography.cta.copy(color = AppTheme.colors.onBackground)
+                    )
 
                     when (question) {
                         is MultiChoiceQuestion -> {
@@ -228,7 +231,7 @@ private fun QuestionnaireContent(
                                 Spacer(Modifier.height(AppSpacing.dp_16))
                                 Text(
                                     text = stringResource(R.string.recco_questionnaire_multiple_answers),
-                                    style = AppTheme.typography.body3.copy(color = AppTheme.colors.primary20)
+                                    style = AppTheme.typography.body3.copy(color = AppTheme.colors.primary40)
                                 )
                             }
                             Spacer(Modifier.height(AppSpacing.dp_32))
@@ -284,16 +287,34 @@ private fun QuestionnaireContent(
 
 @Preview
 @Composable
-private fun Preview(
+private fun PreviewLight(
     @PreviewParameter(QuestionnaireUIStatePreviewProvider::class) uiState: UiState<QuestionnaireUI>
 ) {
-    QuestionnaireScreen(
-        topic = Topic.NUTRITION,
-        uiState = uiState,
-        navigateUp = {},
-        navigateToOutro = {},
-        onUserInteract = {},
-        viewEvents = flow { }
-    )
+    AppTheme {
+        QuestionnaireScreen(
+            topic = Topic.NUTRITION,
+            uiState = uiState,
+            navigateUp = {},
+            navigateToOutro = {},
+            onUserInteract = {},
+            viewEvents = flow { }
+        )
+    }
 }
 
+@Preview
+@Composable
+private fun PreviewDark(
+    @PreviewParameter(QuestionnaireUIStatePreviewProvider::class) uiState: UiState<QuestionnaireUI>
+) {
+    AppTheme(darkTheme = true) {
+        QuestionnaireScreen(
+            topic = Topic.NUTRITION,
+            uiState = uiState,
+            navigateUp = {},
+            navigateToOutro = {},
+            onUserInteract = {},
+            viewEvents = flow { }
+        )
+    }
+}

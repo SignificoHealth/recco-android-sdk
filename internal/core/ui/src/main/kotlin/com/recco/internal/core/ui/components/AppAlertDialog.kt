@@ -124,14 +124,14 @@ private fun CloseDialogButton(
     IconButton(
         modifier = modifier
             .background(
-                color = AppTheme.colors.lightGrey,
+                color = AppTheme.colors.staticLightGrey,
                 shape = CircleShape
             ),
         onClick = onClick,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.recco_ic_close),
-            tint = AppTheme.colors.primary,
+            tint = AppTheme.colors.staticDark,
             contentDescription = null,
         )
     }
@@ -142,12 +142,29 @@ private fun CloseDialogButton(
 private fun Preview() {
     val openDialog = remember { mutableStateOf(true) }
 
-    AppAlertDialog(
-        openDialog = openDialog,
-        titleRes = R.string.recco_dashboard_alert_mental_wellbeing_title,
-        descriptionRes = R.string.recco_dashboard_alert_mental_wellbeing_body,
-        textButtonPrimaryRes = R.string.recco_start,
-        onClickPrimary = {})
+    AppTheme {
+        AppAlertDialog(
+            openDialog = openDialog,
+            titleRes = R.string.recco_dashboard_alert_mental_wellbeing_title,
+            descriptionRes = R.string.recco_dashboard_alert_mental_wellbeing_body,
+            textButtonPrimaryRes = R.string.recco_start,
+            onClickPrimary = {})
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewDark() {
+    val openDialog = remember { mutableStateOf(true) }
+
+    AppTheme(darkTheme = true) {
+        AppAlertDialog(
+            openDialog = openDialog,
+            titleRes = R.string.recco_dashboard_alert_mental_wellbeing_title,
+            descriptionRes = R.string.recco_dashboard_alert_mental_wellbeing_body,
+            textButtonPrimaryRes = R.string.recco_start,
+            onClickPrimary = {})
+    }
 }
 
 @Preview
@@ -155,23 +172,53 @@ private fun Preview() {
 private fun PreviewWithHeader() {
     val openDialog = remember { mutableStateOf(true) }
 
-    AppAlertDialog(
-        openDialog = openDialog,
-        header = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(AppTheme.colors.accent20),
-                contentAlignment = Alignment.Center
-            ) {
-                AppTintedImagePeopleDigital(
-                    modifier = Modifier.size(237.dp)
-                )
-            }
-        },
-        titleRes = R.string.recco_dashboard_alert_mental_wellbeing_title,
-        descriptionRes = R.string.recco_dashboard_alert_mental_wellbeing_body,
-        textButtonPrimaryRes = R.string.recco_start,
-        onClickPrimary = {}
-    )
+    AppTheme {
+        AppAlertDialog(
+            openDialog = openDialog,
+            header = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(AppTheme.colors.accent20),
+                    contentAlignment = Alignment.Center
+                ) {
+                    AppTintedImagePeopleDigital(
+                        modifier = Modifier.size(237.dp)
+                    )
+                }
+            },
+            titleRes = R.string.recco_dashboard_alert_mental_wellbeing_title,
+            descriptionRes = R.string.recco_dashboard_alert_mental_wellbeing_body,
+            textButtonPrimaryRes = R.string.recco_start,
+            onClickPrimary = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewWithHeaderDark() {
+    val openDialog = remember { mutableStateOf(true) }
+
+    AppTheme(darkTheme = true) {
+        AppAlertDialog(
+            openDialog = openDialog,
+            header = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(AppTheme.colors.accent20),
+                    contentAlignment = Alignment.Center
+                ) {
+                    AppTintedImagePeopleDigital(
+                        modifier = Modifier.size(237.dp)
+                    )
+                }
+            },
+            titleRes = R.string.recco_dashboard_alert_mental_wellbeing_title,
+            descriptionRes = R.string.recco_dashboard_alert_mental_wellbeing_body,
+            textButtonPrimaryRes = R.string.recco_start,
+            onClickPrimary = {}
+        )
+    }
 }

@@ -5,20 +5,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.Color
 import com.recco.api.model.ReccoPalette
 import com.recco.internal.core.ui.components.AppStatusBar
 
-internal val LocalExtendedColors = staticCompositionLocalOf {
-    ReccoPalette.Default.lightColors.asExtendedColors()
-}
 
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    colorStatusBar: Color = AppTheme.colors.primary,
-    palette: ReccoPalette = ReccoPalette.Default,
+    palette: ReccoPalette = ReccoPalette.Fresh,
     content: @Composable () -> Unit
 ) {
     val extendedColors = if (darkTheme) {
@@ -27,18 +21,16 @@ fun AppTheme(
         palette.lightColors.asExtendedColors()
     }
 
-    val colors = extendedColors.asColor(isLight = !darkTheme)
-
-    AppStatusBar(color = colorStatusBar, darkIcons = darkTheme)
+    AppStatusBar(color = AppTheme.colors.staticDark, darkIcons = false)
 
     CompositionLocalProvider(
         LocalExtendedColors provides extendedColors,
-        LocalExtendedTypography provides extendedTypography,
+        LocalExtendedTypography provides extendedTypography(extendedColors.primary),
         LocalElevation provides elevation
     ) {
         MaterialTheme(
-            colors = colors,
-            typography = typography
+            colors = extendedColors.asColor(isLight = !darkTheme),
+            typography = extendedTypography(extendedColors.primary).asTypography(),
         ) {
             CompositionLocalProvider(content = content)
         }

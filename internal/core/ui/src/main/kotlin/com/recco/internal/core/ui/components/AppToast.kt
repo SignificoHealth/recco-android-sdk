@@ -24,6 +24,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -105,7 +106,7 @@ fun ToastElement(
 @Composable
 fun ToastContent(
     data: SnackbarData,
-    backgroundColor: Color = Color.White,
+    backgroundColor: Color = AppTheme.colors.background,
     titleStyle: TextStyle = AppTheme.typography.h4,
     subtitleStyle: TextStyle = AppTheme.typography.body2,
     @DrawableRes resIcon: Int = R.drawable.recco_ic_error
@@ -129,7 +130,8 @@ fun ToastContent(
 
             Image(
                 painter = painterResource(id = resIcon),
-                contentDescription = null
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(AppTheme.colors.primary),
             )
 
             Spacer(modifier = Modifier.width(AppSpacing.dp_16))
@@ -167,3 +169,19 @@ private fun Preview() {
         })
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewDark() {
+    AppTheme(darkTheme = true) {
+        ToastContent(data = object : SnackbarData {
+            override val actionLabel = "Something went wrong."
+            override val duration = SnackbarDuration.Short
+            override val message = "Sorry !"
+
+            override fun dismiss() {}
+            override fun performAction() {}
+        })
+    }
+}
+

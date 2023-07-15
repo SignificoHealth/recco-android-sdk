@@ -37,6 +37,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.extensions.noRippleClickable
 import com.recco.internal.core.ui.theme.AppSpacing
+import com.recco.internal.core.ui.theme.AppTheme
 import java.lang.Float.min
 
 data class UiState<T>(
@@ -276,7 +277,7 @@ private fun <T> AppScreenStateAwareContent(
     isFloatingFooter: Boolean = false,
 ) {
 
-    val isPullRefreshEnabled = remember { mutableStateOf(enablePullToRefresh)  }
+    val isPullRefreshEnabled = remember { mutableStateOf(enablePullToRefresh) }
 
     // threshold needs to be smaller than offset so the behaviour keeps less bouncy
     val pullRefreshState = rememberPullRefreshState(
@@ -499,13 +500,30 @@ private fun PreviewEmptyState() {
 @Preview(showBackground = true, backgroundColor = 0xFFF)
 @Composable
 private fun Preview() {
-    AppScreenStateAware(
-        scrollState = rememberScrollState(),
-        uiState = UiState<Unit>(isLoading = true),
-        enablePullToRefresh = true,
-        retry = { },
-        refresh = { },
-    ) {
-        Text(text = "Some content")
+    AppTheme {
+        AppScreenStateAware(
+            scrollState = rememberScrollState(),
+            uiState = UiState<Unit>(isLoading = true),
+            enablePullToRefresh = true,
+            retry = { },
+            refresh = { },
+        ) {
+            Text(text = "Some content")
+        }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFF)
+@Composable
+private fun LoadingPreviewDark() {
+    AppTheme(darkTheme = true) {
+        AppScreenStateAware(
+            scrollState = rememberScrollState(),
+            uiState = UiState<Unit>(isLoading = true),
+            retry = { },
+            refresh = { },
+        ) {
+            Text(text = "Some content")
+        }
     }
 }

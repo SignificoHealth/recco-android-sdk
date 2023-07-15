@@ -8,9 +8,9 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
+import com.recco.internal.core.ui.extensions.asSerializable
 import com.recco.internal.feature.questionnaire.QuestionnaireOnboardingOutroRoute
 import com.recco.internal.feature.questionnaire.QuestionnaireRoute
-import com.recco.internal.core.ui.extensions.asSerializable
 
 internal const val topicArg = "topic"
 internal const val feedSectionTypeArg = "feedSectionType"
@@ -46,9 +46,6 @@ fun NavGraphBuilder.questionnaireGraph(
         ) { backStackEntry ->
             QuestionnaireRoute(
                 topic = checkNotNull(backStackEntry.arguments?.asSerializable(topicArg)),
-                feedSectionType = checkNotNull(
-                    backStackEntry.arguments?.asSerializable(feedSectionTypeArg)
-                ),
                 navigateUp = navigateUp,
                 navigateToOutro = navigateToOutro
             )
@@ -58,7 +55,6 @@ fun NavGraphBuilder.questionnaireGraph(
         ) {
             QuestionnaireRoute(
                 topic = null,
-                feedSectionType = null,
                 navigateUp = navigateUp,
                 navigateToOutro = navigateToOutro
             )

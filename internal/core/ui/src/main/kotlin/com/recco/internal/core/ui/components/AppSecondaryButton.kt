@@ -12,7 +12,6 @@ import com.recco.internal.core.ui.R
 @Composable
 fun AppSecondaryButton(
     modifier: Modifier = Modifier,
-    isOverBackground: Boolean = false,
     @StringRes textRes: Int? = null,
     @DrawableRes iconStartRes: Int? = null,
     @DrawableRes iconEndRes: Int? = null,
@@ -23,7 +22,6 @@ fun AppSecondaryButton(
     AppButton(
         modifier = modifier,
         isPrimary = false,
-        isOverBackground = isOverBackground,
         text = textRes?.let { stringResource(id = textRes) },
         iconStartRes = iconStartRes,
         iconEndRes = iconEndRes,
@@ -36,7 +34,6 @@ fun AppSecondaryButton(
 @Composable
 fun AppSecondaryButton(
     modifier: Modifier = Modifier,
-    isOverBackground: Boolean = false,
     text: String? = null,
     @DrawableRes iconStartRes: Int? = null,
     @DrawableRes iconEndRes: Int? = null,
@@ -47,7 +44,6 @@ fun AppSecondaryButton(
     AppButton(
         modifier = modifier,
         isPrimary = false,
-        isOverBackground = isOverBackground,
         text = text,
         iconStartRes = iconStartRes,
         iconEndRes = iconEndRes,
@@ -63,7 +59,6 @@ fun AppSecondaryButton(
 private fun AppSecondaryButtonActiveOverLightBackgroundPreview() {
     AppSecondaryButton(
         modifier = Modifier.fillMaxWidth(),
-        isOverBackground = false,
         text = "Button",
         iconStartRes = null,
         iconEndRes = null,
@@ -77,7 +72,6 @@ private fun AppSecondaryButtonActiveOverLightBackgroundPreview() {
 private fun AppSecondaryButtonInactiveOverLightBackgroundPreview() {
     AppSecondaryButton(
         modifier = Modifier.fillMaxWidth(),
-        isOverBackground = false,
         text = "Button",
         iconStartRes = null,
         iconEndRes = null,
@@ -92,7 +86,6 @@ private fun AppSecondaryButtonInactiveOverLightBackgroundPreview() {
 private fun AppSecondaryButtonActiveWithEndIconOverLightBackgroundPreview() {
     AppSecondaryButton(
         modifier = Modifier.fillMaxWidth(),
-        isOverBackground = false,
         text = "Button",
         iconStartRes = null,
         iconEndRes = R.drawable.recco_ic_retry,
@@ -106,7 +99,6 @@ private fun AppSecondaryButtonActiveWithEndIconOverLightBackgroundPreview() {
 private fun AppSecondaryButtonInactiveWithEndIconOverLightBackgroundPreview() {
     AppSecondaryButton(
         modifier = Modifier.fillMaxWidth(),
-        isOverBackground = false,
         text = "Button",
         iconStartRes = null,
         iconEndRes = R.drawable.recco_ic_retry,
@@ -120,7 +112,6 @@ private fun AppSecondaryButtonInactiveWithEndIconOverLightBackgroundPreview() {
 private fun AppSecondaryButtonActiveWithStartIconOverLightBackgroundPreview() {
     AppSecondaryButton(
         modifier = Modifier.fillMaxWidth(),
-        isOverBackground = false,
         text = "Button",
         iconStartRes = R.drawable.recco_ic_retry,
         iconEndRes = null,
@@ -134,91 +125,6 @@ private fun AppSecondaryButtonActiveWithStartIconOverLightBackgroundPreview() {
 private fun AppSecondaryButtonInactiveWithStartIconOverLightBackgroundPreview() {
     AppSecondaryButton(
         modifier = Modifier.fillMaxWidth(),
-        isOverBackground = false,
-        text = "Button",
-        iconStartRes = R.drawable.recco_ic_retry,
-        iconEndRes = null,
-        enabled = false,
-        onClick = {}
-    )
-}
-
-@Preview(showBackground = true, backgroundColor = 0x5760CC)
-@Composable
-private fun AppSecondaryButtonActiveOverDarkBackgroundPreview() {
-    AppSecondaryButton(
-        modifier = Modifier.fillMaxWidth(),
-        isOverBackground = true,
-        text = "Button",
-        iconStartRes = null,
-        iconEndRes = null,
-        enabled = true,
-        onClick = {}
-    )
-}
-
-@Preview(showBackground = true, backgroundColor = 0x5760CC)
-@Composable
-private fun AppSecondaryButtonInactiveOverDarkBackgroundPreview() {
-    AppSecondaryButton(
-        modifier = Modifier.fillMaxWidth(),
-        isOverBackground = true,
-        text = "Button",
-        iconStartRes = null,
-        iconEndRes = null,
-        enabled = false,
-        onClick = {}
-    )
-}
-
-@Preview(showBackground = true, backgroundColor = 0x5760CC)
-@Composable
-private fun AppSecondaryButtonActiveWithEndIconOverDarkBackgroundPreview() {
-    AppSecondaryButton(
-        modifier = Modifier.fillMaxWidth(),
-        isOverBackground = true,
-        text = "Button",
-        iconStartRes = null,
-        iconEndRes = R.drawable.recco_ic_retry,
-        enabled = true,
-        onClick = {}
-    )
-}
-
-@Preview(showBackground = true, backgroundColor = 0x5760CC)
-@Composable
-private fun AppSecondaryButtonInactiveWithEndIconOverDarkBackgroundPreview() {
-    AppSecondaryButton(
-        modifier = Modifier.fillMaxWidth(),
-        isOverBackground = true,
-        text = "Button",
-        iconStartRes = null,
-        iconEndRes = R.drawable.recco_ic_retry,
-        enabled = false,
-        onClick = {}
-    )
-}
-
-@Preview(showBackground = true, backgroundColor = 0x5760CC)
-@Composable
-private fun AppSecondaryButtonActiveWithStartIconOverDarkBackgroundPreview() {
-    AppSecondaryButton(
-        modifier = Modifier.fillMaxWidth(),
-        isOverBackground = true,
-        text = "Button",
-        iconStartRes = R.drawable.recco_ic_retry,
-        iconEndRes = null,
-        enabled = true,
-        onClick = {}
-    )
-}
-
-@Preview(showBackground = true, backgroundColor = 0x5760CC)
-@Composable
-private fun AppSecondaryButtonInactiveWithStartIconOverDarkBackgroundPreview() {
-    AppSecondaryButton(
-        modifier = Modifier.fillMaxWidth(),
-        isOverBackground = true,
         text = "Button",
         iconStartRes = R.drawable.recco_ic_retry,
         iconEndRes = null,
