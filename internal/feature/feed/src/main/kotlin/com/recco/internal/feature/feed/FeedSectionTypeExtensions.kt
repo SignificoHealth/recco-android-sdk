@@ -2,7 +2,6 @@ package com.recco.internal.feature.feed
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.core.text.HtmlCompat
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.FeedSectionType.MENTAL_WELLBEING_EXPLORE
 import com.recco.internal.core.model.feed.FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS
@@ -17,7 +16,6 @@ import com.recco.internal.core.model.feed.FeedSectionType.SLEEP_EXPLORE
 import com.recco.internal.core.model.feed.FeedSectionType.SLEEP_RECOMMENDATIONS
 import com.recco.internal.core.model.feed.FeedSectionType.STARTING_RECOMMENDATIONS
 import com.recco.internal.core.ui.R
-import com.recco.internal.core.ui.extensions.removeHTML
 
 @Composable
 internal fun FeedSectionType.asSectionTitle(): String = when (this) {
@@ -54,4 +52,4 @@ internal fun FeedSectionType.asSectionTitle(): String = when (this) {
     MOST_POPULAR -> stringResource(R.string.recco_dashboard_trending)
 
     NEW_CONTENT -> stringResource(R.string.recco_dashboard_new_for_you)
-}.removeHTML()
+}
