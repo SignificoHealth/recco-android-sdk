@@ -82,7 +82,7 @@ Then, include the dependency in your module level build.gradle file and sync aga
 
 ```kotlin
   // UI 
-  implementation("com.significo:recco-ui:<release-version>")
+  implementation("com.significo:recco-api-ui:<release-version>")
 ```
 
 ## Releases

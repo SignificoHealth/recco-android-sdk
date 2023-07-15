@@ -1,12 +1,14 @@
 ---
 name: release
-on: release
+on:
+  release:
+    types: [published]
 jobs:
   deploy:
     runs-on: "${{ matrix.os }}"
     permissions:
       contents: read
-      id-token: write
+      packages: write
     env:
       REGISTRY: ghcr.io
     strategy:

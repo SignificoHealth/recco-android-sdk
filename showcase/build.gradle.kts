@@ -64,7 +64,7 @@ android {
 
 dependencies {
     implementation(project(":api:ui"))
-    // implementation("com.significo:recco-ui:0.0.1")
+    // implementation("com.significo:recco-api-ui:0.0.0")
 
     implementation("com.google.dagger:hilt-android:2.46.1")
     implementation("androidx.navigation:navigation-compose:2.6.0")
