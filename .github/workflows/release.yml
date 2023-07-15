@@ -1,8 +1,6 @@
 ---
-name: recco-android-sdk_prod
-on:
-  push:
-    tags: ["*"]
+name: release
+on: release
 jobs:
   deploy:
     runs-on: "${{ matrix.os }}"
@@ -26,8 +24,8 @@ jobs:
           cache: "gradle"
       - name: "Publish GitHub Packages...."
         env:
-          USERNAME: ${{ secrets.USERNAME }}
-          TOKEN: ${{ secrets.GHPR_PAT }}
+          USERNAME: ${{ github.actor }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))" >> $GITHUB_ENV
           if [[ ! -z $(git tag) ]]; then

@@ -3,13 +3,12 @@
 This document aims to explain Recco SDK publishing process using Github Actions.
 
 ## How It Works
-
-The following .yml [file](https://github.com/viluahealthcare/recco-android-sdk/blob/main/.github/workflows/recco-android-sdk_prod.yml) is included inside the workflows folder,
+The following .yml [file](https://github.com/sf-recco/android-sdk/blob/main/.github/workflows/release.yml) is included inside the workflows folder,
 so a pipeline is generated to deal with Recco SDK publishing process.
 
 ## Triggers
 
-Currently this workflow is only triggered if a new TAG is published to the repository.
+Currently this workflow is only triggered if a new release (TAG) is published via the GitHub UI.
 
 ## Steps
 
@@ -29,10 +28,10 @@ Java environment setup will be provided, so both local and remote executions are
 
 ### Publishing
 
-This is a tailored step in which the following secrets are provided:
+This tailored step leverages automatic token authentication by relying on the GitHub App that GitHub installs in the repository. 
 
-- USERNAME: ${{ secrets.USERNAME }}
-- TOKEN: ${{ secrets.GHPR_PAT }}
+- USERNAME: ${{ github.actor }}
+- TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 According to this configuration, this step is in charge of the following requirements:
 
