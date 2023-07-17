@@ -21,6 +21,9 @@ jobs:
       - name: "Run lint"
         run: ./gradlew lint
 
+      - name: "Run spotless"
+        run: ./gradlew spotlessCheck --no-configuration-cache
+
       - name: "Run unit tests"
         run: ./gradlew test
 

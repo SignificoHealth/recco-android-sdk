@@ -16,6 +16,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.android")
                 apply("recco.android.maven.publish")
                 apply("de.mannodermaus.android-junit5")
+                apply("recco.android.spotless")
             }
 
             extensions.configure<LibraryExtension> {

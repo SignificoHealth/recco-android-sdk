@@ -19,6 +19,7 @@ dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.hilt.android.gradle.plugin)
+    compileOnly(libs.spotless.gradle.plugin)
 
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
@@ -44,6 +45,10 @@ gradlePlugin {
         register("mavenPublish") {
             id = "recco.android.maven.publish"
             implementationClass = "MavenPublishConventionPlugin"
+        }
+        register("spotless") {
+            id = "recco.android.spotless"
+            implementationClass = "SpotlessConventionPlugin"
         }
     }
 }
