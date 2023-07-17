@@ -13,16 +13,15 @@
 
 package com.recco.internal.core.openapi.model
 
-import com.recco.internal.core.openapi.model.MultiChoiceAnswerOptionDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * 
  *
- * @param maxOptions 
- * @param minOptions 
- * @param options 
+ *
+ * @param maxOptions
+ * @param minOptions
+ * @param options
  */
 @JsonClass(generateAdapter = true)
 data class MultiChoiceQuestionDTO(

@@ -13,42 +13,46 @@
 
 package com.recco.internal.core.openapi.api
 
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import com.squareup.moshi.Json
-import com.recco.internal.core.openapi.model.ApiErrorDTO
 import com.recco.internal.core.openapi.model.PATDTO
 import com.recco.internal.core.openapi.model.PATReferenceDeleteDTO
+import retrofit2.Response
+import retrofit2.http.*
 
 interface AuthenticationApi {
 
     /**
-     * Authenticate an app user supplying an app PAT and the associated user client id.         If the user client id does not exist in the app, a new user will be registered on the fly.         This endpoint should be used also after the PAT expires to retrieve a new one.         
-     * 
+     * Authenticate an app user supplying an app PAT and the associated user client id.         If the user client id does not exist in the app, a new user will be registered on the fly.         This endpoint should be used also after the PAT expires to retrieve a new one.
+     *
      * Responses:
      *  - 401: Unauthorized
      *  - 200: OK
      *
-     * @param authorization 
-     * @param clientUserId 
+     * @param authorization
+     * @param clientUserId
      * @return [PATDTO]
      */
     @POST("api/v1/app_users/login")
-    suspend fun login(@Header("Authorization") authorization: kotlin.String, @Header("Client-User-Id") clientUserId: kotlin.String): Response<PATDTO>
+    suspend fun login(
+        @Header("Authorization") authorization: kotlin.String,
+        @Header("Client-User-Id") clientUserId: kotlin.String
+    ): Response<PATDTO>
 
     /**
      * Logout an app user supplying PAT&#39;s id and the associated user client id.
-     * 
+     *
      * Responses:
      *  - 401: Unauthorized
      *  - 204: No Content
      *
-     * @param authorization 
-     * @param clientUserId 
-     * @param paTReferenceDeleteDTO 
+     * @param authorization
+     * @param clientUserId
+     * @param paTReferenceDeleteDTO
      * @return [Unit]
      */
     @POST("api/v1/app_users/logout")
-    suspend fun logout(@Header("Authorization") authorization: kotlin.String, @Header("Client-User-Id") clientUserId: kotlin.String, @Body paTReferenceDeleteDTO: PATReferenceDeleteDTO): Response<Unit>
+    suspend fun logout(
+        @Header("Authorization") authorization: kotlin.String,
+        @Header("Client-User-Id") clientUserId: kotlin.String,
+        @Body paTReferenceDeleteDTO: PATReferenceDeleteDTO
+    ): Response<Unit>
 }

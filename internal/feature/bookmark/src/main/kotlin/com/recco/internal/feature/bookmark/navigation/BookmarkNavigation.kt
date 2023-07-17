@@ -4,8 +4,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.recco.internal.feature.bookmark.BookmarkRoute
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.feature.bookmark.BookmarkRoute
 
 private const val BookmarkGraph = "bookmark_graph"
 const val BookmarkRoute = "bookmark"
