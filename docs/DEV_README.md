@@ -37,7 +37,7 @@ See [**Frontitude CLI**](./FRONTITUDE_CLI.md) to know how to update your `string
 
 [Spotless](https://github.com/diffplug/spotless) plugin for Gradle.
 
-Run ./gradlew spotlessCheck to detect issues or ./gradlew spotlessApply to apply fixing for the issues detected automatically.
+Run `./gradlew spotlessCheck` to detect issues or `./gradlew spotlessApply` to apply fixing for the issues detected automatically.
 
 Recommended to run locally before pushing changes.
 
