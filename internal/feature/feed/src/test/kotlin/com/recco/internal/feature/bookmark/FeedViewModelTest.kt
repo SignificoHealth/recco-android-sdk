@@ -1,6 +1,5 @@
 package com.recco.internal.feature.bookmark
 
-import androidx.lifecycle.viewModelScope
 import com.google.common.truth.Truth.assertThat
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.feed.FeedSectionState
@@ -11,7 +10,6 @@ import com.recco.internal.core.repository.MetricRepository
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.test.CoroutineTestExtension
 import com.recco.internal.core.test.extensions.onViewModelInteraction
-import com.recco.internal.core.test.utils.expectedUiStateWithData
 import com.recco.internal.core.test.utils.expectedUiStateWithError
 import com.recco.internal.core.test.utils.expectedUiStateWithLoading
 import com.recco.internal.core.test.utils.staticThrowableForTesting

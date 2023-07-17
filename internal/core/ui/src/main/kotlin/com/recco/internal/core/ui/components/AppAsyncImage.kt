@@ -90,6 +90,7 @@ fun AppAsyncImage(
                         )
                     }
                 }
+
                 is AsyncImagePainter.State.Success -> Unit
                 is AsyncImagePainter.State.Error -> {
                     if (placeholderRes == null) {

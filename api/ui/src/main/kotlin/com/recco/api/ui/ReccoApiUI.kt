@@ -3,8 +3,8 @@ package com.recco.api.ui
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import com.recco.api.model.ReccoLogger
 import com.recco.api.model.ReccoConfig
+import com.recco.api.model.ReccoLogger
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.repository.AppRepository
 import dagger.hilt.EntryPoint
@@ -22,6 +22,19 @@ private interface ReccoApiUIInterface {
 object ReccoApiUI {
     private lateinit var application: Application
 
+    /**
+     * init
+     *
+     * Configures Recco given an application name and and apiSecret.
+     *
+     * UI can be customized setting a palette from the currently available [Fresh, Ocean]
+     *
+     * Debug and error log operations can be enabled providing your own ReccoLogger implementation.
+     *
+     * @param sdkConfig [ReccoConfig] Initial configuration for the SDK to work properly.
+     * @param application Android context.
+     * @param logger [ReccoLogger] Logger contract implementation.
+     */
     fun init(
         sdkConfig: ReccoConfig,
         application: Application,
@@ -36,18 +49,37 @@ object ReccoApiUI {
             .setupClientLogger(logger)
     }
 
+    /**
+     * login
+     *
+     * Sets user identifiers, and triggers login operation. User session login is tracked.
+     *
+     * @param userId identifier that enables Recco experience to be unique and custom.
+     */
     fun login(userId: String) {
         EntryPoints
             .get(application, ReccoApiUIInterface::class.java).getAppRepository()
             .loginUser(userId)
     }
 
+    /**
+     * logout
+     *
+     * Clears user credentials, cached data and triggers logout operation.
+     */
     fun logout() {
         EntryPoints
             .get(application, ReccoApiUIInterface::class.java).getAppRepository()
             .logoutUser()
     }
 
+    /**
+     * navigateToDashboard
+     *
+     * Starts Recco experience by launching MainActivity on top of the current navigation stack.
+     *
+     * @param context Android context.
+     */
     fun navigateToDashboard(context: Context) {
         context.startActivity(Intent(context, MainActivity::class.java))
     }

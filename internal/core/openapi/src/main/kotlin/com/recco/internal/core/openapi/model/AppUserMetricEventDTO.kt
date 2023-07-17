@@ -13,17 +13,15 @@
 
 package com.recco.internal.core.openapi.model
 
-import com.recco.internal.core.openapi.model.AppUserMetricActionDTO
-import com.recco.internal.core.openapi.model.AppUserMetricCategoryDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * 
  *
- * @param category 
- * @param action 
- * @param `value` 
+ *
+ * @param category
+ * @param action
+ * @param `value`
  */
 @JsonClass(generateAdapter = true)
 data class AppUserMetricEventDTO(

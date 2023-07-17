@@ -46,7 +46,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -58,7 +57,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
-import com.recco.api.model.ReccoPalette
 import com.recco.internal.core.model.FlowDataState
 import com.recco.internal.core.model.feed.FeedSection
 import com.recco.internal.core.model.feed.FeedSectionAndRecommendations
@@ -69,13 +67,11 @@ import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Recommendation
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppAlertDialog
-import com.recco.internal.core.ui.components.AppEmptyContent
 import com.recco.internal.core.ui.components.AppRecommendationCard
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTintedImagePeopleDigital
 import com.recco.internal.core.ui.components.AppTintedImagePottedPlant2
 import com.recco.internal.core.ui.components.AppTopBar
-import com.recco.internal.core.ui.components.EmptyState
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.heightRecommendationCard
 import com.recco.internal.core.ui.components.widthRecommendationCard

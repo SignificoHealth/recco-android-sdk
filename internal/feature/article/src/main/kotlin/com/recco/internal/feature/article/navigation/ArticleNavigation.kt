@@ -5,9 +5,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
-import com.recco.internal.feature.article.ArticleRoute
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.ui.navigation.ContentIdNavType
+import com.recco.internal.feature.article.ArticleRoute
 
 internal const val idArg = "id"
 const val ArticleGraph = "article_graph/{$idArg}"

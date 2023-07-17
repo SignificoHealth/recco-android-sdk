@@ -13,18 +13,15 @@
 
 package com.recco.internal.core.openapi.api
 
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import com.squareup.moshi.Json
-import com.recco.internal.core.openapi.model.ApiErrorDTO
 import com.recco.internal.core.openapi.model.FeedSectionDTO
+import retrofit2.Response
+import retrofit2.http.*
 
 interface FeedApi {
 
     /**
      * Get feed sections.
-     * 
+     *
      * Responses:
      *  - 401: Unauthorized
      *  - 200: OK

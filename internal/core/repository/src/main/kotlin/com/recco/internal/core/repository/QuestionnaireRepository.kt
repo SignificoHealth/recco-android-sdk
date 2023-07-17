@@ -5,7 +5,6 @@ import com.recco.internal.core.model.questionnaire.Question
 import com.recco.internal.core.network.http.unwrap
 import com.recco.internal.core.openapi.api.QuestionnaireApi
 import com.recco.internal.core.openapi.model.QuestionDTO
-import com.recco.internal.core.openapi.model.TopicDTO
 import com.recco.internal.core.repository.mapper.asDTO
 import com.recco.internal.core.repository.mapper.asEntity
 import dagger.hilt.android.scopes.ActivityRetainedScoped

@@ -37,15 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
-import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.questionnaire.MultiChoiceQuestion
 import com.recco.internal.core.model.questionnaire.NumericQuestion
 import com.recco.internal.core.model.questionnaire.NumericQuestionFormat
-import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.*
-import com.recco.internal.feature.questionnaire.QuestionnaireViewEvent.*
-import com.recco.internal.feature.questionnaire.multichoice.MultiChoiceInput
-import com.recco.internal.feature.questionnaire.numeric.NumericInput
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppBottomShadow
 import com.recco.internal.core.ui.components.AppLinearProgress
@@ -57,6 +52,10 @@ import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.extensions.asTitle
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
+import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.*
+import com.recco.internal.feature.questionnaire.QuestionnaireViewEvent.*
+import com.recco.internal.feature.questionnaire.multichoice.MultiChoiceInput
+import com.recco.internal.feature.questionnaire.numeric.NumericInput
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow

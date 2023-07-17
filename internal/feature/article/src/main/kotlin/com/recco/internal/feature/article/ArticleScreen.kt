@@ -31,9 +31,9 @@ import com.google.accompanist.insets.ui.Scaffold
 import com.ireward.htmlcompose.HtmlText
 import com.recco.internal.core.model.recommendation.Article
 import com.recco.internal.core.ui.components.ASPECT_RATIO_4_3
+import com.recco.internal.core.ui.components.AppAsyncImage
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTopBar
-import com.recco.internal.core.ui.components.AppAsyncImage
 import com.recco.internal.core.ui.components.BackIconButton
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.extensions.isEndReached

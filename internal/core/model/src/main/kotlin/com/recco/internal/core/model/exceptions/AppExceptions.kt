@@ -12,22 +12,22 @@ import java.net.HttpURLConnection
  */
 sealed class AppException(val code: Int, var msg: String) : IOException("($code) $msg")
 
-class ApiErrorException(val description: String? = null) : AppException(
+class ApiErrorException(description: String? = null) : AppException(
     code = -1,
     msg = description ?: "Api Error"
 )
 
-class NoConnectException(val description: String? = null) : AppException(
+class NoConnectException(description: String? = null) : AppException(
     code = -2,
     msg = description ?: "Failed to connect to server"
 )
 
-class InternalServerErrorException(val description: String? = null) : AppException(
+class InternalServerErrorException(description: String? = null) : AppException(
     code = HttpURLConnection.HTTP_INTERNAL_ERROR,
     msg = description ?: "Internal Server Error"
 )
 
-class ServiceUnavailableException(val description: String? = null) : AppException(
+class ServiceUnavailableException(description: String? = null) : AppException(
     code = HttpURLConnection.HTTP_UNAVAILABLE,
     msg = description ?: "Service Unavailable"
 )

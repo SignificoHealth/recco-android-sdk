@@ -65,7 +65,7 @@ class QuestionnaireViewModelTest {
     fun `onFailure emits exceptions while logging them if Retry`() = runTest {
         // When
         repository.stubForInitialFailure()
-        val events =  onViewModelInteraction(eventsToDrop = 3, Retry)
+        val events = onViewModelInteraction(eventsToDrop = 3, Retry)
 
         // Then
         verifyBlocking(logger, times(2)) {

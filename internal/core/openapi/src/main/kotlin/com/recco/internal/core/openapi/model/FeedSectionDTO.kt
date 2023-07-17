@@ -13,18 +13,15 @@
 
 package com.recco.internal.core.openapi.model
 
-import com.recco.internal.core.openapi.model.FeedSectionStateDTO
-import com.recco.internal.core.openapi.model.FeedSectionTypeDTO
-import com.recco.internal.core.openapi.model.TopicDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * 
  *
- * @param type 
- * @param state 
- * @param topic 
+ *
+ * @param type
+ * @param state
+ * @param topic
  */
 @JsonClass(generateAdapter = true)
 data class FeedSectionDTO(
