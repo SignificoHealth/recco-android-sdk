@@ -1,4 +1,4 @@
-![recco_header](./art/recco_logo_amethyst.svg)
+![recco_header](../art/recco_logo_amethyst.svg)
 
 # SHOWCASE
 
