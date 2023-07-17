@@ -66,7 +66,7 @@ Allows users to keep track of all their interests, and store content for later r
 ## Feed Locked content
 
 Content should be presented wisely. To do so, user interactions are needed and more information is 
-likely to be required before some information is given to the user. This leads to a leveled-up, achivements
+likely to be required before some information is given to the user. This leads to a leveled-up, achievements
 and progressive experience.
 
 | Feed Scroll                                    | Feed Locked                                  | Feed Unlock                                           |
