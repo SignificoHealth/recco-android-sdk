@@ -13,25 +13,22 @@
 
 package com.recco.internal.core.openapi.api
 
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import com.squareup.moshi.Json
-import com.recco.internal.core.openapi.model.ApiErrorDTO
 import com.recco.internal.core.openapi.model.CreateQuestionnaireAnswerDTO
 import com.recco.internal.core.openapi.model.QuestionDTO
 import com.recco.internal.core.openapi.model.TopicDTO
+import retrofit2.Response
+import retrofit2.http.*
 
 interface QuestionnaireApi {
 
     /**
      * Set user app answers for a questionnaire.
-     * 
+     *
      * Responses:
      *  - 401: Unauthorized
      *  - 204: No Content
      *
-     * @param createQuestionnaireAnswerDTO 
+     * @param createQuestionnaireAnswerDTO
      * @return [Unit]
      */
     @POST("api/v1/me/questionnaire/answers")
@@ -39,12 +36,12 @@ interface QuestionnaireApi {
 
     /**
      * Return the associated questionnaire for a given topic.
-     * 
+     *
      * Responses:
      *  - 401: Unauthorized
      *  - 200: OK
      *
-     * @param topic 
+     * @param topic
      * @return [kotlin.collections.List<QuestionDTO>]
      */
     @GET("api/v1/me/questionnaire/topics/{topic}")
@@ -52,7 +49,7 @@ interface QuestionnaireApi {
 
     /**
      * Return the onboarding questionnaire.
-     * 
+     *
      * Responses:
      *  - 401: Unauthorized
      *  - 200: OK
@@ -64,12 +61,12 @@ interface QuestionnaireApi {
 
     /**
      * Set user app answers for the onboarding questionnaires.
-     * 
+     *
      * Responses:
      *  - 401: Unauthorized
      *  - 204: No Content
      *
-     * @param createQuestionnaireAnswerDTO 
+     * @param createQuestionnaireAnswerDTO
      * @return [Unit]
      */
     @POST("api/v1/me/questionnaire/onboarding_answers")

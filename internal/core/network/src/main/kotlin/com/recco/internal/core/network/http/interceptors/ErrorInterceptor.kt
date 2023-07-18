@@ -43,9 +43,11 @@ internal class ErrorInterceptor : Interceptor {
                     HttpURLConnection.HTTP_INTERNAL_ERROR -> {
                         throw InternalServerErrorException(response.getErrorMessage(responseBody))
                     }
+
                     HttpURLConnection.HTTP_UNAVAILABLE -> {
                         throw ServiceUnavailableException(response.getErrorMessage(responseBody))
                     }
+
                     else -> {
                         throw ApiErrorException(response.getErrorMessage(responseBody))
                     }

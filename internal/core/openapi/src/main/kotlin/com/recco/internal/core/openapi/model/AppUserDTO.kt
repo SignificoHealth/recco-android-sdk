@@ -17,11 +17,11 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * 
  *
- * @param id 
- * @param clientUserId 
- * @param isOnboardingQuestionnaireCompleted 
+ *
+ * @param id
+ * @param clientUserId
+ * @param isOnboardingQuestionnaireCompleted
  */
 @JsonClass(generateAdapter = true)
 data class AppUserDTO(

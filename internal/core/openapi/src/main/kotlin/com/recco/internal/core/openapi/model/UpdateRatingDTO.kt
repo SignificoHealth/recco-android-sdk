@@ -13,18 +13,15 @@
 
 package com.recco.internal.core.openapi.model
 
-import com.recco.internal.core.openapi.model.ContentIdDTO
-import com.recco.internal.core.openapi.model.ContentTypeDTO
-import com.recco.internal.core.openapi.model.RatingDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * 
  *
- * @param contentId 
- * @param contentType 
- * @param rating 
+ *
+ * @param contentId
+ * @param contentType
+ * @param rating
  */
 @JsonClass(generateAdapter = true)
 data class UpdateRatingDTO(
