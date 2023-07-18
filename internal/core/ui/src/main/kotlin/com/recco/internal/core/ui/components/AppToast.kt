@@ -48,7 +48,6 @@ fun GlobalToastEvent(
     description: String?,
     type: ToastType
 ) {
-
     // Host state decoupling allows managing different Toast visual element compositions.
     val hostState = SnackbarHostState()
 
@@ -127,17 +126,16 @@ fun ToastContent(
                 .padding(horizontal = AppSpacing.dp_16),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             Image(
                 painter = painterResource(id = resIcon),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(AppTheme.colors.primary),
+                colorFilter = ColorFilter.tint(AppTheme.colors.primary)
             )
 
             Spacer(modifier = Modifier.width(AppSpacing.dp_16))
 
             Column(
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = data.message,
@@ -159,14 +157,16 @@ fun ToastContent(
 @Composable
 private fun Preview() {
     AppTheme {
-        ToastContent(data = object : SnackbarData {
-            override val actionLabel = "Something went wrong."
-            override val duration = SnackbarDuration.Short
-            override val message = "Sorry !"
+        ToastContent(
+            data = object : SnackbarData {
+                override val actionLabel = "Something went wrong."
+                override val duration = SnackbarDuration.Short
+                override val message = "Sorry !"
 
-            override fun dismiss() {}
-            override fun performAction() {}
-        })
+                override fun dismiss() {}
+                override fun performAction() {}
+            }
+        )
     }
 }
 
@@ -174,14 +174,15 @@ private fun Preview() {
 @Composable
 private fun PreviewDark() {
     AppTheme(darkTheme = true) {
-        ToastContent(data = object : SnackbarData {
-            override val actionLabel = "Something went wrong."
-            override val duration = SnackbarDuration.Short
-            override val message = "Sorry !"
+        ToastContent(
+            data = object : SnackbarData {
+                override val actionLabel = "Something went wrong."
+                override val duration = SnackbarDuration.Short
+                override val message = "Sorry !"
 
-            override fun dismiss() {}
-            override fun performAction() {}
-        })
+                override fun dismiss() {}
+                override fun performAction() {}
+            }
+        )
     }
 }
-

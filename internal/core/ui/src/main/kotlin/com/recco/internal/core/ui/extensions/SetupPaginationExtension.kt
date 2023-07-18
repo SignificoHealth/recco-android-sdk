@@ -40,7 +40,7 @@ private fun ErrorStateViewContent(
         AppPrimaryButton(
             onClick = { callToActionButtonListener() },
             textRes = throwable.asCtaTextRes(),
-            iconStartRes = throwable.asCtaIconRes(),
+            iconStartRes = throwable.asCtaIconRes()
         )
     }
 }

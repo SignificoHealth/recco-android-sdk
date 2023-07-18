@@ -22,7 +22,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verifyBlocking
 
-
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(CoroutineTestExtension::class)
 class ArticleViewModelTest {
@@ -321,7 +320,6 @@ class ArticleViewModelTest {
         repository.stubForSuccessWithDislikedArticle()
         val events = onViewModelInteraction(2, ArticleUserInteract.ToggleLikeState)
 
-
         // Then
         events.forEachIndexed { index, uiState ->
             when (index) {
@@ -410,7 +408,7 @@ class ArticleViewModelTest {
         onViewModelInteraction(
             viewState = viewState,
             eventsToDrop = eventsToDrop,
-            runInteractions = { userInteractions.forEach { onUserInteract(it) } })
+            runInteractions = { userInteractions.forEach { onUserInteract(it) } }
+        )
     }
-
 }

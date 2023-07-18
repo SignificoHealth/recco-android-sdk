@@ -199,7 +199,7 @@ private fun HeaderContent(
     isFirstLoading: Boolean,
     isAnimatedContentCollapsed: Boolean,
     isFloatingHeader: Boolean,
-    content: @Composable (isAnimatedContentCollapsed: Boolean) -> Unit,
+    content: @Composable (isAnimatedContentCollapsed: Boolean) -> Unit
 ) {
     if (isFirstLoading) {
         content(isAnimatedContentCollapsed = true)
@@ -247,7 +247,7 @@ private fun HeaderAwareContent(
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(extraHeight.value))
         content()
@@ -274,9 +274,8 @@ private fun <T> AppScreenStateAwareContent(
     emptyContent: @Composable (ColumnScope.() -> Unit)?,
     content: @Composable ColumnScope.(data: T) -> Unit,
     footerContent: @Composable ((uiStateData: T) -> Unit)? = null,
-    isFloatingFooter: Boolean = false,
+    isFloatingFooter: Boolean = false
 ) {
-
     val isPullRefreshEnabled = remember { mutableStateOf(enablePullToRefresh) }
 
     // threshold needs to be smaller than offset so the behaviour keeps less bouncy
@@ -298,7 +297,6 @@ private fun <T> AppScreenStateAwareContent(
             return@Crossfade
         }
         when {
-
             uiState.error != null -> {
                 LaunchedEffect(Unit) {
                     isPullRefreshEnabled.value = false
@@ -326,7 +324,6 @@ private fun <T> AppScreenStateAwareContent(
             }
 
             else -> {
-
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -420,7 +417,7 @@ private fun <T> AppScreenStateAwareContent(
 
                         isPullRefreshEnabled.value -> {
                             Box(
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier.fillMaxSize()
                             ) {
                                 ReccoPullRefreshIndicator(
                                     state = pullRefreshState,
@@ -442,7 +439,7 @@ private fun LoadingPreview() {
         scrollState = rememberScrollState(),
         uiState = UiState<Unit>(isLoading = true),
         retry = { },
-        refresh = { },
+        refresh = { }
     ) {
         Text(text = "Some content")
     }
@@ -455,7 +452,7 @@ private fun ErrorNavBarPreview() {
         scrollState = rememberScrollState(),
         uiState = UiState<Unit>(isLoading = false, error = RuntimeException()),
         retry = { },
-        refresh = { },
+        refresh = { }
     ) {
         Text(text = "Some content")
     }
@@ -468,7 +465,7 @@ private fun ErrorNoNavBarPreview() {
         scrollState = rememberScrollState(),
         uiState = UiState<Unit>(isLoading = false, error = RuntimeException()),
         retry = { },
-        refresh = { },
+        refresh = { }
     ) {
         Text(text = "Some content")
     }
@@ -491,7 +488,7 @@ private fun PreviewEmptyState() {
             )
         },
         retry = { },
-        refresh = { },
+        refresh = { }
     ) {
         Text(text = "Some content")
     }
@@ -506,7 +503,7 @@ private fun Preview() {
             uiState = UiState<Unit>(isLoading = true),
             enablePullToRefresh = true,
             retry = { },
-            refresh = { },
+            refresh = { }
         ) {
             Text(text = "Some content")
         }
@@ -521,7 +518,7 @@ private fun LoadingPreviewDark() {
             scrollState = rememberScrollState(),
             uiState = UiState<Unit>(isLoading = true),
             retry = { },
-            refresh = { },
+            refresh = { }
         ) {
             Text(text = "Some content")
         }

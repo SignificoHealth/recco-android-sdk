@@ -47,7 +47,7 @@ internal fun UserInteractionRecommendationCard(
     userInteraction: UserInteractionRecommendation,
     toggleBookmarkState: () -> Unit,
     toggleLikeState: () -> Unit,
-    toggleDislikeState: () -> Unit,
+    toggleDislikeState: () -> Unit
 ) {
     Card(
         modifier = modifier,
@@ -95,7 +95,7 @@ internal fun UserInteractionRecommendationCard(
                             AppTheme.colors.accent
                         } else {
                             AppTheme.colors.primary
-                        },
+                        }
                     )
                 }
             }
@@ -146,7 +146,7 @@ internal fun UserInteractionRecommendationCard(
                             AppTheme.colors.primary.copy(
                                 alpha = if (userInteraction.isDislikeLoading) alphaDisabledColor else 1f
                             )
-                        },
+                        }
                     )
                 }
             }
@@ -189,7 +189,7 @@ internal fun UserInteractionRecommendationCard(
                             AppTheme.colors.primary.copy(
                                 alpha = if (userInteraction.isDislikeLoading) alphaDisabledColor else 1f
                             )
-                        },
+                        }
                     )
                 }
             }
@@ -200,7 +200,8 @@ internal fun UserInteractionRecommendationCard(
 @Composable
 @Preview
 private fun Preview(
-    @PreviewParameter(UserInteractionRecommendationPreviewProvider::class) userInteraction: UserInteractionRecommendation
+    @PreviewParameter(UserInteractionRecommendationPreviewProvider::class) userInteraction:
+    UserInteractionRecommendation
 ) {
     AppTheme {
         UserInteractionRecommendationCard(
@@ -215,7 +216,8 @@ private fun Preview(
 @Composable
 @Preview
 private fun PreviewDark(
-    @PreviewParameter(UserInteractionRecommendationPreviewProvider::class) userInteraction: UserInteractionRecommendation
+    @PreviewParameter(UserInteractionRecommendationPreviewProvider::class) userInteraction:
+    UserInteractionRecommendation
 ) {
     AppTheme(darkTheme = true) {
         UserInteractionRecommendationCard(

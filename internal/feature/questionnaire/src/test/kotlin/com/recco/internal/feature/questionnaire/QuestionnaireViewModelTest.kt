@@ -12,7 +12,11 @@ import com.recco.internal.core.test.extensions.onViewModelInteraction
 import com.recco.internal.core.test.utils.expectedUiStateWithError
 import com.recco.internal.core.test.utils.expectedUiStateWithLoading
 import com.recco.internal.core.test.utils.staticThrowableForTesting
-import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.*
+import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.BackClicked
+import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.ClickOnMultiChoiceAnswerOption
+import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.NextClicked
+import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.Retry
+import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.WriteOnNumericQuestion
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -138,7 +142,6 @@ class QuestionnaireViewModelTest {
         }
     }
 
-
     @Test
     fun `state is updated according to NextClicked on lastPage`() = runTest {
         // When
@@ -233,6 +236,7 @@ class QuestionnaireViewModelTest {
         onViewModelInteraction(
             viewState = viewState,
             eventsToDrop = eventsToDrop,
-            runInteractions = { userInteractions.forEach { onUserInteract(it) } })
+            runInteractions = { userInteractions.forEach { onUserInteract(it) } }
+        )
     }
 }

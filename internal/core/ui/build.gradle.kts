@@ -1,5 +1,6 @@
 plugins {
     id("recco.android.library.compose")
+    id("recco.android.spotless")
     alias(libs.plugins.kotlin.serialization)
 }
 

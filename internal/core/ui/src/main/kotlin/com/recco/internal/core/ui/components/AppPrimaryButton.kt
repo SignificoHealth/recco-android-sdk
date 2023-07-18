@@ -17,7 +17,7 @@ fun AppPrimaryButton(
     @DrawableRes iconEndRes: Int? = null,
     isLoading: Boolean = false,
     enabled: Boolean = true,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     AppButton(
         modifier = modifier,
@@ -27,7 +27,7 @@ fun AppPrimaryButton(
         iconEndRes = iconEndRes,
         isLoading = isLoading,
         enabled = enabled,
-        onClick = onClick,
+        onClick = onClick
     )
 }
 
@@ -39,7 +39,7 @@ fun AppPrimaryButton(
     @DrawableRes iconEndRes: Int? = null,
     isLoading: Boolean = false,
     enabled: Boolean = true,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     AppButton(
         modifier = modifier,
@@ -49,9 +49,8 @@ fun AppPrimaryButton(
         iconEndRes = iconEndRes,
         isLoading = isLoading,
         enabled = enabled,
-        onClick = onClick,
+        onClick = onClick
     )
-
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF)

@@ -13,7 +13,7 @@ internal class FeedUIPreviewProvider :
         get() = sequenceOf(
             UiState(
                 isLoading = false,
-                data = data(),
+                data = data()
             ),
             UiState(isLoading = true),
             UiState(isLoading = false, error = Throwable())

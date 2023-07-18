@@ -52,7 +52,7 @@ internal fun MultiChoiceInput(
                 AppTheme.colors.accent20
             } else {
                 AppTheme.colors.background
-            },
+            }
         ),
         contentPadding = PaddingValues(vertical = AppSpacing.dp_12, horizontal = AppSpacing.dp_16)
     ) {
@@ -186,7 +186,6 @@ private fun PreviewSelectedSingleChoice() {
     }
 }
 
-
 @Preview
 @Composable
 private fun PreviewLargeText() {
@@ -195,7 +194,11 @@ private fun PreviewLargeText() {
     AppTheme {
         MultiChoiceInput(
             selected = selected,
-            text = "I've already done something, but I'm not doing anything now.I'm doing something about it now and I intend to do something in the future.",
+            text = """
+                I've already done something, but I'm not doing anything now.
+
+                I'm doing something about it now and I intend to do something in the future.
+            """.trimIndent(),
             onClick = {
                 selected = !selected
             }

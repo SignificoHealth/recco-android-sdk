@@ -18,7 +18,9 @@ class ArticlePreviewProvider {
             headline = "Some headline",
             lead = "Some lead",
             imageUrl = null,
-            articleBodyHtml = "<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>"
+            articleBodyHtml = """
+              <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+            """.trimIndent()
         )
     }
 }

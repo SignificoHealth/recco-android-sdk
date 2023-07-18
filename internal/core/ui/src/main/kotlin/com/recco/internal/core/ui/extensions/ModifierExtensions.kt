@@ -23,8 +23,10 @@ import androidx.compose.ui.unit.IntSize
 import com.recco.internal.core.ui.theme.AppTheme
 
 fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
-    clickable(indication = null,
-        interactionSource = remember { MutableInteractionSource() }) {
+    clickable(
+        indication = null,
+        interactionSource = remember { MutableInteractionSource() }
+    ) {
         onClick()
     }
 }
@@ -58,7 +60,7 @@ fun Modifier.shimmerEffect(
         AppTheme.colors.staticLightGrey.copy(alpha = .2f),
         AppTheme.colors.staticLightGrey.copy(alpha = .6f),
         AppTheme.colors.staticLightGrey,
-        AppTheme.colors.staticLightGrey,
+        AppTheme.colors.staticLightGrey
     )
     val transition = rememberInfiniteTransition()
     val translateAnimation = transition.animateFloat(

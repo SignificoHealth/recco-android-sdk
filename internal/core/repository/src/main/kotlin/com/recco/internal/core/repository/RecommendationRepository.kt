@@ -179,7 +179,7 @@ class RecommendationRepository @Inject constructor(
                             recommendation.copy(
                                 status = status ?: recommendation.status,
                                 bookmarked = bookmarked ?: recommendation.bookmarked,
-                                rating = rating ?: recommendation.rating,
+                                rating = rating ?: recommendation.rating
                             )
                         } else {
                             recommendation

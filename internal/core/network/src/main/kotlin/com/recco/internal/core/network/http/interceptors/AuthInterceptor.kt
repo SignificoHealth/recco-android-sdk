@@ -14,7 +14,7 @@ import okhttp3.Response
 internal class AuthInterceptor(
     private val authCredentials: AuthCredentials,
     private val authenticationApi: AuthenticationApi,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {

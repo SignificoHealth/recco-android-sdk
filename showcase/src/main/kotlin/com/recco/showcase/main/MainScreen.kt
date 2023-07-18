@@ -43,7 +43,7 @@ fun MainScreen(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(BackgroundColor)
-            .padding(all = 24.dp),
+            .padding(all = 24.dp)
     ) {
         Image(
             modifier = Modifier
@@ -80,14 +80,14 @@ fun MainScreen(
                 .height(48.dp),
             colors = ButtonDefaults.filledTonalButtonColors(
                 containerColor = WarmBrown,
-                contentColor = SoftYellow,
+                contentColor = SoftYellow
             ),
             shape = RoundedCornerShape(0.dp),
             onClick = openReccoClick
         ) {
             Text(
                 text = stringResource(id = R.string.open_recco),
-                style = Typography.displayMedium,
+                style = Typography.displayMedium
             )
         }
 
@@ -97,7 +97,7 @@ fun MainScreen(
                 .padding(top = 16.dp)
                 .height(48.dp),
             colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = WarmBrown,
+                contentColor = WarmBrown
             ),
             shape = RoundedCornerShape(0.dp),
             border = BorderStroke(width = 1.dp, WarmBrown),
@@ -105,7 +105,7 @@ fun MainScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.customize),
-                style = Typography.displayMedium.copy(color = WarmBrown),
+                style = Typography.displayMedium.copy(color = WarmBrown)
             )
         }
 
@@ -115,7 +115,7 @@ fun MainScreen(
                 .padding(top = 16.dp)
                 .height(48.dp),
             colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = WarmBrown,
+                contentColor = WarmBrown
             ),
             shape = RoundedCornerShape(0.dp),
             border = BorderStroke(width = 1.dp, WarmBrown),
@@ -123,7 +123,7 @@ fun MainScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.logout),
-                style = Typography.displayMedium.copy(color = WarmBrown),
+                style = Typography.displayMedium.copy(color = WarmBrown)
             )
         }
     }

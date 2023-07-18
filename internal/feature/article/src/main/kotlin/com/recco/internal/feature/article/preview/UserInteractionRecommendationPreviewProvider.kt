@@ -12,7 +12,7 @@ internal class UserInteractionRecommendationPreviewProvider :
             UserInteractionRecommendation(
                 rating = Rating.LIKE,
                 isBookmarked = true,
-                isBookmarkLoading = true,
+                isBookmarkLoading = true
             ),
 
             UserInteractionRecommendation(

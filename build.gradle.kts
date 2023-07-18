@@ -9,4 +9,5 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.junit) apply false
+    alias(libs.plugins.spotless) apply false
 }

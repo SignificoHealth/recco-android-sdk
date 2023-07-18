@@ -126,7 +126,7 @@ private fun BookmarksContent(
             ),
             verticalArrangement = Arrangement.spacedBy(AppSpacing.dp_16),
             horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8),
-            columns = GridCells.Fixed(3),
+            columns = GridCells.Fixed(3)
         ) {
             items(feedUI.recommendations) { recommendation ->
                 AppRecommendationCard(recommendation, navigateToArticle, applyViewedOverlay = false)

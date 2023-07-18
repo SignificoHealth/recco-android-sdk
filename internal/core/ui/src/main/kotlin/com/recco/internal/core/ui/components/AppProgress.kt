@@ -34,18 +34,17 @@ import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppSpacing.dp_24
 import com.recco.internal.core.ui.theme.AppTheme
 
-
 @Composable
 fun AppProgressLoading(
     modifier: Modifier = Modifier,
     color: Color = AppTheme.colors.primary,
     size: Dp = 48.dp,
-    strokeWidth: Dp = 3.dp,
+    strokeWidth: Dp = 3.dp
 ) {
     CircularProgressIndicator(
         modifier = modifier.size(size),
         color = color,
-        strokeWidth = strokeWidth,
+        strokeWidth = strokeWidth
     )
 }
 
@@ -63,12 +62,12 @@ fun AppProgressLoadingCircled(
             .shadow(elevation = elevation, shape = CircleShape)
             .clip(CircleShape)
             .background(AppTheme.colors.background)
-            .padding(AppSpacing.dp_8),
+            .padding(AppSpacing.dp_8)
     ) {
         CircularProgressIndicator(
             modifier = Modifier.size(size),
             color = color,
-            strokeWidth = strokeWidth,
+            strokeWidth = strokeWidth
         )
     }
 }
@@ -124,48 +123,42 @@ fun ReccoPullRefreshIndicator(
     scale: Boolean = false,
     elevation: Dp = AppTheme.elevation.default
 ) {
-
     Surface(
         modifier = modifier
             .size(dp_24 * 2)
             .pullRefreshIndicatorTransform(state, scale)
             .shadow(elevation = elevation, shape = CircleShape)
             .clip(CircleShape),
-        elevation = elevation,
+        elevation = elevation
     ) { AppProgressLoadingCircled() }
 }
 
 @Preview
 @Composable
-private fun AppProgressLoadingPreview(
-) {
+private fun AppProgressLoadingPreview() {
     AppProgressLoading()
 }
 
 @Preview
 @Composable
-private fun AppProgressLoadingCircledPreview(
-) {
+private fun AppProgressLoadingCircledPreview() {
     AppProgressLoadingCircled()
 }
 
 @Preview
 @Composable
-private fun LinearProgressPreview(
-) {
+private fun LinearProgressPreview() {
     AppLinearProgress(progress = .5f)
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Preview
 @Composable
-private fun SwipeRefreshLoadingIndicatorPreview(
-) {
+private fun SwipeRefreshLoadingIndicatorPreview() {
     ReccoPullRefreshIndicator(
         state = rememberPullRefreshState(
             refreshing = false,
             onRefresh = { }
-        ),
+        )
     )
 }
-

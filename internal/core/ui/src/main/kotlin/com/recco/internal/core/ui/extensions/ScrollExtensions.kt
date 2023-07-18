@@ -9,7 +9,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
-
 private const val SCROLLING_OFFSET = 20
 private const val EDGE_REACHED_OFFSET = 5
 

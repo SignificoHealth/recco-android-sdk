@@ -58,7 +58,7 @@ fun BoxScope.AppBottomShadow(scrollState: ScrollState) {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         Color.Transparent,
-                        AppTheme.colors.shadow,
+                        AppTheme.colors.shadow
                     )
                 )
             )

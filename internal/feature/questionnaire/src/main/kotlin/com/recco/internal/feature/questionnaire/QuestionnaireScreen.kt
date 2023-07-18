@@ -52,8 +52,14 @@ import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.extensions.asTitle
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
-import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.*
-import com.recco.internal.feature.questionnaire.QuestionnaireViewEvent.*
+import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.BackClicked
+import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.ClickOnMultiChoiceAnswerOption
+import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.NextClicked
+import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.Retry
+import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.WriteOnNumericQuestion
+import com.recco.internal.feature.questionnaire.QuestionnaireViewEvent.QuestionnaireOnboardingSubmitted
+import com.recco.internal.feature.questionnaire.QuestionnaireViewEvent.QuestionnaireSubmitted
+import com.recco.internal.feature.questionnaire.QuestionnaireViewEvent.ScrollTo
 import com.recco.internal.feature.questionnaire.multichoice.MultiChoiceInput
 import com.recco.internal.feature.questionnaire.numeric.NumericInput
 import kotlinx.coroutines.flow.Flow
@@ -89,7 +95,7 @@ private fun QuestionnaireScreen(
     onUserInteract: (QuestionnaireUserInteract) -> Unit,
     navigateUp: () -> Unit,
     navigateToOutro: () -> Unit,
-    contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues(),
+    contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
     val pagerState = rememberPagerState()
     val focusManager = LocalFocusManager.current
@@ -172,7 +178,7 @@ private fun QuestionnaireScreen(
                     onBackClicked = { onUserInteract(BackClicked) },
                     onNextClicked = { onUserInteract(NextClicked) }
                 )
-            },
+            }
         ) { data ->
             QuestionnaireContent(
                 data = data,

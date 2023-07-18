@@ -132,8 +132,8 @@ internal class ArticleViewModel @Inject constructor(
             )
 
             val isOppositeAction =
-                userInteraction.rating == Rating.DISLIKE && newRating == Rating.LIKE
-                        || userInteraction.rating == Rating.LIKE && newRating == Rating.DISLIKE
+                userInteraction.rating == Rating.DISLIKE && newRating == Rating.LIKE ||
+                    userInteraction.rating == Rating.LIKE && newRating == Rating.DISLIKE
             val newRatingState =
                 if (userInteraction.rating == Rating.NOT_RATED || isOppositeAction) {
                     newRating

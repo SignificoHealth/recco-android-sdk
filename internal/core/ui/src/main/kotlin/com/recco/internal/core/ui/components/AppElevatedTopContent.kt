@@ -81,7 +81,7 @@ private fun BoxScope.TopShadow(elevation: Dp) {
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         AppTheme.colors.shadow,
-                        Color.Transparent,
+                        Color.Transparent
                     )
                 )
             )

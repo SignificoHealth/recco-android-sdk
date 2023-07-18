@@ -118,6 +118,7 @@ class BookmarkViewModelTest {
         onViewModelInteraction(
             viewState = viewState,
             eventsToDrop = eventsToDrop,
-            runInteractions = { userInteractions.forEach { onUserInteract(it) } })
+            runInteractions = { userInteractions.forEach { onUserInteract(it) } }
+        )
     }
 }

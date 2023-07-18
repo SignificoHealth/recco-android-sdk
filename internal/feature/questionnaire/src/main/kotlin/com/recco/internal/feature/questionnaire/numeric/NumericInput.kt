@@ -23,7 +23,7 @@ internal fun NumericInput(
     onValueChange: (String) -> Unit,
     format: NumericQuestionFormat,
     maxValue: Int,
-    initialValue: String,
+    initialValue: String
 ) {
     when (format) {
         NumericQuestionFormat.INTEGER, NumericQuestionFormat.DECIMAL -> NumericTextField(

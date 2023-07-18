@@ -47,9 +47,8 @@ fun CustomizeScreen(
                 .verticalScroll(rememberScrollState())
                 .background(BackgroundColor)
                 .padding(top = contentPadding.calculateTopPadding())
-                .padding(all = 24.dp),
+                .padding(all = 24.dp)
         ) {
-
         }
     }
 }

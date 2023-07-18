@@ -78,7 +78,7 @@ fun AppAlertDialog(
                             modifier = Modifier.fillMaxWidth(),
                             text = stringResource(titleRes),
                             style = AppTheme.typography.h1,
-                            textAlign = TextAlign.Center,
+                            textAlign = TextAlign.Center
                         )
 
                         descriptionRes?.let {
@@ -87,7 +87,7 @@ fun AppAlertDialog(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = stringResource(descriptionRes),
                                 style = AppTheme.typography.body2,
-                                textAlign = TextAlign.Center,
+                                textAlign = TextAlign.Center
                             )
                         }
 
@@ -98,7 +98,7 @@ fun AppAlertDialog(
                                 onClickPrimary()
                                 openDialog.value = false
                             },
-                            textRes = textButtonPrimaryRes,
+                            textRes = textButtonPrimaryRes
                         )
 
                         Spacer(Modifier.height(AppSpacing.dp_32))
@@ -127,12 +127,12 @@ private fun CloseDialogButton(
                 color = AppTheme.colors.staticLightGrey,
                 shape = CircleShape
             ),
-        onClick = onClick,
+        onClick = onClick
     ) {
         Icon(
             painter = painterResource(id = R.drawable.recco_ic_close),
             tint = AppTheme.colors.staticDark,
-            contentDescription = null,
+            contentDescription = null
         )
     }
 }
@@ -148,7 +148,8 @@ private fun Preview() {
             titleRes = R.string.recco_dashboard_alert_mental_wellbeing_title,
             descriptionRes = R.string.recco_dashboard_alert_mental_wellbeing_body,
             textButtonPrimaryRes = R.string.recco_start,
-            onClickPrimary = {})
+            onClickPrimary = {}
+        )
     }
 }
 
@@ -163,7 +164,8 @@ private fun PreviewDark() {
             titleRes = R.string.recco_dashboard_alert_mental_wellbeing_title,
             descriptionRes = R.string.recco_dashboard_alert_mental_wellbeing_body,
             textButtonPrimaryRes = R.string.recco_start,
-            onClickPrimary = {})
+            onClickPrimary = {}
+        )
     }
 }
 

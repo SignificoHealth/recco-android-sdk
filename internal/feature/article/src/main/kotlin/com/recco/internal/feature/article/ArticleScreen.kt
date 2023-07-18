@@ -91,7 +91,7 @@ private fun ArticleScreen(
                         .fillMaxWidth()
                         .aspectRatio(ASPECT_RATIO_4_3),
                     data = it.article.imageUrl,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.Crop
                 )
             },
             isFloatingFooter = true,
@@ -108,7 +108,7 @@ private fun ArticleScreen(
         ) {
             ArticleContent(
                 linkClicked = linkClicked,
-                article = it.article,
+                article = it.article
             )
         }
     }
@@ -117,7 +117,7 @@ private fun ArticleScreen(
 @Composable
 private fun ArticleContent(
     linkClicked: (String) -> Unit,
-    article: Article,
+    article: Article
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Card(
@@ -126,7 +126,7 @@ private fun ArticleContent(
                 .fillMaxSize(),
             elevation = 0.dp,
             shape = RoundedCornerShape(AppSpacing.dp_24),
-            backgroundColor = AppTheme.colors.background,
+            backgroundColor = AppTheme.colors.background
         ) {
             Column(modifier = Modifier.padding(horizontal = AppSpacing.dp_16)) {
                 Spacer(Modifier.height(AppSpacing.dp_32))
@@ -176,7 +176,6 @@ private fun Preview(
         ArticleScreen(linkClicked = {}, uiState = uiState, navigateUp = { }, onUserInteract = {})
     }
 }
-
 
 @Preview
 @Composable

@@ -56,7 +56,6 @@ private fun OnboardingScreen(
     navigateToQuestionnaire: () -> Unit,
     pagerState: PagerState = rememberPagerState()
 ) {
-
     val pages = listOf<@Composable (PaddingValues) -> Unit>({
         OnboardingPage(
             imageId = drawable.recco_ic_flying,
