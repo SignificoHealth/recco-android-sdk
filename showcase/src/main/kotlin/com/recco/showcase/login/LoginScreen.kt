@@ -48,7 +48,7 @@ fun LoginScreen(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .background(BackgroundColor)
-            .padding(all = 24.dp),
+            .padding(all = 24.dp)
     ) {
         Image(
             modifier = Modifier
@@ -63,7 +63,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(top = 48.dp),
             text = stringResource(id = R.string.login_message),
-            style = Typography.bodyMedium,
+            style = Typography.bodyMedium
         )
 
         Text(
@@ -71,7 +71,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(top = 32.dp),
             text = stringResource(id = R.string.user_id),
-            style = Typography.labelSmall,
+            style = Typography.labelSmall
         )
 
         Surface(
@@ -79,7 +79,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(top = 12.dp),
             shape = RoundedCornerShape(8.dp),
-            shadowElevation = 2.dp,
+            shadowElevation = 2.dp
         ) {
             TextField(
                 value = textField,
@@ -107,7 +107,7 @@ fun LoginScreen(
                 .height(48.dp),
             colors = ButtonDefaults.filledTonalButtonColors(
                 containerColor = WarmBrown,
-                contentColor = SoftYellow,
+                contentColor = SoftYellow
             ),
             shape = RoundedCornerShape(0.dp),
             onClick = {
@@ -118,7 +118,7 @@ fun LoginScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.login),
-                style = Typography.displayMedium,
+                style = Typography.displayMedium
             )
         }
     }

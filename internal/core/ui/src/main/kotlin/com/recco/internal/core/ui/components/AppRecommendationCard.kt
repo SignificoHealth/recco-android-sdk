@@ -77,7 +77,6 @@ fun AppRecommendationCard(
     }
 }
 
-
 @Preview
 @Composable
 private fun Preview(

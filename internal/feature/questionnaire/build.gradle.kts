@@ -1,5 +1,6 @@
 plugins {
     id("recco.android.feature")
+    id("recco.android.spotless")
 }
 
 android {

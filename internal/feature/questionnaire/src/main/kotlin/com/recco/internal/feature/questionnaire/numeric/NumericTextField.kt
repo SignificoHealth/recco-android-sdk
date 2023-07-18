@@ -82,7 +82,8 @@ internal fun NumericTextField(
                     contentAlignment = Alignment.CenterEnd
                 ) {
                     Text(
-                        text = label, style = AppTheme.typography.body2.copy(
+                        text = label,
+                        style = AppTheme.typography.body2.copy(
                             color = AppTheme.colors.primary40
                         )
                     )

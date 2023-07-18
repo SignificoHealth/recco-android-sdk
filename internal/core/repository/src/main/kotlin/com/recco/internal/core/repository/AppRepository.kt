@@ -21,7 +21,7 @@ class AppRepository @Inject constructor(
     private val metricApi: MetricApi,
     private val authCredentials: AuthCredentials,
     private val logger: Logger,
-    @ApplicationScope private val appScope: CoroutineScope,
+    @ApplicationScope private val appScope: CoroutineScope
 ) {
     private lateinit var sdkConfig: ReccoConfig
 

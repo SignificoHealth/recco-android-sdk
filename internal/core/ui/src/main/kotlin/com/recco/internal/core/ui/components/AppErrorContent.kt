@@ -20,7 +20,7 @@ import com.recco.internal.core.ui.extensions.asTitleRes
 internal fun AppErrorContent(
     throwable: Throwable? = null,
     retry: () -> Unit,
-    scrollState: ScrollState? = null,
+    scrollState: ScrollState? = null
 ) {
     Column(
         modifier = Modifier
@@ -59,7 +59,7 @@ private fun Preview() {
 private fun PreviewNetworkError() {
     AppErrorContent(
         throwable = RuntimeException(),
-        retry = {},
+        retry = {}
     )
 }
 

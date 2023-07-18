@@ -2,8 +2,17 @@
 
 package com.recco.internal.feature.questionnaire
 
-import androidx.compose.animation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +37,7 @@ internal fun QuestionnaireFooterContent(
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         AnimatedVisibility(
             visible = showBack,
@@ -51,7 +60,9 @@ internal fun QuestionnaireFooterContent(
             enabled = nextEnabled,
             onClick = onNextClicked,
             isLoading = isQuestionnaireSubmitLoading,
-            text = stringResource(if (isLastPage && !isOnboarding) R.string.recco_finish_button else R.string.recco_continue_button)
+            text = stringResource(
+                if (isLastPage && !isOnboarding) R.string.recco_finish_button else R.string.recco_continue_button
+            )
         )
     }
 }
@@ -85,7 +96,6 @@ private fun PreviewSubmitting() {
         onNextClicked = {}
     )
 }
-
 
 @Preview
 @Composable

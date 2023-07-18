@@ -3,8 +3,8 @@ package com.recco.api.ui
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import com.recco.api.model.ReccoLogger
 import com.recco.api.model.ReccoConfig
+import com.recco.api.model.ReccoLogger
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.repository.AppRepository
 import dagger.hilt.EntryPoint

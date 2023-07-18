@@ -64,7 +64,8 @@ fun AppTopBar(
                         .layoutId("navigationIcon")
                 ) {
                     CompositionLocalProvider(
-                        LocalContentAlpha provides 1f, content = navigationIcon
+                        LocalContentAlpha provides 1f,
+                        content = navigationIcon
                     )
                 }
                 Box(
@@ -89,7 +90,8 @@ fun AppTopBar(
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1
                             )
-                        })
+                        }
+                    )
                 }
                 Box(
                     modifier = Modifier
@@ -104,9 +106,10 @@ fun AppTopBar(
                                 verticalAlignment = Alignment.CenterVertically,
                                 content = actions
                             )
-                        })
+                        }
+                    )
                 }
-            },
+            }
         ) { measurables, constraints ->
             val navigationIconPlaceable = measurables.first { it.layoutId == "navigationIcon" }
                 .measure(constraints.copy(minWidth = 0))
@@ -146,16 +149,16 @@ fun AppTopBar(
 fun BackIconButton(
     modifier: Modifier = Modifier,
     iconTint: Color = AppTheme.colors.primary,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     IconButton(
         modifier = modifier,
-        onClick = onClick,
+        onClick = onClick
     ) {
         Icon(
             painter = painterResource(id = R.drawable.recco_ic_back),
             tint = iconTint,
-            contentDescription = null,
+            contentDescription = null
         )
     }
 }
@@ -164,18 +167,18 @@ fun BackIconButton(
 fun CloseIconButton(
     modifier: Modifier = Modifier,
     iconTint: Color = AppTheme.colors.primary,
-    onClick: (context: Context) -> Unit = { (it as AppCompatActivity).finish() },
+    onClick: (context: Context) -> Unit = { (it as AppCompatActivity).finish() }
 ) {
     val context = LocalContext.current
 
     IconButton(
         modifier = modifier,
-        onClick = { onClick(context) },
+        onClick = { onClick(context) }
     ) {
         Icon(
             painter = painterResource(id = R.drawable.recco_ic_close),
             tint = iconTint,
-            contentDescription = null,
+            contentDescription = null
         )
     }
 }
@@ -197,7 +200,7 @@ private fun PreviewWithTitle() {
 private fun PreviewWithLongTitle() {
     AppTheme {
         AppTopBar(
-            title = "Lorem ipsum dolor sit amet consectetur adipiscing elit",
+            title = "Lorem ipsum dolor sit amet consectetur adipiscing elit"
         )
     }
 }

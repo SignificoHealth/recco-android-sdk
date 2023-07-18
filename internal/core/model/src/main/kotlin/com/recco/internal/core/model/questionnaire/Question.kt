@@ -16,7 +16,7 @@ data class MultiChoiceQuestion(
     val maxOptions: Int,
     val minOptions: Int,
     val isSingleChoice: Boolean = maxOptions == 1,
-    val options: List<MultiChoiceAnswerOption>,
+    val options: List<MultiChoiceAnswerOption>
 ) : Question() {
     override fun isAnswerInputValid(requiredToBeAnswered: Boolean): Boolean =
         if (!requiredToBeAnswered && options.none { it.isSelected }) {
@@ -38,12 +38,12 @@ data class NumericQuestion(
 ) : Question() {
     override fun isAnswerInputValid(requiredToBeAnswered: Boolean): Boolean =
         if (!requiredToBeAnswered) {
-            selectedValue == null
-                    || (selectedValue >= minValue && selectedValue <= maxValue)
+            selectedValue == null ||
+                (selectedValue >= minValue && selectedValue <= maxValue)
         } else {
-            selectedValue != null
-                    && selectedValue >= minValue
-                    && selectedValue <= maxValue
+            selectedValue != null &&
+                selectedValue >= minValue &&
+                selectedValue <= maxValue
         }
 }
 
@@ -51,5 +51,5 @@ enum class NumericQuestionFormat {
     HUMAN_HEIGHT,
     HUMAN_WEIGHT,
     INTEGER,
-    DECIMAL;
+    DECIMAL
 }

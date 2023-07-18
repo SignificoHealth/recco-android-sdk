@@ -98,7 +98,7 @@ object NetworkModule {
         logger: Logger,
         authCredentials: AuthCredentials,
         authenticationApi: AuthenticationApi,
-        @IoDispatcher dispatcher: CoroutineDispatcher,
+        @IoDispatcher dispatcher: CoroutineDispatcher
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(apiEndpoint.baseUrl)

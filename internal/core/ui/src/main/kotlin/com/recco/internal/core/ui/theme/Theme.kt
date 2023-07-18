@@ -8,7 +8,6 @@ import androidx.compose.runtime.ReadOnlyComposable
 import com.recco.api.model.ReccoPalette
 import com.recco.internal.core.ui.components.AppStatusBar
 
-
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -30,7 +29,7 @@ fun AppTheme(
     ) {
         MaterialTheme(
             colors = extendedColors.asColor(isLight = !darkTheme),
-            typography = extendedTypography(extendedColors.primary).asTypography(),
+            typography = extendedTypography(extendedColors.primary).asTypography()
         ) {
             CompositionLocalProvider(content = content)
         }

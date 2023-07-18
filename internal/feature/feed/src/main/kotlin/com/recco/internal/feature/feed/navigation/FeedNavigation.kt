@@ -4,10 +4,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.recco.internal.feature.feed.FeedRoute
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.feature.feed.FeedRoute
 
 const val FeedGraph = "feed_graph"
 const val FeedRoute = "feed"

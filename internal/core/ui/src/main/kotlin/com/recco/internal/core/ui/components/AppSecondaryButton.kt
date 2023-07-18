@@ -27,7 +27,7 @@ fun AppSecondaryButton(
         iconEndRes = iconEndRes,
         isLoading = isLoading,
         enabled = enabled,
-        onClick = onClick,
+        onClick = onClick
     )
 }
 
@@ -39,7 +39,7 @@ fun AppSecondaryButton(
     @DrawableRes iconEndRes: Int? = null,
     isLoading: Boolean = false,
     enabled: Boolean = true,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     AppButton(
         modifier = modifier,
@@ -49,10 +49,9 @@ fun AppSecondaryButton(
         iconEndRes = iconEndRes,
         isLoading = isLoading,
         enabled = enabled,
-        onClick = onClick,
+        onClick = onClick
     )
 }
-
 
 @Preview(showBackground = true, backgroundColor = 0xFFF)
 @Composable
@@ -79,7 +78,6 @@ private fun AppSecondaryButtonInactiveOverLightBackgroundPreview() {
         onClick = {}
     )
 }
-
 
 @Preview(showBackground = true, backgroundColor = 0xFFF)
 @Composable

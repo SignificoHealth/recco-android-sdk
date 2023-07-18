@@ -38,10 +38,14 @@ internal class HumanHeightHandler(
         getMillimeters(bigValue, smallValue) / 10
 
     private fun getMillimeters(bigValue: Double?, smallValue: Double?): Int = when (unitSystem) {
-        UnitSystem.IMPERIAL -> (bigValue?.feetToMillimeters()
-            ?: 0) + (smallValue?.inchesToMillimeters() ?: 0)
+        UnitSystem.IMPERIAL -> (
+            bigValue?.feetToMillimeters()
+                ?: 0
+            ) + (smallValue?.inchesToMillimeters() ?: 0)
 
-        UnitSystem.METRIC -> (bigValue?.metersToMillimeters()
-            ?: 0) + (smallValue?.centimetersToMillimeters() ?: 0)
+        UnitSystem.METRIC -> (
+            bigValue?.metersToMillimeters()
+                ?: 0
+            ) + (smallValue?.centimetersToMillimeters() ?: 0)
     }
 }

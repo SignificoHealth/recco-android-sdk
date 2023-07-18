@@ -52,7 +52,7 @@ internal class PipelineStateAware<T : Any>(private val remoteDatasource: suspend
 
         data class Update<out T : Any>(
             val datasource: suspend () -> T,
-            val id: Int = Random.nextInt(),
+            val id: Int = Random.nextInt()
         ) : PipelineState<T>()
     }
 }

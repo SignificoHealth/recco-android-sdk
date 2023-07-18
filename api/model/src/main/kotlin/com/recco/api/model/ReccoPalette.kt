@@ -26,7 +26,7 @@ sealed class ReccoPalette {
                 onBackground = Color(0xFF383b45),
                 accent = Color(0xFF7b61ff),
                 onAccent = Color(0xFF2C2783),
-                illustration = Color(0xFFf5b731),
+                illustration = Color(0xFFf5b731)
             )
     }
 

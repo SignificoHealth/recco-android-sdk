@@ -4,5 +4,5 @@ enum class Topic {
     PHYSICAL_ACTIVITY,
     NUTRITION,
     MENTAL_WELLBEING,
-    SLEEP;
+    SLEEP
 }

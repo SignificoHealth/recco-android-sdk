@@ -29,7 +29,7 @@ internal fun AppButton(
     @DrawableRes iconEndRes: Int? = null,
     isLoading: Boolean = false,
     enabled: Boolean = true,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     val isEnabled = enabled && !isLoading
     val backgroundColor = getBackgroundColor(isPrimary, isEnabled)
@@ -45,7 +45,7 @@ internal fun AppButton(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundColor,
             contentColor = contentColor,
-            disabledBackgroundColor = backgroundColor,
+            disabledBackgroundColor = backgroundColor
         ),
         shape = cornerShape,
         border = borderStroke,
@@ -58,7 +58,7 @@ internal fun AppButton(
                     modifier = Modifier.size(24.dp),
                     painter = painterResource(iconStartRes),
                     contentDescription = null,
-                    tint = contentColor,
+                    tint = contentColor
                 )
             }
 
@@ -76,7 +76,7 @@ internal fun AppButton(
                     AppProgressLoading(
                         size = 20.dp,
                         strokeWidth = 1.5.dp,
-                        color = contentColor,
+                        color = contentColor
                     )
                 }
 
@@ -85,11 +85,11 @@ internal fun AppButton(
                         modifier = Modifier.size(24.dp),
                         painter = painterResource(iconEndRes),
                         contentDescription = null,
-                        tint = contentColor,
+                        tint = contentColor
                     )
                 }
             }
-        },
+        }
     )
 }
 

@@ -20,7 +20,6 @@ internal fun SavedStateHandle.stub() {
     }
 }
 
-
 internal fun QuestionnaireRepository.stubForInitialFailure() {
     stub {
         onBlocking { it.getOnboarding() } doThrow staticThrowableForTesting

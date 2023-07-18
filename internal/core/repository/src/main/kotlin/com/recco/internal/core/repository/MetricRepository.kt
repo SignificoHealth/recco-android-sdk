@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class MetricRepository @Inject constructor(
     private val metricApi: MetricApi,
-    @ApplicationScope private val appScope: CoroutineScope,
+    @ApplicationScope private val appScope: CoroutineScope
 ) {
 
     fun openDashboard() {

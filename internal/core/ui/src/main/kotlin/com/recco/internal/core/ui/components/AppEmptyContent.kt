@@ -40,7 +40,7 @@ data class EmptyState(
 @Composable
 fun AppEmptyContent(
     drawableModifier: Modifier = Modifier,
-    emptyState: EmptyState,
+    emptyState: EmptyState
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -88,7 +88,7 @@ fun AppEmptyContent(
                     modifier = Modifier.fillMaxWidth(),
                     textRes = emptyState.ctaTextRes,
                     iconStartRes = emptyState.ctaIconRes,
-                    onClick = emptyState.onCtaClick,
+                    onClick = emptyState.onCtaClick
                 )
             }
         }
@@ -102,7 +102,7 @@ private fun PreviewWithoutCta() {
         emptyState = EmptyState(
             titleRes = R.string.recco_error_connection_title,
             description = stringResource(R.string.recco_error_connection_body),
-            drawableRes = R.drawable.recco_ic_no_connection,
+            drawableRes = R.drawable.recco_ic_no_connection
         )
     )
 }
@@ -153,6 +153,6 @@ private fun PreviewCustomImageSize() {
             ctaTextRes = R.string.recco_error_reload,
             ctaIconRes = R.drawable.recco_ic_retry,
             onCtaClick = { }
-        ),
+        )
     )
 }

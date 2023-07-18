@@ -26,15 +26,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.recco.internal.core.ui.theme.AppTheme
 
-
 private const val ANIM_DURATION = 1000
 private const val TOTAL_DOTS = 4
 private const val START_DELAY_DOT = (ANIM_DURATION + (ANIM_DURATION / 1.5f)).toInt() / TOTAL_DOTS
 
 // Starting from the lowest number, each number represent a dot in the screen.
 private val DOTS_ANIM_SEQUENCE = listOf(
-    0, 1,
-    3, 2
+    0,
+    1,
+    3,
+    2
 )
 
 @Composable
@@ -73,7 +74,7 @@ private fun AnimatedDotIcon(delay: Int) {
                 durationMillis = ANIM_DURATION,
                 easing = FastOutLinearInEasing
             ),
-            repeatMode = RepeatMode.Reverse,
+            repeatMode = RepeatMode.Reverse
         )
     )
 
@@ -85,7 +86,6 @@ private fun AnimatedDotIcon(delay: Int) {
             .background(color)
     )
 }
-
 
 @Preview(showBackground = true, backgroundColor = 0xFFF)
 @Composable

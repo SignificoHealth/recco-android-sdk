@@ -20,7 +20,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -42,7 +41,7 @@ internal fun QuestionnaireOnboardingOutroRoute(
         imageId = R.drawable.recco_ic_portrait_2,
         titleTextId = R.string.recco_onboarding_outro_title,
         bodyTextId = R.string.recco_onboarding_outro_body,
-        navigateToOutro = navigateToFeed,
+        navigateToOutro = navigateToFeed
     )
 }
 
@@ -55,7 +54,6 @@ private fun QuestionnaireOnboardingOutroScreen(
     navigateToOutro: () -> Unit,
     contentPadding: PaddingValues = PaddingValues()
 ) {
-
     BackHandler(
         enabled = true,
         onBack = { navigateToOutro() }
@@ -137,7 +135,7 @@ private fun Preview() {
             imageId = R.drawable.recco_ic_portrait_2,
             titleTextId = R.string.recco_onboarding_outro_title,
             bodyTextId = R.string.recco_onboarding_outro_body,
-            navigateToOutro = {},
+            navigateToOutro = {}
         )
     }
 }
@@ -150,7 +148,7 @@ private fun PreviewDark() {
             imageId = R.drawable.recco_ic_portrait_2,
             titleTextId = R.string.recco_onboarding_outro_title,
             bodyTextId = R.string.recco_onboarding_outro_body,
-            navigateToOutro = {},
+            navigateToOutro = {}
         )
     }
 }

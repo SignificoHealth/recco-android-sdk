@@ -61,7 +61,7 @@ internal class BookmarkViewModel @Inject constructor(
                     _viewState.value.copy(
                         isLoading = false,
                         error = null,
-                        data = data.copy(recommendations = recommendations),
+                        data = data.copy(recommendations = recommendations)
                     )
                 )
             }

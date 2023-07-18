@@ -5,5 +5,5 @@ import com.recco.internal.core.ui.pipelines.GlobalViewEvent
 
 internal data class FeedUI(
     val feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock? = null,
-    val sections: List<FeedSectionAndRecommendations> = emptyList(),
+    val sections: List<FeedSectionAndRecommendations> = emptyList()
 )

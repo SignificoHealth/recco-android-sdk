@@ -58,7 +58,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
-import com.recco.api.model.ReccoPalette
 import com.recco.internal.core.model.FlowDataState
 import com.recco.internal.core.model.feed.FeedSection
 import com.recco.internal.core.model.feed.FeedSectionAndRecommendations
@@ -69,13 +68,11 @@ import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Recommendation
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppAlertDialog
-import com.recco.internal.core.ui.components.AppEmptyContent
 import com.recco.internal.core.ui.components.AppRecommendationCard
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTintedImagePeopleDigital
 import com.recco.internal.core.ui.components.AppTintedImagePottedPlant2
 import com.recco.internal.core.ui.components.AppTopBar
-import com.recco.internal.core.ui.components.EmptyState
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.heightRecommendationCard
 import com.recco.internal.core.ui.components.widthRecommendationCard
@@ -97,7 +94,7 @@ internal fun FeedRoute(
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     navigateToBookmarks: () -> Unit,
-    viewModel: FeedViewModel = hiltViewModel(),
+    viewModel: FeedViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle()
     FeedScreen(
@@ -148,7 +145,7 @@ private fun FeedScreen(
                 },
                 onLockAnimationFinished = {
                     onUserInteract(FeedUserInteract.RefreshUnlockedFeedSection)
-                },
+                }
             )
         }
     }
@@ -160,7 +157,7 @@ private fun FeedContent(
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
     navigateToBookmarks: () -> Unit,
-    onLockAnimationFinished: () -> Unit,
+    onLockAnimationFinished: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -176,7 +173,7 @@ private fun FeedContent(
                 targetState = section.recommendations is FlowDataState.Loading,
                 animationSpec = tween(
                     durationMillis = 1000,
-                    easing = LinearEasing,
+                    easing = LinearEasing
                 )
             ) { isLoading ->
                 Column {
@@ -188,7 +185,7 @@ private fun FeedContent(
                             feedSectionToUnlock = feedUI.feedSectionToUnlock,
                             navigateToArticle = navigateToArticle,
                             navigateToQuestionnaire = navigateToQuestionnaire,
-                            onLockAnimationFinished = onLockAnimationFinished,
+                            onLockAnimationFinished = onLockAnimationFinished
                         )
                     }
                     Spacer(Modifier.height(AppSpacing.dp_40))
@@ -216,7 +213,7 @@ private fun FeedHeader(
                     modifier = Modifier.clickable { navigateToBookmarks() },
                     painter = painterResource(id = R.drawable.recco_ic_bookmark_filled),
                     tint = AppTheme.colors.accent,
-                    contentDescription = null,
+                    contentDescription = null
                 )
                 Spacer(Modifier.height(AppSpacing.dp_16))
 
@@ -237,7 +234,7 @@ private fun FeedHeader(
 
 @Composable
 private fun FeedSectionLoading(
-    section: FeedSectionAndRecommendations,
+    section: FeedSectionAndRecommendations
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -256,7 +253,7 @@ private fun FeedSection(
     feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock?,
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
-    onLockAnimationFinished: () -> Unit,
+    onLockAnimationFinished: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
@@ -268,7 +265,7 @@ private fun FeedSection(
         QuestionnaireStartDialog(
             openDialog = openDialog,
             topic = topic,
-            onClick = { navigateToQuestionnaire(topic, feedSection.type) },
+            onClick = { navigateToQuestionnaire(topic, feedSection.type) }
         )
     }
 
@@ -284,7 +281,7 @@ private fun FeedSection(
             targetState = feedSection.state == FeedSectionState.LOCKED,
             animationSpec = tween(
                 durationMillis = 1000,
-                easing = LinearEasing,
+                easing = LinearEasing
             )
         ) { isLocked ->
             if (isLocked) {
@@ -331,7 +328,7 @@ private fun LoadingItems() {
                 modifier = Modifier
                     .height(heightRecommendationCard)
                     .width(widthRecommendationCard),
-                elevation = AppTheme.elevation.card,
+                elevation = AppTheme.elevation.card
             ) {
                 Box(
                     modifier = Modifier
@@ -350,7 +347,7 @@ private fun LockedItems(
     feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock?,
     openDialog: MutableState<Boolean>,
     topicDialog: MutableState<Topic?>,
-    onLockAnimationFinished: () -> Unit,
+    onLockAnimationFinished: () -> Unit
 ) {
     LazyRow(
         state = scrollState,
@@ -380,7 +377,7 @@ private fun UnlockedItems(
     scrollState: LazyListState,
     section: FeedSectionAndRecommendations,
     navigateToArticle: (ContentId) -> Unit,
-    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
+    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit
 ) {
     val recommendations =
         (section.recommendations as FlowDataState.Success<List<Recommendation>>).data
@@ -415,7 +412,7 @@ private fun UnlockedItems(
 private fun QuestionnaireStartDialog(
     openDialog: MutableState<Boolean>,
     topic: Topic,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     AppAlertDialog(
         openDialog = openDialog,
@@ -437,7 +434,6 @@ private fun QuestionnaireStartDialog(
         onClickPrimary = onClick
     )
 }
-
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -462,7 +458,7 @@ private fun PartiallyUnlockedCard(
             Icon(
                 painter = painterResource(id = R.drawable.recco_ic_refresh),
                 tint = AppTheme.colors.onPrimary,
-                contentDescription = null,
+                contentDescription = null
             )
             Spacer(Modifier.height(AppSpacing.dp_8))
             Text(
@@ -479,7 +475,7 @@ private fun PartiallyUnlockedCard(
 private fun LockedCard(
     onClick: () -> Unit,
     shouldStartAnimation: () -> Boolean,
-    onAnimationFinished: () -> Unit,
+    onAnimationFinished: () -> Unit
 ) {
     val cardRes = remember {
         mutableStateOf(
@@ -530,15 +526,15 @@ private fun LockedCard(
 @Composable
 private fun AppLockIcon(
     shouldStartAnimation: () -> Boolean,
-    onAnimationFinished: () -> Unit,
+    onAnimationFinished: () -> Unit
 ) {
     val transformationRotateSpec = tween<Float>(
         durationMillis = 300,
-        easing = FastOutSlowInEasing,
+        easing = FastOutSlowInEasing
     )
     val transformationBounceSpecEnter = tween<Float>(
         durationMillis = 300,
-        easing = { OvershootInterpolator().getInterpolation(it) },
+        easing = { OvershootInterpolator().getInterpolation(it) }
     )
     val transformationBounceSpecExit = spring<Float>(
         dampingRatio = DampingRatioHighBouncy,
@@ -614,7 +610,6 @@ private fun Preview(
             navigateToBookmarks = {}
         )
     }
-
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF, heightDp = 1250)

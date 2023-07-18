@@ -22,7 +22,7 @@ class ShowcaseApp : Application() {
         ReccoApiUI.init(
             sdkConfig = ReccoConfig(
                 appName = "Showcase",
-                apiSecret = "yvU5m39iXgVtOOKSQqz8neU5mP5HkOamKKMhcX5FDdBE6s6lmrdkC87XQr5dApi5r-vVOFo",
+                apiSecret = "yvU5m39iXgVtOOKSQqz8neU5mP5HkOamKKMhcX5FDdBE6s6lmrdkC87XQr5dApi5r-vVOFo"
                 /*                palette = ReccoPalette.Custom(
                                     lightColors = ReccoPalette.Default.lightColors.copy(primary = Color(0xFFFFEB3B)),
                                     darkColors = ReccoPalette.Default.darkColors

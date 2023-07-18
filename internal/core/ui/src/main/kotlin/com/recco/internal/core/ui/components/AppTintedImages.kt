@@ -26,7 +26,7 @@ fun AppTintedImagePottedPlant2(
         modifier = modifier,
         drawableRes = R.drawable.recco_ic_potted_plant_2,
         drawableResTint = R.drawable.recco_ic_potted_plant_2_tint,
-        tint = tint,
+        tint = tint
     )
 }
 
@@ -39,7 +39,7 @@ fun AppTintedImageApple(
         modifier = modifier,
         drawableRes = R.drawable.recco_ic_apple,
         drawableResTint = R.drawable.recco_ic_apple_tint,
-        tint = tint,
+        tint = tint
     )
 }
 
@@ -52,7 +52,7 @@ fun AppTintedImageNoConnection(
         modifier = modifier,
         drawableRes = R.drawable.recco_ic_no_connection, // FIXME
         drawableResTint = R.drawable.recco_ic_no_connection_tint,
-        tint = tint,
+        tint = tint
     )
 }
 
@@ -65,7 +65,7 @@ fun AppTintedImagePeopleDigital(
         modifier = modifier,
         drawableRes = R.drawable.recco_ic_people_digital, // FIXME
         drawableResTint = R.drawable.recco_ic_people_digital_tint,
-        tint = tint,
+        tint = tint
     )
 }
 
@@ -78,7 +78,7 @@ fun AppTintedImageRidingBike(
         modifier = modifier,
         drawableRes = R.drawable.recco_ic_riding_bike, // FIXME
         drawableResTint = R.drawable.recco_ic_riding_bike_tint,
-        tint = tint,
+        tint = tint
     )
 }
 
@@ -91,7 +91,7 @@ fun AppTintedImageAboutYou(
         modifier = modifier,
         drawableRes = R.drawable.recco_ic_about_you, // FIXME
         drawableResTint = R.drawable.recco_ic_about_you_tint,
-        tint = tint,
+        tint = tint
     )
 }
 
@@ -104,7 +104,7 @@ fun AppTintedImagePortrait1(
         modifier = modifier,
         drawableRes = R.drawable.recco_ic_portrait_1, // FIXME
         drawableResTint = R.drawable.recco_ic_portrait_1_tint,
-        tint = tint,
+        tint = tint
     )
 }
 
@@ -117,7 +117,7 @@ fun AppTintedImagePortrait2(
         modifier = modifier,
         drawableRes = R.drawable.recco_ic_portrait_2, // FIXME
         drawableResTint = R.drawable.recco_ic_portrait_2_tint,
-        tint = tint,
+        tint = tint
     )
 }
 
@@ -137,7 +137,7 @@ private fun AppTintedImage(
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(drawableResTint),
             colorFilter = ColorFilter.tint(tint),
-            contentDescription = null,
+            contentDescription = null
         )
         Image(
             modifier = Modifier.fillMaxSize(),

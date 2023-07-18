@@ -1,9 +1,8 @@
 package com.recco.internal.feature.questionnaire.numeric
 
 import com.recco.internal.core.model.questionnaire.UnitSystem
-import com.recco.internal.core.model.questionnaire.gramsToKilograms
-import com.recco.internal.core.model.questionnaire.kilogramsToPounds
 import com.recco.internal.core.model.questionnaire.kilogramsToGrams
+import com.recco.internal.core.model.questionnaire.kilogramsToPounds
 import com.recco.internal.core.model.questionnaire.poundsToGrams
 
 internal class HumanWeightHandler(

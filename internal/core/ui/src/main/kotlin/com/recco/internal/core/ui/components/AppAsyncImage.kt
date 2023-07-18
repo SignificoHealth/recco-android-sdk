@@ -26,7 +26,6 @@ const val ASPECT_RATIO_16_9 = 16f / 9f // 0.56
 const val ASPECT_RATIO_10_5 = 10f / 5f // 0.5
 const val ASPECT_RATIO_10_4 = 10f / 4f // 0.4
 
-
 /**
  * @param data This can be a URL, a [painterResource], a [java.io.File], ...
  * @param placeholderRes Used for error and fallback states if [placeholderContent] is null. Not use both.
@@ -47,7 +46,7 @@ fun AppAsyncImage(
     loadingContent: (@Composable () -> Unit)? = null,
     contentScale: ContentScale = ContentScale.Crop,
     aspectRatio: Float? = null,
-    onStateChange: (AsyncImagePainter.State) -> Unit = {},
+    onStateChange: (AsyncImagePainter.State) -> Unit = {}
 ) {
     Box {
         if (data == null && placeholderContent != null) {
@@ -60,7 +59,7 @@ fun AppAsyncImage(
                 model = data,
                 contentScale = contentScale,
                 error = placeholderPainter,
-                fallback = placeholderPainter,
+                fallback = placeholderPainter
             )
 
             val state = painter.state
@@ -71,9 +70,12 @@ fun AppAsyncImage(
                 contentScale = contentScale,
                 contentDescription = null,
                 modifier = modifier.let {
-                    if (aspectRatio != null) it.aspectRatio(aspectRatio)
-                    else it
-                },
+                    if (aspectRatio != null) {
+                        it.aspectRatio(aspectRatio)
+                    } else {
+                        it
+                    }
+                }
             )
 
             when (state) {
@@ -86,7 +88,7 @@ fun AppAsyncImage(
                             modifier = modifier,
                             painter = rememberDrawablePainter(loadingAnimationDrawable),
                             contentScale = ContentScale.Crop,
-                            contentDescription = null,
+                            contentDescription = null
                         )
                     }
                 }
@@ -111,7 +113,7 @@ fun loadingAnimationDrawable() = loadingAnimationDrawable(
         R.drawable.recco_bg_loading_4,
         R.drawable.recco_bg_loading_5,
         R.drawable.recco_bg_loading_6,
-        R.drawable.recco_bg_loading_7,
+        R.drawable.recco_bg_loading_7
     )
 )
 
@@ -125,7 +127,7 @@ fun loadingCardAnimationDrawable() = loadingAnimationDrawable(
         R.drawable.recco_bg_loading_card_4,
         R.drawable.recco_bg_loading_card_5,
         R.drawable.recco_bg_loading_card_6,
-        R.drawable.recco_bg_loading_card_7,
+        R.drawable.recco_bg_loading_card_7
     )
 )
 
