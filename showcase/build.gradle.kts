@@ -5,6 +5,8 @@ plugins {
 
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+
+    alias(libs.plugins.easylauncher)
 }
 
 android {
@@ -26,6 +28,12 @@ android {
     }
 
     signingConfigs {
+        named("debug") {
+            keyAlias = "debug"
+            keyPassword = "password"
+            storeFile = file("${project.projectDir}/keys/debug.keystore")
+            storePassword = "password"
+        }
         create("release") {
             keyAlias = "release"
             keyPassword = "password"
@@ -35,6 +43,18 @@ android {
     }
 
     buildTypes {
+        named("debug") {
+            applicationIdSuffix = ".debug"
+
+            buildConfigField(
+                type = "String",
+                name = "CLIENT_SECRET",
+                value = "\"yvU5m39iXgVtOOKSQqz8neU5mP5HkOamKKMhcX5FDdBE6s6lmrdkC87XQr5dApi5r-vVOFo\""
+            )
+
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
         named("release") {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -44,6 +64,13 @@ android {
                     "proguard-rules.pro"
                 )
             )
+
+            buildConfigField(
+                type = "String",
+                name = "CLIENT_SECRET",
+                value = "\"${System.getenv("CLIENT_SECRET")}\""
+            )
+
             signingConfig = signingConfigs.getByName("release")
         }
     }
@@ -53,6 +80,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -65,6 +93,8 @@ android {
 
 dependencies {
     implementation(project(":api:ui"))
+    implementation(project(":internal:core:network"))
+
     // implementation("com.significo:recco-api-ui:0.0.0")
 
     implementation("com.google.dagger:hilt-android:2.46.1")
@@ -86,3 +116,28 @@ dependencies {
 
     implementation("androidx.compose.ui:ui-text-google-fonts:1.4.3")
 }
+
+easylauncher {
+    buildTypes {
+        create("debug") {
+            filters(
+                customRibbon(
+                    label = "DEBUG",
+                    ribbonColor = "#FFf5b731",
+                    labelColor = "#FFFFFF"
+                )
+            )
+        }
+
+        create("release") {
+            filters(
+                customRibbon(
+                    label = "PROD",
+                    ribbonColor = "#FF9EE4A1",
+                    labelColor = "#FFFFFF"
+                )
+            )
+        }
+    }
+}
+

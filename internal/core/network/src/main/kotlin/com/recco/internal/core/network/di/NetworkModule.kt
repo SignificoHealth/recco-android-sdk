@@ -3,7 +3,6 @@ package com.recco.internal.core.network.di
 import com.recco.internal.core.base.di.IoDispatcher
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.network.BuildConfig
-import com.recco.internal.core.network.http.ApiEndpoint
 import com.recco.internal.core.network.http.interceptors.AddHeadersInterceptor
 import com.recco.internal.core.network.http.interceptors.AuthInterceptor
 import com.recco.internal.core.network.http.interceptors.ErrorInterceptor
@@ -31,16 +30,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val TIMEOUT = 30L
+    var BASE_URL = "https://api.sf-dev.significo.dev/"
 
-    @Singleton
-    @Provides
-    fun provideApiEndpoint(): ApiEndpoint =
-        if (!BuildConfig.DEBUG) {
-            ApiEndpoint.PROD
-        } else {
-            ApiEndpoint.STAGING
-        }
+    private const val TIMEOUT = 30L
 
     @Singleton
     @Provides
@@ -77,10 +69,9 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(
         moshi: Moshi,
-        apiEndpoint: ApiEndpoint,
         logger: Logger
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(apiEndpoint.baseUrl)
+        .baseUrl(BASE_URL)
         .client(
             buildOkhttp(
                 logger = logger
@@ -94,14 +85,13 @@ object NetworkModule {
     @Provides
     fun provideRetrofitAuthentication(
         moshi: Moshi,
-        apiEndpoint: ApiEndpoint,
         logger: Logger,
         authCredentials: AuthCredentials,
         authenticationApi: AuthenticationApi,
         @IoDispatcher dispatcher: CoroutineDispatcher
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(apiEndpoint.baseUrl)
+            .baseUrl(BASE_URL)
             .client(
                 buildOkhttp(
                     logger = logger,
