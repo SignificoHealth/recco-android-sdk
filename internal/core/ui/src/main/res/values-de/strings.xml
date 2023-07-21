@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="recco_bookmarks_empty_state_title">Du hast noch keine Lesezeichen gesetzt. </string>
+  <string name="recco_bookmarks_title">Deine Bookmarks</string>
+  <string name="recco_continue_button">Weiter</string>
+  <string name="recco_dashboard_alert_mental_wellbeing_body">Deine Gefühlswelt nimmt Einfluss auf Deine Gedanken und Dein Verhalten. Finde Wege, dich öfter besser zu fühlen. </string>
+  <string name="recco_dashboard_alert_mental_wellbeing_title">Mentale Gesundheit</string>
+  <string name="recco_dashboard_alert_nutrition_body">Deine Gesundheit hängt auch davon ab, wie Du dich im Großen und Ganzen ernährst. So geht gesundes Essen ganz einfach: </string>
+  <string name="recco_dashboard_alert_nutrition_title">Essverhalten</string>
+  <string name="recco_dashboard_alert_physical_activity_body">Körperliche Aktivität wirkt sich positiv auf Körper und Geist aus - besonders, wenn die Bewegung Spaß macht! </string>
+  <string name="recco_dashboard_alert_physical_activity_title">Bewegung</string>
+  <string name="recco_dashboard_alert_sleep_body">Guter Schlaf ist das Fundament physischer und mentaler Gesundheit. Zum Glück kannst Du Deine Schlafqualität beeinflussen. </string>
+  <string name="recco_dashboard_alert_sleep_title">Schlaf</string>
+  <string name="recco_dashboard_explore_topic">Entdecken &amp; verstehen </string>
+  <string name="recco_dashboard_new_for_you">Neue Inhalte </string>
+  <string name="recco_dashboard_recommended_for_you_topic">Für dich empfohlen: <xliff:g id="section_name">%1$s</xliff:g>\n</string>
+  <string name="recco_dashboard_review_area">Bereich \nerkunden</string>
+  <string name="recco_dashboard_start_here">Schnell zum Erfolg </string>
+  <string name="recco_dashboard_trending">Beliebte Tipps</string>
+  <string name="recco_dashboard_unlock">Entsperren</string>
+  <string name="recco_dashboard_welcome_back_body">Mal sehen, was Deiner Gesundheit heute guttun könnte...</string>
+  <string name="recco_dashboard_welcome_back_title">Willkommen! </string>
+  <string name="recco_dashboard_you_may_also_like">Speziell für dich </string>
+  <string name="recco_error_connection_body">Atme tief durch und probiere es später nochmal. </string>
+  <string name="recco_error_connection_title">Keine Verbindung </string>
+  <string name="recco_error_generic_body">Das hätte nicht passieren dürfen. Lade die Seite neu. </string>
+  <string name="recco_error_generic_title">Entschuldigung! </string>
+  <string name="recco_error_reload">Neu laden</string>
+  <string name="recco_finish_button">Abschließen</string>
+  <string name="recco_next">Weiter</string>
+  <string name="recco_onboarding_go_to_dashboard">Zum Dashboard</string>
+  <string name="recco_onboarding_outro_body">Du hast Dein Profil erfolgreich eingerichtet. Schau dir jetzt an, was Recco dir zu bieten hat. </string>
+  <string name="recco_onboarding_outro_title">Prima! </string>
+  <string name="recco_onboarding_page1_body">Willkommen bei Recco, Deinem ganz persönlichen Hilfsmittel für mehr Gesundheit im Alltag. Beantworte Fragen und Du bekommst Tipps für ein rundum gesünderes Leben! </string>
+  <string name="recco_onboarding_page1_title">Schön, dass Du da bist!</string>
+  <string name="recco_onboarding_page2_body">Genug über Recco... und zu dir. Was ist dir wichtig\? Wie sehen Deine Gesundheitsziele aus\? Und wie geht es dir im Moment\? </string>
+  <string name="recco_onboarding_page2_title">Im Fokus: Du! </string>
+  <string name="recco_onboarding_page3_body">Je mehr Fragen Du beantwortest, umso aussagekräftiger wird Dein Gesundheits-Index. Der Content wird genau auf dich abgestimmt. So macht positive Veränderung Spaß! </string>
+  <string name="recco_onboarding_page3_title">Gemeinsam wachsen</string>
+  <string name="recco_questionnaire_about_you">Im Fokus: Du </string>
+  <string name="recco_questionnaire_go_to_dashboard">Zum Dashboard</string>
+  <string name="recco_questionnaire_multiple_answers">Mehrfachauswahl möglich</string>
+  <string name="recco_questionnaire_outro_body">Diesen Teil hast Du abgeschlossen und damit noch bessere Empfehlungen für dich generiert. Schau sie dir gleich an! </string>
+  <string name="recco_questionnaire_outro_title">Super gemacht! </string>
+  <string name="recco_start">Los geht\'s! </string>
+</resources>
