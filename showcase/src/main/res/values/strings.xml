@@ -7,4 +7,6 @@
     <string name="logout">Logout</string>
     <string name="customize">Customize</string>
     <string name="user_id">User ID</string>
+    <string name="fresh">Fresh</string>
+    <string name="ocean">Ocean</string>
 </resources>
