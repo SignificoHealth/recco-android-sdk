@@ -99,13 +99,17 @@ fun PaletteSelection(
                 shadowElevation = 2.dp
             ) {
                 Column {
-                    MosaicSampleSection(ReccoPalette.Fresh, showIconHeader = true,
+                    MosaicSampleSection(
+                        ReccoPalette.Fresh,
+                        showIconHeader = true,
                         selectionClickPalette = {
                             expanded = false
                             selectionClickPalette(it)
                         }
                     )
-                    MosaicSampleSection(ReccoPalette.Ocean, showIconHeader = false,
+                    MosaicSampleSection(
+                        ReccoPalette.Ocean,
+                        showIconHeader = false,
                         selectionClickPalette = {
                             expanded = false
                             selectionClickPalette(it)
@@ -123,8 +127,9 @@ fun MosaicSampleSection(
     showIconHeader: Boolean,
     selectionClickPalette: (ReccoPalette) -> Unit
 ) {
-    Row(Modifier
-        .noRippleClickable { selectionClickPalette(palette) }
+    Row(
+        Modifier
+            .noRippleClickable { selectionClickPalette(palette) }
     ) {
         MosaicSample(
             palette = palette,
@@ -191,7 +196,7 @@ fun MosaicSample(
             colors = CardDefaults.cardColors(
                 containerColor = backgroundColor
             ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
             Box(
                 modifier = Modifier
