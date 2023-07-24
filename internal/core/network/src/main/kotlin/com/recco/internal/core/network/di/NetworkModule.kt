@@ -3,6 +3,7 @@ package com.recco.internal.core.network.di
 import com.recco.internal.core.base.di.IoDispatcher
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.network.BuildConfig
+import com.recco.internal.core.network.BuildConfig.RECCO_BASE_URL
 import com.recco.internal.core.network.http.interceptors.AddHeadersInterceptor
 import com.recco.internal.core.network.http.interceptors.AuthInterceptor
 import com.recco.internal.core.network.http.interceptors.ErrorInterceptor
@@ -30,8 +31,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    var BASE_URL = "https://api.sf-dev.significo.dev/"
-
     private const val TIMEOUT = 30L
 
     @Singleton
@@ -71,7 +70,7 @@ object NetworkModule {
         moshi: Moshi,
         logger: Logger
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(RECCO_BASE_URL)
         .client(
             buildOkhttp(
                 logger = logger
@@ -91,7 +90,7 @@ object NetworkModule {
         @IoDispatcher dispatcher: CoroutineDispatcher
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(RECCO_BASE_URL)
             .client(
                 buildOkhttp(
                     logger = logger,
