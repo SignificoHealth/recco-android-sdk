@@ -88,10 +88,11 @@ fun LoginScreen(
                 onValueChange = { newText -> textField = newText },
                 singleLine = true,
                 shape = RoundedCornerShape(8.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = WarmBrown,
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = WarmBrown,
                     disabledTextColor = Color.Transparent,
-                    containerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent
