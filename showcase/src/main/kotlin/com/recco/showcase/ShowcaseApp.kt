@@ -6,7 +6,6 @@ import com.recco.api.model.ReccoConfig
 import com.recco.api.model.ReccoLogger
 import com.recco.api.model.ReccoPalette
 import com.recco.api.ui.ReccoApiUI
-import com.recco.internal.core.network.di.NetworkModule
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -15,11 +14,6 @@ class ShowcaseApp : Application() {
         super.onCreate()
 
         initSDK(this)
-
-        // This is only for internal usage: please, do not change Recco base url.
-        if (BuildConfig.DEBUG) {
-            NetworkModule.BASE_URL = "https://api.sf-dev.significo.dev/"
-        }
     }
 
     companion object {
