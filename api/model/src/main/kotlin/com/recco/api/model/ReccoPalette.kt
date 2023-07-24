@@ -9,23 +9,23 @@ sealed class ReccoPalette {
     object Fresh : ReccoPalette() {
         override val darkColors: ReccoColors
             get() = ReccoColors(
-                primary = Color(0xFFFFE6B0),
+                primary = Color(0xFFffe6b0),
                 onPrimary = Color(0xFF383b45),
                 background = Color(0xFF383b45),
                 onBackground = Color(0xFFffffff),
                 accent = Color(0xFF7b61ff),
-                onAccent = Color(0xFFFFE5AE),
+                onAccent = Color(0xFFffe5ae),
                 illustration = Color(0xFFf5b731)
             )
 
         override val lightColors
             get() = ReccoColors(
-                primary = Color(0xFF383B45),
+                primary = Color(0xFF383b45),
                 onPrimary = Color(0xFFFFFFFF),
                 background = Color(0xFFfcfcfc),
                 onBackground = Color(0xFF383b45),
                 accent = Color(0xFF7b61ff),
-                onAccent = Color(0xFF2C2783),
+                onAccent = Color(0xFF2c2783),
                 illustration = Color(0xFFf5b731)
             )
     }
@@ -36,20 +36,20 @@ sealed class ReccoPalette {
                 primary = Color(0xFFCEEEFF),
                 onPrimary = Color(0xFF263743),
                 background = Color(0xFF263743),
-                onBackground = Color(0xFFE4F6FF),
-                accent = Color(0xFF35B9FF),
-                onAccent = Color(0xFFE4F6FF),
+                onBackground = Color(0xFFe4f6ff),
+                accent = Color(0xFF35b9ff),
+                onAccent = Color(0xFFe4f6ff),
                 illustration = Color(0xFF35b9ff)
             )
 
         override val lightColors
             get() = ReccoColors(
-                primary = Color(0xFF125E85),
+                primary = Color(0xFF125e85),
                 onPrimary = Color(0xFFffffff),
-                background = Color(0xFFECF8FE),
-                onBackground = Color(0xFF0C5175),
-                accent = Color(0xFF35B9FF),
-                onAccent = Color(0xFF17445B),
+                background = Color(0xFFecf8fe),
+                onBackground = Color(0xFF0c5175),
+                accent = Color(0xFF35b9ff),
+                onAccent = Color(0xFF17445b),
                 illustration = Color(0xFFf5a08c)
             )
     }
