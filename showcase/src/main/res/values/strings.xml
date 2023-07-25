@@ -9,4 +9,6 @@
     <string name="user_id">User ID</string>
     <string name="fresh">Fresh</string>
     <string name="ocean">Ocean</string>
+    <string name="tech">Tech</string>
+    <string name="spring">Spring</string>
 </resources>

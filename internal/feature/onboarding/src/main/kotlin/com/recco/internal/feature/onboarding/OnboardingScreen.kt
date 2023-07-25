@@ -8,6 +8,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -33,6 +34,9 @@ import com.google.accompanist.insets.ui.Scaffold
 import com.recco.internal.core.ui.R.drawable
 import com.recco.internal.core.ui.R.string
 import com.recco.internal.core.ui.components.ASPECT_RATIO_1_1
+import com.recco.internal.core.ui.components.AppTintedImageContent
+import com.recco.internal.core.ui.components.AppTintedImageFlying
+import com.recco.internal.core.ui.components.AppTintedImagePortrait
 import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.HorizontalPagerNavigation
 import com.recco.internal.core.ui.theme.AppSpacing
@@ -58,21 +62,23 @@ private fun OnboardingScreen(
 ) {
     val pages = listOf<@Composable (PaddingValues) -> Unit>({
         OnboardingPage(
-            imageId = drawable.recco_ic_flying,
+            image = { modifier -> AppTintedImageFlying(modifier) },
             titleTextId = string.recco_onboarding_page1_title,
             bodyTextId = string.recco_onboarding_page1_body,
             contentPadding = it
         )
     }, {
         OnboardingPage(
-            imageId = drawable.recco_ic_content,
+            image = { modifier -> AppTintedImageContent(modifier) },
             titleTextId = string.recco_onboarding_page2_title,
             bodyTextId = string.recco_onboarding_page2_body,
             contentPadding = it
         )
     }, {
         OnboardingPage(
-            imageId = drawable.recco_ic_portrait_2,
+            image = { modifier ->
+                AppTintedImagePortrait(modifier)
+            },
             titleTextId = string.recco_onboarding_page3_title,
             bodyTextId = string.recco_onboarding_page3_body,
             contentPadding = it
@@ -100,7 +106,7 @@ private fun OnboardingScreen(
 
 @Composable
 private fun OnboardingPage(
-    @DrawableRes imageId: Int,
+    image: @Composable ((Modifier) -> Unit),
     @StringRes titleTextId: Int,
     @StringRes bodyTextId: Int,
     modifier: Modifier = Modifier,
@@ -116,10 +122,8 @@ private fun OnboardingPage(
             .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = imageId),
-            contentDescription = null,
-            modifier = Modifier
+        image(
+            Modifier
                 .background(AppTheme.colors.accent20)
                 .padding(top = AppSpacing.dp_32)
                 .padding(horizontal = AppSpacing.dp_32 * 2)

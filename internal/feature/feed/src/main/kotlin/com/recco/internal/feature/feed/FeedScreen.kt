@@ -70,7 +70,7 @@ import com.recco.internal.core.ui.components.AppAlertDialog
 import com.recco.internal.core.ui.components.AppRecommendationCard
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTintedImagePeopleDigital
-import com.recco.internal.core.ui.components.AppTintedImagePottedPlant2
+import com.recco.internal.core.ui.components.AppTintedImagePottedPlant
 import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.heightRecommendationCard
@@ -226,7 +226,7 @@ private fun FeedHeader(
                 )
             }
 
-            AppTintedImagePottedPlant2()
+            AppTintedImagePottedPlant()
         }
     }
 }

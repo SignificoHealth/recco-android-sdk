@@ -2,6 +2,7 @@ package com.recco.internal.core.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -10,123 +11,93 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import com.recco.api.model.ReccoPalette
 import com.recco.internal.core.ui.R
+import com.recco.internal.core.ui.preview.ReccoPaletteProvider
 import com.recco.internal.core.ui.theme.AppTheme
 
 @Composable
-fun AppTintedImagePottedPlant2(
-    modifier: Modifier = Modifier,
-    tint: Color = AppTheme.colors.illustration
+fun AppTintedImagePottedPlant(
+    modifier: Modifier = Modifier
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.recco_ic_potted_plant_2,
-        drawableResTint = R.drawable.recco_ic_potted_plant_2_tint,
-        tint = tint
-    )
-}
-
-@Composable
-fun AppTintedImageApple(
-    modifier: Modifier = Modifier,
-    tint: Color = AppTheme.colors.illustration
-) {
-    AppTintedImage(
-        modifier = modifier,
-        drawableRes = R.drawable.recco_ic_apple,
-        drawableResTint = R.drawable.recco_ic_apple_tint,
-        tint = tint
+        drawableResStatic = R.drawable.recco_ic_potted_plant_static,
+        drawableResTint = R.drawable.recco_ic_potted_plant_tint,
+        drawableResOutline = R.drawable.recco_ic_potted_plant_outline
     )
 }
 
 @Composable
 fun AppTintedImageNoConnection(
-    modifier: Modifier = Modifier,
-    tint: Color = AppTheme.colors.illustration
+    modifier: Modifier = Modifier
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.recco_ic_no_connection, // FIXME
+        drawableResStatic = R.drawable.recco_ic_no_connection_static,
         drawableResTint = R.drawable.recco_ic_no_connection_tint,
-        tint = tint
+        drawableResOutline = R.drawable.recco_ic_no_connection_outline
     )
 }
 
 @Composable
 fun AppTintedImagePeopleDigital(
-    modifier: Modifier = Modifier,
-    tint: Color = AppTheme.colors.illustration
+    modifier: Modifier = Modifier
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.recco_ic_people_digital, // FIXME
+        drawableResStatic = R.drawable.recco_ic_people_digital_static,
         drawableResTint = R.drawable.recco_ic_people_digital_tint,
-        tint = tint
+        drawableResOutline = R.drawable.recco_ic_people_digital_outline
     )
 }
 
 @Composable
-fun AppTintedImageRidingBike(
-    modifier: Modifier = Modifier,
-    tint: Color = AppTheme.colors.illustration
+fun AppTintedImagePortrait(
+    modifier: Modifier = Modifier
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.recco_ic_riding_bike, // FIXME
-        drawableResTint = R.drawable.recco_ic_riding_bike_tint,
-        tint = tint
+        drawableResStatic = R.drawable.recco_ic_portrait_static,
+        drawableResTint = R.drawable.recco_ic_portrait_tint,
+        drawableResOutline = R.drawable.recco_ic_portrait_outline
     )
 }
 
 @Composable
-fun AppTintedImageAboutYou(
-    modifier: Modifier = Modifier,
-    tint: Color = AppTheme.colors.illustration
+fun AppTintedImageFlying(
+    modifier: Modifier = Modifier
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.recco_ic_about_you, // FIXME
-        drawableResTint = R.drawable.recco_ic_about_you_tint,
-        tint = tint
+        drawableResStatic = R.drawable.recco_ic_flying_static,
+        drawableResTint = R.drawable.recco_ic_flying_tint,
+        drawableResOutline = R.drawable.recco_ic_flying_outline
     )
 }
 
 @Composable
-fun AppTintedImagePortrait1(
-    modifier: Modifier = Modifier,
-    tint: Color = AppTheme.colors.illustration
+fun AppTintedImageContent(
+    modifier: Modifier = Modifier
 ) {
     AppTintedImage(
         modifier = modifier,
-        drawableRes = R.drawable.recco_ic_portrait_1, // FIXME
-        drawableResTint = R.drawable.recco_ic_portrait_1_tint,
-        tint = tint
-    )
-}
-
-@Composable
-fun AppTintedImagePortrait2(
-    modifier: Modifier = Modifier,
-    tint: Color = AppTheme.colors.illustration
-) {
-    AppTintedImage(
-        modifier = modifier,
-        drawableRes = R.drawable.recco_ic_portrait_2, // FIXME
-        drawableResTint = R.drawable.recco_ic_portrait_2_tint,
-        tint = tint
+        drawableResStatic = R.drawable.recco_ic_content_static,
+        drawableResTint = R.drawable.recco_ic_content_tint,
+        drawableResOutline = R.drawable.recco_ic_content_outline
     )
 }
 
 @Composable
 private fun AppTintedImage(
     modifier: Modifier = Modifier,
-    @DrawableRes drawableRes: Int,
+    @DrawableRes drawableResStatic: Int,
     @DrawableRes drawableResTint: Int,
-    tint: Color
+    @DrawableRes drawableResOutline: Int
 ) {
     Box(
         modifier = modifier
@@ -136,31 +107,54 @@ private fun AppTintedImage(
         Image(
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(drawableResTint),
-            colorFilter = ColorFilter.tint(tint),
+            colorFilter = ColorFilter.tint(AppTheme.colors.illustration),
             contentDescription = null
         )
         Image(
             modifier = Modifier.fillMaxSize(),
-            painter = painterResource(drawableRes),
+            painter = painterResource(drawableResStatic),
+            contentDescription = null
+        )
+        Image(
+            modifier = Modifier.fillMaxSize(),
+            painter = painterResource(drawableResOutline),
+            colorFilter = ColorFilter.tint(AppTheme.colors.illustrationOutline),
             contentDescription = null
         )
     }
 }
 
-@Preview
+@Preview(heightDp = 1500)
 @Composable
-private fun PreviewAppTintedImagePottedPlant2() {
-    Column {
-        AppTintedImagePottedPlant2()
-        AppTintedImagePottedPlant2(tint = AppTheme.colors.primary)
+private fun PreviewLight(
+    @PreviewParameter(ReccoPaletteProvider::class) palette: ReccoPalette
+) {
+    AppTheme(darkTheme = false, palette = palette) {
+        Column {
+            AppTintedImagePottedPlant()
+            AppTintedImageNoConnection()
+            AppTintedImagePeopleDigital()
+            AppTintedImagePortrait()
+            AppTintedImageFlying()
+            AppTintedImageContent()
+        }
     }
 }
 
-@Preview
+@Preview(heightDp = 1500)
 @Composable
-private fun PreviewAppTintedImageApple() {
-    Column {
-        AppTintedImageApple()
-        AppTintedImageApple(tint = AppTheme.colors.primary)
+private fun PreviewDark(
+    @PreviewParameter(ReccoPaletteProvider::class) palette: ReccoPalette
+) {
+    AppTheme(darkTheme = true, palette = palette) {
+        Column(Modifier.background(AppTheme.colors.background)) {
+            AppTintedImagePottedPlant()
+            AppTintedImageNoConnection()
+            AppTintedImagePeopleDigital()
+            AppTintedImagePortrait()
+            AppTintedImageFlying()
+            AppTintedImageContent()
+        }
     }
 }
+

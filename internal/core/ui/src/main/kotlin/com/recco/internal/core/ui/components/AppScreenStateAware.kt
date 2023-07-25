@@ -483,7 +483,7 @@ private fun PreviewEmptyState() {
                 emptyState = EmptyState(
                     titleRes = R.string.recco_error_connection_title,
                     description = stringResource(R.string.recco_error_connection_body),
-                    drawableRes = R.drawable.recco_ic_no_connection
+                    drawableRes = R.drawable.recco_ic_no_connection_static
                 )
             )
         },
