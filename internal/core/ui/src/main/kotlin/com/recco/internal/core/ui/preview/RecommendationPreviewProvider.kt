@@ -21,5 +21,3 @@ class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
             )
     }
 }
-
-
