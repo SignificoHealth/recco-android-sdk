@@ -71,9 +71,7 @@ private fun OnboardingScreen(
         )
     }, {
         OnboardingPage(
-            image = { modifier ->
-                AppTintedImagePortrait(modifier)
-            },
+            image = { modifier -> AppTintedImagePortrait(modifier) },
             titleTextId = string.recco_onboarding_page3_title,
             bodyTextId = string.recco_onboarding_page3_body,
             contentPadding = it
