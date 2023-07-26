@@ -18,7 +18,7 @@
     <string name="recco_dashboard_start_here">Quick Wins!</string>
     <string name="recco_dashboard_trending">Popular Articles</string>
     <string name="recco_dashboard_unlock">Unlock it</string>
-    <string name="recco_dashboard_welcome_back_body">Let\'s see how we can improve your health today…</string>
+    <string name="recco_dashboard_welcome_back_body">Let\'s see how we can improve your health today...</string>
     <string name="recco_dashboard_welcome_back_title">Great to see you!</string>
     <string name="recco_dashboard_you_may_also_like">Totally You</string>
     <string name="recco_error_connection_body">Take a breath and try again later</string>
@@ -33,7 +33,7 @@
     <string name="recco_onboarding_outro_title">Great job!</string>
     <string name="recco_onboarding_page1_body">Welcome to Recco, the personalized health improvement tool. \n \nComplete surveys to get customized health advice for improving your life all around!</string>
     <string name="recco_onboarding_page1_title">Well hello there!</string>
-    <string name="recco_onboarding_page2_body">But enough about Recco… \nlet\'s talk about you! \n\nWhat\'s important to you\? What are your health goals\? And how are you doing right now\?</string>
+    <string name="recco_onboarding_page2_body">But enough about Recco... \nlet\'s talk about you! \n\nWhat\'s important to you\? What are your health goals\? And how are you doing right now\?</string>
     <string name="recco_onboarding_page2_title">All About You</string>
     <string name="recco_onboarding_page3_body">The more surveys you complete, the more accurate your health score and customized health recommendations will be. \n\nYou\'ll also get fun and interesting content to help you make positive changes right away!</string>
     <string name="recco_onboarding_page3_title">Let\'s Grow Together</string>
