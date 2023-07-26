@@ -102,7 +102,7 @@ private fun PreviewWithoutCta() {
         emptyState = EmptyState(
             titleRes = R.string.recco_error_connection_title,
             description = stringResource(R.string.recco_error_connection_body),
-            drawableRes = R.drawable.recco_ic_no_connection
+            drawableRes = R.drawable.recco_ic_no_connection_static
         )
     )
 }
@@ -113,7 +113,7 @@ private fun PreviewWithoutDescription() {
     AppEmptyContent(
         emptyState = EmptyState(
             titleRes = R.string.recco_error_connection_title,
-            drawableRes = R.drawable.recco_ic_no_connection,
+            drawableRes = R.drawable.recco_ic_no_connection_static,
             ctaTextRes = R.string.recco_error_reload,
             ctaIconRes = R.drawable.recco_ic_retry,
             onCtaClick = { }
@@ -128,7 +128,7 @@ private fun PreviewFull() {
         emptyState = EmptyState(
             titleRes = R.string.recco_error_connection_title,
             description = stringResource(R.string.recco_error_connection_body),
-            drawableRes = R.drawable.recco_ic_no_connection,
+            drawableRes = R.drawable.recco_ic_no_connection_static,
             ctaTextRes = R.string.recco_error_reload,
             ctaIconRes = R.drawable.recco_ic_retry,
             onCtaClick = { }
@@ -148,7 +148,7 @@ private fun PreviewCustomImageSize() {
             description = stringResource(R.string.recco_error_connection_body),
             drawableRes = null,
             drawableComposable = {
-                AppTintedImageNoConnection(tint = AppTheme.colors.primary)
+                AppTintedImageNoConnection()
             },
             ctaTextRes = R.string.recco_error_reload,
             ctaIconRes = R.drawable.recco_ic_retry,

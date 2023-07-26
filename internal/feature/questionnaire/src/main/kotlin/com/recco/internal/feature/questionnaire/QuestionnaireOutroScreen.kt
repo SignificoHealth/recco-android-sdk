@@ -1,9 +1,6 @@
 package com.recco.internal.feature.questionnaire
 
 import androidx.activity.compose.BackHandler
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,7 +17,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +24,7 @@ import com.google.accompanist.insets.ui.Scaffold
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.ASPECT_RATIO_1_1
 import com.recco.internal.core.ui.components.AppPrimaryButton
+import com.recco.internal.core.ui.components.AppTintedImagePortrait
 import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.CloseIconButton
 import com.recco.internal.core.ui.theme.AppSpacing
@@ -38,9 +35,6 @@ internal fun QuestionnaireOnboardingOutroRoute(
     navigateToFeed: () -> Unit
 ) {
     QuestionnaireOnboardingOutroScreen(
-        imageId = R.drawable.recco_ic_portrait_2,
-        titleTextId = R.string.recco_onboarding_outro_title,
-        bodyTextId = R.string.recco_onboarding_outro_body,
         navigateToOutro = navigateToFeed
     )
 }
@@ -48,9 +42,6 @@ internal fun QuestionnaireOnboardingOutroRoute(
 @Composable
 private fun QuestionnaireOnboardingOutroScreen(
     modifier: Modifier = Modifier,
-    @DrawableRes imageId: Int,
-    @StringRes titleTextId: Int,
-    @StringRes bodyTextId: Int,
     navigateToOutro: () -> Unit,
     contentPadding: PaddingValues = PaddingValues()
 ) {
@@ -91,10 +82,8 @@ private fun QuestionnaireOnboardingOutroScreen(
                 .statusBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = imageId),
-                contentDescription = null,
-                modifier = Modifier
+            AppTintedImagePortrait(
+                Modifier
                     .background(AppTheme.colors.accent20)
                     .padding(top = AppSpacing.dp_32)
                     .padding(horizontal = AppSpacing.dp_32 * 2)
@@ -104,7 +93,7 @@ private fun QuestionnaireOnboardingOutroScreen(
             Spacer(modifier = Modifier.height(AppSpacing.dp_40))
 
             Text(
-                text = stringResource(id = titleTextId),
+                text = stringResource(id = R.string.recco_onboarding_outro_title),
                 modifier = modifier
                     .padding(horizontal = AppSpacing.dp_24),
                 color = AppTheme.colors.primary,
@@ -115,7 +104,7 @@ private fun QuestionnaireOnboardingOutroScreen(
             Spacer(modifier = Modifier.height(AppSpacing.dp_24))
 
             Text(
-                text = stringResource(id = bodyTextId),
+                text = stringResource(id = R.string.recco_onboarding_outro_body),
                 modifier = modifier
                     .padding(horizontal = AppSpacing.dp_24)
                     .padding(bottom = AppSpacing.dp_12),
@@ -132,9 +121,6 @@ private fun QuestionnaireOnboardingOutroScreen(
 private fun Preview() {
     AppTheme {
         QuestionnaireOnboardingOutroScreen(
-            imageId = R.drawable.recco_ic_portrait_2,
-            titleTextId = R.string.recco_onboarding_outro_title,
-            bodyTextId = R.string.recco_onboarding_outro_body,
             navigateToOutro = {}
         )
     }
@@ -145,9 +131,6 @@ private fun Preview() {
 private fun PreviewDark() {
     AppTheme(darkTheme = true) {
         QuestionnaireOnboardingOutroScreen(
-            imageId = R.drawable.recco_ic_portrait_2,
-            titleTextId = R.string.recco_onboarding_outro_title,
-            bodyTextId = R.string.recco_onboarding_outro_body,
             navigateToOutro = {}
         )
     }

@@ -99,22 +99,17 @@ fun PaletteSelection(
                 shadowElevation = 2.dp
             ) {
                 Column {
-                    MosaicSampleSection(
-                        ReccoPalette.Fresh,
-                        showIconHeader = true,
-                        selectionClickPalette = {
-                            expanded = false
-                            selectionClickPalette(it)
+                    listOf(ReccoPalette.Fresh, ReccoPalette.Ocean, ReccoPalette.Spring, ReccoPalette.Tech)
+                        .forEachIndexed { index, palette ->
+                            MosaicSampleSection(
+                                palette,
+                                showIconHeader = index == 0,
+                                selectionClickPalette = {
+                                    expanded = false
+                                    selectionClickPalette(it)
+                                }
+                            )
                         }
-                    )
-                    MosaicSampleSection(
-                        ReccoPalette.Ocean,
-                        showIconHeader = false,
-                        selectionClickPalette = {
-                            expanded = false
-                            selectionClickPalette(it)
-                        }
-                    )
                 }
             }
         }
@@ -259,7 +254,15 @@ fun MosaicSample(
                         .align(Alignment.BottomEnd)
                         .padding(start = .25.dp, top = .25.dp)
                         .background(paletteColors.illustration)
-                )
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(.5f)
+                            .fillMaxHeight(.5f)
+                            .align(Alignment.Center)
+                            .background(paletteColors.illustrationOutline)
+                    )
+                }
             }
         }
     }
@@ -277,6 +280,8 @@ private fun ReccoPalette.asTitle() = stringResource(
         is ReccoPalette.Custom -> TODO()
         ReccoPalette.Fresh -> R.string.fresh
         ReccoPalette.Ocean -> R.string.ocean
+        ReccoPalette.Spring -> R.string.spring
+        ReccoPalette.Tech -> R.string.tech
     }
 )
 
