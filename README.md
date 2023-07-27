@@ -247,5 +247,5 @@ object : ReccoLogger {
 [Recco-Flutter]:https://github.com/sf-recco/flutter-showcase
 [Recco-iOS]:https://github.com/viluahealthcare/recco-ios-sdk
 [Recco-Showcase]:./docs/SHOWCASE.md
-[Recco-Download]:https://app.bitrise.io/app/2e7050f9-468b-45b6-8ab9-73124007335f/build/56d78bb3-52d2-[…]/artifact/aea7957d222cc658/p/6f1f326e75afe5da5aa3a1bd56bbba71
+[Recco-Download]:https://app.bitrise.io/app/2e7050f9-468b-45b6-8ab9-73124007335f/build/f0cf8235-ee29-43e6-a000-7c0c7e940dd2/artifact/af27994c0df5cfbc/p/633b6a2f0ea55095050e5dab7b285bd7
 [Recco-QR]:./art/recco_qr.png
