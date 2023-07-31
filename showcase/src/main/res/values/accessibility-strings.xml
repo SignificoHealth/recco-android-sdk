@@ -1,3 +1,5 @@
 <resources>
     <string name="accessibility_palette_selection">Palette selection</string>
+    <string name="accessibility_enter_user_id">Enter user ID</string>
+    <string name="accessibility_back">Back</string>
 </resources>

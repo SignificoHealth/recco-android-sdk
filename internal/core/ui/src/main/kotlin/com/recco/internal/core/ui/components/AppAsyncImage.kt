@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -36,6 +37,7 @@ const val ASPECT_RATIO_10_4 = 10f / 4f // 0.4
  * @param aspectRatio Width/Height, i.e: 16f/9f, ASPECT_RATIO_16_9
  * @param onStateChange Useful for example if you need to get for example the size of the image loaded.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AppAsyncImage(
     modifier: Modifier,
@@ -66,16 +68,17 @@ fun AppAsyncImage(
             onStateChange(state)
 
             Image(
+                modifier = modifier
+                    .let {
+                        if (aspectRatio != null) {
+                            it.aspectRatio(aspectRatio)
+                        } else {
+                            it
+                        }
+                    },
                 painter = painter,
                 contentScale = contentScale,
-                contentDescription = null,
-                modifier = modifier.let {
-                    if (aspectRatio != null) {
-                        it.aspectRatio(aspectRatio)
-                    } else {
-                        it
-                    }
-                }
+                contentDescription = null
             )
 
             when (state) {

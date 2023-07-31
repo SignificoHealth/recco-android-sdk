@@ -79,12 +79,12 @@ internal fun MultiChoiceInput(
                         R.drawable.recco_ic_add
                     }
                 ),
-                contentDescription = null,
                 tint = if (selected) {
                     AppTheme.colors.accent
                 } else {
                     AppTheme.colors.primary
-                }
+                },
+                contentDescription = null
             )
         }
     }

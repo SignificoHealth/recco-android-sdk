@@ -128,8 +128,8 @@ fun ToastContent(
         ) {
             Image(
                 painter = painterResource(id = resIcon),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(AppTheme.colors.primary)
+                colorFilter = ColorFilter.tint(AppTheme.colors.primary),
+                contentDescription = null
             )
 
             Spacer(modifier = Modifier.width(AppSpacing.dp_16))

@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -39,7 +40,8 @@ fun AppRecommendationCard(
     Card(
         modifier = Modifier
             .height(heightRecommendationCard)
-            .width(widthRecommendationCard),
+            .width(widthRecommendationCard)
+            .semantics(mergeDescendants = true) {},
         elevation = AppTheme.elevation.card,
         onClick = { onClick(recommendation.id) }
     ) {

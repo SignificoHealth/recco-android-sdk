@@ -1,0 +1,13 @@
+<resources>
+    <string name="accessibility_close">Close</string>
+    <string name="accessibility_back">Back</string>
+    <string name="accessibility_your_bookmarks">Your Bookmarks</string>
+    <string name="accessibility_locked_card">Locked card %1$d in %2$s</string>
+    <string name="accessibility_back_previous_page">Go back to the previous page</string>
+    <string name="accessibility_add_to_bookmarks">Add to Bookmarks</string>
+    <string name="accessibility_remove_from_bookmarks">Remove from Bookmarks</string>
+    <string name="accessibility_give_thumbs_up">Give thumbs up</string>
+    <string name="accessibility_remove_thumbs_up">Remove thumbs up</string>
+    <string name="accessibility_give_thumbs_down">Give thumbs down</string>
+    <string name="accessibility_remove_thumbs_down">Remove thumbs down</string>
+</resources>

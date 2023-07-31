@@ -49,7 +49,10 @@ internal fun QuestionnaireFooterContent(
                     iconStartRes = R.drawable.recco_ic_chevron_back,
                     onClick = onBackClicked,
                     text = null,
-                    enabled = !isQuestionnaireSubmitLoading
+                    enabled = !isQuestionnaireSubmitLoading,
+                    contentDescription = stringResource(
+                        id = R.string.accessibility_back_previous_page
+                    )
                 )
                 Spacer(Modifier.width(AppSpacing.dp_8))
             }
@@ -61,7 +64,11 @@ internal fun QuestionnaireFooterContent(
             onClick = onNextClicked,
             isLoading = isQuestionnaireSubmitLoading,
             text = stringResource(
-                if (isLastPage && !isOnboarding) R.string.recco_finish_button else R.string.recco_continue_button
+                if (isLastPage && !isOnboarding) {
+                    R.string.recco_finish_button
+                } else {
+                    R.string.recco_continue_button
+                }
             )
         )
     }
