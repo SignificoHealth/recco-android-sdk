@@ -25,7 +25,7 @@ object ReccoApiUI {
     /**
      * init
      *
-     * Configures Recco given an application name and and apiSecret.
+     * Configures Recco given an application name and and clientSecret.
      *
      * UI can be customized setting a palette from the currently available [Fresh, Ocean]
      *

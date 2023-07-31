@@ -21,7 +21,7 @@ class ShowcaseApp : Application() {
             ReccoApiUI.init(
                 sdkConfig = ReccoConfig(
                     appName = "Showcase",
-                    apiSecret = BuildConfig.CLIENT_SECRET,
+                    clientSecret = BuildConfig.CLIENT_SECRET,
                     palette = palette
                 ),
                 application = application,

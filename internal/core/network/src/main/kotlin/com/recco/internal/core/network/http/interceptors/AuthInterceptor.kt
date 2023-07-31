@@ -35,7 +35,7 @@ internal class AuthInterceptor(
             val userId =
                 authCredentials.userId ?: throw IllegalStateException("No userId has been found.")
             authenticationApi.login(
-                authorization = "Bearer ${authCredentials.sdkConfig.apiSecret}",
+                authorization = "Bearer ${authCredentials.sdkConfig.clientSecret}",
                 clientUserId = userId
             ).unwrap()
                 .run {

@@ -47,7 +47,7 @@ class AppRepository @Inject constructor(
     }
 
     fun logoutUser() {
-        val apiSecret = authCredentials.sdkConfig.apiSecret
+        val clientSecret = authCredentials.sdkConfig.clientSecret
         val userId = authCredentials.userId ?: return authCredentials.clearCache()
         val tokenId = authCredentials.tokenId ?: return authCredentials.clearCache()
 
@@ -55,7 +55,7 @@ class AppRepository @Inject constructor(
             runCatching {
                 authCredentials.clearCache()
                 authenticationApi.logout(
-                    authorization = "Bearer $apiSecret",
+                    authorization = "Bearer $clientSecret",
                     clientUserId = userId,
                     paTReferenceDeleteDTO = PATReferenceDeleteDTO(
                         tokenId = tokenId
