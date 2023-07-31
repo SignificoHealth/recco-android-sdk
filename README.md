@@ -245,9 +245,9 @@ object : ReccoLogger {
 
 [Github-Packages]:https://github.com/features/packages
 [PAT]:https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
-[Github-Recco]:https://github.com/orgs/viluahealthcare/packages?repo_name=recco-android-sdk
+[Github-Recco]:https://github.com/orgs/sf-recco/packages?repo_name=android-sdk
 [Recco-Flutter]:https://github.com/sf-recco/flutter-showcase
-[Recco-iOS]:https://github.com/viluahealthcare/recco-ios-sdk
+[Recco-iOS]:https://github.com/sf-recco/recco-ios-sdk
 [Recco-Showcase]:./docs/SHOWCASE.md
 [Recco-Download]:https://app.bitrise.io/app/2e7050f9-468b-45b6-8ab9-73124007335f/build/f0cf8235-ee29-43e6-a000-7c0c7e940dd2/artifact/af27994c0df5cfbc/p/633b6a2f0ea55095050e5dab7b285bd7
 [Recco-QR]:./art/recco_qr.png
