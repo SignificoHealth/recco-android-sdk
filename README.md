@@ -140,7 +140,6 @@ class YourApplication : Application() {
         ReccoApiUI.init(
             // SDK Config
             sdkConfig = SDKConfig(
-                appName = "APP NAME HERE",
                 apiSecret = "API SECRET HERE",
             ),
 
