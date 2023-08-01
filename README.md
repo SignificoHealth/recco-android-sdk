@@ -4,7 +4,11 @@
 ![Kotlin](https://img.shields.io/badge/Kotlin-0095D5?&style=for-the-badge&logo=kotlin&logoColor=white)
 ![Android Studio](https://img.shields.io/badge/Android%20Studio-3DDC84.svg?style=for-the-badge&logo=android-studio&logoColor=white)
 
-# Recco
+# Recco Android SDK
+
+This repository holds the codebase for the Recco Android SDK. Instructions on how to add and use this Android library can be found in the [Usage](#usage) section.
+
+You are more than welcome to install the [APK](#demo) to start playing around with the product, or clone the repository and compile it on your own if you feel like it. However, please be aware that in order to actually integrate it into your own application, you will first need to contact our sales team to initiate the license acquisition process. For that purpose, please send an email to `recco@significo.com`.
 
 ## Overview
 
@@ -14,7 +18,7 @@ _We believe that everyone deserves to live their best life, and we are committed
 
 ## Mission
 
-Allow experiencing firsthand the effectiveness of our `recommendation engine`. Empower users to achieve their best selves through personalized recommendations that are grounded in the latest scientific research. 
+Allow experiencing firsthand the effectiveness of our `recommendation engine`. Empower users to achieve their best selves through personalized recommendations that are grounded in the latest scientific research.
 
 Enabling products to provide their users with a wealth of knowledge, tips, and exercises to help them improve their behavior and achieve their goals.
 
@@ -25,7 +29,7 @@ Enabling products to provide their users with a wealth of knowledge, tips, and e
 
 ## Key features
 
-__Keeping it simple__ 
+__Keeping it simple__
 
 We believe in open communication and encourage individuals to take ownership and responsibility for their actions. We reject the notion of blame culture and instead embrace collaboration, recognizing that we are stronger together. Let us extend a helping hand to one another as we work towards achieving our common goals.
 
@@ -37,11 +41,11 @@ __Technological trend__
 
 Recco aims to be in line with modern solutions and development trends, best practices and official guidelines are followed to keep quality at is highest level.
 
-__Analytics & Reporting__ 
+__Analytics & Reporting__
 
 Monitor the utilization and impact of the recommendation engine. You can track key metrics like user engagement, satisfaction levels, and health outcomes to evaluate the effectiveness of our solution.
 
-__Personalized content__ 
+__Personalized content__
 
 Our engine learns to recommend the user content for each topic that the user motivate to improve their health behavior. The recommendations will change on the path of the user and will recommend always the content which the user helps to go forward in the specific time.
 
@@ -120,38 +124,40 @@ You can even read the following QR Code.
 
 #### init
 
-| Param       | Type        | Optional | Description                                                                |
-|-------------|-------------|----------|----------------------------------------------------------------------------|
-| sdkConfig   | SDKConfig   | NO       | Recco configuration object made from an application name and a secret key. |
-| application | Application | NO       | Android application context.                                               |
-| logger      | ReccoLogger | YES      | Allows configuring a logger instance to trigger debug and error log ops.   |
+| Param       | Type        | Optional | Description                                                                               |
+|-------------|-------------|----------|-------------------------------------------------------------------------------------------|
+| sdkConfig   | ReccoConfig | NO       | Recco configuration object made from an application name, secret key and a color palette. |
+| application | Application | NO       | Android application context.                                                              |
+| logger      | ReccoLogger | YES      | Allows configuring a logger instance to trigger debug and error log ops.                  |
 
 ```kotlin
 // Annotate your Application entry point using Hilt
 @HiltAndroidApp
 class YourApplication : Application() {
-    
+
     override fun onCreate() {
         super.onCreate()
-        
+
         //...
         //...
 
         ReccoApiUI.init(
             // SDK Config
-            sdkConfig = SDKConfig(
-                appName = "APP NAME HERE",
+            sdkConfig = ReccoConfig(
                 clientSecret = "CLIENT SECRET HERE",
+                palette = ReccoPalette.Fresh
             ),
 
             application = this,
-            
+
             // This is a logger implementation example, you can provide your own !
             logger = DefaultReccoLogger()
         )
     }
 }
 ```
+
+Please, take a look on the Recco Showcase application [documentation][Recco-Showcase] so you can get more information on __Recco Color Palettes__.
 
 __Bonus:__ How to provide your own ReccoLogger implementation ?
 
@@ -177,13 +183,13 @@ object : ReccoLogger {
 // Button OnClick action login implementation sample
 @Composable private fun login() {
 
-Button( // Button config here ),
+    Button( // Button config here ),
         // ...
-        
+
         onClick = {
-            
+
             ReccoApiUI.login(userId = textField)
-            
+
             // Useful point to store user data
         }
     ) {
@@ -198,13 +204,13 @@ Button( // Button config here ),
 // Button OnClick action logout implementation sample
 @Composable private fun logout() {
 
-Button( // Button config here ),
+    Button( // Button config here ),
         // ...
-        
+
         onClick = {
-            
+
             ReccoApiUI.logout()
-            
+
             // Useful point to clear stored data if any
         }
     ) {
@@ -223,11 +229,11 @@ Button( // Button config here ),
 // Button OnClick action navigateToDashboard implementation sample
 @Composable private fun openReccoExperience() {
 
-Button( // Button config here ),
+    Button( // Button config here ),
         // ...
-        
+
         onClick = {
-            
+
             ReccoApiUI.navigateToDashboard(this@MyActivity)
         }
     ) {
@@ -238,9 +244,9 @@ Button( // Button config here ),
 
 [Github-Packages]:https://github.com/features/packages
 [PAT]:https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
-[Github-Recco]:https://github.com/orgs/viluahealthcare/packages?repo_name=recco-android-sdk
-[Recco-Flutter]:https://github.com/viluahealthcare/recco-flutter-showcase
-[Recco-iOS]:https://github.com/viluahealthcare/recco-ios-sdk
+[Github-Recco]:https://github.com/orgs/sf-recco/packages?repo_name=android-sdk
+[Recco-Flutter]:https://github.com/sf-recco/flutter-showcase
+[Recco-iOS]:https://github.com/sf-recco/recco-ios-sdk
 [Recco-Showcase]:./docs/SHOWCASE.md
-[Recco-Download]:https://app.bitrise.io/app/2e7050f9-468b-45b6-8ab9-73124007335f/build/56d78bb3-52d2-[…]/artifact/aea7957d222cc658/p/6f1f326e75afe5da5aa3a1bd56bbba71
+[Recco-Download]:https://app.bitrise.io/app/2e7050f9-468b-45b6-8ab9-73124007335f/build/f0cf8235-ee29-43e6-a000-7c0c7e940dd2/artifact/af27994c0df5cfbc/p/633b6a2f0ea55095050e5dab7b285bd7
 [Recco-QR]:./art/recco_qr.png
