@@ -144,7 +144,6 @@ class YourApplication : Application() {
         ReccoApiUI.init(
             // SDK Config
             sdkConfig = ReccoConfig(
-                appName = "APP NAME HERE",
                 apiSecret = "API SECRET HERE",
                 palette = ReccoPalette.Fresh,
             ),
