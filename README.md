@@ -8,7 +8,7 @@
 
 This repository holds the codebase for the Recco Android SDK. Instructions on how to add and use this Android library can be found in the [Usage](#usage) section.
 
-You are more than welcome to install the [APK](#demo) to start playing around with the product, or clone the repository and compile it on your own if you feel like it. However, please be aware that in order to actually integrate it into your own application, you will first need to contact our sales team to initiate the license acquisition process.
+You are more than welcome to install the [APK](#demo) to start playing around with the product, or clone the repository and compile it on your own if you feel like it. However, please be aware that in order to actually integrate it into your own application, you will first need to contact our sales team to initiate the license acquisition process. For that purpose, please send an email to `recco@significo.com`.
 
 ## Overview
 
