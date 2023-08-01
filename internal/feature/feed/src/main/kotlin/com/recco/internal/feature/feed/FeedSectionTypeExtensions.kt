@@ -41,8 +41,24 @@ internal fun FeedSectionType.asSectionTitle(): String = when (this) {
         stringResource(R.string.recco_dashboard_alert_sleep_title)
     )
 
-    PHYSICAL_ACTIVITY_EXPLORE, NUTRITION_EXPLORE, MENTAL_WELLBEING_EXPLORE, SLEEP_EXPLORE -> stringResource(
-        R.string.recco_dashboard_explore_topic
+    PHYSICAL_ACTIVITY_EXPLORE -> stringResource(
+        R.string.recco_dashboard_explore_topic,
+        stringResource(R.string.recco_dashboard_alert_physical_activity_title)
+    )
+
+    NUTRITION_EXPLORE -> stringResource(
+        R.string.recco_dashboard_explore_topic,
+        stringResource(R.string.recco_dashboard_alert_nutrition_title)
+    )
+
+    MENTAL_WELLBEING_EXPLORE -> stringResource(
+        R.string.recco_dashboard_explore_topic,
+        stringResource(R.string.recco_dashboard_alert_mental_wellbeing_title)
+    )
+
+    SLEEP_EXPLORE -> stringResource(
+        R.string.recco_dashboard_explore_topic,
+        stringResource(R.string.recco_dashboard_alert_sleep_title)
     )
 
     STARTING_RECOMMENDATIONS -> stringResource(R.string.recco_dashboard_start_here)
