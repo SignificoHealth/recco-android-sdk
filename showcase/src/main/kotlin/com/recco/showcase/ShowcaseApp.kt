@@ -20,7 +20,7 @@ class ShowcaseApp : Application() {
         fun initSDK(application: Application, palette: ReccoPalette = ReccoPalette.Fresh) {
             ReccoApiUI.init(
                 sdkConfig = ReccoConfig(
-                    apiSecret = BuildConfig.CLIENT_SECRET,
+                    clientSecret = BuildConfig.CLIENT_SECRET,
                     palette = palette
                 ),
                 application = application,

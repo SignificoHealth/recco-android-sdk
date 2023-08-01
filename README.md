@@ -115,12 +115,12 @@ You can even read the following QR Code.
 
 ### Api summary
 
-| Method              | Description                                                   |
-|---------------------|---------------------------------------------------------------|
-| init                | Configures Recco given an application name and and apiSecret. |
-| login               | Performs login operation given a user identifier.             |
-| logout              | Performs logout operation.                                    |
-| navigateToDashboard | Launches Recco's full experience journey.                     |
+| Method              | Description                                                      |
+|---------------------|------------------------------------------------------------------|
+| init                | Configures Recco given an application name and and clientSecret. |
+| login               | Performs login operation given a user identifier.                |
+| logout              | Performs logout operation.                                       |
+| navigateToDashboard | Launches Recco's full experience journey.                        |
 
 #### init
 
@@ -144,8 +144,8 @@ class YourApplication : Application() {
         ReccoApiUI.init(
             // SDK Config
             sdkConfig = ReccoConfig(
-                apiSecret = "API SECRET HERE",
-                palette = ReccoPalette.Fresh,
+                clientSecret = "CLIENT SECRET HERE",
+                palette = ReccoPalette.Fresh
             ),
 
             application = this,
