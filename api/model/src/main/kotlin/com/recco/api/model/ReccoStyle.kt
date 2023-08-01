@@ -2,11 +2,11 @@ package com.recco.api.model
 
 import androidx.compose.ui.graphics.Color
 
-sealed class ReccoPalette {
+sealed class ReccoStyle {
     abstract val darkColors: ReccoColors
     abstract val lightColors: ReccoColors
 
-    object Fresh : ReccoPalette() {
+    object Fresh : ReccoStyle() {
         override val darkColors: ReccoColors
             get() = ReccoColors(
                 primary = Color(0xFFffe6b0),
@@ -32,7 +32,7 @@ sealed class ReccoPalette {
             )
     }
 
-    object Ocean : ReccoPalette() {
+    object Ocean : ReccoStyle() {
         override val darkColors: ReccoColors
             get() = ReccoColors(
                 primary = Color(0xFFCEEEFF),
@@ -58,7 +58,7 @@ sealed class ReccoPalette {
             )
     }
 
-    object Spring : ReccoPalette() {
+    object Spring : ReccoStyle() {
         override val darkColors: ReccoColors
             get() = ReccoColors(
                 primary = Color(0xFFffddbe),
@@ -84,7 +84,7 @@ sealed class ReccoPalette {
             )
     }
 
-    object Tech : ReccoPalette() {
+    object Tech : ReccoStyle() {
         override val darkColors: ReccoColors
             get() = ReccoColors(
                 primary = Color(0xFFe5e4a3),
@@ -113,5 +113,5 @@ sealed class ReccoPalette {
     data class Custom(
         override val darkColors: ReccoColors,
         override val lightColors: ReccoColors
-    ) : ReccoPalette()
+    ) : ReccoStyle()
 }

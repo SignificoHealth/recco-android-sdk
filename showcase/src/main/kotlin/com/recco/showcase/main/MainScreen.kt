@@ -116,8 +116,8 @@ fun MainScreen(
         }
 
         val application = LocalContext.current.applicationContext as Application
-        PaletteSelection(selectionClickPalette = { reccoPalette ->
-            ShowcaseApp.initSDK(application, reccoPalette)
+        StyleSelection(selectionClickStyle = { reccoStyle ->
+            ShowcaseApp.initSDK(application, reccoStyle)
         })
     }
 }

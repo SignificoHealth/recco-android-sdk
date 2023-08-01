@@ -15,9 +15,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.recco.api.model.ReccoPalette
+import com.recco.api.model.ReccoStyle
 import com.recco.internal.core.ui.R
-import com.recco.internal.core.ui.preview.ReccoPaletteProvider
+import com.recco.internal.core.ui.preview.ReccoStyleProvider
 import com.recco.internal.core.ui.theme.AppTheme
 
 @Composable
@@ -127,9 +127,9 @@ private fun AppTintedImage(
 @Preview(heightDp = 1500)
 @Composable
 private fun PreviewLight(
-    @PreviewParameter(ReccoPaletteProvider::class) palette: ReccoPalette
+    @PreviewParameter(ReccoStyleProvider::class) style: ReccoStyle
 ) {
-    AppTheme(darkTheme = false, palette = palette) {
+    AppTheme(darkTheme = false, style = style) {
         Column {
             AppTintedImagePottedPlant()
             AppTintedImageNoConnection()
@@ -144,9 +144,9 @@ private fun PreviewLight(
 @Preview(heightDp = 1500)
 @Composable
 private fun PreviewDark(
-    @PreviewParameter(ReccoPaletteProvider::class) palette: ReccoPalette
+    @PreviewParameter(ReccoStyleProvider::class) style: ReccoStyle
 ) {
-    AppTheme(darkTheme = true, palette = palette) {
+    AppTheme(darkTheme = true, style = style) {
         Column(Modifier.background(AppTheme.colors.background)) {
             AppTintedImagePottedPlant()
             AppTintedImageNoConnection()

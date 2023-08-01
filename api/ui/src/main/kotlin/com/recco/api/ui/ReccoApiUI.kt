@@ -27,7 +27,7 @@ object ReccoApiUI {
      *
      * Configures Recco given an application name and and clientSecret.
      *
-     * UI can be customized setting a palette from the currently available [Fresh, Ocean]
+     * UI can be customized setting a style from the currently available [Fresh, Ocean, Spring, Tech]
      *
      * Debug and error log operations can be enabled providing your own ReccoLogger implementation.
      *

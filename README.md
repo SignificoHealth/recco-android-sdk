@@ -124,11 +124,11 @@ You can even read the following QR Code.
 
 #### init
 
-| Param       | Type        | Optional | Description                                                                               |
-|-------------|-------------|----------|-------------------------------------------------------------------------------------------|
-| sdkConfig   | ReccoConfig | NO       | Recco configuration object made from an application name, secret key and a color palette. |
-| application | Application | NO       | Android application context.                                                              |
-| logger      | ReccoLogger | YES      | Allows configuring a logger instance to trigger debug and error log ops.                  |
+| Param       | Type        | Optional | Description                                                                       |
+|-------------|-------------|----------|-----------------------------------------------------------------------------------|
+| sdkConfig   | ReccoConfig | NO       | Recco configuration object made from an application name, secret key and a style. |
+| application | Application | NO       | Android application context.                                                      |
+| logger      | ReccoLogger | YES      | Allows configuring a logger instance to trigger debug and error log ops.          |
 
 ```kotlin
 // Annotate your Application entry point using Hilt
@@ -145,7 +145,7 @@ class YourApplication : Application() {
             // SDK Config
             sdkConfig = ReccoConfig(
                 clientSecret = "CLIENT SECRET HERE",
-                palette = ReccoPalette.Fresh
+                style = ReccoStyle.Fresh
             ),
 
             application = this,
@@ -157,7 +157,7 @@ class YourApplication : Application() {
 }
 ```
 
-Please, take a look on the Recco Showcase application [documentation][Recco-Showcase] so you can get more information on __Recco Color Palettes__.
+Please, take a look on the Recco Showcase application [documentation][Recco-Showcase] so you can get more information on __Recco Styles__.
 
 __Bonus:__ How to provide your own ReccoLogger implementation ?
 

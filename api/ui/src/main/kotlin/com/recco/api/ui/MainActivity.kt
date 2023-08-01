@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             val uiState by viewModel.viewState.collectAsStateWithLifecycle()
             val viewEvents = globalViewEvents.collectAsStateWithLifecycle(GlobalViewEvent.NoOp)
 
-            AppTheme(palette = appRepository.getSDKConfig().palette) {
+            AppTheme(style = appRepository.getSDKConfig().style) {
                 val user = uiState.data?.user
                 if (user != null) {
                     AppNavHost(

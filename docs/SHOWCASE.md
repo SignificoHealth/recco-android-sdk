@@ -13,13 +13,13 @@ You need your users to be identified, this is how a personalized experience is b
 |---------------------------------------|---------------------------------------------------|--------------------------------------------|
 | ![login](../art/recco_user_login.png) | ![login-fill](../art/recco_user_login_filled.png) | ![login-welcome](../art/recco_welcome.png) |
 
-## Palette selection
+## Style selection
 
-Recco's journey design might be configured using one of its predefined palettes, available in both light and dark modes.
+Recco's journey design might be configured using one of its predefined styles, available in both light and dark modes.
 
-| Select Palette                                | Apply Palette                                | Apply Dark Palette                              |
-|-----------------------------------------------|----------------------------------------------|-------------------------------------------------|
-| ![select](../art/recco_palette_selection.png) | ![apply](../art/recco_palette_applied.png) | ![dark](../art/recco_dark_palette_applied.png) |
+| Select Style                                | Apply Style                              | Apply Dark Style                             |
+|---------------------------------------------|------------------------------------------|----------------------------------------------|
+| ![select](../art/recco_style_selection.png) | ![apply](../art/recco_style_applied.png) | ![dark](../art/recco_dark_style_applied.png) |
 
 ## Language Selection
 

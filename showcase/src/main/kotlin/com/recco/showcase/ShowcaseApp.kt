@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import com.recco.api.model.ReccoConfig
 import com.recco.api.model.ReccoLogger
-import com.recco.api.model.ReccoPalette
+import com.recco.api.model.ReccoStyle
 import com.recco.api.ui.ReccoApiUI
 import dagger.hilt.android.HiltAndroidApp
 
@@ -17,11 +17,11 @@ class ShowcaseApp : Application() {
     }
 
     companion object {
-        fun initSDK(application: Application, palette: ReccoPalette = ReccoPalette.Fresh) {
+        fun initSDK(application: Application, style: ReccoStyle = ReccoStyle.Fresh) {
             ReccoApiUI.init(
                 sdkConfig = ReccoConfig(
                     clientSecret = BuildConfig.CLIENT_SECRET,
-                    palette = palette
+                    style = style
                 ),
                 application = application,
                 logger = object : ReccoLogger {

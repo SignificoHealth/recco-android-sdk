@@ -44,14 +44,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.recco.api.model.ReccoPalette
+import com.recco.api.model.ReccoStyle
 import com.recco.showcase.R
 import com.recco.showcase.ui.theme.Typography
 import com.recco.showcase.ui.theme.WarmBrown
 
 @Composable
-fun PaletteSelection(
-    selectionClickPalette: (ReccoPalette) -> Unit,
+fun StyleSelection(
+    selectionClickStyle: (ReccoStyle) -> Unit,
     initiallyExpanded: Boolean = false
 ) {
     var expanded by remember { mutableStateOf(initiallyExpanded) }
@@ -99,14 +99,14 @@ fun PaletteSelection(
                 shadowElevation = 2.dp
             ) {
                 Column {
-                    listOf(ReccoPalette.Fresh, ReccoPalette.Ocean, ReccoPalette.Spring, ReccoPalette.Tech)
-                        .forEachIndexed { index, palette ->
+                    listOf(ReccoStyle.Fresh, ReccoStyle.Ocean, ReccoStyle.Spring, ReccoStyle.Tech)
+                        .forEachIndexed { index, style ->
                             MosaicSampleSection(
-                                palette,
+                                style,
                                 showIconHeader = index == 0,
-                                selectionClickPalette = {
+                                selectionClickStyle = {
                                     expanded = false
-                                    selectionClickPalette(it)
+                                    selectionClickStyle(it)
                                 }
                             )
                         }
@@ -118,22 +118,22 @@ fun PaletteSelection(
 
 @Composable
 fun MosaicSampleSection(
-    palette: ReccoPalette,
+    style: ReccoStyle,
     showIconHeader: Boolean,
-    selectionClickPalette: (ReccoPalette) -> Unit
+    selectionClickStyle: (ReccoStyle) -> Unit
 ) {
     Row(
         Modifier
-            .noRippleClickable { selectionClickPalette(palette) }
+            .noRippleClickable { selectionClickStyle(style) }
     ) {
         MosaicSample(
-            palette = palette,
+            style = style,
             showIconHeader = showIconHeader,
             isDarkMode = false
         )
 
         MosaicSample(
-            palette = palette,
+            style = style,
             showIconHeader = showIconHeader,
             isDarkMode = true
         )
@@ -142,12 +142,12 @@ fun MosaicSampleSection(
 
 @Composable
 fun MosaicSample(
-    palette: ReccoPalette,
+    style: ReccoStyle,
     showIconHeader: Boolean,
     isDarkMode: Boolean
 ) {
-    val paletteSize = 56.dp
-    val paletteColors = if (isDarkMode) palette.darkColors else palette.lightColors
+    val styleSize = 56.dp
+    val styleColors = if (isDarkMode) style.darkColors else style.lightColors
     val backgroundColor = if (isDarkMode) Color(0xFF040E1E) else Color.White
 
     Column(
@@ -172,7 +172,7 @@ fun MosaicSample(
         }
 
         Text(
-            text = palette.asTitle(),
+            text = style.asTitle(),
             style = Typography.labelSmall.copy(
                 fontSize = 11.sp,
                 color = if (isDarkMode) {
@@ -186,7 +186,7 @@ fun MosaicSample(
         Spacer(modifier = Modifier.height(8.dp))
         Card(
             modifier = Modifier
-                .size(paletteSize),
+                .size(styleSize),
             shape = RoundedCornerShape(0),
             colors = CardDefaults.cardColors(
                 containerColor = backgroundColor
@@ -205,14 +205,14 @@ fun MosaicSample(
                         .fillMaxHeight(.5f)
                         .align(Alignment.TopStart)
                         .padding(end = .25.dp, bottom = .25.dp)
-                        .background(paletteColors.primary)
+                        .background(styleColors.primary)
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(.5f)
                             .fillMaxHeight(.5f)
                             .align(Alignment.Center)
-                            .background(paletteColors.onPrimary)
+                            .background(styleColors.onPrimary)
                     )
                 }
                 Box(
@@ -221,14 +221,14 @@ fun MosaicSample(
                         .fillMaxHeight(.5f)
                         .align(Alignment.TopEnd)
                         .padding(start = .25.dp, bottom = .25.dp)
-                        .background(paletteColors.background)
+                        .background(styleColors.background)
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(.5f)
                             .fillMaxHeight(.5f)
                             .align(Alignment.Center)
-                            .background(paletteColors.onBackground)
+                            .background(styleColors.onBackground)
                     )
                 }
                 Box(
@@ -237,14 +237,14 @@ fun MosaicSample(
                         .fillMaxHeight(.5f)
                         .align(Alignment.BottomStart)
                         .padding(end = .25.dp, top = .25.dp)
-                        .background(paletteColors.accent)
+                        .background(styleColors.accent)
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(.5f)
                             .fillMaxHeight(.5f)
                             .align(Alignment.Center)
-                            .background(paletteColors.onAccent)
+                            .background(styleColors.onAccent)
                     )
                 }
                 Box(
@@ -253,14 +253,14 @@ fun MosaicSample(
                         .fillMaxHeight(.5f)
                         .align(Alignment.BottomEnd)
                         .padding(start = .25.dp, top = .25.dp)
-                        .background(paletteColors.illustration)
+                        .background(styleColors.illustration)
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(.5f)
                             .fillMaxHeight(.5f)
                             .align(Alignment.Center)
-                            .background(paletteColors.illustrationOutline)
+                            .background(styleColors.illustrationOutline)
                     )
                 }
             }
@@ -271,17 +271,17 @@ fun MosaicSample(
 @Preview
 @Composable
 private fun Preview() {
-    PaletteSelection(initiallyExpanded = true, selectionClickPalette = {})
+    StyleSelection(initiallyExpanded = true, selectionClickStyle = {})
 }
 
 @Composable
-private fun ReccoPalette.asTitle() = stringResource(
+private fun ReccoStyle.asTitle() = stringResource(
     when (this) {
-        is ReccoPalette.Custom -> TODO()
-        ReccoPalette.Fresh -> R.string.fresh
-        ReccoPalette.Ocean -> R.string.ocean
-        ReccoPalette.Spring -> R.string.spring
-        ReccoPalette.Tech -> R.string.tech
+        is ReccoStyle.Custom -> TODO()
+        ReccoStyle.Fresh -> R.string.fresh
+        ReccoStyle.Ocean -> R.string.ocean
+        ReccoStyle.Spring -> R.string.spring
+        ReccoStyle.Tech -> R.string.tech
     }
 )
 
