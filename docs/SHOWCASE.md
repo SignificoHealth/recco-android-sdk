@@ -13,6 +13,21 @@ You need your users to be identified, this is how a personalized experience is b
 |---------------------------------------|---------------------------------------------------|--------------------------------------------|
 | ![login](../art/recco_user_login.png) | ![login-fill](../art/recco_user_login_filled.png) | ![login-welcome](../art/recco_welcome.png) |
 
+## Palette selection
+
+Recco's journey design might be configured using one of its predefined palettes, available in both light and dark modes.
+
+| Select Palette                                | Apply Palette                                | Apply Dark Palette                              |
+|-----------------------------------------------|----------------------------------------------|-------------------------------------------------|
+| ![select](../art/recco_palette_selection.png) | ![apply](../art/recco_palette_applied.png) | ![dark](../art/recco_dark_palette_applied.png) |
+
+## Language Selection
+
+Recco currently supports English and German languages, let your users select their regarding their preferences.
+
+| Select Language                               | Apply English                               | Apply German                              |
+|-----------------------------------------------|---------------------------------------------|-------------------------------------------|
+| ![select](../art/recco_language_settings.png) | ![english](../art/recco_english_locale.png) | ![german](../art/recco_german_locale.png) |
 
 ## Onboarding
 
