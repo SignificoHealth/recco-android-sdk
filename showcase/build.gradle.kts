@@ -49,7 +49,7 @@ android {
             buildConfigField(
                 type = "String",
                 name = "CLIENT_SECRET",
-                value = "\"ax56dFyYSU7fgnJU6PuNyWSJ_rFQccFSYr16t3kj11J9NzelobNNRxBvBpFh97ZszHPjjnE\""
+                value = "\"_20_0iKompsh-xy0Pc2YAYLHFimFV0qCZVSPobB982K1dIhhkYwbhutnBsSQsNqV0aludu8\""
             )
 
             signingConfig = signingConfigs.getByName("debug")
