@@ -12,7 +12,7 @@ android {
 
     val reccoBaseUrlLocalProperties: String? = gradleLocalProperties(rootDir).getProperty("recco.base.url")
     val reccoBaseUrlEnv: String? = System.getenv("RECCO_BASE_URL")
-    val baseUrl = reccoBaseUrlLocalProperties ?: reccoBaseUrlEnv ?: "\"https://api.sf-dev.significo.dev/\""
+    val baseUrl = reccoBaseUrlLocalProperties ?: reccoBaseUrlEnv ?: "\"https://recco-api.significo.app/\""
 
     buildTypes {
         debug {
