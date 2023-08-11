@@ -5,7 +5,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.recco.api.model.ReccoColors
-import com.recco.api.model.ReccoPalette
+import com.recco.api.model.ReccoStyle
 
 @Immutable
 data class ExtendedColors(
@@ -85,5 +85,5 @@ fun ExtendedColors.asColor(isLight: Boolean) = Colors(
 )
 
 internal val LocalExtendedColors = staticCompositionLocalOf {
-    ReccoPalette.Fresh.lightColors.asExtendedColors()
+    ReccoStyle.Fresh.lightColors.asExtendedColors()
 }

@@ -5,19 +5,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
-import com.recco.api.model.ReccoPalette
+import com.recco.api.model.ReccoStyle
 import com.recco.internal.core.ui.components.AppStatusBar
 
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    palette: ReccoPalette = ReccoPalette.Fresh,
+    style: ReccoStyle = ReccoStyle.Fresh,
     content: @Composable () -> Unit
 ) {
     val extendedColors = if (darkTheme) {
-        palette.darkColors.asExtendedColors()
+        style.darkColors.asExtendedColors()
     } else {
-        palette.lightColors.asExtendedColors()
+        style.lightColors.asExtendedColors()
     }
 
     AppStatusBar(color = AppTheme.colors.staticDark, darkIcons = false)
