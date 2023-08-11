@@ -93,7 +93,6 @@ android {
 
 dependencies {
     implementation(project(":api:ui"))
-    implementation(project(":internal:core:network"))
 
     // implementation("com.significo:recco-api-ui:0.0.0")
 
