@@ -11,6 +11,6 @@ class ReccoStyleProvider : PreviewParameterProvider<ReccoStyle> {
             ReccoStyle(ReccoFont.POPPINS, ReccoPalette.Fresh),
             ReccoStyle(ReccoFont.ROBOTO, ReccoPalette.Ocean),
             ReccoStyle(ReccoFont.MONTSERRAT, ReccoPalette.Spring),
-            ReccoStyle(ReccoFont.WORK_SANS, ReccoPalette.Tech),
+            ReccoStyle(ReccoFont.WORK_SANS, ReccoPalette.Tech)
         )
 }
