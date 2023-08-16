@@ -145,7 +145,7 @@ class YourApplication : Application() {
             // SDK Config
             sdkConfig = ReccoConfig(
                 clientSecret = "CLIENT SECRET HERE",
-                style = ReccoStyle.Fresh
+                style = ReccoStyle()
             ),
 
             application = this,
