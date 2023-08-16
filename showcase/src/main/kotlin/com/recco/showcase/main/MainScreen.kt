@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ireward.htmlcompose.HtmlText
+import com.recco.api.model.ReccoStyle
 import com.recco.showcase.R
 import com.recco.showcase.ShowcaseApp
 import com.recco.showcase.ui.theme.BackgroundColor
@@ -117,7 +118,7 @@ fun MainScreen(
 
         val application = LocalContext.current.applicationContext as Application
         StyleSelection(selectionClickStyle = { reccoStyle ->
-            ShowcaseApp.initSDK(application, reccoStyle)
+            ShowcaseApp.initSDK(application, ReccoStyle(palette = reccoStyle))
         })
     }
 }

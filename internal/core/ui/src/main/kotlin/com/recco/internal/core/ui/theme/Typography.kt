@@ -16,106 +16,111 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
+import com.recco.api.model.ReccoFont
 import com.recco.internal.core.ui.R
 
-private val provider = GoogleFont.Provider(
-    providerAuthority = "com.google.android.gms.fonts",
-    providerPackage = "com.google.android.gms",
-    certificates = R.array.com_google_android_gms_fonts_certs
-)
-private val fontName = GoogleFont("Poppins")
-private val poppins = FontFamily(
-    Font(googleFont = fontName, fontProvider = provider, FontWeight.Normal),
-    Font(googleFont = fontName, fontProvider = provider, FontWeight.Medium),
-    Font(googleFont = fontName, fontProvider = provider, FontWeight.SemiBold),
-    Font(googleFont = fontName, fontProvider = provider, FontWeight.Bold)
-)
+fun ReccoFont.asFontFamily(): FontFamily {
+    val provider = GoogleFont.Provider(
+        providerAuthority = "com.google.android.gms.fonts",
+        providerPackage = "com.google.android.gms",
+        certificates = R.array.com_google_android_gms_fonts_certs
+    )
+    val fontName = GoogleFont(fontName)
+    return FontFamily(
+        Font(googleFont = fontName, fontProvider = provider, FontWeight.Normal),
+        Font(googleFont = fontName, fontProvider = provider, FontWeight.Medium),
+        Font(googleFont = fontName, fontProvider = provider, FontWeight.SemiBold),
+        Font(googleFont = fontName, fontProvider = provider, FontWeight.Bold)
+    )
+}
 
-private fun h1(textColor: Color) = TextStyle(
-    fontFamily = poppins,
+private fun h1(textColor: Color, fontFamily: FontFamily) = TextStyle(
+    fontFamily = fontFamily,
     fontWeight = FontWeight.SemiBold,
     fontSize = 28.sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false),
     color = textColor
 )
 
-private fun h2(textColor: Color) = TextStyle(
-    fontFamily = poppins,
+private fun h2(textColor: Color, fontFamily: FontFamily) = TextStyle(
+    fontFamily = fontFamily,
     fontWeight = FontWeight.Medium,
     fontSize = 24.sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false),
     color = textColor
 )
 
-private fun h3(textColor: Color) = TextStyle(
-    fontFamily = poppins,
+private fun h3(textColor: Color, fontFamily: FontFamily) = TextStyle(
+    fontFamily = fontFamily,
     fontWeight = FontWeight.Bold,
     fontSize = 17.sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false),
     color = textColor
 )
 
-private fun h4(textColor: Color) = TextStyle(
-    fontFamily = poppins,
+private fun h4(textColor: Color, fontFamily: FontFamily) = TextStyle(
+    fontFamily = fontFamily,
     fontWeight = FontWeight.SemiBold,
     fontSize = 17.sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false),
     color = textColor
 )
 
-private fun body1(textColor: Color) = TextStyle(
-    fontFamily = poppins,
+private fun body1(textColor: Color, fontFamily: FontFamily) = TextStyle(
+    fontFamily = fontFamily,
     fontWeight = FontWeight.Normal,
     fontSize = 17.sp,
     color = textColor
 )
 
-private fun body1Bold(textColor: Color) = body1(textColor).copy(fontWeight = FontWeight.Bold)
+private fun body1Bold(textColor: Color, fontFamily: FontFamily) =
+    body1(textColor, fontFamily).copy(fontWeight = FontWeight.Bold)
 
-private fun body2(textColor: Color) = TextStyle(
-    fontFamily = poppins,
+private fun body2(textColor: Color, fontFamily: FontFamily) = TextStyle(
+    fontFamily = fontFamily,
     fontWeight = FontWeight.Medium,
     fontSize = 15.sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false),
     color = textColor
 )
 
-private fun body2Bold(textColor: Color) = body2(textColor).copy(fontWeight = FontWeight.Bold)
+private fun body2Bold(textColor: Color, fontFamily: FontFamily) =
+    body2(textColor, fontFamily).copy(fontWeight = FontWeight.Bold)
 
-private fun body3(textColor: Color) = TextStyle(
-    fontFamily = poppins,
+private fun body3(textColor: Color, fontFamily: FontFamily) = TextStyle(
+    fontFamily = fontFamily,
     fontWeight = FontWeight.SemiBold,
     fontSize = 12.sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false),
     color = textColor
 )
 
-private fun cta(textColor: Color) = TextStyle(
-    fontFamily = poppins,
+private fun cta(textColor: Color, fontFamily: FontFamily) = TextStyle(
+    fontFamily = fontFamily,
     fontWeight = FontWeight.SemiBold,
     fontSize = 16.sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false),
     color = textColor
 )
 
-private fun labelSmall(textColor: Color) = TextStyle(
-    fontFamily = poppins,
+private fun labelSmall(textColor: Color, fontFamily: FontFamily) = TextStyle(
+    fontFamily = fontFamily,
     fontWeight = FontWeight.SemiBold,
     fontSize = 13.sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false),
     color = textColor
 )
 
-private fun contentTitle(textColor: Color) = TextStyle(
-    fontFamily = poppins,
+private fun contentTitle(textColor: Color, fontFamily: FontFamily) = TextStyle(
+    fontFamily = fontFamily,
     fontWeight = FontWeight.Medium,
     fontSize = 12.sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false),
     color = textColor
 )
 
-private fun numberBig(textColor: Color) = TextStyle(
-    fontFamily = poppins,
+private fun numberBig(textColor: Color, fontFamily: FontFamily) = TextStyle(
+    fontFamily = fontFamily,
     fontWeight = FontWeight.SemiBold,
     fontSize = 22.sp,
     platformStyle = PlatformTextStyle(includeFontPadding = false),
@@ -139,24 +144,24 @@ data class ExtendedTypography(
     val numberBig: TextStyle = TextStyle()
 )
 
-internal fun extendedTypography(textColor: Color) = ExtendedTypography(
-    h1 = h1(textColor),
-    h2 = h2(textColor),
-    h3 = h3(textColor),
-    h4 = h4(textColor),
-    body1 = body1(textColor),
-    body1Bold = body1Bold(textColor),
-    body2 = body2(textColor),
-    body2Bold = body2Bold(textColor),
-    body3 = body3(textColor),
-    cta = cta(textColor),
-    labelSmall = labelSmall(textColor),
-    contentTitle = contentTitle(textColor),
-    numberBig = numberBig(textColor)
+internal fun extendedTypography(textColor: Color, fontFamily: FontFamily) = ExtendedTypography(
+    h1 = h1(textColor, fontFamily),
+    h2 = h2(textColor, fontFamily),
+    h3 = h3(textColor, fontFamily),
+    h4 = h4(textColor, fontFamily),
+    body1 = body1(textColor, fontFamily),
+    body1Bold = body1Bold(textColor, fontFamily),
+    body2 = body2(textColor, fontFamily),
+    body2Bold = body2Bold(textColor, fontFamily),
+    body3 = body3(textColor, fontFamily),
+    cta = cta(textColor, fontFamily),
+    labelSmall = labelSmall(textColor, fontFamily),
+    contentTitle = contentTitle(textColor, fontFamily),
+    numberBig = numberBig(textColor, fontFamily)
 )
 
 internal fun ExtendedTypography.asTypography() = Typography(
-    defaultFontFamily = poppins,
+    defaultFontFamily = ReccoFont.POPPINS.asFontFamily(),
     h1 = h1,
     h2 = h2,
     h3 = h3,

@@ -11,25 +11,27 @@ import com.recco.internal.core.ui.components.AppStatusBar
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    style: ReccoStyle = ReccoStyle.Fresh,
+    style: ReccoStyle = ReccoStyle(),
     content: @Composable () -> Unit
 ) {
     val extendedColors = if (darkTheme) {
-        style.darkColors.asExtendedColors()
+        style.palette.darkColors.asExtendedColors()
     } else {
-        style.lightColors.asExtendedColors()
+        style.palette.lightColors.asExtendedColors()
     }
 
     AppStatusBar(color = AppTheme.colors.staticDark, darkIcons = false)
 
+    val fontFamily = style.font.asFontFamily()
+
     CompositionLocalProvider(
         LocalExtendedColors provides extendedColors,
-        LocalExtendedTypography provides extendedTypography(extendedColors.primary),
+        LocalExtendedTypography provides extendedTypography(extendedColors.primary, fontFamily),
         LocalElevation provides elevation
     ) {
         MaterialTheme(
             colors = extendedColors.asColor(isLight = !darkTheme),
-            typography = extendedTypography(extendedColors.primary).asTypography()
+            typography = extendedTypography(extendedColors.primary, fontFamily).asTypography()
         ) {
             CompositionLocalProvider(content = content)
         }

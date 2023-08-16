@@ -17,7 +17,7 @@ class ShowcaseApp : Application() {
     }
 
     companion object {
-        fun initSDK(application: Application, style: ReccoStyle = ReccoStyle.Fresh) {
+        fun initSDK(application: Application, style: ReccoStyle = ReccoStyle()) {
             ReccoApiUI.init(
                 sdkConfig = ReccoConfig(
                     clientSecret = BuildConfig.CLIENT_SECRET,

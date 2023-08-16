@@ -44,14 +44,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.recco.api.model.ReccoStyle
+import com.recco.api.model.ReccoPalette
 import com.recco.showcase.R
 import com.recco.showcase.ui.theme.Typography
 import com.recco.showcase.ui.theme.WarmBrown
 
 @Composable
 fun StyleSelection(
-    selectionClickStyle: (ReccoStyle) -> Unit,
+    selectionClickStyle: (ReccoPalette) -> Unit,
     initiallyExpanded: Boolean = false
 ) {
     var expanded by remember { mutableStateOf(initiallyExpanded) }
@@ -99,7 +99,7 @@ fun StyleSelection(
                 shadowElevation = 2.dp
             ) {
                 Column {
-                    listOf(ReccoStyle.Fresh, ReccoStyle.Ocean, ReccoStyle.Spring, ReccoStyle.Tech)
+                    listOf(ReccoPalette.Fresh, ReccoPalette.Ocean, ReccoPalette.Spring, ReccoPalette.Tech)
                         .forEachIndexed { index, style ->
                             MosaicSampleSection(
                                 style,
@@ -118,9 +118,9 @@ fun StyleSelection(
 
 @Composable
 fun MosaicSampleSection(
-    style: ReccoStyle,
+    style: ReccoPalette,
     showIconHeader: Boolean,
-    selectionClickStyle: (ReccoStyle) -> Unit
+    selectionClickStyle: (ReccoPalette) -> Unit
 ) {
     Row(
         Modifier
@@ -142,7 +142,7 @@ fun MosaicSampleSection(
 
 @Composable
 fun MosaicSample(
-    style: ReccoStyle,
+    style: ReccoPalette,
     showIconHeader: Boolean,
     isDarkMode: Boolean
 ) {
@@ -275,13 +275,13 @@ private fun Preview() {
 }
 
 @Composable
-private fun ReccoStyle.asTitle() = stringResource(
+private fun ReccoPalette.asTitle() = stringResource(
     when (this) {
-        is ReccoStyle.Custom -> TODO()
-        ReccoStyle.Fresh -> R.string.fresh
-        ReccoStyle.Ocean -> R.string.ocean
-        ReccoStyle.Spring -> R.string.spring
-        ReccoStyle.Tech -> R.string.tech
+        is ReccoPalette.Custom -> TODO()
+        ReccoPalette.Fresh -> R.string.fresh
+        ReccoPalette.Ocean -> R.string.ocean
+        ReccoPalette.Spring -> R.string.spring
+        ReccoPalette.Tech -> R.string.tech
     }
 )
 
