@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.recco.showcase.customize.CustomizeScreen
 import com.recco.showcase.login.LoginScreen
-import com.recco.showcase.main.MainScreen
+import com.recco.showcase.main.MainRoute
 
 private const val MainRoute = "main"
 private const val LoginRoute = "login"
@@ -28,7 +28,7 @@ fun ShowcaseNavHost(
         startDestination = if (isUserLoggedIn) MainRoute else LoginRoute
     ) {
         composable(route = MainRoute) {
-            MainScreen(
+            MainRoute(
                 logoutClick = {
                     logout()
                     navController.navigate(LoginRoute) {
