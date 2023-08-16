@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.recco.showcase.customize.CustomizeScreen
+import com.recco.showcase.customize.CustomizePaletteScreen
 import com.recco.showcase.login.LoginScreen
 import com.recco.showcase.main.MainRoute
 
@@ -36,7 +36,8 @@ fun ShowcaseNavHost(
                     }
                 },
                 openReccoClick = openReccoClick,
-                navigateToCustomizeScreen = { navController.navigate(CustomizeRoute) }
+                createCustomPalette = { navController.navigate(CustomizeRoute) },
+                editCustomPalette = { navController.navigate(CustomizeRoute) }
             )
         }
 
@@ -52,7 +53,7 @@ fun ShowcaseNavHost(
         }
 
         composable(route = CustomizeRoute) {
-            CustomizeScreen(
+            CustomizePaletteScreen(
                 navigateUp = navController::navigateUp
             )
         }

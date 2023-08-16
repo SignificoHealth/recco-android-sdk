@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
 import com.recco.api.ui.ReccoApiUI
+import com.recco.showcase.data.ShowcaseRepository
 import com.recco.showcase.navigation.ShowcaseNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -12,23 +13,23 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ShowcaseActivity : ComponentActivity() {
     @Inject
-    lateinit var persistence: ShowcaseRepository
+    lateinit var repository: ShowcaseRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             ShowcaseNavHost(
-                updateClientId = { persistence.setUserId(it) },
+                updateClientId = { repository.setUserId(it) },
                 logout = {
                     ReccoApiUI.logout()
-                    persistence.clearUserId()
+                    repository.clearUserId()
                 },
                 openReccoClick = {
                     ReccoApiUI.navigateToDashboard(this@ShowcaseActivity)
                 },
                 navController = rememberNavController(),
-                isUserLoggedIn = persistence.isUserLoggedIn()
+                isUserLoggedIn = repository.isUserLoggedIn()
             )
         }
     }

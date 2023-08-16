@@ -3,8 +3,8 @@ package com.recco.showcase.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.recco.api.model.ReccoFont
-import com.recco.api.model.ReccoPalette
-import com.recco.showcase.ShowcaseRepository
+import com.recco.showcase.data.ShowcaseRepository
+import com.recco.showcase.models.ShowcasePalette
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,7 +21,8 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(
         MainUI(
-            selectedPalette = repository.getSelectedReccoPalette(),
+            palettes = emptyList(),
+            selectedPaletteId = repository.getSelectedPaletteId(),
             selectedFont = repository.getSelectedReccoFont()
         )
     )
@@ -32,21 +33,31 @@ class MainViewModel @Inject constructor(
         initialValue = MainUI()
     )
 
-    val selectedReccoPalette: ReccoPalette get() = repository.getSelectedReccoPalette()
+    val selectedPalette: ShowcasePalette get() = _viewState.value.palettes.first { it.id == repository.getSelectedPaletteId() }
 
     val selectedReccoFont: ReccoFont get() = repository.getSelectedReccoFont()
 
-    fun setReccoFont(font: ReccoFont) {
+    init {
+        viewModelScope.launch {
+            _viewState.emit(
+                _viewState.value.copy(
+                    palettes = repository.getPalettes()
+                )
+            )
+        }
+    }
+
+    fun setSelectedReccoFont(font: ReccoFont) {
         repository.setReccoFont(font)
         viewModelScope.launch {
             _viewState.emit(_viewState.value.copy(selectedFont = font))
         }
     }
 
-    fun setReccoPalette(palette: ReccoPalette) {
-        repository.setReccoPalette(palette)
+    fun setSelectedPaletteId(paletteId: Int) {
+        repository.setSelectedPaletteId(paletteId)
         viewModelScope.launch {
-            _viewState.emit(_viewState.value.copy(selectedPalette = palette))
+            _viewState.emit(_viewState.value.copy(selectedPaletteId = paletteId))
         }
     }
 }

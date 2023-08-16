@@ -118,6 +118,13 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+
+    val roomVersion = "2.5.2"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+
+    //debugImplementation("androidx.compose.ui:ui-tooling:1.6.0-alpha03")
 }
 
 easylauncher {

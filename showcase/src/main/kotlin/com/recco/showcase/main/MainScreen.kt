@@ -37,6 +37,9 @@ import com.recco.api.model.ReccoPalette
 import com.recco.api.model.ReccoStyle
 import com.recco.showcase.R
 import com.recco.showcase.ShowcaseApp
+import com.recco.showcase.data.mappers.asReccoPalette
+import com.recco.showcase.data.mappers.asShowcasePaletteEntity
+import com.recco.showcase.models.ShowcasePalette
 import com.recco.showcase.ui.theme.BackgroundColor
 import com.recco.showcase.ui.theme.SoftYellow
 import com.recco.showcase.ui.theme.Typography
@@ -46,7 +49,8 @@ import com.recco.showcase.ui.theme.WarmBrown
 fun MainRoute(
     logoutClick: () -> Unit,
     openReccoClick: () -> Unit,
-    navigateToCustomizeScreen: () -> Unit,
+    createCustomPalette: () -> Unit,
+    editCustomPalette: (ShowcasePalette) -> Unit,
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val application = LocalContext.current.applicationContext as Application
@@ -57,28 +61,29 @@ fun MainRoute(
         logoutClick = logoutClick,
         openReccoClick = openReccoClick,
         selectionClickPalette = { palette ->
-            viewModel.setReccoPalette(palette)
+            viewModel.setSelectedPaletteId(palette.id)
 
             ShowcaseApp.initSDK(
                 application,
                 ReccoStyle(
                     font = viewModel.selectedReccoFont,
-                    palette = viewModel.selectedReccoPalette
+                    palette = viewModel.selectedPalette.asReccoPalette()
                 )
             )
         },
         selectionClickFont = { font ->
-            viewModel.setReccoFont(font)
+            viewModel.setSelectedReccoFont(font)
 
             ShowcaseApp.initSDK(
                 application,
                 ReccoStyle(
                     font = viewModel.selectedReccoFont,
-                    palette = viewModel.selectedReccoPalette
+                    palette = viewModel.selectedPalette.asReccoPalette()
                 )
             )
         },
-        navigateToCustomizeScreen = navigateToCustomizeScreen
+        createCustomPalette = createCustomPalette,
+        editCustomPalette = editCustomPalette
     )
 }
 
@@ -87,9 +92,10 @@ private fun MainScreen(
     uiState: MainUI,
     logoutClick: () -> Unit,
     openReccoClick: () -> Unit,
-    selectionClickPalette: (ReccoPalette) -> Unit,
+    selectionClickPalette: (ShowcasePalette) -> Unit,
     selectionClickFont: (ReccoFont) -> Unit,
-    navigateToCustomizeScreen: () -> Unit
+    createCustomPalette: () -> Unit,
+    editCustomPalette: (ShowcasePalette) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -165,7 +171,13 @@ private fun MainScreen(
         }
 
         Box {
-            PaletteSelection(selectionClickPalette, selectedPalette = uiState.selectedPalette)
+            PaletteSelection(
+                palettes = uiState.palettes,
+                selectionClickPalette = selectionClickPalette,
+                selectedPaletteId = uiState.selectedPaletteId,
+                createCustomPalette = createCustomPalette,
+                editCustomPalette = editCustomPalette
+            )
             FontSelection(selectionClickFont, selectedFont = uiState.selectedFont)
         }
     }
@@ -180,6 +192,7 @@ private fun Preview() {
         openReccoClick = {},
         selectionClickPalette = {},
         selectionClickFont = {},
-        navigateToCustomizeScreen = {}
+        createCustomPalette = {},
+        editCustomPalette = {}
     )
 }
