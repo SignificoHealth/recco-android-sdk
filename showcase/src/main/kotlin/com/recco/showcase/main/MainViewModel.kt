@@ -32,9 +32,9 @@ class MainViewModel @Inject constructor(
         initialValue = MainUI()
     )
 
-    val selectedReccoPalette get() = repository.getSelectedReccoPalette()
+    val selectedReccoPalette: ReccoPalette get() = repository.getSelectedReccoPalette()
 
-    val selectedReccoFont get() = repository.getSelectedReccoFont()
+    val selectedReccoFont: ReccoFont get() = repository.getSelectedReccoFont()
 
     fun setReccoFont(font: ReccoFont) {
         repository.setReccoFont(font)

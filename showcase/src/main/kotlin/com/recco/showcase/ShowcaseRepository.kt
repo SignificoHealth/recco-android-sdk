@@ -38,8 +38,11 @@ class ShowcaseRepository @Inject constructor(
 
     fun getSelectedReccoPalette(): ReccoPalette {
         val reccoPaletteName = prefs.getString(RECCO_PALETTE_KEY, "")
-        if (reccoPaletteName.isNullOrBlank()) return ReccoPalette.Fresh
-        return reccoPaletteName.asPalette()
+        return if (reccoPaletteName.isNullOrBlank()) {
+            ReccoPalette.Fresh
+        } else {
+            reccoPaletteName.asPalette()
+        }
     }
 
     fun setReccoFont(font: ReccoFont) {
@@ -60,17 +63,17 @@ class ShowcaseRepository @Inject constructor(
 
     private fun ReccoPalette.asName(): String = when (this) {
         is ReccoPalette.Custom -> TODO()
-        ReccoPalette.Fresh -> "Fresh"
-        ReccoPalette.Ocean -> "Ocean"
-        ReccoPalette.Spring -> "Spring"
-        ReccoPalette.Tech -> "Tech"
+        ReccoPalette.Fresh -> FRESH_PALETTE
+        ReccoPalette.Ocean -> OCEAN_PALETTE
+        ReccoPalette.Spring -> SPRING_PALETTE
+        ReccoPalette.Tech -> TECH_PALETTE
     }
 
     private fun String.asPalette() = when (this) {
-        "Fresh" -> ReccoPalette.Fresh
-        "Ocean" -> ReccoPalette.Ocean
-        "Spring" -> ReccoPalette.Spring
-        "Tech" -> ReccoPalette.Tech
+        FRESH_PALETTE -> ReccoPalette.Fresh
+        OCEAN_PALETTE -> ReccoPalette.Ocean
+        SPRING_PALETTE -> ReccoPalette.Spring
+        TECH_PALETTE -> ReccoPalette.Tech
         else -> throw IllegalArgumentException("$this is not a supported palette")
     }
 
@@ -78,5 +81,9 @@ class ShowcaseRepository @Inject constructor(
         private const val USER_ID_KEY = "user_id_key"
         private const val RECCO_PALETTE_KEY = "recco_palette_key"
         private const val RECCO_FONT_KEY = "recco_font_key"
+        private const val FRESH_PALETTE = "Fresh"
+        private const val OCEAN_PALETTE = "Ocean"
+        private const val SPRING_PALETTE = "Spring"
+        private const val TECH_PALETTE = "Tech"
     }
 }
