@@ -171,14 +171,14 @@ fun MosaicSample(
                             .fillMaxHeight(.5f)
                             .align(Alignment.TopStart)
                             .padding(end = .25.dp, bottom = .25.dp)
-                            .background(styleColors.primary)
+                            .background(styleColors.primary.asComposeColor())
                     ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth(.5f)
                                 .fillMaxHeight(.5f)
                                 .align(Alignment.Center)
-                                .background(styleColors.onPrimary)
+                                .background(styleColors.onPrimary.asComposeColor())
                         )
                     }
                     Box(
@@ -187,14 +187,14 @@ fun MosaicSample(
                             .fillMaxHeight(.5f)
                             .align(Alignment.TopEnd)
                             .padding(start = .25.dp, bottom = .25.dp)
-                            .background(styleColors.background)
+                            .background(styleColors.background.asComposeColor())
                     ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth(.5f)
                                 .fillMaxHeight(.5f)
                                 .align(Alignment.Center)
-                                .background(styleColors.onBackground)
+                                .background(styleColors.onBackground.asComposeColor())
                         )
                     }
                     Box(
@@ -203,14 +203,14 @@ fun MosaicSample(
                             .fillMaxHeight(.5f)
                             .align(Alignment.BottomStart)
                             .padding(end = .25.dp, top = .25.dp)
-                            .background(styleColors.accent)
+                            .background(styleColors.accent.asComposeColor())
                     ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth(.5f)
                                 .fillMaxHeight(.5f)
                                 .align(Alignment.Center)
-                                .background(styleColors.onAccent)
+                                .background(styleColors.onAccent.asComposeColor())
                         )
                     }
                     Box(
@@ -219,14 +219,14 @@ fun MosaicSample(
                             .fillMaxHeight(.5f)
                             .align(Alignment.BottomEnd)
                             .padding(start = .25.dp, top = .25.dp)
-                            .background(styleColors.illustration)
+                            .background(styleColors.illustration.asComposeColor())
                     ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth(.5f)
                                 .fillMaxHeight(.5f)
                                 .align(Alignment.Center)
-                                .background(styleColors.illustrationOutline)
+                                .background(styleColors.illustrationOutline.asComposeColor())
                         )
                     }
                 }
@@ -234,6 +234,8 @@ fun MosaicSample(
         }
     }
 }
+
+private fun String.asComposeColor() = Color(android.graphics.Color.parseColor(this))
 
 @Preview
 @Composable
