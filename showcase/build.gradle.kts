@@ -114,6 +114,10 @@ dependencies {
     implementation("com.github.viluahealthcare:compose-html:1.0.3")
 
     implementation("androidx.compose.ui:ui-text-google-fonts:1.4.3")
+
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
 }
 
 easylauncher {

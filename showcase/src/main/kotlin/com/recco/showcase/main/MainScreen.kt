@@ -18,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -28,7 +29,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ireward.htmlcompose.HtmlText
+import com.recco.api.model.ReccoFont
+import com.recco.api.model.ReccoPalette
 import com.recco.api.model.ReccoStyle
 import com.recco.showcase.R
 import com.recco.showcase.ShowcaseApp
@@ -38,9 +43,52 @@ import com.recco.showcase.ui.theme.Typography
 import com.recco.showcase.ui.theme.WarmBrown
 
 @Composable
-fun MainScreen(
+fun MainRoute(
     logoutClick: () -> Unit,
     openReccoClick: () -> Unit,
+    navigateToCustomizeScreen: () -> Unit,
+    viewModel: MainViewModel = hiltViewModel()
+) {
+    val application = LocalContext.current.applicationContext as Application
+    val uiState by viewModel.viewState.collectAsStateWithLifecycle()
+
+    MainScreen(
+        uiState = uiState,
+        logoutClick = logoutClick,
+        openReccoClick = openReccoClick,
+        selectionClickPalette = { palette ->
+            viewModel.setReccoPalette(palette)
+
+            ShowcaseApp.initSDK(
+                application,
+                ReccoStyle(
+                    font = viewModel.selectedReccoFont,
+                    palette = viewModel.selectedReccoPalette
+                )
+            )
+        },
+        selectionClickFont = { font ->
+            viewModel.setReccoFont(font)
+
+            ShowcaseApp.initSDK(
+                application,
+                ReccoStyle(
+                    font = viewModel.selectedReccoFont,
+                    palette = viewModel.selectedReccoPalette
+                )
+            )
+        },
+        navigateToCustomizeScreen = navigateToCustomizeScreen
+    )
+}
+
+@Composable
+private fun MainScreen(
+    uiState: MainUI,
+    logoutClick: () -> Unit,
+    openReccoClick: () -> Unit,
+    selectionClickPalette: (ReccoPalette) -> Unit,
+    selectionClickFont: (ReccoFont) -> Unit,
     navigateToCustomizeScreen: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -116,15 +164,22 @@ fun MainScreen(
             }
         }
 
-        val application = LocalContext.current.applicationContext as Application
-        StyleSelection(selectionClickStyle = { reccoStyle ->
-            ShowcaseApp.initSDK(application, ReccoStyle(palette = reccoStyle))
-        })
+        Box {
+            PaletteSelection(selectionClickPalette, selectedPalette = uiState.selectedPalette)
+            FontSelection(selectionClickFont, selectedFont = uiState.selectedFont)
+        }
     }
 }
 
 @Preview
 @Composable
 private fun Preview() {
-    MainScreen(logoutClick = {}, openReccoClick = {}, navigateToCustomizeScreen = {})
+    MainScreen(
+        uiState = MainUI(),
+        logoutClick = {},
+        openReccoClick = {},
+        selectionClickPalette = {},
+        selectionClickFont = {},
+        navigateToCustomizeScreen = {}
+    )
 }

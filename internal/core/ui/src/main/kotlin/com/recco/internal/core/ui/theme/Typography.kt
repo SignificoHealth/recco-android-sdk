@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.recco.api.model.ReccoFont
 import com.recco.internal.core.ui.R
 
-fun ReccoFont.asFontFamily(): FontFamily {
+internal fun ReccoFont.asFontFamily(): FontFamily {
     val provider = GoogleFont.Provider(
         providerAuthority = "com.google.android.gms.fonts",
         providerPackage = "com.google.android.gms",
