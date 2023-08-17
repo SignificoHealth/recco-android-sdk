@@ -24,7 +24,7 @@ Couple of Gradle Tasks are now generated both for project and module level, thes
   ```groovy
   ...
   moduleGroupId=com.significo
-  moduleVersion=0.0.1
+  moduleVersion=0.0.2
   ```
 
 Make sure these files contain the information you expect your publications to attend to. The following snippet shows a possible attribute values configuration.
@@ -107,5 +107,5 @@ repositories {
 Then, include the dependencies in your module level build.gradle file and sync again.
 
 ```kotlin
-  implementation("com.significo:recco-ui:0.0.1")
+  implementation("com.significo:recco-ui:0.0.2")
 ```
