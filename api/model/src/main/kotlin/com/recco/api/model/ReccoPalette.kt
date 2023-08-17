@@ -1,7 +1,5 @@
 package com.recco.api.model
 
-import androidx.compose.ui.graphics.Color
-
 sealed class ReccoPalette {
     abstract val darkColors: ReccoColors
     abstract val lightColors: ReccoColors
@@ -9,104 +7,104 @@ sealed class ReccoPalette {
     object Fresh : ReccoPalette() {
         override val darkColors: ReccoColors
             get() = ReccoColors(
-                primary = Color(0xFFffe6b0),
-                onPrimary = Color(0xFF383b45),
-                background = Color(0xFF383b45),
-                onBackground = Color(0xFFffffff),
-                accent = Color(0xFF7b61ff),
-                onAccent = Color(0xFFffe5ae),
-                illustration = Color(0xFFf5b731),
-                illustrationOutline = Color(0xFF7b61ff)
+                primary = "#FFffe6b0",
+                onPrimary = "#FF383b45",
+                background = "#FF383b45",
+                onBackground = "#FFffffff",
+                accent = "#FF7b61ff",
+                onAccent = "#FFffe5ae",
+                illustration = "#FFf5b731",
+                illustrationOutline = "#FF7b61ff"
             )
 
         override val lightColors
             get() = ReccoColors(
-                primary = Color(0xFF383b45),
-                onPrimary = Color(0xFFFFFFFF),
-                background = Color(0xFFfcfcfc),
-                onBackground = Color(0xFF383b45),
-                accent = Color(0xFF7b61ff),
-                onAccent = Color(0xFF2c2783),
-                illustration = Color(0xFFf5b731),
-                illustrationOutline = Color(0xFF454138)
+                primary = "#FF383b45",
+                onPrimary = "#FFFFFFFF",
+                background = "#FFfcfcfc",
+                onBackground = "#FF383b45",
+                accent = "#FF7b61ff",
+                onAccent = "#FF2c2783",
+                illustration = "#FFf5b731",
+                illustrationOutline = "#FF454138"
             )
     }
 
     object Ocean : ReccoPalette() {
         override val darkColors: ReccoColors
             get() = ReccoColors(
-                primary = Color(0xFFCEEEFF),
-                onPrimary = Color(0xFF263743),
-                background = Color(0xFF263743),
-                onBackground = Color(0xFFe4f6ff),
-                accent = Color(0xFF35b9ff),
-                onAccent = Color(0xFFe4f6ff),
-                illustration = Color(0xFF35b9ff),
-                illustrationOutline = Color(0xFF88493f)
+                primary = "#FFCEEEFF",
+                onPrimary = "#FF263743",
+                background = "#FF263743",
+                onBackground = "#FFe4f6ff",
+                accent = "#FF35b9ff",
+                onAccent = "#FFe4f6ff",
+                illustration = "#FF35b9ff",
+                illustrationOutline = "#FF88493f"
             )
 
         override val lightColors
             get() = ReccoColors(
-                primary = Color(0xFF125e85),
-                onPrimary = Color(0xFFffffff),
-                background = Color(0xFFecf8fe),
-                onBackground = Color(0xFF0c5175),
-                accent = Color(0xFF35b9ff),
-                onAccent = Color(0xFF17445b),
-                illustration = Color(0xFFf5a08c),
-                illustrationOutline = Color(0xFF105a81)
+                primary = "#FF125e85",
+                onPrimary = "#FFffffff",
+                background = "#FFecf8fe",
+                onBackground = "#FF0c5175",
+                accent = "#FF35b9ff",
+                onAccent = "#FF17445b",
+                illustration = "#FFf5a08c",
+                illustrationOutline = "#FF105a81"
             )
     }
 
     object Spring : ReccoPalette() {
         override val darkColors: ReccoColors
             get() = ReccoColors(
-                primary = Color(0xFFffddbe),
-                onPrimary = Color(0xFF383b45),
-                background = Color(0xFF383b45),
-                onBackground = Color(0xFFffffff),
-                accent = Color(0xFF3ba17a),
-                onAccent = Color(0xFFffe5ae),
-                illustration = Color(0xFFffc188),
-                illustrationOutline = Color(0xFF926500)
+                primary = "#FFffddbe",
+                onPrimary = "#FF383b45",
+                background = "#FF383b45",
+                onBackground = "#FFffffff",
+                accent = "#FF3ba17a",
+                onAccent = "#FFffe5ae",
+                illustration = "#FFffc188",
+                illustrationOutline = "#FF926500"
             )
 
         override val lightColors
             get() = ReccoColors(
-                primary = Color(0xFF2c956d),
-                onPrimary = Color(0xFFffffff),
-                background = Color(0xFFfcfcfc),
-                onBackground = Color(0xFF383b45),
-                accent = Color(0xFFea8822),
-                onAccent = Color(0xFF2c2783),
-                illustration = Color(0xFFffc188),
-                illustrationOutline = Color(0xFF306d49)
+                primary = "#FF2c956d",
+                onPrimary = "#FFffffff",
+                background = "#FFfcfcfc",
+                onBackground = "#FF383b45",
+                accent = "#FFea8822",
+                onAccent = "#FF2c2783",
+                illustration = "#FFffc188",
+                illustrationOutline = "#FF306d49"
             )
     }
 
     object Tech : ReccoPalette() {
         override val darkColors: ReccoColors
             get() = ReccoColors(
-                primary = Color(0xFFe5e4a3),
-                onPrimary = Color(0xFF373733),
-                background = Color(0xFF242422),
-                onBackground = Color(0xFFe5e4a3),
-                accent = Color(0xFFe6e452),
-                onAccent = Color(0xFFffffff),
-                illustration = Color(0xFFf5b731),
-                illustrationOutline = Color(0xFF403f15)
+                primary = "#FFe5e4a3",
+                onPrimary = "#FF373733",
+                background = "#FF242422",
+                onBackground = "#FFe5e4a3",
+                accent = "#FFe6e452",
+                onAccent = "#FFffffff",
+                illustration = "#FFf5b731",
+                illustrationOutline = "#FF403f15"
             )
 
         override val lightColors
             get() = ReccoColors(
-                primary = Color(0xFF25291d),
-                onPrimary = Color(0xFFffffff),
-                background = Color(0xFFf8f9f4),
-                onBackground = Color(0xFF383b45),
-                accent = Color(0xFFbab714),
-                onAccent = Color(0xFF6a6d65),
-                illustration = Color(0xFFf5b731),
-                illustrationOutline = Color(0xFF403f15)
+                primary = "#FF25291d",
+                onPrimary = "#FFffffff",
+                background = "#FFf8f9f4",
+                onBackground = "#FF383b45",
+                accent = "#FFbab714",
+                onAccent = "#FF6a6d65",
+                illustration = "#FFf5b731",
+                illustrationOutline = "#FF403f15"
             )
     }
 

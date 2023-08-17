@@ -1,16 +1,17 @@
 package com.recco.api.model
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
-
-@Immutable
+/*
+Color as string. Supported formats are:
+    #RRGGBB
+    #AARRGGBB
+ */
 data class ReccoColors(
-    val primary: Color,
-    val onPrimary: Color,
-    val background: Color,
-    val onBackground: Color,
-    val accent: Color,
-    val onAccent: Color,
-    val illustration: Color,
-    val illustrationOutline: Color
+    val primary: String,
+    val onPrimary: String,
+    val background: String,
+    val onBackground: String,
+    val accent: String,
+    val onAccent: String,
+    val illustration: String,
+    val illustrationOutline: String
 )
