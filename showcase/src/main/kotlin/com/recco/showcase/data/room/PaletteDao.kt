@@ -9,7 +9,7 @@ import com.recco.showcase.data.entities.ShowcasePaletteEntity
 @Dao
 interface PaletteDao {
     @Query("SELECT * FROM palette")
-    suspend fun get(): List<ShowcasePaletteEntity>
+    suspend fun getAll(): List<ShowcasePaletteEntity>
 
     @Insert
     suspend fun add(paletteEntity: ShowcasePaletteEntity)

@@ -66,7 +66,7 @@ class ShowcaseRepository @Inject constructor(
         }
     }
 
-    suspend fun getPalettes() = paletteDao.get().map(ShowcasePaletteEntity::asShowcasePalette)
+    suspend fun getPalettes() = paletteDao.getAll().map(ShowcasePaletteEntity::asShowcasePalette)
         .plus(
             listOf(ReccoPalette.Fresh, ReccoPalette.Ocean, ReccoPalette.Spring, ReccoPalette.Tech)
                 .map { it.asShowcasePalette() }
