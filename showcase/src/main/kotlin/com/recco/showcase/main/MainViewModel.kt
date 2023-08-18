@@ -33,7 +33,9 @@ class MainViewModel @Inject constructor(
         initialValue = MainUI()
     )
 
-    val selectedPalette: ShowcasePalette get() = _viewState.value.palettes.first { it.id == repository.getSelectedPaletteId() }
+    val selectedPalette: ShowcasePalette get() = _viewState.value.palettes.first {
+        it.id == repository.getSelectedPaletteId()
+    }
 
     val selectedReccoFont: ReccoFont get() = repository.getSelectedReccoFont()
 

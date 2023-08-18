@@ -33,12 +33,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ireward.htmlcompose.HtmlText
 import com.recco.api.model.ReccoFont
-import com.recco.api.model.ReccoPalette
 import com.recco.api.model.ReccoStyle
 import com.recco.showcase.R
 import com.recco.showcase.ShowcaseApp
 import com.recco.showcase.data.mappers.asReccoPalette
-import com.recco.showcase.data.mappers.asShowcasePaletteEntity
 import com.recco.showcase.models.ShowcasePalette
 import com.recco.showcase.ui.theme.BackgroundColor
 import com.recco.showcase.ui.theme.SoftYellow

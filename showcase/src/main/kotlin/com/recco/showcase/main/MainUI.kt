@@ -7,5 +7,5 @@ import com.recco.showcase.models.ShowcasePalette
 data class MainUI(
     val palettes: List<ShowcasePalette> = emptyList(),
     val selectedFont: ReccoFont? = null,
-    val selectedPaletteId: Int = FRESH_PALETTE_ID,
+    val selectedPaletteId: Int = FRESH_PALETTE_ID
 )

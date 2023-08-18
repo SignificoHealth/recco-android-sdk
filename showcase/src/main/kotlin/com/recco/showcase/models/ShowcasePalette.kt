@@ -6,4 +6,3 @@ data class ShowcasePalette(
     val darkColors: ShowcaseColors,
     val lightColors: ShowcaseColors
 )
-

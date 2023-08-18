@@ -49,7 +49,6 @@ fun CustomizePaletteScreen(
                 .padding(top = contentPadding.calculateTopPadding())
                 .padding(all = 24.dp)
         ) {
-
         }
     }
 }

@@ -19,7 +19,8 @@ object DataModule {
     @Singleton
     fun provideRoom(@ApplicationContext context: Context): ShowcaseDatabase = Room.databaseBuilder(
         context,
-        ShowcaseDatabase::class.java, "showcase-db"
+        ShowcaseDatabase::class.java,
+        "showcase-db"
     ).build()
 
     @Provides
