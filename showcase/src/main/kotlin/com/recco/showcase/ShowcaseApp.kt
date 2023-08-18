@@ -6,7 +6,11 @@ import com.recco.api.model.ReccoConfig
 import com.recco.api.model.ReccoLogger
 import com.recco.api.model.ReccoStyle
 import com.recco.api.ui.ReccoApiUI
+import com.recco.showcase.data.ShowcaseRepository
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -14,16 +18,19 @@ class ShowcaseApp : Application() {
     @Inject
     lateinit var persistence: ShowcaseRepository
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate() {
         super.onCreate()
 
-        initSDK(
-            this,
-            ReccoStyle(
-                font = persistence.getSelectedReccoFont(),
-                palette = persistence.getSelectedReccoPalette()
+        GlobalScope.launch {
+            initSDK(
+                this@ShowcaseApp,
+                ReccoStyle(
+                    font = persistence.getSelectedReccoFont(),
+                    palette = persistence.getSelectedReccoPalette()
+                )
             )
-        )
+        }
     }
 
     companion object {

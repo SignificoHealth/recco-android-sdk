@@ -3,6 +3,8 @@ package com.recco.showcase.main
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -15,15 +17,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,15 +39,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.recco.api.model.ReccoPalette
 import com.recco.showcase.R
+import com.recco.showcase.data.mappers.FRESH_PALETTE_ID
+import com.recco.showcase.data.mappers.asShowcasePalette
+import com.recco.showcase.models.ShowcasePalette
 import com.recco.showcase.ui.theme.SoftYellow
 import com.recco.showcase.ui.theme.Typography
 import com.recco.showcase.ui.theme.WarmBrown
 
 @Composable
 fun PaletteSelection(
-    selectionClickPalette: (ReccoPalette) -> Unit,
+    palettes: List<ShowcasePalette>,
+    selectionClickPalette: (ShowcasePalette) -> Unit,
+    createCustomPalette: () -> Unit,
+    editCustomPalette: (ShowcasePalette) -> Unit,
     initiallyExpanded: Boolean = false,
-    selectedPalette: ReccoPalette? = null
+    selectedPaletteId: Int
 ) {
     val expanded = remember { mutableStateOf(initiallyExpanded) }
 
@@ -48,8 +61,13 @@ fun PaletteSelection(
         expandedState = expanded,
         iconRes = R.drawable.ic_palette
     ) {
-        Column {
-            listOf(ReccoPalette.Fresh, ReccoPalette.Ocean, ReccoPalette.Spring, ReccoPalette.Tech)
+        Column(
+            modifier = Modifier
+                .width(IntrinsicSize.Min)
+                .background(Color.White)
+                .verticalScroll(rememberScrollState())
+        ) {
+            palettes
                 .forEachIndexed { index, palette ->
                     MosaicSampleSection(
                         palette,
@@ -58,18 +76,43 @@ fun PaletteSelection(
                             expanded.value = false
                             selectionClickPalette(it)
                         },
-                        selectedPalette = selectedPalette == palette
+                        selectedPalette = selectedPaletteId == palette.id
                     )
                 }
+
+            Divider()
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .clickable { createCustomPalette() },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(WarmBrown)
+                        .padding(5.dp),
+                    painter = painterResource(id = R.drawable.ic_add),
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = stringResource(R.string.new_palette),
+                    style = Typography.labelLarge.copy(color = WarmBrown)
+                )
+            }
         }
     }
 }
 
 @Composable
 fun MosaicSampleSection(
-    palette: ReccoPalette,
+    palette: ShowcasePalette,
     showIconHeader: Boolean,
-    selectionClickStyle: (ReccoPalette) -> Unit,
+    selectionClickStyle: (ShowcasePalette) -> Unit,
     selectedPalette: Boolean
 ) {
     Row(
@@ -77,14 +120,14 @@ fun MosaicSampleSection(
             .noRippleClickable { selectionClickStyle(palette) }
     ) {
         MosaicSample(
-            style = palette,
+            palette = palette,
             showIconHeader = showIconHeader,
             isDarkMode = false,
             selectedPalette = selectedPalette
         )
 
         MosaicSample(
-            style = palette,
+            palette = palette,
             showIconHeader = showIconHeader,
             isDarkMode = true,
             selectedPalette = selectedPalette
@@ -94,13 +137,13 @@ fun MosaicSampleSection(
 
 @Composable
 fun MosaicSample(
-    style: ReccoPalette,
+    palette: ShowcasePalette,
     showIconHeader: Boolean,
     isDarkMode: Boolean,
     selectedPalette: Boolean
 ) {
     val styleSize = 56.dp
-    val styleColors = if (isDarkMode) style.darkColors else style.lightColors
+    val styleColors = if (isDarkMode) palette.darkColors else palette.lightColors
     val backgroundColor = if (isDarkMode) Color(0xFF040E1E) else Color.White
 
     Column(
@@ -138,7 +181,7 @@ fun MosaicSample(
                 .padding(10.dp)
         ) {
             Text(
-                text = style.asTitle(),
+                text = palette.name,
                 style = Typography.labelSmall.copy(
                     fontSize = 11.sp,
                     color = if (isDarkMode) {
@@ -237,25 +280,22 @@ fun MosaicSample(
 
 private fun String.asComposeColor() = Color(android.graphics.Color.parseColor(this))
 
+private val palettesPreview = listOf(
+    ReccoPalette.Fresh,
+    ReccoPalette.Ocean,
+    ReccoPalette.Spring,
+    ReccoPalette.Tech
+).map { it.asShowcasePalette() }
+
 @Preview
 @Composable
 private fun Preview() {
-    PaletteSelection(initiallyExpanded = true, selectionClickPalette = {})
+    PaletteSelection(
+        palettes = palettesPreview,
+        initiallyExpanded = true,
+        selectionClickPalette = {},
+        selectedPaletteId = FRESH_PALETTE_ID,
+        createCustomPalette = {},
+        editCustomPalette = {}
+    )
 }
-
-@Preview
-@Composable
-private fun PreviewSelected() {
-    PaletteSelection(initiallyExpanded = true, selectionClickPalette = {}, selectedPalette = ReccoPalette.Fresh)
-}
-
-@Composable
-private fun ReccoPalette.asTitle() = stringResource(
-    when (this) {
-        is ReccoPalette.Custom -> TODO()
-        ReccoPalette.Fresh -> R.string.fresh
-        ReccoPalette.Ocean -> R.string.ocean
-        ReccoPalette.Spring -> R.string.spring
-        ReccoPalette.Tech -> R.string.tech
-    }
-)

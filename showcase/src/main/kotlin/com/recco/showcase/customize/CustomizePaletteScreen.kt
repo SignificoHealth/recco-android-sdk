@@ -25,7 +25,7 @@ import com.recco.showcase.ui.theme.BackgroundColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomizeScreen(
+fun CustomizePaletteScreen(
     navigateUp: () -> Unit
 ) {
     Scaffold(
@@ -56,5 +56,5 @@ fun CustomizeScreen(
 @Preview
 @Composable
 private fun Preview() {
-    CustomizeScreen(navigateUp = {})
+    CustomizePaletteScreen(navigateUp = {})
 }
