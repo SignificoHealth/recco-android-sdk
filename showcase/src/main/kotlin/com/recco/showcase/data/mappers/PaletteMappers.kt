@@ -22,7 +22,8 @@ fun ReccoPalette.asShowcasePalette() = ShowcasePalette(
         is ReccoPalette.Custom -> throw IllegalArgumentException("$this is not a supported palette")
     },
     darkColors = darkColors.asShowcaseColors(),
-    lightColors = lightColors.asShowcaseColors()
+    lightColors = lightColors.asShowcaseColors(),
+    isCustom = false
 )
 
 private fun ReccoColors.asShowcaseColors() = ShowcaseColors(
@@ -58,7 +59,7 @@ private fun ShowcaseColors.asReccoColors() = ReccoColors(
     illustrationOutline
 )
 
-fun ShowcasePalette.asShowcasePaletteEntity() = ShowcasePaletteEntity(
+fun ShowcasePalette.asShowcasePaletteEntity(setId: Boolean = true) = ShowcasePaletteEntity(
     name = name,
     primaryLight = lightColors.primary,
     onPrimaryLight = lightColors.onPrimary,
@@ -76,7 +77,13 @@ fun ShowcasePalette.asShowcasePaletteEntity() = ShowcasePaletteEntity(
     onAccentDark = darkColors.onAccent,
     illustrationDark = darkColors.illustration,
     illustrationOutlineDark = darkColors.illustrationOutline
-)
+).let { palette ->
+    if (setId) {
+        palette.copy(id = id)
+    } else {
+        palette
+    }
+}
 
 fun ShowcasePaletteEntity.asShowcasePalette() = ShowcasePalette(
     id = id,
@@ -100,7 +107,8 @@ fun ShowcasePaletteEntity.asShowcasePalette() = ShowcasePalette(
         onAccent = onAccentLight,
         illustration = illustrationLight,
         illustrationOutline = illustrationOutlineLight
-    )
+    ),
+    isCustom = true
 )
 
 // The faked id values adopt negative values to avoid clashing with Room auto-generated ids

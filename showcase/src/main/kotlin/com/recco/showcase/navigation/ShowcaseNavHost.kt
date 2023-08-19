@@ -3,15 +3,20 @@ package com.recco.showcase.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.recco.showcase.customize.CustomizePaletteScreen
+import androidx.navigation.navArgument
+import com.recco.showcase.customize.CustomizePaletteRoute
 import com.recco.showcase.login.LoginScreen
 import com.recco.showcase.main.MainRoute
 
 private const val MainRoute = "main"
 private const val LoginRoute = "login"
-private const val CustomizeRoute = "customize"
+
+const val paletteToEditIdArg = "paletteId"
+private const val CreatePalette = "create_palette"
+private const val EditPalette = "edit_palette/{$paletteToEditIdArg}"
 
 @Composable
 fun ShowcaseNavHost(
@@ -36,8 +41,15 @@ fun ShowcaseNavHost(
                     }
                 },
                 openReccoClick = openReccoClick,
-                createCustomPalette = { navController.navigate(CustomizeRoute) },
-                editCustomPalette = { navController.navigate(CustomizeRoute) }
+                createCustomPalette = { navController.navigate(CreatePalette) },
+                editCustomPalette = { palette ->
+                    navController.navigate(
+                        EditPalette.replace(
+                            oldValue = "{$paletteToEditIdArg}",
+                            newValue = palette.id.toString()
+                        )
+                    )
+                }
             )
         }
 
@@ -52,8 +64,16 @@ fun ShowcaseNavHost(
             )
         }
 
-        composable(route = CustomizeRoute) {
-            CustomizePaletteScreen(
+        composable(route = CreatePalette) {
+            CustomizePaletteRoute(
+                navigateUp = navController::navigateUp
+            )
+        }
+
+        composable(route = EditPalette, arguments = listOf(
+            navArgument(paletteToEditIdArg) { type = NavType.IntType }
+        )) {
+            CustomizePaletteRoute(
                 navigateUp = navController::navigateUp
             )
         }

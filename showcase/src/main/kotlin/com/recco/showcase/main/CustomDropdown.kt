@@ -79,18 +79,13 @@ fun CustomDropdown(
 
         AnimatedVisibility(
             modifier = Modifier
+                .background(Color.Transparent)
                 .padding(top = topIconMargin),
             visible = expandedState.value,
             enter = expandVertically() + fadeIn(),
             exit = shrinkVertically() + fadeOut()
         ) {
-            Surface(
-                modifier = Modifier.zIndex(4f),
-                tonalElevation = 2.dp,
-                shadowElevation = 2.dp
-            ) {
-                collapsableView()
-            }
+            collapsableView()
         }
     }
 }

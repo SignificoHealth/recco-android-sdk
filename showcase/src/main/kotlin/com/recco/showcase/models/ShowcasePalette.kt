@@ -4,5 +4,6 @@ data class ShowcasePalette(
     val id: Int,
     val name: String,
     val darkColors: ShowcaseColors,
-    val lightColors: ShowcaseColors
+    val lightColors: ShowcaseColors,
+    val isCustom: Boolean
 )

@@ -1,6 +1,5 @@
 package com.recco.showcase.main
 
-import android.app.Application
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -33,10 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ireward.htmlcompose.HtmlText
 import com.recco.api.model.ReccoFont
-import com.recco.api.model.ReccoStyle
 import com.recco.showcase.R
-import com.recco.showcase.ShowcaseApp
-import com.recco.showcase.data.mappers.asReccoPalette
 import com.recco.showcase.models.ShowcasePalette
 import com.recco.showcase.ui.theme.BackgroundColor
 import com.recco.showcase.ui.theme.SoftYellow
@@ -51,37 +46,17 @@ fun MainRoute(
     editCustomPalette: (ShowcasePalette) -> Unit,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    val application = LocalContext.current.applicationContext as Application
     val uiState by viewModel.viewState.collectAsStateWithLifecycle()
 
     MainScreen(
         uiState = uiState,
         logoutClick = logoutClick,
         openReccoClick = openReccoClick,
-        selectionClickPalette = { palette ->
-            viewModel.setSelectedPaletteId(palette.id)
-
-            ShowcaseApp.initSDK(
-                application,
-                ReccoStyle(
-                    font = viewModel.selectedReccoFont,
-                    palette = viewModel.selectedPalette.asReccoPalette()
-                )
-            )
-        },
-        selectionClickFont = { font ->
-            viewModel.setSelectedReccoFont(font)
-
-            ShowcaseApp.initSDK(
-                application,
-                ReccoStyle(
-                    font = viewModel.selectedReccoFont,
-                    palette = viewModel.selectedPalette.asReccoPalette()
-                )
-            )
-        },
+        selectionClickPalette = { palette -> viewModel.setSelectedPaletteId(palette.id) },
+        selectionClickFont = { font -> viewModel.setSelectedReccoFont(font) },
         createCustomPalette = createCustomPalette,
-        editCustomPalette = editCustomPalette
+        editCustomPalette = editCustomPalette,
+        deleteCustomPalette = { viewModel.deleteCustomPalette(it) }
     )
 }
 
@@ -93,7 +68,8 @@ private fun MainScreen(
     selectionClickPalette: (ShowcasePalette) -> Unit,
     selectionClickFont: (ReccoFont) -> Unit,
     createCustomPalette: () -> Unit,
-    editCustomPalette: (ShowcasePalette) -> Unit
+    editCustomPalette: (ShowcasePalette) -> Unit,
+    deleteCustomPalette: (ShowcasePalette) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -174,7 +150,8 @@ private fun MainScreen(
                 selectionClickPalette = selectionClickPalette,
                 selectedPaletteId = uiState.selectedPaletteId,
                 createCustomPalette = createCustomPalette,
-                editCustomPalette = editCustomPalette
+                editCustomPalette = editCustomPalette,
+                deleteCustomPalette = deleteCustomPalette
             )
             FontSelection(selectionClickFont, selectedFont = uiState.selectedFont)
         }
@@ -191,6 +168,7 @@ private fun Preview() {
         selectionClickPalette = {},
         selectionClickFont = {},
         createCustomPalette = {},
-        editCustomPalette = {}
+        editCustomPalette = {},
+        deleteCustomPalette = {}
     )
 }

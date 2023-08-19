@@ -5,11 +5,24 @@
     <string name="login_message">Please create any User ID you want to be able to identify you as a User in the SDK.</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
-    <string name="customize">Customize</string>
+    <string name="create_palette">Create palette</string>
+    <string name="edit_palette">Edit palette</string>
     <string name="user_id">User ID</string>
     <string name="fresh">Fresh</string>
     <string name="ocean">Ocean</string>
     <string name="tech">Tech</string>
     <string name="spring">Spring</string>
     <string name="new_palette">New palette</string>
+    <string name="save_palette">Save palette</string>
+    <string name="primary">Primary</string>
+    <string name="on_primary">On Primary</string>
+    <string name="background">Background</string>
+    <string name="on_background">On Background</string>
+    <string name="accent">Accent</string>
+    <string name="on_accent">On Accent</string>
+    <string name="illustration">Illustration</string>
+    <string name="illustration_outline">Illustration Outline</string>
+    <string name="palette_name">Palette name</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
 </resources>
