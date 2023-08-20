@@ -98,7 +98,7 @@ fun ColorPickerScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(35.dp),
-                        controller = controller,
+                        controller = controller
                     )
                 }
             }

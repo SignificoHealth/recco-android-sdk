@@ -77,7 +77,17 @@ private fun CustomizePaletteScreen(
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
                     }
                 },
-                title = { Text(stringResource(if (uiState.isEditing) R.string.edit_palette else R.string.create_palette)) }
+                title = {
+                    Text(
+                        stringResource(
+                            if (uiState.isEditing) {
+                                R.string.edit_palette
+                            } else {
+                                R.string.create_palette
+                            }
+                        )
+                    )
+                }
             )
         }
     ) { contentPadding ->
@@ -94,7 +104,6 @@ private fun CustomizePaletteScreen(
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
-
                 ShowcaseTextField(
                     label = R.string.palette_name,
                     value = uiState.palette.name,

@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
                 _viewState.emit(
                     _viewState.value.copy(
                         palettes = palettes,
-                        selectedPaletteId = repository.getSelectedPaletteId(),
+                        selectedPaletteId = repository.getSelectedPaletteId()
                     )
                 )
             }

@@ -19,7 +19,7 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class CustomizePaletteViewModel @Inject constructor(
     private val repository: ShowcaseRepository,
-    savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val paletteToEditId by lazy { savedStateHandle.get<Int>(paletteToEditIdArg) }
     private val isEditing by lazy { paletteToEditId != null }

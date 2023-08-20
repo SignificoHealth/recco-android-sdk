@@ -70,9 +70,12 @@ fun ShowcaseNavHost(
             )
         }
 
-        composable(route = EditPalette, arguments = listOf(
-            navArgument(paletteToEditIdArg) { type = NavType.IntType }
-        )) {
+        composable(
+            route = EditPalette,
+            arguments = listOf(
+                navArgument(paletteToEditIdArg) { type = NavType.IntType }
+            )
+        ) {
             CustomizePaletteRoute(
                 navigateUp = navController::navigateUp
             )
