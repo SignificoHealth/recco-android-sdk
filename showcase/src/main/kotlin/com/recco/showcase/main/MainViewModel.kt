@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.WhileSubscribed
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,33 +34,36 @@ class MainViewModel @Inject constructor(
         initialValue = MainUI()
     )
 
-    val selectedPalette: ShowcasePalette get() = _viewState.value.palettes.first {
-        it.id == repository.getSelectedPaletteId()
-    }
-
-    val selectedReccoFont: ReccoFont get() = repository.getSelectedReccoFont()
-
     init {
         viewModelScope.launch {
-            _viewState.emit(
-                _viewState.value.copy(
-                    palettes = repository.getPalettes()
+            repository.getPalettes().collectLatest { palettes ->
+                _viewState.emit(
+                    _viewState.value.copy(
+                        palettes = palettes,
+                        selectedPaletteId = repository.getSelectedPaletteId()
+                    )
                 )
-            )
+            }
         }
     }
 
     fun setSelectedReccoFont(font: ReccoFont) {
-        repository.setReccoFont(font)
         viewModelScope.launch {
+            repository.setReccoFont(font)
             _viewState.emit(_viewState.value.copy(selectedFont = font))
         }
     }
 
     fun setSelectedPaletteId(paletteId: Int) {
-        repository.setSelectedPaletteId(paletteId)
         viewModelScope.launch {
+            repository.setSelectedPaletteId(paletteId)
             _viewState.emit(_viewState.value.copy(selectedPaletteId = paletteId))
+        }
+    }
+
+    fun deleteCustomPalette(palette: ShowcasePalette) {
+        viewModelScope.launch {
+            repository.deletePalette(palette)
         }
     }
 }

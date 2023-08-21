@@ -5,6 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "palette")
 data class ShowcasePaletteEntity(
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
+
     val name: String,
 
     val primaryLight: String,
@@ -24,7 +27,4 @@ data class ShowcasePaletteEntity(
     val onAccentDark: String,
     val illustrationDark: String,
     val illustrationOutlineDark: String
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-}
+)

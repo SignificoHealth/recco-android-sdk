@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,6 +53,7 @@ fun PaletteSelection(
     selectionClickPalette: (ShowcasePalette) -> Unit,
     createCustomPalette: () -> Unit,
     editCustomPalette: (ShowcasePalette) -> Unit,
+    deleteCustomPalette: (ShowcasePalette) -> Unit,
     initiallyExpanded: Boolean = false,
     selectedPaletteId: Int
 ) {
@@ -64,7 +66,6 @@ fun PaletteSelection(
         Column(
             modifier = Modifier
                 .width(IntrinsicSize.Min)
-                .background(Color.White)
                 .verticalScroll(rememberScrollState())
         ) {
             palettes
@@ -72,19 +73,21 @@ fun PaletteSelection(
                     MosaicSampleSection(
                         palette,
                         showIconHeader = index == 0,
-                        selectionClickStyle = {
+                        selectPalette = {
                             expanded.value = false
                             selectionClickPalette(it)
                         },
-                        selectedPalette = selectedPaletteId == palette.id
+                        selectedPalette = selectedPaletteId == palette.id,
+                        editCustomPalette = editCustomPalette,
+                        deleteCustomPalette = deleteCustomPalette
                     )
                 }
-
-            Divider()
+            Divider(modifier = Modifier.width(132.dp))
             Row(
                 modifier = Modifier
+                    .background(Color.White)
                     .padding(horizontal = 10.dp)
-                    .fillMaxWidth()
+                    .width(132.dp)
                     .height(70.dp)
                     .clickable { createCustomPalette() },
                 verticalAlignment = Alignment.CenterVertically,
@@ -92,11 +95,13 @@ fun PaletteSelection(
             ) {
                 Image(
                     modifier = Modifier
+                        .size(30.dp)
                         .clip(CircleShape)
                         .background(WarmBrown)
                         .padding(5.dp),
                     painter = painterResource(id = R.drawable.ic_add),
-                    contentDescription = null
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(SoftYellow)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
@@ -112,12 +117,15 @@ fun PaletteSelection(
 fun MosaicSampleSection(
     palette: ShowcasePalette,
     showIconHeader: Boolean,
-    selectionClickStyle: (ShowcasePalette) -> Unit,
+    selectPalette: (ShowcasePalette) -> Unit,
+    editCustomPalette: (ShowcasePalette) -> Unit,
+    deleteCustomPalette: (ShowcasePalette) -> Unit,
     selectedPalette: Boolean
 ) {
     Row(
         Modifier
-            .noRippleClickable { selectionClickStyle(palette) }
+            .background(Color.Transparent)
+            .noRippleClickable { selectPalette(palette) }
     ) {
         MosaicSample(
             palette = palette,
@@ -132,6 +140,41 @@ fun MosaicSampleSection(
             isDarkMode = true,
             selectedPalette = selectedPalette
         )
+
+        if (palette.isCustom) {
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .background(WarmBrown, CircleShape)
+                    .size(30.dp)
+                    .align(Alignment.CenterVertically)
+                    .clickable { editCustomPalette(palette) },
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.ic_edit),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(SoftYellow)
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .background(WarmBrown, CircleShape)
+                    .size(30.dp)
+                    .align(Alignment.CenterVertically)
+                    .clickable { deleteCustomPalette(palette) },
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(id = R.drawable.ic_delete),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(SoftYellow)
+                )
+            }
+        }
     }
 }
 
@@ -278,14 +321,14 @@ fun MosaicSample(
     }
 }
 
-private fun String.asComposeColor() = Color(android.graphics.Color.parseColor(this))
+fun String.asComposeColor() = Color(android.graphics.Color.parseColor(this))
 
 private val palettesPreview = listOf(
     ReccoPalette.Fresh,
     ReccoPalette.Ocean,
     ReccoPalette.Spring,
     ReccoPalette.Tech
-).map { it.asShowcasePalette() }
+).map { it.asShowcasePalette().copy(isCustom = true) }
 
 @Preview
 @Composable
@@ -296,6 +339,7 @@ private fun Preview() {
         selectionClickPalette = {},
         selectedPaletteId = FRESH_PALETTE_ID,
         createCustomPalette = {},
-        editCustomPalette = {}
+        editCustomPalette = {},
+        deleteCustomPalette = {}
     )
 }

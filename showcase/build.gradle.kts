@@ -119,6 +119,9 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
 
+    implementation("com.github.skydoves:colorpicker-compose:1.0.4")
+    implementation("com.holix.android:bottomsheetdialog-compose:1.2.2")
+
     val roomVersion = "2.5.2"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
