@@ -27,11 +27,12 @@ You can add new custom properties in the `openapi-generator-config.json` file to
 
 See [**Frontitude CLI**](./FRONTITUDE_CLI.md) to know how to update your `strings.xml`.
 
-## Maven Publishing
+## Releasing a new SDK version
 
-- [__Local reference__](./LOCAL_PUBLISHING.md)
-- [__Remote reference__](./REMOTE_PUBLISHING.md)
+- [__Release__](./RELEASE.md)
 - [__Workflow reference__](./ACTION_PUBLISHING.md)
+- [__Remote reference__](./REMOTE_PUBLISHING.md)
+- [__Local reference__](./LOCAL_PUBLISHING.md)
 
 ## Spotless integration
 

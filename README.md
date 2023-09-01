@@ -107,12 +107,6 @@ Would you like to experience the Showcase application directly in your device ?
 
 Go ahead ! Feel free to install it using the following [download link][Recco-Download].
 
-You can even read the following QR Code.
-
-<p align="center" width="100%">
-  <img src="./art/recco_qr.png">
-</p>
-
 ### Api summary
 
 | Method              | Description                                                      |
@@ -248,5 +242,5 @@ object : ReccoLogger {
 [Recco-Flutter]:https://github.com/sf-recco/flutter-showcase
 [Recco-iOS]:https://github.com/sf-recco/recco-ios-sdk
 [Recco-Showcase]:./docs/SHOWCASE.md
-[Recco-Download]:https://app.bitrise.io/app/2e7050f9-468b-45b6-8ab9-73124007335f/build/f0cf8235-ee29-43e6-a000-7c0c7e940dd2/artifact/af27994c0df5cfbc/p/633b6a2f0ea55095050e5dab7b285bd7
+[Recco-Download]:https://app.bitrise.io/app/2e7050f9-468b-45b6-8ab9-73124007335f/build/9e4775d3-ee1c-42c3-bb8d-7143213f7ec8/artifact/6092b0a7a5f3a9a6/p/d3a1b1de01d374896d9b2bffb852b4cd
 [Recco-QR]:./art/recco_qr.png
