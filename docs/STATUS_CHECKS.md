@@ -17,6 +17,6 @@ The project is covered by a set of unit tests to ensure code quality, improve co
 
 Recommended to run `./gradlew test` locally prior to pushing changes.
 
-[PULL-REQUESTS]:./docs/CONTRIBUTIONS_PULL_REQUESTS.md
+[PULL-REQUESTS]:./CONTRIBUTIONS_PULL_REQUESTS.md
 [Lint]:https://developer.android.com/studio/write/lint
 [Spotless]:https://github.com/diffplug/spotless

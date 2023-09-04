@@ -23,4 +23,4 @@ Before submitting a PR, review your changes thoroughly to catch errors and ensur
 1. When you are ready to submit your changes, open a pull request from your working branch targeting main. Reference any relevant issues in the PR description.
 2. To be able to merge the PR, the branch needs to be up to date with `main` and the PR reviewed and approved by other team member, along with succeeding the [STATUS_CHECKS][STATUS-CHECKS] that are executed as part of the `pull-request` Github action.
 
-[STATUS-CHECKS]:./docs/STATUS_CHECKS.md
+[STATUS-CHECKS]:./STATUS_CHECKS.md
