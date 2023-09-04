@@ -27,20 +27,15 @@ You can add new custom properties in the `openapi-generator-config.json` file to
 
 See [**Frontitude CLI**](./FRONTITUDE_CLI.md) to know how to update your `strings.xml`.
 
+## Contributing via Pull Requests
+- [__Pull request docs__](./CONTRIBUTIONS_PULL_REQUESTS.md)
+
 ## Releasing a new SDK version
 
 - [__Release__](./RELEASE.md)
 - [__Workflow reference__](./ACTION_PUBLISHING.md)
 - [__Remote reference__](./REMOTE_PUBLISHING.md)
 - [__Local reference__](./LOCAL_PUBLISHING.md)
-
-## Spotless integration
-
-[Spotless](https://github.com/diffplug/spotless) plugin for Gradle.
-
-Run `./gradlew spotlessCheck` to detect issues or `./gradlew spotlessApply` to apply fixing for the issues detected automatically.
-
-Recommended to run locally before pushing changes.
 
 ## Keep a changelog
 
