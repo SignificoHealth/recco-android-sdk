@@ -10,5 +10,5 @@ Open a PR with the following changes:
 Create a new Github release using the previously specified version, adding in the description a reference to the changelog section where the documented changes are listed.
 The creation of the tag will trigger the Github action `release`, which will publish the new packages on Github Packages using the Maven publishing plugin. For additional information, refer to the [REMOTE_PUBLISHING][REMOTE-PUBLISHING] or [ACTION_PUBLISHING][ACTION-PUBLISHING] documents.
 
-[REMOTE-PUBLISHING]:./docs/REMOTE_PUBLISHING.md
-[ACTION-PUBLISHING]:./docs/ACTION_PUBLISHING.md
+[REMOTE-PUBLISHING]:./REMOTE_PUBLISHING.md
+[ACTION-PUBLISHING]:./ACTION_PUBLISHING.md
