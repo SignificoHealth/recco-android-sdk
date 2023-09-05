@@ -1,3 +1,6 @@
+## Confluence Docs
+* The information about general infrastructure is located in [Confluence Android](https://vilua.atlassian.net/wiki/spaces/SHAD/pages/324534278).
+
 ## Contributing via Pull Requests
 - [__Pull request docs__](./CONTRIBUTIONS_PULL_REQUESTS.md)
 
