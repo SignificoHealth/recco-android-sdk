@@ -238,7 +238,7 @@ object : ReccoLogger {
 
 [Github-Packages]:https://github.com/features/packages
 [PAT]:https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
-[Github-Recco]:https://github.com/orgs/SignificoHealth/packages?repo_name=android-sdk
+[Github-Recco]:https://github.com/orgs/SignificoHealth/packages?repo_name=recco-android-sdk
 [Recco-Flutter]:https://github.com/SignificoHealth/recco-flutter-plugin
 [Recco-iOS]:https://github.com/SignificoHealth/recco-ios-sdk
 [Recco-Showcase]:./SHOWCASE.md
