@@ -1,4 +1,4 @@
-![recco_header](../art/recco_logo_amethyst.svg)
+![recco_header](./art/recco_logo_amethyst.svg)
 
 # SHOWCASE
 
@@ -11,7 +11,7 @@ You need your users to be identified, this is how a personalized experience is b
 
 | Login                                 | Login Filled                                      | Welcome                                    |
 |---------------------------------------|---------------------------------------------------|--------------------------------------------|
-| ![login](../art/recco_user_login.png) | ![login-fill](../art/recco_user_login_filled.png) | ![login-welcome](../art/recco_welcome.png) |
+| ![login](./art/recco_user_login.png) | ![login-fill](./art/recco_user_login_filled.png) | ![login-welcome](./art/recco_welcome.png) |
 
 ## Style selection
 
@@ -19,7 +19,7 @@ Recco's journey design might be configured using one of its predefined styles, a
 
 | Select Style                                | Apply Style                              | Apply Dark Style                             |
 |---------------------------------------------|------------------------------------------|----------------------------------------------|
-| ![select](../art/recco_style_selection.png) | ![apply](../art/recco_style_applied.png) | ![dark](../art/recco_dark_style_applied.png) |
+| ![select](./art/recco_style_selection.png) | ![apply](./art/recco_style_applied.png) | ![dark](./art/recco_dark_style_applied.png) |
 
 ## Language Selection
 
@@ -27,7 +27,7 @@ Recco currently supports English and German languages, let your users select the
 
 | Select Language                               | Apply English                               | Apply German                              |
 |-----------------------------------------------|---------------------------------------------|-------------------------------------------|
-| ![select](../art/recco_language_settings.png) | ![english](../art/recco_english_locale.png) | ![german](../art/recco_german_locale.png) |
+| ![select](./art/recco_language_settings.png) | ![english](./art/recco_english_locale.png) | ![german](./art/recco_german_locale.png) |
 
 ## Onboarding
 
@@ -36,7 +36,7 @@ are provided so the user starts tasting the look & feel and learns briefly on th
 
 | Onboarding First                                | Onboarding Second                                 | Onboarding Third                                |
 |-------------------------------------------------|---------------------------------------------------|-------------------------------------------------|
-| ![onb-first](../art/recco_onboarding_first.png) | ![onb-second](../art/recco_onboarding_second.png) | ![onb-third](../art/recco_onboarding_third.png) |
+| ![onb-first](./art/recco_onboarding_first.png) | ![onb-second](./art/recco_onboarding_second.png) | ![onb-third](./art/recco_onboarding_third.png) |
 
 
 ## Questionnaire
@@ -46,7 +46,7 @@ This way, first interaction will show accurate content based on the information 
 
 | Onboarding Questionnaire                                   | Onboarding Second                                            | Onboarding Outro                                  |
 |------------------------------------------------------------|--------------------------------------------------------------|---------------------------------------------------|
-| ![quest-first](../art/recco_onboarding_question_first.png) | ![quest-second](../art/recco_onboarding_question_second.png) | ![quest-third](../art/recco_onboarding_outro.png) |
+| ![quest-first](./art/recco_onboarding_question_first.png) | ![quest-second](./art/recco_onboarding_question_second.png) | ![quest-third](./art/recco_onboarding_outro.png) |
 
 
 ## Feed
@@ -57,7 +57,7 @@ It is crucial to encourage users to take advantage from the IA, since it will be
 
 | Feed Init Loading                                   | Feed Loading Shades                                 | Feed Loaded                                   |
 |-----------------------------------------------------|-----------------------------------------------------|-----------------------------------------------|
-| ![feed-init](../art/recco_feed_loading_initial.png) | ![feed-shade](../art/recco_feed_loading_shades.png) | ![feed-content](../art/recco_feed_loaded.png) |
+| ![feed-init](./art/recco_feed_loading_initial.png) | ![feed-shade](./art/recco_feed_loading_shades.png) | ![feed-content](./art/recco_feed_loaded.png) |
 
 
 ## Article
@@ -66,7 +66,7 @@ Health and wellness recommendations, the core of the application itself that emp
 
 | Article                              | Article Rating                                  | Article Bookmarking                                      |
 |--------------------------------------|-------------------------------------------------|----------------------------------------------------------|
-| ![article](../art/recco_article.png) | ![article-rate](../art/recco_article_rated.png) | ![article-bookmark](../art/recco_article_bookmarked.png) |
+| ![article](./art/recco_article.png) | ![article-rate](./art/recco_article_rated.png) | ![article-bookmark](./art/recco_article_bookmarked.png) |
 
 
 ## Bookmarking
@@ -75,7 +75,7 @@ Allows users to keep track of all their interests, and store content for later r
 
 | Bookmark Empty                                | Bookmark Content                                       | Bookmark interaction                                    |
 |-----------------------------------------------|--------------------------------------------------------|---------------------------------------------------------|
-| ![bookmark](../art/recco_empty_bookmarks.png) | ![bookmark-content](../art/recco_bookmarks_filled.png) | ![bookmark-video](../art/recco_bookmarking_content.gif) |
+| ![bookmark](./art/recco_empty_bookmarks.png) | ![bookmark-content](./art/recco_bookmarks_filled.png) | ![bookmark-video](./art/recco_bookmarking_content.gif) |
 
 
 ## Feed Locked content
@@ -86,7 +86,7 @@ and progressive experience.
 
 | Feed Scroll                                    | Feed Locked                                  | Feed Unlock                                           |
 |------------------------------------------------|----------------------------------------------|-------------------------------------------------------|
-| ![feed-scroll](../art/recco_feed_scrolled.png) | ![feed-locked](../art/recco_feed_locked.png) | ![feed-unlock](../art/recco_unlock_content_first.png) |
+| ![feed-scroll](./art/recco_feed_scrolled.png) | ![feed-locked](./art/recco_feed_locked.png) | ![feed-unlock](./art/recco_unlock_content_first.png) |
 
 ## Feed Unlocking Content
 
@@ -95,5 +95,5 @@ will be unlocked just by asking simple questionnaires that will fit the experien
 
 | Feed Question First                                             | Feed Question Last                                    | Unlock interaction                                 |
 |-----------------------------------------------------------------|-------------------------------------------------------|----------------------------------------------------|
-| ![unlock-quest](../art/recco_unlock_content_question_first.png) | ![unlock-last](../art/recco_unlock_question_last.png) | ![unlock-video](../art/recco_unlocked_content.gif) |
+| ![unlock-quest](./art/recco_unlock_content_question_first.png) | ![unlock-last](./art/recco_unlock_question_last.png) | ![unlock-video](./art/recco_unlocked_content.gif) |
 
