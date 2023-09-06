@@ -33,7 +33,7 @@ dependencyResolutionManagement {
 
         maven {
             name = "GithubPackages"
-            url = uri("https://maven.pkg.github.com/sf-recco/android-sdk")
+            url = uri("https://maven.pkg.github.com/SignificoHealth/recco-android-sdk")
             credentials {
                 username = githubUsername
                 password = githubSecret

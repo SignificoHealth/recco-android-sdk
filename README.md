@@ -73,7 +73,7 @@ repositories {
   ...
   maven {
     name = "GithubPackages"
-    url = uri("https://maven.pkg.github.com/sf-recco/android-sdk")
+    url = uri("https://maven.pkg.github.com/SignificoHealth/recco-android-sdk")
     credentials {
       username = extra["gprUser"].toString()
       password = extra["gprKey"].toString()
@@ -238,9 +238,9 @@ object : ReccoLogger {
 
 [Github-Packages]:https://github.com/features/packages
 [PAT]:https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
-[Github-Recco]:https://github.com/orgs/sf-recco/packages?repo_name=android-sdk
-[Recco-Flutter]:https://github.com/sf-recco/flutter-showcase
-[Recco-iOS]:https://github.com/sf-recco/recco-ios-sdk
+[Github-Recco]:https://github.com/orgs/SignificoHealth/packages?repo_name=android-sdk
+[Recco-Flutter]:https://github.com/SignificoHealth/recco-flutter-plugin
+[Recco-iOS]:https://github.com/SignificoHealth/recco-ios-sdk
 [Recco-Showcase]:./SHOWCASE.md
 [Recco-Download]:https://app.bitrise.io/app/2e7050f9-468b-45b6-8ab9-73124007335f/build/9e4775d3-ee1c-42c3-bb8d-7143213f7ec8/artifact/6092b0a7a5f3a9a6/p/d3a1b1de01d374896d9b2bffb852b4cd
 [Recco-QR]:./art/recco_qr.png
