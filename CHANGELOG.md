@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.0.6 - 2023-09-06
+
+- Release a new version after organization rename and breaking existing artifacts (second attempt)
+
 ## 0.0.5 - 2023-09-06
 
 - Release a new version after organization rename and breaking existing artifacts
