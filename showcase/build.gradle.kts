@@ -46,7 +46,8 @@ android {
 
     val reccoClientSecretEnv: String? = System.getenv("RECCO_CLIENT_SECRET")
     val reccoClientSecretLocalProperties: String? = gradleLocalProperties(rootDir).getProperty("recco.client.secret")
-    val clientSecret = reccoClientSecretEnv ?: reccoClientSecretLocalProperties!!
+    // Default to empty to avoid crashing the build when running status checks on Github Actions such as Lint
+    val clientSecret = reccoClientSecretEnv ?: reccoClientSecretLocalProperties ?: "\"\""
 
     buildTypes {
         named("debug") {
