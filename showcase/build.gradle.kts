@@ -29,21 +29,6 @@ android {
         }
     }
 
-    signingConfigs {
-        named("debug") {
-            keyAlias = "debug"
-            keyPassword = "password"
-            storeFile = file("${project.projectDir}/keys/debug.keystore")
-            storePassword = "password"
-        }
-        create("release") {
-            keyAlias = "release"
-            keyPassword = "password"
-            storeFile = file("${project.projectDir}/keys/release.keystore")
-            storePassword = "password"
-        }
-    }
-
     val reccoClientSecretEnv: String? = System.getenv("RECCO_CLIENT_SECRET")
     val reccoClientSecretLocalProperties: String? = gradleLocalProperties(rootDir).getProperty("recco.client.secret")
     // Default to empty to avoid crashing the build when running status checks on Github Actions such as Lint
@@ -58,8 +43,6 @@ android {
                 name = "CLIENT_SECRET",
                 value = clientSecret
             )
-
-            signingConfig = signingConfigs.getByName("debug")
         }
 
         named("release") {
@@ -77,8 +60,6 @@ android {
                 name = "CLIENT_SECRET",
                 value = clientSecret
             )
-
-            signingConfig = signingConfigs.getByName("release")
         }
     }
 
