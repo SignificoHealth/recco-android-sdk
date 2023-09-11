@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -42,6 +44,11 @@ android {
         }
     }
 
+    val reccoClientSecretEnv: String? = System.getenv("RECCO_CLIENT_SECRET")
+    val reccoClientSecretLocalProperties: String? = gradleLocalProperties(rootDir).getProperty("recco.client.secret")
+    // Default to empty to avoid crashing the build when running status checks on Github Actions such as Lint
+    val clientSecret = reccoClientSecretEnv ?: reccoClientSecretLocalProperties ?: "\"\""
+
     buildTypes {
         named("debug") {
             applicationIdSuffix = ".debug"
@@ -49,7 +56,7 @@ android {
             buildConfigField(
                 type = "String",
                 name = "CLIENT_SECRET",
-                value = "\"ax56dFyYSU7fgnJU6PuNyWSJ_rFQccFSYr16t3kj11J9NzelobNNRxBvBpFh97ZszHPjjnE\""
+                value = clientSecret
             )
 
             signingConfig = signingConfigs.getByName("debug")
@@ -68,7 +75,7 @@ android {
             buildConfigField(
                 type = "String",
                 name = "CLIENT_SECRET",
-                value = "\"99ItJU5LzZKmLggRvGJMWWxd9mEek7MKedmkZ4_3Wb4yKVJ17lm3K6Smh8eUp3GuFIPq0-w\""
+                value = clientSecret
             )
 
             signingConfig = signingConfigs.getByName("release")
