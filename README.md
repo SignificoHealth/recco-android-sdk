@@ -103,9 +103,14 @@ You will find a more detailed implementation example and a full UI journey expla
 
 ### Demo
 
-Would you like to experience the Showcase application directly in your device ?
+Would you like to experience the Showcase application directly in your device?
 
-Go ahead ! Feel free to install it using the following [download link][Recco-Download].
+Go ahead ! Feel free to install it using the following [download link][Recco-Download]. Alternatively, you are welcome to clone this repository and launch the project yourself. To be able to do that, please add to the top level `local.properties` the following variables:
+
+```gradle
+recco.base.url="https://recco-api.significo.app/"
+recco.client.secret="99ItJU5LzZKmLggRvGJMWWxd9mEek7MKedmkZ4_3Wb4yKVJ17lm3K6Smh8eUp3GuFIPq0-w"
+```
 
 ### Api summary
 
