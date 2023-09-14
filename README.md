@@ -156,6 +156,10 @@ class YourApplication : Application() {
 }
 ```
 
+As part of the `ReccoConfig` setup, you have the option to supply an optional `ReccoStyle` instance to configure some customization entry points:
+* `ReccoFont`: This defines the set of available predefined fonts.
+* `ReccoPalette`: This defines the set of available predefined color palettes, including a custom palette that allows you to provide a personalized selection of colors.
+
 Please, take a look on the Recco Showcase application [documentation][Recco-Showcase] so you can get more information on __Recco Styles__.
 
 __Bonus:__ How to provide your own ReccoLogger implementation ?
