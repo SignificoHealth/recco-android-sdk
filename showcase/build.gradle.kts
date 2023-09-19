@@ -29,14 +29,12 @@ android {
         }
     }
 
-    val reccoClientSecretEnv: String? = System.getenv("RECCO_CLIENT_SECRET")
-    val reccoClientSecretLocalProperties: String? = gradleLocalProperties(rootDir).getProperty("recco.client.secret")
-    // Default to empty to avoid crashing the build when running status checks on Github Actions such as Lint
-    val clientSecret = reccoClientSecretEnv ?: reccoClientSecretLocalProperties ?: "\"\""
+    val appIdSuffix = resolveAppIdSuffix()
+    val clientSecret = resolveClientSecret()
 
     buildTypes {
         named("debug") {
-            applicationIdSuffix = ".debug"
+            applicationIdSuffix = ".$appIdSuffix"
 
             buildConfigField(
                 type = "String",
@@ -45,7 +43,10 @@ android {
             )
         }
 
+
         named("release") {
+            applicationIdSuffix = ".$appIdSuffix"
+
             isMinifyEnabled = true
             isShrinkResources = true
             setProguardFiles(
@@ -120,10 +121,12 @@ dependencies {
 
 easylauncher {
     buildTypes {
+        val appIdSuffix = resolveAppIdSuffix().uppercase()
+
         create("debug") {
             filters(
                 customRibbon(
-                    label = "DEBUG",
+                    label = appIdSuffix,
                     ribbonColor = "#FFf5b731",
                     labelColor = "#FFFFFF"
                 )
@@ -133,7 +136,7 @@ easylauncher {
         create("release") {
             filters(
                 customRibbon(
-                    label = "PROD",
+                    label = appIdSuffix,
                     ribbonColor = "#FF9EE4A1",
                     labelColor = "#FFFFFF"
                 )
@@ -142,3 +145,15 @@ easylauncher {
     }
 }
 
+fun resolveAppIdSuffix(): String {
+    val applicationIdSuffixEnv = System.getenv("RECCO_APP_ID_SUFFIX")
+    val applicationIdLocalProperties: String? = gradleLocalProperties(rootDir).getProperty("recco.app.id.suffix")
+    return applicationIdSuffixEnv ?: applicationIdLocalProperties ?: "dev"
+}
+
+fun resolveClientSecret(): String {
+    val reccoClientSecretEnv: String? = System.getenv("RECCO_CLIENT_SECRET")
+    val reccoClientSecretLocalProperties: String? = gradleLocalProperties(rootDir).getProperty("recco.client.secret")
+    // Default to empty to avoid crashing the build when running status checks on Github Actions such as Lint
+    return reccoClientSecretEnv ?: reccoClientSecretLocalProperties ?: "\"\""
+}
