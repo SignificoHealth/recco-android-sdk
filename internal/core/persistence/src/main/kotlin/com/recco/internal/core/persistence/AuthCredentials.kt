@@ -3,7 +3,7 @@ package com.recco.internal.core.persistence
 import android.content.Context
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
 import com.recco.api.model.ReccoConfig
 import com.recco.internal.core.model.authentication.PAT
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,10 +20,13 @@ class AuthCredentials @Inject constructor(
         private set
 
     private val prefs by lazy {
+
         EncryptedSharedPreferences.create(
-            RECCO_SDK_PREFS,
-            MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
             context,
+            RECCO_SDK_PREFS,
+            MasterKey.Builder(context)
+                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                .build(),
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
