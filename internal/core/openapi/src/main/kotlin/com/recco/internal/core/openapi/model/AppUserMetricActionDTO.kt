@@ -17,9 +17,9 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * 
  *
- *
- * Values: LOGIN,DURATION,VIEW
+ * Values: LOGIN,DURATION,VIEW,HOST_APP_OPEN,RECCO_SDK_OPEN
  */
 @Suppress("RemoveRedundantQualifierName")
 @JsonClass(generateAdapter = false)
@@ -32,7 +32,13 @@ enum class AppUserMetricActionDTO(val value: kotlin.String) {
     DURATION("duration"),
 
     @Json(name = "view")
-    VIEW("view");
+    VIEW("view"),
+
+    @Json(name = "host_app_open")
+    HOST_APP_OPEN("host_app_open"),
+
+    @Json(name = "recco_sdk_open")
+    RECCO_SDK_OPEN("recco_sdk_open");
 
     /**
      * Override toString() to avoid using the enum variable name as the value, and instead use
