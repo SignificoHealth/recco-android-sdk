@@ -17,10 +17,10 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * 
  *
- *
- * @param id
- * @param text
+ * @param id 
+ * @param text 
  */
 @JsonClass(generateAdapter = true)
 data class MultiChoiceAnswerOptionDTO(

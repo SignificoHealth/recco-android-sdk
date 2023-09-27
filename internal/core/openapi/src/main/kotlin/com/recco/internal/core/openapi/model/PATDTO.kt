@@ -17,12 +17,12 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * 
  *
- *
- * @param accessToken
- * @param expirationDate
- * @param tokenId
- * @param creationDate
+ * @param accessToken 
+ * @param expirationDate 
+ * @param tokenId 
+ * @param creationDate 
  */
 @JsonClass(generateAdapter = true)
 data class PATDTO(

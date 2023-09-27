@@ -17,7 +17,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- *
+ * 
  *
  * Values: PHYSICAL_ACTIVITY,NUTRITION,MENTAL_WELLBEING,SLEEP
  */
