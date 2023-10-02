@@ -13,15 +13,17 @@
 
 package com.recco.internal.core.openapi.model
 
+import com.recco.internal.core.openapi.model.ContentIdDTO
+import com.recco.internal.core.openapi.model.ContentTypeDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * 
  *
- *
- * @param contentId
- * @param contentType
- * @param bookmarked
+ * @param contentId 
+ * @param contentType 
+ * @param bookmarked 
  */
 @JsonClass(generateAdapter = true)
 data class UpdateBookmarkDTO(

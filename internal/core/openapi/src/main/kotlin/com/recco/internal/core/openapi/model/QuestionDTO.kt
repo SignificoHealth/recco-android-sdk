@@ -13,21 +13,24 @@
 
 package com.recco.internal.core.openapi.model
 
+import com.recco.internal.core.openapi.model.MultiChoiceQuestionDTO
+import com.recco.internal.core.openapi.model.NumericQuestionDTO
+import com.recco.internal.core.openapi.model.QuestionAnswerTypeDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * 
  *
- *
- * @param questionnaireId
- * @param id
- * @param index
- * @param text
- * @param type
- * @param multiChoice
- * @param multiChoiceSelectedIds
- * @param numeric
- * @param numericSelected
+ * @param questionnaireId 
+ * @param id 
+ * @param index 
+ * @param text 
+ * @param type 
+ * @param multiChoice 
+ * @param multiChoiceSelectedIds 
+ * @param numeric 
+ * @param numericSelected 
  */
 @JsonClass(generateAdapter = true)
 data class QuestionDTO(

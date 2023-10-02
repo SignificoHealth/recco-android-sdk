@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080",
+      "url": "https://recco-api.significo.dev",
       "description": "Generated server url"
     }
   ],
@@ -998,7 +998,9 @@
         "enum": [
           "login",
           "duration",
-          "view"
+          "view",
+          "host_app_open",
+          "recco_sdk_open"
         ]
       },
       "AppUserMetricCategory": {

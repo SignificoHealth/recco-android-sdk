@@ -17,10 +17,10 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * 
  *
- *
- * @param itemId
- * @param catalogId
+ * @param itemId 
+ * @param catalogId 
  */
 @JsonClass(generateAdapter = true)
 data class ContentIdDTO(

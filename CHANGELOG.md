@@ -1,6 +1,9 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## [1.0.0] - 2023-09-27 - YYYY-MM-DD
+
+### Changed 
+- Update OpenAPI schemas to have access to the new metrics events
 
 ## 0.0.6 - 2023-09-06
 

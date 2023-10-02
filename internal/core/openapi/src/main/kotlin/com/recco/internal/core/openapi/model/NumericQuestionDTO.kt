@@ -17,11 +17,11 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * 
  *
- *
- * @param maxValue
- * @param minValue
- * @param format
+ * @param maxValue 
+ * @param minValue 
+ * @param format 
  */
 @JsonClass(generateAdapter = true)
 data class NumericQuestionDTO(
@@ -36,20 +36,16 @@ data class NumericQuestionDTO(
     val format: NumericQuestionDTO.Format
 ) {
     /**
-     *
+     * 
      *
      * Values: HUMAN_HEIGHT,HUMAN_WEIGHT,INTEGER,DECIMAL
      */
     @JsonClass(generateAdapter = false)
     enum class Format(val value: kotlin.String) {
-        @Json(name = "human_height")
-        HUMAN_HEIGHT("human_height"),
-        @Json(name = "human_weight")
-        HUMAN_WEIGHT("human_weight"),
-        @Json(name = "integer")
-        INTEGER("integer"),
-        @Json(name = "decimal")
-        DECIMAL("decimal");
+        @Json(name = "human_height") HUMAN_HEIGHT("human_height"),
+        @Json(name = "human_weight") HUMAN_WEIGHT("human_weight"),
+        @Json(name = "integer") INTEGER("integer"),
+        @Json(name = "decimal") DECIMAL("decimal");
     }
 }
 
