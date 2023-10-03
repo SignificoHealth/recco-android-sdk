@@ -7,10 +7,10 @@ import com.recco.internal.core.model.metric.AppUserMetricAction
 import com.recco.internal.core.model.metric.AppUserMetricCategory
 import com.recco.internal.core.model.metric.AppUserMetricEvent
 import com.recco.internal.core.repository.AppRepository
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class ApplicationLifecycleObserver @Inject constructor(
