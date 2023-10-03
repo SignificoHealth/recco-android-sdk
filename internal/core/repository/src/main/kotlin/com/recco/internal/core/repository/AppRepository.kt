@@ -3,13 +3,14 @@ package com.recco.internal.core.repository
 import com.recco.api.model.ReccoConfig
 import com.recco.internal.core.base.di.ApplicationScope
 import com.recco.internal.core.logger.Logger
+import com.recco.internal.core.model.metric.AppUserMetricAction
+import com.recco.internal.core.model.metric.AppUserMetricCategory
+import com.recco.internal.core.model.metric.AppUserMetricEvent
 import com.recco.internal.core.openapi.api.AuthenticationApi
 import com.recco.internal.core.openapi.api.MetricApi
-import com.recco.internal.core.openapi.model.AppUserMetricActionDTO
-import com.recco.internal.core.openapi.model.AppUserMetricCategoryDTO
-import com.recco.internal.core.openapi.model.AppUserMetricEventDTO
 import com.recco.internal.core.openapi.model.PATReferenceDeleteDTO
 import com.recco.internal.core.persistence.AuthCredentials
+import com.recco.internal.core.repository.mapper.asDTO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,16 +35,12 @@ class AppRepository @Inject constructor(
 
     fun loginUser(userId: String) {
         authCredentials.setUserId(userId)
-        appScope.launch {
-            runCatching {
-                metricApi.logEvent(
-                    AppUserMetricEventDTO(
-                        category = AppUserMetricCategoryDTO.USER_SESSION,
-                        action = AppUserMetricActionDTO.LOGIN
-                    )
-                )
-            }.onFailure { logger.e(it) }
-        }
+        logEvent(
+            AppUserMetricEvent(
+                category = AppUserMetricCategory.USER_SESSION,
+                action = AppUserMetricAction.LOGIN
+            )
+        )
     }
 
     fun logoutUser() {
@@ -61,6 +58,17 @@ class AppRepository @Inject constructor(
                         tokenId = tokenId
                     )
                 )
+            }.onFailure { logger.e(it) }
+        }
+    }
+
+    fun logEvent(event: AppUserMetricEvent) {
+        if (authCredentials.userId == null) {
+            return
+        }
+        appScope.launch {
+            runCatching {
+                metricApi.logEvent(event.asDTO())
             }.onFailure { logger.e(it) }
         }
     }

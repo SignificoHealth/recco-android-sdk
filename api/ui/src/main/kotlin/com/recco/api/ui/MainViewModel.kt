@@ -3,6 +3,10 @@ package com.recco.api.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.recco.internal.core.logger.Logger
+import com.recco.internal.core.model.metric.AppUserMetricAction
+import com.recco.internal.core.model.metric.AppUserMetricCategory
+import com.recco.internal.core.model.metric.AppUserMetricEvent
+import com.recco.internal.core.repository.AppRepository
 import com.recco.internal.core.repository.MeRepository
 import com.recco.internal.core.ui.components.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +25,7 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
     private val meRepository: MeRepository,
+    private val appRepository: AppRepository,
     private val logger: Logger
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(UiState<MainUI>())
@@ -39,6 +44,15 @@ internal class MainViewModel @Inject constructor(
         when (userInteract) {
             MainUserInteract.Retry -> initialLoadOrRetry()
         }
+    }
+
+    fun onReccoSDKOpen() {
+        appRepository.logEvent(
+            AppUserMetricEvent(
+                category = AppUserMetricCategory.USER_SESSION,
+                action = AppUserMetricAction.RECCO_SDK_OPEN
+            )
+        )
     }
 
     private fun initialLoadOrRetry() {
