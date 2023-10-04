@@ -17,6 +17,9 @@ import dagger.hilt.components.SingletonComponent
 private interface ReccoApiUIInterface {
     fun getAppRepository(): AppRepository
     fun getLogger(): Logger
+
+    // Even though this component is not consumed, we need to call it for Hilt to instantiate it.
+    fun getHostAppTrackEventsLifecycleObserver(): HostAppTrackEventsLifecycleObserver
 }
 
 object ReccoApiUI {
@@ -47,6 +50,8 @@ object ReccoApiUI {
 
         EntryPoints.get(application, ReccoApiUIInterface::class.java).getLogger()
             .setupClientLogger(logger)
+
+        EntryPoints.get(application, ReccoApiUIInterface::class.java).getHostAppTrackEventsLifecycleObserver()
     }
 
     /**
