@@ -1,8 +1,8 @@
 package com.recco.api.ui
 
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.recco.internal.core.model.metric.AppUserMetricAction
 import com.recco.internal.core.model.metric.AppUserMetricCategory
 import com.recco.internal.core.model.metric.AppUserMetricEvent
@@ -17,9 +17,11 @@ class HostAppTrackEventsLifecycleObserver @Inject constructor(
     private val appRepository: AppRepository
 ) : DefaultLifecycleObserver {
 
-    fun register(lifecycle: Lifecycle) {
+    init {
         MainScope().launch {
-            lifecycle.addObserver(this@HostAppTrackEventsLifecycleObserver)
+            ProcessLifecycleOwner.get()
+                .lifecycle
+                .addObserver(this@HostAppTrackEventsLifecycleObserver)
         }
     }
 

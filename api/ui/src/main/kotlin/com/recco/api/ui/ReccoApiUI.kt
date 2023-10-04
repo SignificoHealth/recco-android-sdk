@@ -3,7 +3,6 @@ package com.recco.api.ui
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.recco.api.model.ReccoConfig
 import com.recco.api.model.ReccoLogger
 import com.recco.internal.core.logger.Logger
@@ -18,6 +17,8 @@ import dagger.hilt.components.SingletonComponent
 private interface ReccoApiUIInterface {
     fun getAppRepository(): AppRepository
     fun getLogger(): Logger
+
+    // Even though this component is not consumed, we need to call it for Hilt to instantiate it.
     fun getHostAppTrackEventsLifecycleObserver(): HostAppTrackEventsLifecycleObserver
 }
 
@@ -50,10 +51,7 @@ object ReccoApiUI {
         EntryPoints.get(application, ReccoApiUIInterface::class.java).getLogger()
             .setupClientLogger(logger)
 
-        application.mainLooper.run {
-            EntryPoints.get(application, ReccoApiUIInterface::class.java).getHostAppTrackEventsLifecycleObserver()
-                .register(ProcessLifecycleOwner.get().lifecycle)
-        }
+        EntryPoints.get(application, ReccoApiUIInterface::class.java).getHostAppTrackEventsLifecycleObserver()
     }
 
     /**
