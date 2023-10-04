@@ -6,7 +6,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.recco.internal.core.model.metric.AppUserMetricAction
 import com.recco.internal.core.model.metric.AppUserMetricCategory
 import com.recco.internal.core.model.metric.AppUserMetricEvent
-import com.recco.internal.core.repository.AppRepository
+import com.recco.internal.core.repository.MetricRepository
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Singleton
 class HostAppTrackEventsLifecycleObserver @Inject constructor(
-    private val appRepository: AppRepository
+    private val metricRepository: MetricRepository
 ) : DefaultLifecycleObserver {
 
     init {
@@ -28,7 +28,7 @@ class HostAppTrackEventsLifecycleObserver @Inject constructor(
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
 
-        appRepository.logEvent(
+        metricRepository.logEvent(
             AppUserMetricEvent(
                 category = AppUserMetricCategory.USER_SESSION,
                 action = AppUserMetricAction.HOST_APP_OPEN
