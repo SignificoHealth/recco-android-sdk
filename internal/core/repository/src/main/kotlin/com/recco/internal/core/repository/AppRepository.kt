@@ -35,12 +35,6 @@ class AppRepository @Inject constructor(
 
     fun loginUser(userId: String) {
         authCredentials.setUserId(userId)
-        logEvent(
-            AppUserMetricEvent(
-                category = AppUserMetricCategory.USER_SESSION,
-                action = AppUserMetricAction.LOGIN
-            )
-        )
     }
 
     fun logoutUser() {

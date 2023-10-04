@@ -8,8 +8,6 @@ import com.recco.internal.core.openapi.model.AppUserMetricCategoryDTO
 import com.recco.internal.core.openapi.model.AppUserMetricEventDTO
 
 internal fun AppUserMetricAction.asDTO() = when (this) {
-    AppUserMetricAction.LOGIN -> AppUserMetricActionDTO.LOGIN
-    AppUserMetricAction.DURATION -> AppUserMetricActionDTO.DURATION
     AppUserMetricAction.VIEW -> AppUserMetricActionDTO.VIEW
     AppUserMetricAction.HOST_APP_OPEN -> AppUserMetricActionDTO.HOST_APP_OPEN
     AppUserMetricAction.RECCO_SDK_OPEN -> AppUserMetricActionDTO.RECCO_SDK_OPEN
@@ -23,5 +21,5 @@ internal fun AppUserMetricCategory.asDTO() = when (this) {
 internal fun AppUserMetricEvent.asDTO() = AppUserMetricEventDTO(
     category = this.category.asDTO(),
     action = this.action.asDTO(),
-    value = this.value
+    value = this.valueEvent
 )
