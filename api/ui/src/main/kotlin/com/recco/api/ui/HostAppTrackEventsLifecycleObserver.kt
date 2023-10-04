@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Singleton
 class HostAppTrackEventsLifecycleObserver @Inject constructor(
     private val metricRepository: MetricRepository
-) : DefaultLifecycleObserver, CoroutineScope by MainScope()  {
+) : DefaultLifecycleObserver, CoroutineScope by MainScope() {
 
     init {
         launch {
