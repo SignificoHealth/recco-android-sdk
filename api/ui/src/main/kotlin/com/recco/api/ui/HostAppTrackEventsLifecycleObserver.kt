@@ -13,13 +13,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ApplicationLifecycleObserver @Inject constructor(
+class HostAppTrackEventsLifecycleObserver @Inject constructor(
     private val appRepository: AppRepository
 ) : DefaultLifecycleObserver {
 
     fun register(lifecycle: Lifecycle) {
         MainScope().launch {
-            lifecycle.addObserver(this@ApplicationLifecycleObserver)
+            lifecycle.addObserver(this@HostAppTrackEventsLifecycleObserver)
         }
     }
 

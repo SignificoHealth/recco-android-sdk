@@ -18,7 +18,7 @@ import dagger.hilt.components.SingletonComponent
 private interface ReccoApiUIInterface {
     fun getAppRepository(): AppRepository
     fun getLogger(): Logger
-    fun getApplicationLifecycleObserver(): ApplicationLifecycleObserver
+    fun getHostAppTrackEventsLifecycleObserver(): HostAppTrackEventsLifecycleObserver
 }
 
 object ReccoApiUI {
@@ -51,7 +51,7 @@ object ReccoApiUI {
             .setupClientLogger(logger)
 
         application.mainLooper.run {
-            EntryPoints.get(application, ReccoApiUIInterface::class.java).getApplicationLifecycleObserver()
+            EntryPoints.get(application, ReccoApiUIInterface::class.java).getHostAppTrackEventsLifecycleObserver()
                 .register(ProcessLifecycleOwner.get().lifecycle)
         }
     }
