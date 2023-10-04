@@ -43,10 +43,11 @@ internal class MainViewModel @Inject constructor(
     fun onUserInteract(userInteract: MainUserInteract) {
         when (userInteract) {
             MainUserInteract.Retry -> initialLoadOrRetry()
+            MainUserInteract.ReccoSDKOpen -> onReccoSDKOpen()
         }
     }
 
-    fun onReccoSDKOpen() {
+    private fun onReccoSDKOpen() {
         appRepository.logEvent(
             AppUserMetricEvent(
                 category = AppUserMetricCategory.USER_SESSION,

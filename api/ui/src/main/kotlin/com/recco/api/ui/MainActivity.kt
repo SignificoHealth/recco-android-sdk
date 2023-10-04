@@ -85,6 +85,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.onReccoSDKOpen()
+        viewModel.onUserInteract(MainUserInteract.ReccoSDKOpen)
     }
 }
