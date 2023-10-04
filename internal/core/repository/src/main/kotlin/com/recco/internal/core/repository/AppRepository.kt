@@ -63,13 +63,11 @@ class AppRepository @Inject constructor(
     }
 
     fun logEvent(event: AppUserMetricEvent) {
-        if (authCredentials.userId == null) {
-            return
-        }
-        appScope.launch {
-            runCatching {
-                metricApi.logEvent(event.asDTO())
-            }.onFailure { logger.e(it) }
+        authCredentials.userId?.let {
+            appScope.launch {
+                runCatching { metricApi.logEvent(event.asDTO()) }
+                    .onFailure { logger.e(it) }
+            }
         }
     }
 }
