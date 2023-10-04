@@ -7,6 +7,7 @@ import com.recco.internal.core.model.metric.AppUserMetricAction
 import com.recco.internal.core.model.metric.AppUserMetricCategory
 import com.recco.internal.core.model.metric.AppUserMetricEvent
 import com.recco.internal.core.repository.MetricRepository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,10 +16,10 @@ import javax.inject.Singleton
 @Singleton
 class HostAppTrackEventsLifecycleObserver @Inject constructor(
     private val metricRepository: MetricRepository
-) : DefaultLifecycleObserver {
+) : DefaultLifecycleObserver, CoroutineScope by MainScope()  {
 
     init {
-        MainScope().launch {
+        launch {
             ProcessLifecycleOwner.get()
                 .lifecycle
                 .addObserver(this@HostAppTrackEventsLifecycleObserver)

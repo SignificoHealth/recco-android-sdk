@@ -22,7 +22,7 @@ class MetricRepository @Inject constructor(
         authCredentials.userId?.let {
             appScope.launch {
                 runCatching { metricApi.logEvent(event.asDTO()) }
-                    .onFailure { logger.e(it) }
+                    .onFailure(logger::e)
             }
         }
     }

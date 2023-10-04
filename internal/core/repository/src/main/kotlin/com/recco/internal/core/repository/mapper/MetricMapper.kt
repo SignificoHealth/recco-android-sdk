@@ -19,7 +19,7 @@ internal fun AppUserMetricCategory.asDTO() = when (this) {
 }
 
 internal fun AppUserMetricEvent.asDTO() = AppUserMetricEventDTO(
-    category = this.category.asDTO(),
-    action = this.action.asDTO(),
-    value = this.valueEvent
+    category = category.asDTO(),
+    action = action.asDTO(),
+    value = valueEvent
 )
