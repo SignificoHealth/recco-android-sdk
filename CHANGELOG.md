@@ -2,6 +2,9 @@
 
 ## [1.0.0] - 2023-09-27 - YYYY-MM-DD
 
+### Added 
+- Send new metric events HOST_APP_OPEN & RECCO_SDK_OPEN https://vilua.atlassian.net/browse/SHAD-338
+
 ### Changed 
 - Update OpenAPI schemas to have access to the new metrics events
 
