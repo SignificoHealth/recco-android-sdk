@@ -2,6 +2,7 @@ package com.recco.showcase.data
 
 import android.app.Application
 import android.content.Context
+import androidx.core.content.edit
 import com.recco.api.model.ReccoFont
 import com.recco.api.model.ReccoPalette
 import com.recco.api.model.ReccoStyle
@@ -24,29 +25,26 @@ class ShowcaseRepository @Inject constructor(
     private val paletteDao: PaletteDao
 ) {
     private val prefs by lazy {
-        context.getSharedPreferences("showcase", Context.MODE_PRIVATE)
+        context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
     }
 
     fun setUserId(userId: String) {
-        with(prefs.edit()) {
+        prefs.edit {
             putString(USER_ID_KEY, userId)
-            apply()
         }
     }
 
     fun clearUserId() {
-        with(prefs.edit()) {
+        prefs.edit {
             putString(USER_ID_KEY, null)
-            apply()
         }
     }
 
     fun isUserLoggedIn() = !prefs.getString(USER_ID_KEY, "").isNullOrBlank()
 
     suspend fun setSelectedPaletteId(id: Int) {
-        with(prefs.edit()) {
+        prefs.edit {
             putInt(RECCO_PALETTE_ID_KEY, id)
-            apply()
         }
 
         ShowcaseApp.initSDK(
@@ -67,9 +65,8 @@ class ShowcaseRepository @Inject constructor(
     fun getDefaultPalette(): ShowcasePalette = ReccoPalette.Fresh.asShowcasePalette()
 
     suspend fun setReccoFont(font: ReccoFont) {
-        with(prefs.edit()) {
+        prefs.edit {
             putString(RECCO_FONT_KEY, font.fontName)
-            apply()
         }
 
         ShowcaseApp.initSDK(
@@ -120,6 +117,7 @@ class ShowcaseRepository @Inject constructor(
     }
 
     companion object {
+        private const val PREFERENCES_NAME = "showcase"
         private const val USER_ID_KEY = "user_id_key"
         private const val RECCO_PALETTE_ID_KEY = "recco_palette_id_key"
         private const val RECCO_FONT_KEY = "recco_font_key"
