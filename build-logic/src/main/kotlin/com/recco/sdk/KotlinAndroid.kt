@@ -9,7 +9,7 @@ import org.gradle.kotlin.dsl.the
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-internal fun Project.configureKotlinAndroid(extension: CommonExtension<*, *, *, *>) {
+internal fun Project.configureKotlinAndroid(extension: CommonExtension<*, *, *, *, *>) {
     val libs = the<LibrariesForLibs>()
 
     extension.apply {
