@@ -169,7 +169,7 @@ private fun FeedContent(
 
         feedUI.sections.forEach { section ->
             Crossfade(
-                label= "crossfade_feed_content",
+                label = "crossfade_feed_content",
                 targetState = section.recommendations is FlowDataState.Loading,
                 animationSpec = tween(
                     durationMillis = 1000,
@@ -279,7 +279,7 @@ private fun FeedSection(
 
         Crossfade(
             targetState = feedSection.state == FeedSectionState.LOCKED,
-            label= "crossfade_feed_section",
+            label = "crossfade_feed_section",
             animationSpec = tween(
                 durationMillis = 1000,
                 easing = LinearEasing
