@@ -279,7 +279,7 @@ private fun FeedSection(
 
         Crossfade(
             targetState = feedSection.state == FeedSectionState.LOCKED,
-            label= "crossfade_feed_esction",
+            label= "crossfade_feed_section",
             animationSpec = tween(
                 durationMillis = 1000,
                 easing = LinearEasing
