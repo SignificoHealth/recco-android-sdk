@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package com.recco.internal.feature.onboarding
 
 import androidx.annotation.StringRes
@@ -15,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -37,24 +34,18 @@ import com.recco.internal.core.ui.components.HorizontalPagerNavigation
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun OnboardingRoute(
     navigateToQuestionnaire: () -> Unit
 ) {
-    val pagerState = rememberPagerState(0)
-
     OnboardingScreen(
-        navigateToQuestionnaire = navigateToQuestionnaire,
-        pagerState = pagerState
+        navigateToQuestionnaire = navigateToQuestionnaire
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun OnboardingScreen(
-    navigateToQuestionnaire: () -> Unit,
-    pagerState: PagerState = rememberPagerState()
-) {
+private fun OnboardingScreen(navigateToQuestionnaire: () -> Unit) {
     val pages = listOf<@Composable (PaddingValues) -> Unit>({
         OnboardingPage(
             image = { modifier -> AppTintedImageFlying(modifier) },
@@ -78,20 +69,20 @@ private fun OnboardingScreen(
         )
     })
 
+    val pagerState = rememberPagerState { pages.size }
+
     Scaffold(
         topBar = { AppTopBar() },
         bottomBar = {
             HorizontalPagerNavigation(
                 pagerState = pagerState,
-                pageCount = pages.size,
                 onButtonClick = navigateToQuestionnaire
             )
         }
     ) { contentPadding ->
         HorizontalPager(
-            pageCount = pages.size,
-            modifier = Modifier.fillMaxSize(),
             state = pagerState,
+            modifier = Modifier.fillMaxSize(),
             pageContent = { pages[it](contentPadding) }
         )
     }
@@ -154,8 +145,7 @@ private fun OnboardingPage(
 private fun PreviewLight() {
     AppTheme {
         OnboardingScreen(
-            navigateToQuestionnaire = {},
-            pagerState = rememberPagerState(initialPage = 0)
+            navigateToQuestionnaire = {}
         )
     }
 }
@@ -166,8 +156,7 @@ private fun PreviewLight() {
 private fun PreviewDark() {
     AppTheme(darkTheme = true) {
         OnboardingScreen(
-            navigateToQuestionnaire = {},
-            pagerState = rememberPagerState(initialPage = 0)
+            navigateToQuestionnaire = {}
         )
     }
 }

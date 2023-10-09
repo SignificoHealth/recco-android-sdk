@@ -76,6 +76,7 @@ internal fun QuestionnaireRoute(
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
         initialValue = UiState()
     )
+
     QuestionnaireScreen(
         topic = topic,
         uiState = uiState,
@@ -97,7 +98,8 @@ private fun QuestionnaireScreen(
     navigateToOutro: () -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState { uiState.data?.questions?.size ?: 0 }
+
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = Unit) {
@@ -182,8 +184,8 @@ private fun QuestionnaireScreen(
         ) { data ->
             QuestionnaireContent(
                 data = data,
-                state = pagerState,
-                onUserInteract = onUserInteract
+                onUserInteract = onUserInteract,
+                pagerState = pagerState
             )
         }
     }
@@ -193,8 +195,8 @@ private fun QuestionnaireScreen(
 @Composable
 private fun QuestionnaireContent(
     data: QuestionnaireUI,
-    state: PagerState,
-    onUserInteract: (QuestionnaireUserInteract) -> Unit
+    onUserInteract: (QuestionnaireUserInteract) -> Unit,
+    pagerState: PagerState
 ) {
     BackHandler(
         enabled = !data.isFirstPage,
@@ -208,8 +210,7 @@ private fun QuestionnaireContent(
     ) {
         HorizontalPager(
             modifier = Modifier.fillMaxSize(),
-            pageCount = data.questions.size,
-            state = state,
+            state = pagerState,
             userScrollEnabled = false
         ) { page ->
             val question = data.questions[page]

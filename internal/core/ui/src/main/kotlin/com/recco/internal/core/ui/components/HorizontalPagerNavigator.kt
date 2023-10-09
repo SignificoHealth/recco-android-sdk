@@ -13,6 +13,9 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,14 +28,16 @@ import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HorizontalPagerNavigation(
     pagerState: PagerState,
-    pageCount: Int,
     modifier: Modifier = Modifier,
     onButtonClick: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
+
+    val isLast by remember { derivedStateOf { pagerState.currentPage.inc() == pagerState.pageCount } }
 
     BackHandler(enabled = pagerState.currentPage > 0) {
         scope.launch { pagerState.animateScrollToPage(page = pagerState.currentPage.dec()) }
@@ -42,8 +47,6 @@ fun HorizontalPagerNavigation(
         modifier = modifier
             .background(AppTheme.colors.background)
     ) {
-        val isLast = pagerState.currentPage == pageCount.dec()
-
         val buttonText = if (isLast) {
             stringResource(id = R.string.recco_start)
         } else {
@@ -77,7 +80,7 @@ fun HorizontalPagerNavigation(
         ) {
             HorizontalPagerIndicator(
                 pagerState = pagerState,
-                pageCount = pageCount,
+                pageCount = pagerState.pageCount,
                 modifier = Modifier.align(Alignment.Center),
                 activeColor = AppTheme.colors.accent,
                 inactiveColor = AppTheme.colors.primary20,
@@ -89,13 +92,13 @@ fun HorizontalPagerNavigation(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 private fun HorizontalPagerNavigationPreview() {
     AppTheme {
         HorizontalPagerNavigation(
-            pagerState = rememberPagerState(0),
-            pageCount = 3,
+            pagerState = rememberPagerState(initialPage = 0) { 3 },
             onButtonClick = {}
         )
     }
