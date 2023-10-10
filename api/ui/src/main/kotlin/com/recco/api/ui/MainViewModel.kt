@@ -2,10 +2,12 @@ package com.recco.api.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.recco.api.model.ReccoConfig
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.metric.AppUserMetricAction
 import com.recco.internal.core.model.metric.AppUserMetricCategory
 import com.recco.internal.core.model.metric.AppUserMetricEvent
+import com.recco.internal.core.repository.AppRepository
 import com.recco.internal.core.repository.MeRepository
 import com.recco.internal.core.repository.MetricRepository
 import com.recco.internal.core.ui.components.UiState
@@ -26,6 +28,7 @@ import kotlin.time.Duration.Companion.seconds
 internal class MainViewModel @Inject constructor(
     private val meRepository: MeRepository,
     private val metricRepository: MetricRepository,
+    private val appRepository: AppRepository,
     private val logger: Logger
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(UiState<MainUI>())
@@ -39,6 +42,9 @@ internal class MainViewModel @Inject constructor(
     init {
         initialLoadOrRetry()
     }
+
+    val sdkConfig: ReccoConfig
+        get() = appRepository.getSDKConfig()
 
     fun onUserInteract(userInteract: MainUserInteract) {
         when (userInteract) {
