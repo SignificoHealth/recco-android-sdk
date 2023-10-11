@@ -8,6 +8,7 @@
 ### Changed 
 - Update OpenAPI schemas to have access to the new metrics events
 - Update dependencies catalog, Gradle version and resize jvm heap memory size. [SHAD-398](https://vilua.atlassian.net/browse/SHAD-398)
+- Fix questionnaires content not aligned to the top. [SHAD-414](https://vilua.atlassian.net/browse/SHAD-414)  
 
 ## 0.0.6 - 2023-09-06
 
