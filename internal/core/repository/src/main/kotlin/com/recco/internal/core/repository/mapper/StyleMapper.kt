@@ -9,6 +9,6 @@ internal fun StyleDTO.asEntity() = ReccoStyle(
     font = ReccoFont.valueOf(androidFont.value.uppercase()),
     palette = ReccoPalette.Custom(
         darkColors = darkColors.asEntity(),
-        lightColors = lightColors.asEntity(),
+        lightColors = lightColors.asEntity()
     )
 )

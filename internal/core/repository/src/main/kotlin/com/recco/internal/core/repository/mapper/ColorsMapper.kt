@@ -13,4 +13,3 @@ internal fun ColorsDTO.asEntity() = ReccoColors(
     illustration = illustration,
     illustrationOutline = illustrationOutline
 )
-

@@ -2,7 +2,6 @@ package com.recco.api.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.recco.api.model.ReccoConfig
 import com.recco.api.model.ReccoStyle
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.metric.AppUserMetricAction
