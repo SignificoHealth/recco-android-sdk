@@ -211,7 +211,8 @@ private fun QuestionnaireContent(
         HorizontalPager(
             modifier = Modifier.fillMaxSize(),
             state = pagerState,
-            userScrollEnabled = false
+            userScrollEnabled = false,
+            verticalAlignment = Alignment.Top
         ) { page ->
             val question = data.questions[page]
             val scrollState = rememberScrollState()
