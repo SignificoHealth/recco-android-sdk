@@ -4,6 +4,7 @@
 
 ### Added 
 - Send new metric events HOST_APP_OPEN & RECCO_SDK_OPEN [SHAD-338](https://vilua.atlassian.net/browse/SHAD-338)
+- Support a style specified via backoffice. [SHAD-410](https://vilua.atlassian.net/browse/SHAD-410)
 
 ### Changed 
 - Update OpenAPI schemas to have access to the new metrics events
