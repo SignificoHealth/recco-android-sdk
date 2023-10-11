@@ -38,7 +38,7 @@ data class ApiErrorDTO(
     /**
      * 
      *
-     * Values: UNKNOWN,RESOURCE_NOT_FOUND,UNAUTHORIZED,APP_DISABLED,BAD_REQUEST,CONFLICT
+     * Values: UNKNOWN,RESOURCE_NOT_FOUND,UNAUTHORIZED,APP_DISABLED,BAD_REQUEST,CONFLICT,TRANSIENT_TOKEN_ALREADY_CONSUMED
      */
     @JsonClass(generateAdapter = false)
     enum class ErrorCode(val value: kotlin.String) {
@@ -47,7 +47,8 @@ data class ApiErrorDTO(
         @Json(name = "unauthorized") UNAUTHORIZED("unauthorized"),
         @Json(name = "app_disabled") APP_DISABLED("app_disabled"),
         @Json(name = "bad_request") BAD_REQUEST("bad_request"),
-        @Json(name = "conflict") CONFLICT("conflict");
+        @Json(name = "conflict") CONFLICT("conflict"),
+        @Json(name = "transient_token_already_consumed") TRANSIENT_TOKEN_ALREADY_CONSUMED("transient_token_already_consumed");
     }
 }
 

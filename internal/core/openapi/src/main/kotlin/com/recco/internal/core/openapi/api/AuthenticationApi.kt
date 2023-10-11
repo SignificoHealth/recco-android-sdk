@@ -51,4 +51,31 @@ interface AuthenticationApi {
      */
     @POST("api/v1/app_users/logout")
     suspend fun logout(@Header("Authorization") authorization: kotlin.String, @Header("Client-User-Id") clientUserId: kotlin.String, @Body paTReferenceDeleteDTO: PATReferenceDeleteDTO): Response<Unit>
+
+    /**
+     * Create a PAT, with a lifespan of 15 days, for the clientUserId associated with the transient token.
+     * 
+     * Responses:
+     *  - 401: Unauthorized
+     *  - 200: OK
+     *
+     * @param authorization 
+     * @return [PATDTO]
+     */
+    @POST("api/v1/app_users/tokens")
+    suspend fun tokens(@Header("Authorization") authorization: kotlin.String): Response<PATDTO>
+
+    /**
+     * Create a one-time PAT for the app, with a 1-minute lifespan and scoped to the supplied clientUserId.
+     * 
+     * Responses:
+     *  - 401: Unauthorized
+     *  - 200: OK
+     *
+     * @param authorization 
+     * @param clientUserId 
+     * @return [PATDTO]
+     */
+    @POST("api/v1/app_users/transient_tokens")
+    suspend fun transientTokens(@Header("Authorization") authorization: kotlin.String, @Header("Client-User-Id") clientUserId: kotlin.String): Response<PATDTO>
 }
