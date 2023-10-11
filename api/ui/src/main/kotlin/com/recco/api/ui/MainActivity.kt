@@ -34,9 +34,8 @@ class MainActivity : AppCompatActivity() {
             val uiState by viewModel.viewState.collectAsStateWithLifecycle()
             val viewEvents = globalViewEvents.collectAsStateWithLifecycle(GlobalViewEvent.NoOp)
             val user = uiState.data?.user
-            val reccoStyle = user?.reccoStyle ?: viewModel.sdkConfig.style
 
-            AppTheme(style = reccoStyle) {
+            AppTheme(style = viewModel.reccoStyle) {
                 if (user != null) {
                     AppNavHost(
                         user = user,

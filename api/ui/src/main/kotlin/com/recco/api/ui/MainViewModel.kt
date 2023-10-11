@@ -3,6 +3,7 @@ package com.recco.api.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.recco.api.model.ReccoConfig
+import com.recco.api.model.ReccoStyle
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.metric.AppUserMetricAction
 import com.recco.internal.core.model.metric.AppUserMetricCategory
@@ -33,6 +34,11 @@ internal class MainViewModel @Inject constructor(
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(UiState<MainUI>())
 
+    val reccoStyle: ReccoStyle
+        get() {
+            return _viewState.value.data?.user?.reccoStyle ?: appRepository.getSDKConfig().style
+        }
+
     val viewState: StateFlow<UiState<MainUI>> = _viewState.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(stopTimeout = 5.seconds),
@@ -42,9 +48,6 @@ internal class MainViewModel @Inject constructor(
     init {
         initialLoadOrRetry()
     }
-
-    val sdkConfig: ReccoConfig
-        get() = appRepository.getSDKConfig()
 
     fun onUserInteract(userInteract: MainUserInteract) {
         when (userInteract) {
