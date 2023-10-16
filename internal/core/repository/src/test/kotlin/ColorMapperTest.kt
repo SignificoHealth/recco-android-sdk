@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Test
 class ColorMapperTest {
 
     @Test
-    fun `When rearrangeHexColorAlphaToStart with valid input, then result should be the rearranged color`() {
+    fun `When valid input, result is the rearranged color`() {
         val hexColor = "#AABBCCDD"
         val result = hexColor.rearrangeHexColorAlphaToStart()
         assertThat(result).isEqualTo("#DDAABBCC")
     }
 
     @Test
-    fun `When rearrangeHexColorAlphaToStart with invalid input format, then it should throw IllegalArgumentException with a message containing #RRGGBBAA valid format`() {
+    fun `When invalid input format, it throws IllegalArgumentException`() {
         val hexColor = "AABBCCDD" // Missing '#' at the start
         val exception = assertThrows(IllegalStateException::class.java) {
             hexColor.rearrangeHexColorAlphaToStart()
@@ -23,7 +23,7 @@ class ColorMapperTest {
     }
 
     @Test
-    fun `When rearrangeHexColorAlphaToStart with invalid input length, then it should throw IllegalArgumentException with a message containing #RRGGBBAA valid format`() {
+    fun `When invalid input length, it throws IllegalArgumentException`() {
         val hexColor = "#AABBCCD" // Length is not 9
         val exception = assertThrows(IllegalStateException::class.java) {
             hexColor.rearrangeHexColorAlphaToStart()
