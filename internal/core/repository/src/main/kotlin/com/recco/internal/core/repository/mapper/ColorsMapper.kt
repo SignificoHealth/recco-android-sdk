@@ -27,7 +27,7 @@ internal fun ColorsDTO.asEntity(): ReccoColors {
 fun String.rearrangeHexColorAlphaToStart(): String {
     if (length != 9 || !startsWith("#")) {
         // Invalid input format
-        error("Hex color does not have a (#RRGGBBAA) valid format: $this")
+        error("($this) color does not have a valid format: #RRGGBBAA")
     }
 
     val alpha = substring(7)
