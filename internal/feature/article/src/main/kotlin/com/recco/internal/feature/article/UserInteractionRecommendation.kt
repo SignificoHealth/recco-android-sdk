@@ -19,9 +19,13 @@ import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -51,21 +55,53 @@ internal fun UserInteractionRecommendationCard(
 ) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(AppSpacing.dp_24),
+        shape = RoundedCornerShape(AppSpacing.dp_32),
         elevation = animateDpAsState(targetValue = if (isScrollEndReached) 0.dp else 2.dp).value,
         backgroundColor = AppTheme.colors.background
     ) {
         val alphaDisabledColor = .5f
-
+        val bookmarkDescription = stringResource(
+            if (userInteraction.isBookmarked) {
+                R.string.accessibility_remove_from_bookmarks
+            } else {
+                R.string.accessibility_add_to_bookmarks
+            }
+        )
+        val thumbsUpDescription = stringResource(
+            if (userInteraction.rating == Rating.LIKE) {
+                R.string.accessibility_remove_thumbs_up
+            } else {
+                R.string.accessibility_give_thumbs_up
+            }
+        )
+        val thumbsDownDescription = stringResource(
+            if (userInteraction.rating == Rating.DISLIKE) {
+                R.string.accessibility_remove_thumbs_down
+            } else {
+                R.string.accessibility_give_thumbs_down
+            }
+        )
         Row(
             modifier = Modifier
                 .padding(
-                    horizontal = AppSpacing.dp_16,
-                    vertical = AppSpacing.dp_12
+                    horizontal = AppSpacing.dp_12,
+                    vertical = AppSpacing.dp_8
                 )
                 .height(IntrinsicSize.Min)
         ) {
-            Box(modifier = Modifier.size(AppSpacing.dp_24)) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .semantics(mergeDescendants = true) {}
+                    .let {
+                        if (userInteraction.isBookmarkLoading) {
+                            it
+                        } else {
+                            it.clickable { toggleBookmarkState() }
+                        }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
                 androidx.compose.animation.AnimatedVisibility(
                     visible = userInteraction.isBookmarkLoading,
                     enter = fadeIn(),
@@ -82,7 +118,7 @@ internal fun UserInteractionRecommendationCard(
                     Icon(
                         modifier = Modifier
                             .size(AppSpacing.dp_24)
-                            .clickable { toggleBookmarkState() },
+                            .semantics { contentDescription = bookmarkDescription },
                         painter = painterResource(
                             if (userInteraction.isBookmarked) {
                                 R.drawable.recco_ic_bookmark_filled
@@ -90,16 +126,16 @@ internal fun UserInteractionRecommendationCard(
                                 R.drawable.recco_ic_bookmark_outline
                             }
                         ),
-                        contentDescription = null,
                         tint = if (userInteraction.isBookmarked) {
                             AppTheme.colors.accent
                         } else {
                             AppTheme.colors.primary
-                        }
+                        },
+                        contentDescription = null
                     )
                 }
             }
-            Spacer(Modifier.width(AppSpacing.dp_16))
+            Spacer(Modifier.width(AppSpacing.dp_12))
 
             Divider(
                 modifier = Modifier
@@ -107,9 +143,24 @@ internal fun UserInteractionRecommendationCard(
                     .width(1.dp)
                     .fillMaxHeight()
             )
-            Spacer(Modifier.width(AppSpacing.dp_16))
+            Spacer(Modifier.width(AppSpacing.dp_12))
 
-            Box(modifier = Modifier.size(AppSpacing.dp_24)) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .semantics(mergeDescendants = true) {}
+                    .let {
+                        if (userInteraction.isLikeLoading) {
+                            it
+                        } else {
+                            it.clickable(
+                                enabled = !userInteraction.isDislikeLoading,
+                                onClick = toggleLikeState
+                            )
+                        }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
                 androidx.compose.animation.AnimatedVisibility(
                     visible = userInteraction.isLikeLoading,
                     enter = fadeIn(),
@@ -126,10 +177,7 @@ internal fun UserInteractionRecommendationCard(
                     Icon(
                         modifier = Modifier
                             .size(AppSpacing.dp_24)
-                            .clickable(
-                                enabled = !userInteraction.isDislikeLoading,
-                                onClick = toggleLikeState
-                            ),
+                            .semantics { contentDescription = thumbsUpDescription },
                         painter = painterResource(
                             if (userInteraction.rating == Rating.LIKE) {
                                 R.drawable.recco_ic_thumbs_up_filled
@@ -137,7 +185,6 @@ internal fun UserInteractionRecommendationCard(
                                 R.drawable.recco_ic_thumbs_up_outline
                             }
                         ),
-                        contentDescription = null,
                         tint = if (userInteraction.rating == Rating.LIKE) {
                             AppTheme.colors.accent.copy(
                                 alpha = if (userInteraction.isDislikeLoading) alphaDisabledColor else 1f
@@ -146,13 +193,29 @@ internal fun UserInteractionRecommendationCard(
                             AppTheme.colors.primary.copy(
                                 alpha = if (userInteraction.isDislikeLoading) alphaDisabledColor else 1f
                             )
-                        }
+                        },
+                        contentDescription = null
                     )
                 }
             }
-            Spacer(Modifier.width(AppSpacing.dp_16))
+            Spacer(Modifier.width(AppSpacing.dp_8 / 2))
 
-            Box(modifier = Modifier.size(AppSpacing.dp_24)) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .semantics(mergeDescendants = true) {}
+                    .let {
+                        if (userInteraction.isDislikeLoading) {
+                            it
+                        } else {
+                            it.clickable(
+                                enabled = !userInteraction.isLikeLoading,
+                                onClick = toggleDislikeState
+                            )
+                        }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
                 androidx.compose.animation.AnimatedVisibility(
                     visible = userInteraction.isDislikeLoading,
                     enter = fadeIn(),
@@ -169,10 +232,7 @@ internal fun UserInteractionRecommendationCard(
                     Icon(
                         modifier = Modifier
                             .size(AppSpacing.dp_24)
-                            .clickable(
-                                enabled = !userInteraction.isLikeLoading,
-                                onClick = toggleDislikeState
-                            ),
+                            .semantics { contentDescription = thumbsDownDescription },
                         painter = painterResource(
                             if (userInteraction.rating == Rating.DISLIKE) {
                                 R.drawable.recco_ic_thumbs_down_filled
@@ -180,7 +240,6 @@ internal fun UserInteractionRecommendationCard(
                                 R.drawable.recco_ic_thumbs_down_outline
                             }
                         ),
-                        contentDescription = null,
                         tint = if (userInteraction.rating == Rating.DISLIKE) {
                             AppTheme.colors.accent.copy(
                                 alpha = if (userInteraction.isDislikeLoading) alphaDisabledColor else 1f
@@ -189,7 +248,8 @@ internal fun UserInteractionRecommendationCard(
                             AppTheme.colors.primary.copy(
                                 alpha = if (userInteraction.isDislikeLoading) alphaDisabledColor else 1f
                             )
-                        }
+                        },
+                        contentDescription = null
                     )
                 }
             }

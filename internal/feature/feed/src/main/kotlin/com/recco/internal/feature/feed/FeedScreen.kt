@@ -50,6 +50,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -213,7 +216,7 @@ private fun FeedHeader(
                     modifier = Modifier.clickable { navigateToBookmarks() },
                     painter = painterResource(id = R.drawable.recco_ic_bookmark_filled),
                     tint = AppTheme.colors.accent,
-                    contentDescription = null
+                    contentDescription = stringResource(id = R.string.accessibility_your_bookmarks)
                 )
                 Spacer(Modifier.height(AppSpacing.dp_16))
 
@@ -292,7 +295,8 @@ private fun FeedSection(
                     feedSectionToUnlock = feedSectionToUnlock,
                     openDialog = openDialog,
                     topicDialog = topicDialog,
-                    onLockAnimationFinished = onLockAnimationFinished
+                    onLockAnimationFinished = onLockAnimationFinished,
+                    sectionText = feedSection.type.asSectionTitle()
                 )
             } else {
                 UnlockedItems(
@@ -348,7 +352,8 @@ private fun LockedItems(
     feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock?,
     openDialog: MutableState<Boolean>,
     topicDialog: MutableState<Topic?>,
-    onLockAnimationFinished: () -> Unit
+    onLockAnimationFinished: () -> Unit,
+    sectionText: String
 ) {
     LazyRow(
         state = scrollState,
@@ -358,7 +363,7 @@ private fun LockedItems(
             end = AppSpacing.dp_24
         )
     ) {
-        items(LOCK_PLACEHOLDER_ELEMENTS) {
+        items(LOCK_PLACEHOLDER_ELEMENTS) { index ->
             LockedCard(
                 onClick = {
                     feedSection.topic?.let { topic ->
@@ -367,7 +372,9 @@ private fun LockedItems(
                     }
                 },
                 shouldStartAnimation = { feedSection.type == feedSectionToUnlock?.type },
-                onAnimationFinished = onLockAnimationFinished
+                onAnimationFinished = onLockAnimationFinished,
+                index = index + 1,
+                sectionText = sectionText
             )
         }
     }
@@ -444,7 +451,8 @@ private fun PartiallyUnlockedCard(
     Card(
         modifier = Modifier
             .height(heightRecommendationCard)
-            .width(widthRecommendationCard),
+            .width(widthRecommendationCard)
+            .semantics(mergeDescendants = true) {},
         elevation = 0.dp,
         onClick = onClick,
         backgroundColor = AppTheme.colors.primary
@@ -476,7 +484,9 @@ private fun PartiallyUnlockedCard(
 private fun LockedCard(
     onClick: () -> Unit,
     shouldStartAnimation: () -> Boolean,
-    onAnimationFinished: () -> Unit
+    onAnimationFinished: () -> Unit,
+    index: Int,
+    sectionText: String
 ) {
     val cardRes = remember {
         mutableStateOf(
@@ -487,23 +497,32 @@ private fun LockedCard(
             ).random()
         )
     }
+    val cardDescription = stringResource(
+        id = R.string.accessibility_locked_card,
+        index,
+        sectionText
+    )
 
     Card(
         modifier = Modifier
             .height(heightRecommendationCard)
-            .width(widthRecommendationCard),
+            .width(widthRecommendationCard)
+            .semantics(mergeDescendants = true) {}
+            .clearAndSetSemantics { contentDescription = cardDescription },
         elevation = 0.dp,
         onClick = onClick,
         backgroundColor = AppTheme.colors.background
     ) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .semantics { }
         ) {
             Image(
-                painter = painterResource(cardRes.value),
-                contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+                painter = painterResource(cardRes.value),
+                contentScale = ContentScale.Crop,
+                contentDescription = null
             )
 
             Column(
@@ -592,8 +611,8 @@ private fun AppLockIcon(
                 this.rotationZ = rotate.value
             },
         painter = painterResource(iconRes.value),
-        contentDescription = null,
-        tint = AppTheme.colors.primary
+        tint = AppTheme.colors.primary,
+        contentDescription = null
     )
 }
 

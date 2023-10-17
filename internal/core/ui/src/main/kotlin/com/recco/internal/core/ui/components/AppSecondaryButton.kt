@@ -17,7 +17,8 @@ fun AppSecondaryButton(
     @DrawableRes iconEndRes: Int? = null,
     isLoading: Boolean = false,
     enabled: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    contentDescription: String? = null
 ) {
     AppButton(
         modifier = modifier,
@@ -27,7 +28,8 @@ fun AppSecondaryButton(
         iconEndRes = iconEndRes,
         isLoading = isLoading,
         enabled = enabled,
-        onClick = onClick
+        onClick = onClick,
+        contentDescription = contentDescription
     )
 }
 
@@ -39,7 +41,8 @@ fun AppSecondaryButton(
     @DrawableRes iconEndRes: Int? = null,
     isLoading: Boolean = false,
     enabled: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    contentDescription: String? = null
 ) {
     AppButton(
         modifier = modifier,
@@ -49,7 +52,8 @@ fun AppSecondaryButton(
         iconEndRes = iconEndRes,
         isLoading = isLoading,
         enabled = enabled,
-        onClick = onClick
+        onClick = onClick,
+        contentDescription = contentDescription
     )
 }
 

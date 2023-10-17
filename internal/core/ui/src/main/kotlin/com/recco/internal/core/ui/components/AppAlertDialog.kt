@@ -132,7 +132,7 @@ private fun CloseDialogButton(
         Icon(
             painter = painterResource(id = R.drawable.recco_ic_close),
             tint = AppTheme.colors.staticDark,
-            contentDescription = null
+            contentDescription = stringResource(id = R.string.accessibility_close)
         )
     }
 }

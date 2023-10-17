@@ -29,7 +29,8 @@ internal fun AppButton(
     @DrawableRes iconEndRes: Int? = null,
     isLoading: Boolean = false,
     enabled: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    contentDescription: String? = null
 ) {
     val isEnabled = enabled && !isLoading
     val backgroundColor = getBackgroundColor(isPrimary, isEnabled)
@@ -57,8 +58,8 @@ internal fun AppButton(
                 Icon(
                     modifier = Modifier.size(24.dp),
                     painter = painterResource(iconStartRes),
-                    contentDescription = null,
-                    tint = contentColor
+                    tint = contentColor,
+                    contentDescription = contentDescription
                 )
             }
 

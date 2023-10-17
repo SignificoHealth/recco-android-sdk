@@ -84,7 +84,7 @@ private fun MainScreen(
                     .fillMaxWidth()
                     .padding(top = 60.dp),
                 painter = painterResource(id = R.drawable.bg_logo),
-                contentDescription = ""
+                contentDescription = null
             )
 
             Image(
@@ -92,7 +92,7 @@ private fun MainScreen(
                     .fillMaxWidth()
                     .padding(vertical = 42.dp, horizontal = 40.dp),
                 painter = painterResource(id = R.drawable.bg_shapes),
-                contentDescription = ""
+                contentDescription = null
             )
 
             HtmlText(
