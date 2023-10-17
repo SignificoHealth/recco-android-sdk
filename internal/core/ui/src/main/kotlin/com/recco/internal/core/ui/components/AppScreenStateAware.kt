@@ -288,7 +288,10 @@ private fun <T> AppScreenStateAwareContent(
 
     val animatedContentHeight = rememberSaveable { mutableStateOf(0f) }
 
-    Crossfade(targetState = uiState.isLoading && isFirstLoading.value) { isInitialLoading ->
+    Crossfade(
+        targetState = uiState.isLoading && isFirstLoading.value,
+        label = "loading_crossfade"
+    ) { isInitialLoading ->
         if (isInitialLoading) {
             HeaderAwareContent(isFloatingHeader) {
                 loadingHeaderContent?.invoke()

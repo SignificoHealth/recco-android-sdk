@@ -5,6 +5,7 @@ import com.recco.internal.core.repository.MetricRepository
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.test.utils.staticThrowableForTesting
 import kotlinx.coroutines.flow.flow
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.stub
@@ -84,6 +85,6 @@ internal fun RecommendationRepository.stubRepositoryForError() {
 
 internal fun MetricRepository.stubRepositoryForError() {
     stub {
-        onBlocking { it.openDashboard() } doThrow staticThrowableForTesting
+        onBlocking { it.logEvent(any()) } doThrow staticThrowableForTesting
     }
 }

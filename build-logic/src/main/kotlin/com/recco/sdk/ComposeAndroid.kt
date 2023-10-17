@@ -6,7 +6,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.the
 
-internal fun Project.configureAndroidCompose(extension: CommonExtension<*, *, *, *>) {
+internal fun Project.configureAndroidCompose(extension: CommonExtension<*, *, *, *, *>) {
     val libs = the<LibrariesForLibs>()
 
     extension.apply {

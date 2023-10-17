@@ -13,15 +13,17 @@
 
 package com.recco.internal.core.openapi.model
 
+import com.recco.internal.core.openapi.model.StyleDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
+ * 
  *
- *
- * @param id
- * @param clientUserId
- * @param isOnboardingQuestionnaireCompleted
+ * @param id 
+ * @param clientUserId 
+ * @param isOnboardingQuestionnaireCompleted 
+ * @param appStyle 
  */
 @JsonClass(generateAdapter = true)
 data class AppUserDTO(
@@ -33,5 +35,8 @@ data class AppUserDTO(
     val clientUserId: kotlin.String,
 
     @Json(name = "isOnboardingQuestionnaireCompleted")
-    val isOnboardingQuestionnaireCompleted: kotlin.Boolean
+    val isOnboardingQuestionnaireCompleted: kotlin.Boolean,
+
+    @Json(name = "appStyle")
+    val appStyle: StyleDTO? = null
 )

@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("recco.android.spotless")
 
-    kotlin("kapt")
+    id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
 
     alias(libs.plugins.easylauncher)
@@ -14,12 +14,12 @@ plugins {
 android {
     namespace = "com.recco.showcase"
 
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.recco.showcase"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -29,14 +29,12 @@ android {
         }
     }
 
-    val reccoClientSecretEnv: String? = System.getenv("RECCO_CLIENT_SECRET")
-    val reccoClientSecretLocalProperties: String? = gradleLocalProperties(rootDir).getProperty("recco.client.secret")
-    // Default to empty to avoid crashing the build when running status checks on Github Actions such as Lint
-    val clientSecret = reccoClientSecretEnv ?: reccoClientSecretLocalProperties ?: "\"\""
+    val appIdSuffix = resolveAppIdSuffix()
+    val clientSecret = resolveClientSecret()
 
     buildTypes {
         named("debug") {
-            applicationIdSuffix = ".debug"
+            applicationIdSuffix = ".$appIdSuffix"
 
             buildConfigField(
                 type = "String",
@@ -45,7 +43,10 @@ android {
             )
         }
 
+
         named("release") {
+            applicationIdSuffix = ".$appIdSuffix"
+
             isMinifyEnabled = true
             isShrinkResources = true
             setProguardFiles(
@@ -75,7 +76,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.8"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 }
 
@@ -84,16 +85,16 @@ dependencies {
 
     // implementation("com.significo:recco-api-ui:0.0.0")
 
-    implementation("com.google.dagger:hilt-android:2.47")
-    implementation("androidx.navigation:navigation-compose:2.6.0")
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    implementation("androidx.navigation:navigation-compose:2.7.4")
 
-    kapt("com.google.dagger:hilt-android-compiler:2.47")
+    ksp("com.google.dagger:hilt-android-compiler:2.48.1")
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.8.0")
 
-    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
+    implementation(platform("androidx.compose:compose-bom:2023.10.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -101,11 +102,11 @@ dependencies {
 
     implementation("com.github.viluahealthcare:compose-html:1.0.3")
 
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.4.3")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.5.3")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
     implementation("com.github.skydoves:colorpicker-compose:1.0.4")
     implementation("com.holix.android:bottomsheetdialog-compose:1.2.2")
@@ -113,17 +114,19 @@ dependencies {
     val roomVersion = "2.5.2"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
 
     //debugImplementation("androidx.compose.ui:ui-tooling:1.6.0-alpha03")
 }
 
 easylauncher {
     buildTypes {
+        val appIdSuffix = resolveAppIdSuffix().uppercase()
+
         create("debug") {
             filters(
                 customRibbon(
-                    label = "DEBUG",
+                    label = appIdSuffix,
                     ribbonColor = "#FFf5b731",
                     labelColor = "#FFFFFF"
                 )
@@ -133,7 +136,7 @@ easylauncher {
         create("release") {
             filters(
                 customRibbon(
-                    label = "PROD",
+                    label = appIdSuffix,
                     ribbonColor = "#FF9EE4A1",
                     labelColor = "#FFFFFF"
                 )
@@ -142,3 +145,15 @@ easylauncher {
     }
 }
 
+fun resolveAppIdSuffix(): String {
+    val applicationIdSuffixEnv = System.getenv("RECCO_APP_ID_SUFFIX")
+    val applicationIdLocalProperties: String? = gradleLocalProperties(rootDir).getProperty("recco.app.id.suffix")
+    return applicationIdSuffixEnv ?: applicationIdLocalProperties ?: "dev"
+}
+
+fun resolveClientSecret(): String {
+    val reccoClientSecretEnv: String? = System.getenv("RECCO_CLIENT_SECRET")
+    val reccoClientSecretLocalProperties: String? = gradleLocalProperties(rootDir).getProperty("recco.client.secret")
+    // Default to empty to avoid crashing the build when running status checks on Github Actions such as Lint
+    return reccoClientSecretEnv ?: reccoClientSecretLocalProperties ?: "\"\""
+}

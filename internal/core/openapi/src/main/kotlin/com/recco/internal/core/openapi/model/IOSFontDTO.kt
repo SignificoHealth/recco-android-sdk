@@ -19,17 +19,26 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
- * Values: USER_SESSION,DASHBOARD_SCREEN
+ * Values: SF_PRO,HELVETICA_NEUE,AVENIR_NEXT,APPLE_SD_GOTHIC_NEO,GEORGIA
  */
 @Suppress("RemoveRedundantQualifierName")
 @JsonClass(generateAdapter = false)
-enum class AppUserMetricCategoryDTO(val value: kotlin.String) {
+enum class IOSFontDTO(val value: kotlin.String) {
 
-    @Json(name = "user_session")
-    USER_SESSION("user_session"),
+    @Json(name = "sf_pro")
+    SF_PRO("sf_pro"),
 
-    @Json(name = "dashboard_screen")
-    DASHBOARD_SCREEN("dashboard_screen");
+    @Json(name = "helvetica_neue")
+    HELVETICA_NEUE("helvetica_neue"),
+
+    @Json(name = "avenir_next")
+    AVENIR_NEXT("avenir_next"),
+
+    @Json(name = "apple_sd_gothic_neo")
+    APPLE_SD_GOTHIC_NEO("apple_sd_gothic_neo"),
+
+    @Json(name = "georgia")
+    GEORGIA("georgia");
 
     /**
      * Override toString() to avoid using the enum variable name as the value, and instead use

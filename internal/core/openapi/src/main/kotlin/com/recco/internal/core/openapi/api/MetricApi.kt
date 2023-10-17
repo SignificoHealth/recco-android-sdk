@@ -13,20 +13,23 @@
 
 package com.recco.internal.core.openapi.api
 
-import com.recco.internal.core.openapi.model.AppUserMetricEventDTO
-import retrofit2.Response
 import retrofit2.http.*
+import retrofit2.Response
+import okhttp3.RequestBody
+import com.squareup.moshi.Json
+import com.recco.internal.core.openapi.model.ApiErrorDTO
+import com.recco.internal.core.openapi.model.AppUserMetricEventDTO
 
 interface MetricApi {
 
     /**
      * Log event.
-     *
+     * 
      * Responses:
      *  - 401: Unauthorized
      *  - 204: No Content
      *
-     * @param appUserMetricEventDTO
+     * @param appUserMetricEventDTO 
      * @return [Unit]
      */
     @POST("api/v1/me/metric")

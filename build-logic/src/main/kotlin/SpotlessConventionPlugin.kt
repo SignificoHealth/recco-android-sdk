@@ -14,7 +14,6 @@ class SpotlessConventionPlugin : Plugin<Project> {
                     target("**/*.kt")
                     targetExclude("**/build/**/*.kt")
                     ktlint()
-                        .setUseExperimental(true)
                         .userData(mapOf("android" to "true"))
                         .setEditorConfigPath("$rootDir/.editorconfig")
                 }

@@ -14,7 +14,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ui.Scaffold
 import com.recco.api.ui.navigation.AppNavHost
-import com.recco.internal.core.repository.AppRepository
 import com.recco.internal.core.ui.components.AppCustomLoading
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTopBar
@@ -23,14 +22,10 @@ import com.recco.internal.core.ui.pipelines.GlobalViewEvent
 import com.recco.internal.core.ui.pipelines.globalViewEvents
 import com.recco.internal.core.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
-
-    @Inject
-    lateinit var appRepository: AppRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +33,9 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val uiState by viewModel.viewState.collectAsStateWithLifecycle()
             val viewEvents = globalViewEvents.collectAsStateWithLifecycle(GlobalViewEvent.NoOp)
+            val user = uiState.data?.user
 
-            AppTheme(style = appRepository.getSDKConfig().style) {
-                val user = uiState.data?.user
+            AppTheme(style = viewModel.reccoStyle) {
                 if (user != null) {
                     AppNavHost(
                         user = user,
@@ -81,5 +76,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onUserInteract(MainUserInteract.ReccoSDKOpen)
     }
 }
