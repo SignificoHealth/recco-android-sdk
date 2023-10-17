@@ -8,5 +8,6 @@ data class Article(
     val headline: String,
     val lead: String? = null,
     val imageUrl: String? = null,
+    val imageAlt: String? = null,
     val articleBodyHtml: String? = null
 )
