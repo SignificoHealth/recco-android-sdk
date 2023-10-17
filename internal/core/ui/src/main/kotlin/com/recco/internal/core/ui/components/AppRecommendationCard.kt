@@ -57,6 +57,7 @@ fun AppRecommendationCard(
                         }
                     },
                 data = recommendation.imageUrl,
+                alt = recommendation.imageAlt,
                 contentScale = ContentScale.Crop,
                 loadingAnimationDrawable = loadingCardAnimationDrawable()
             )

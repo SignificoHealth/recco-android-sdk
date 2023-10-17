@@ -40,6 +40,7 @@ const val ASPECT_RATIO_10_4 = 10f / 4f // 0.4
 fun AppAsyncImage(
     modifier: Modifier,
     data: Any?,
+    alt: String? = null,
     @DrawableRes placeholderRes: Int? = R.drawable.recco_bg_image_placeholder,
     placeholderContent: (@Composable () -> Unit)? = null,
     loadingAnimationDrawable: AnimationDrawable? = loadingAnimationDrawable(),
@@ -68,7 +69,7 @@ fun AppAsyncImage(
             Image(
                 painter = painter,
                 contentScale = contentScale,
-                contentDescription = null,
+                contentDescription = alt,
                 modifier = modifier.let {
                     if (aspectRatio != null) {
                         it.aspectRatio(aspectRatio)

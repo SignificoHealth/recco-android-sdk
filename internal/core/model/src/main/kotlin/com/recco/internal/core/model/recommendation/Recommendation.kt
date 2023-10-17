@@ -7,5 +7,6 @@ data class Recommendation(
     val bookmarked: Boolean,
     val headline: String,
     val lead: String? = null,
-    val imageUrl: String? = null
+    val imageUrl: String? = null,
+    val imageAlt: String? = null
 )
