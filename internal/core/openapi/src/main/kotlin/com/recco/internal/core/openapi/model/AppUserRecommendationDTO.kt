@@ -31,6 +31,7 @@ import com.squareup.moshi.JsonClass
  * @param headline 
  * @param lead 
  * @param imageUrl 
+ * @param imageAlt 
  */
 @JsonClass(generateAdapter = true)
 data class AppUserRecommendationDTO(
@@ -57,5 +58,8 @@ data class AppUserRecommendationDTO(
     val lead: kotlin.String? = null,
 
     @Json(name = "imageUrl")
-    val imageUrl: kotlin.String? = null
+    val imageUrl: kotlin.String? = null,
+
+    @Json(name = "imageAlt")
+    val imageAlt: kotlin.String? = null
 )

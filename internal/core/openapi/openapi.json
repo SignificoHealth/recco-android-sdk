@@ -1316,6 +1316,9 @@
           },
           "imageUrl": {
             "type": "string"
+          },
+          "imageAlt": {
+            "type": "string"
           }
         }
       },
@@ -1355,6 +1358,9 @@
             "type": "string"
           },
           "imageUrl": {
+            "type": "string"
+          },
+          "imageAlt": {
             "type": "string"
           },
           "articleBodyHtml": {
