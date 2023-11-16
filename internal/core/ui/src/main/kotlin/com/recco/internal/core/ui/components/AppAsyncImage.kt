@@ -2,7 +2,6 @@ package com.recco.internal.core.ui.components
 
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -52,7 +51,7 @@ fun AppAsyncImage(
     onStateChange: (AsyncImagePainter.State) -> Unit = {}
 ) {
     BoxWithConstraints(
-        modifier = modifier,
+        modifier = modifier
     ) {
         if (data == null && placeholderContent != null) {
             placeholderContent()
@@ -168,8 +167,8 @@ private fun loadingAnimationDrawable(
 private fun constructDynamicImageUrl(
     url: String,
     viewWidthPx: Float,
-    viewHeightPx: Float)
-: String {
+    viewHeightPx: Float
+): String {
     val (standardWidth, standardHeight) = mapToStandardSize(viewWidthPx, viewHeightPx)
     val quality = 70
     val format = "webp"

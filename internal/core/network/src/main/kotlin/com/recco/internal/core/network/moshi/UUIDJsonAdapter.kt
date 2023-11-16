@@ -12,7 +12,7 @@ class UUIDJsonAdapter {
     }
 
     @ToJson
-    fun toJson(value:java.util.UUID): String {
+    fun toJson(value: java.util.UUID): String {
         return value.toString()
     }
 }
