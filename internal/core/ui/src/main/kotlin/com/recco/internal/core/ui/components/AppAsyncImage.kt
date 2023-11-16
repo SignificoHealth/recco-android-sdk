@@ -65,9 +65,7 @@ fun AppAsyncImage(
                     url = data,
                     viewWidthPx = constraints.maxWidth.toFloat(),
                     viewHeightPx = constraints.maxHeight.toFloat()
-                ).also {
-                    Log.i("dynamic-url", "url: $it")
-                }
+                )
             } else {
                 data
             }
