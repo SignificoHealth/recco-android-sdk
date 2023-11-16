@@ -2,6 +2,9 @@
 
 ## [1.1.0] - 2023-10-16 - YYYY-MM-DD
 
+### Changed 
+- Docs updated to explain the process to request an apiKey for testing purposes
+
 ## [1.0.0] - 2023-09-27 - 2023-10-16
 
 ### Added 
