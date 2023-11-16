@@ -29,6 +29,7 @@ import com.squareup.moshi.JsonClass
  * @param headline 
  * @param lead 
  * @param imageUrl 
+ * @param dynamicImageResizingUrl 
  * @param imageAlt 
  * @param articleBodyHtml 
  */
@@ -55,6 +56,9 @@ data class AppUserArticleDTO(
 
     @Json(name = "imageUrl")
     val imageUrl: kotlin.String? = null,
+
+    @Json(name = "dynamicImageResizingUrl")
+    val dynamicImageResizingUrl: kotlin.String? = null,
 
     @Json(name = "imageAlt")
     val imageAlt: kotlin.String? = null,
