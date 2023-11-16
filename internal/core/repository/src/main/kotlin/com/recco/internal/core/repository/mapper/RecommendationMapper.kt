@@ -9,7 +9,7 @@ internal fun AppUserRecommendationDTO.asEntity() = Recommendation(
     status = status.asEntity(),
     headline = headline,
     lead = lead,
-    imageUrl = imageUrl,
+    imageUrl = dynamicImageResizingUrl,
     bookmarked = bookmarked,
     imageAlt = imageAlt
 )
