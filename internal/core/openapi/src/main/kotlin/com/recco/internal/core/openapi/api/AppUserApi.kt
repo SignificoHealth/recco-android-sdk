@@ -26,8 +26,8 @@ interface AppUserApi {
      * Return app user.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @return [AppUserDTO]
      */

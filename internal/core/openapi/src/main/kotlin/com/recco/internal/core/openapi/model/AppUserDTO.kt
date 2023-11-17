@@ -24,6 +24,7 @@ import com.squareup.moshi.JsonClass
  * @param clientUserId 
  * @param isOnboardingQuestionnaireCompleted 
  * @param appStyle 
+ * @param appRedirectUrl 
  */
 @JsonClass(generateAdapter = true)
 data class AppUserDTO(
@@ -38,5 +39,8 @@ data class AppUserDTO(
     val isOnboardingQuestionnaireCompleted: kotlin.Boolean,
 
     @Json(name = "appStyle")
-    val appStyle: StyleDTO? = null
+    val appStyle: StyleDTO? = null,
+
+    @Json(name = "appRedirectUrl")
+    val appRedirectUrl: kotlin.String? = null
 )

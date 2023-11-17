@@ -26,8 +26,8 @@ interface MetricApi {
      * Log event.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 204: No Content
+     *  - 401: Unauthorized
      *
      * @param appUserMetricEventDTO 
      * @return [Unit]

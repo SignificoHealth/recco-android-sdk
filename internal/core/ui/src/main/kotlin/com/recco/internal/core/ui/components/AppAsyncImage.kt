@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,6 +25,7 @@ const val ASPECT_RATIO_10_7 = 10f / 7f // 0.7
 const val ASPECT_RATIO_16_9 = 16f / 9f // 0.56
 const val ASPECT_RATIO_10_5 = 10f / 5f // 0.5
 const val ASPECT_RATIO_10_4 = 10f / 4f // 0.4
+const val MAX_SERVER_SIZE = 1080
 
 /**
  * @param data This can be a URL, a [painterResource], a [java.io.File], ...
@@ -49,15 +50,27 @@ fun AppAsyncImage(
     aspectRatio: Float? = null,
     onStateChange: (AsyncImagePainter.State) -> Unit = {}
 ) {
-    Box {
+    BoxWithConstraints(
+        modifier = modifier
+    ) {
         if (data == null && placeholderContent != null) {
             placeholderContent()
         } else {
             val placeholderPainter = placeholderRes?.let { painterResource(it) }
                 .takeIf { placeholderContent == null }
 
+            val model = if (data is String) {
+                constructDynamicImageUrl(
+                    url = data,
+                    viewWidthPx = constraints.maxWidth.toFloat(),
+                    viewHeightPx = constraints.maxHeight.toFloat()
+                )
+            } else {
+                data
+            }
+
             val painter = rememberAsyncImagePainter(
-                model = data,
+                model = model,
                 contentScale = contentScale,
                 error = placeholderPainter,
                 fallback = placeholderPainter
@@ -149,4 +162,40 @@ private fun loadingAnimationDrawable(
     }
 
     return animationDrawable
+}
+
+private fun constructDynamicImageUrl(
+    url: String,
+    viewWidthPx: Float,
+    viewHeightPx: Float
+): String {
+    val (standardWidth, standardHeight) = mapToStandardSize(viewWidthPx, viewHeightPx)
+    val quality = 70
+    val format = "webp"
+    val fit = "cover"
+
+    return url +
+        "?width=$standardWidth" +
+        "&height=$standardHeight" +
+        "&quality=$quality" +
+        "&format=$format" +
+        "&fit=$fit"
+}
+
+private fun mapToStandardSize(viewWidthPx: Float, viewHeightPx: Float): Pair<Int, Int> {
+    val standardWidth = when {
+        viewWidthPx <= 640 -> 320
+        viewWidthPx <= 930 -> 640
+        viewWidthPx <= MAX_SERVER_SIZE -> 930
+        else -> MAX_SERVER_SIZE // 1080
+    }
+
+    val standardHeight = when {
+        viewHeightPx <= 640 -> 320
+        viewHeightPx <= 930 -> 640
+        viewHeightPx <= MAX_SERVER_SIZE -> 930
+        else -> MAX_SERVER_SIZE // 1080
+    }
+
+    return Pair(standardWidth, standardHeight)
 }

@@ -4,6 +4,7 @@
 
 ### Changed 
 - Docs updated to explain the process to request an apiKey for testing purposes
+- Support dynamic image URLs with standardised sizes [SHAD-532](https://vilua.atlassian.net/browse/SHAD-532).
 
 ## [1.0.0] - 2023-09-27 - 2023-10-16
 
