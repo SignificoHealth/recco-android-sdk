@@ -2,6 +2,8 @@
 
 ## [1.1.0] - 2023-10-16 - YYYY-MM-DD
 
+- Support dynamic image URLs with standardised sizes [SHAD-532](https://vilua.atlassian.net/browse/SHAD-532). 
+
 ## [1.0.0] - 2023-09-27 - 2023-10-16
 
 ### Added 
