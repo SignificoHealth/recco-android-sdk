@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -203,4 +202,3 @@ private fun normalize(value: Dp) = when {
     value <= 900.dp -> 900.dp
     else -> MAX_SERVER_SIZE.dp
 }.dpToPx()
-
