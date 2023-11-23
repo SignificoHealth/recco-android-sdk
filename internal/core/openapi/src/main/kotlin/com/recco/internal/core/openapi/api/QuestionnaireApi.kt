@@ -28,8 +28,8 @@ interface QuestionnaireApi {
      * Set user app answers for a questionnaire.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 204: No Content
+     *  - 401: Unauthorized
      *
      * @param createQuestionnaireAnswerDTO 
      * @return [Unit]
@@ -41,8 +41,8 @@ interface QuestionnaireApi {
      * Return the associated questionnaire for a given topic.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @param topic 
      * @return [kotlin.collections.List<QuestionDTO>]
@@ -54,8 +54,8 @@ interface QuestionnaireApi {
      * Return the onboarding questionnaire.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @return [kotlin.collections.List<QuestionDTO>]
      */
@@ -66,8 +66,8 @@ interface QuestionnaireApi {
      * Set user app answers for the onboarding questionnaires.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 204: No Content
+     *  - 401: Unauthorized
      *
      * @param createQuestionnaireAnswerDTO 
      * @return [Unit]

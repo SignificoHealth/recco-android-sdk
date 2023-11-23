@@ -27,8 +27,8 @@ interface AuthenticationApi {
      * Authenticate an app user supplying an app PAT and the associated user client id.         If the user client id does not exist in the app, a new user will be registered on the fly.         This endpoint should be used also after the PAT expires to retrieve a new one.         
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @param authorization 
      * @param clientUserId 
@@ -41,8 +41,8 @@ interface AuthenticationApi {
      * Logout an app user supplying PAT&#39;s id and the associated user client id.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 204: No Content
+     *  - 401: Unauthorized
      *
      * @param authorization 
      * @param clientUserId 
@@ -56,8 +56,8 @@ interface AuthenticationApi {
      * Create a PAT, with a lifespan of 15 days, for the clientUserId associated with the transient token.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @param authorization 
      * @return [PATDTO]
@@ -69,8 +69,8 @@ interface AuthenticationApi {
      * Create a one-time PAT for the app, with a 1-minute lifespan and scoped to the supplied clientUserId.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @param authorization 
      * @param clientUserId 

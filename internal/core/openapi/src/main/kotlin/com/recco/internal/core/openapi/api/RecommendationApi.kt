@@ -30,8 +30,8 @@ interface RecommendationApi {
      * A list of content filtered by topic.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @param topic 
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
@@ -43,8 +43,8 @@ interface RecommendationApi {
      * Get article.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @param itemId 
      * @param catalogId 
@@ -57,8 +57,8 @@ interface RecommendationApi {
      * A list of bookmarked recommendations.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -69,8 +69,8 @@ interface RecommendationApi {
      * A list of most popular content.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -81,8 +81,8 @@ interface RecommendationApi {
      * A list of newest content.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -93,8 +93,8 @@ interface RecommendationApi {
      * A list of starting recommendations.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -105,8 +105,8 @@ interface RecommendationApi {
      * A list of tailored recommendations filtered by topic.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @param topic 
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
@@ -118,8 +118,8 @@ interface RecommendationApi {
      * A list of recommendations which are improved by the preferences.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 200: OK
+     *  - 401: Unauthorized
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -130,8 +130,8 @@ interface RecommendationApi {
      * Set recommendation bookmark state.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 204: No Content
+     *  - 401: Unauthorized
      *
      * @param updateBookmarkDTO 
      * @return [Unit]
@@ -143,8 +143,8 @@ interface RecommendationApi {
      * Set recommendation rating.
      * 
      * Responses:
-     *  - 401: Unauthorized
      *  - 204: No Content
+     *  - 401: Unauthorized
      *
      * @param updateRatingDTO 
      * @return [Unit]

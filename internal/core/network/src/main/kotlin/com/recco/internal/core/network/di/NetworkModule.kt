@@ -8,6 +8,7 @@ import com.recco.internal.core.network.http.interceptors.AddHeadersInterceptor
 import com.recco.internal.core.network.http.interceptors.AuthInterceptor
 import com.recco.internal.core.network.http.interceptors.ErrorInterceptor
 import com.recco.internal.core.network.moshi.OffsetDateTimeAdapter
+import com.recco.internal.core.network.moshi.UUIDJsonAdapter
 import com.recco.internal.core.openapi.api.AppUserApi
 import com.recco.internal.core.openapi.api.AuthenticationApi
 import com.recco.internal.core.openapi.api.FeedApi
@@ -135,5 +136,6 @@ object NetworkModule {
     @Singleton
     fun provideMoshi(): Moshi = Moshi.Builder()
         .add(OffsetDateTimeAdapter())
+        .add(UUIDJsonAdapter())
         .build()
 }

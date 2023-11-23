@@ -55,6 +55,9 @@
           "required": true
         },
         "responses": {
+          "204": {
+            "description": "No Content"
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -64,14 +67,13 @@
                 }
               }
             }
-          },
-          "204": {
-            "description": "No Content"
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -94,6 +96,9 @@
           "required": true
         },
         "responses": {
+          "204": {
+            "description": "No Content"
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -103,14 +108,13 @@
                 }
               }
             }
-          },
-          "204": {
-            "description": "No Content"
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -136,6 +140,9 @@
           "required": true
         },
         "responses": {
+          "204": {
+            "description": "No Content"
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -145,14 +152,13 @@
                 }
               }
             }
-          },
-          "204": {
-            "description": "No Content"
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -178,6 +184,9 @@
           "required": true
         },
         "responses": {
+          "204": {
+            "description": "No Content"
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -187,14 +196,13 @@
                 }
               }
             }
-          },
-          "204": {
-            "description": "No Content"
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -217,6 +225,9 @@
           "required": true
         },
         "responses": {
+          "204": {
+            "description": "No Content"
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -226,14 +237,13 @@
                 }
               }
             }
-          },
-          "204": {
-            "description": "No Content"
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -264,16 +274,6 @@
           }
         ],
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -283,11 +283,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -310,16 +322,6 @@
           }
         ],
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -329,11 +331,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -374,6 +388,9 @@
           "required": true
         },
         "responses": {
+          "204": {
+            "description": "No Content"
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -383,14 +400,13 @@
                 }
               }
             }
-          },
-          "204": {
-            "description": "No Content"
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -421,16 +437,6 @@
           }
         ],
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -440,11 +446,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -457,16 +475,6 @@
         "summary": "Return app user.",
         "operationId": "get",
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -476,11 +484,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -503,16 +523,6 @@
           }
         ],
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -525,11 +535,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -542,16 +564,6 @@
         "summary": "A list of starting recommendations.",
         "operationId": "getStartingRecommendations",
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -564,11 +576,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -581,16 +605,6 @@
         "summary": "A list of recommendations which are improved by the preferences.",
         "operationId": "getUserPreferredRecommendations",
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -603,11 +617,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -620,16 +646,6 @@
         "summary": "A list of newest content.",
         "operationId": "getNewestContent",
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -642,11 +658,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -659,16 +687,6 @@
         "summary": "A list of most popular content.",
         "operationId": "getMostPopularContent",
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -681,11 +699,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -708,16 +738,6 @@
           }
         ],
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -730,11 +750,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -747,16 +779,6 @@
         "summary": "A list of bookmarked recommendations.",
         "operationId": "getBookmarkedRecommendations",
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -769,11 +791,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -804,16 +838,6 @@
           }
         ],
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -823,11 +847,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -850,16 +886,6 @@
           }
         ],
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -872,11 +898,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -889,16 +927,6 @@
         "summary": "Return the onboarding questionnaire.",
         "operationId": "onboarding",
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -911,11 +939,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -928,16 +968,6 @@
         "summary": "Get feed sections.",
         "operationId": "getFeed",
         "responses": {
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK",
             "content": {
@@ -950,11 +980,23 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "bearerAuth": []
+            "bearerAuth": [
+
+            ]
           }
         ]
       }
@@ -1196,6 +1238,9 @@
           },
           "appStyle": {
             "$ref": "#/components/schemas/Style"
+          },
+          "appRedirectUrl": {
+            "type": "string"
           }
         }
       },
@@ -1255,10 +1300,20 @@
           "androidFont",
           "darkColors",
           "iosFont",
-          "lightColors"
+          "isPredefined",
+          "lightColors",
+          "name",
+          "webFont"
         ],
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
           "darkColors": {
             "$ref": "#/components/schemas/Colors"
           },
@@ -1270,8 +1325,20 @@
           },
           "androidFont": {
             "$ref": "#/components/schemas/AndroidFont"
+          },
+          "webFont": {
+            "$ref": "#/components/schemas/WebFont"
+          },
+          "isPredefined": {
+            "type": "boolean"
           }
         }
+      },
+      "WebFont": {
+        "type": "string",
+        "enum": [
+          "poppins"
+        ]
       },
       "Topic": {
         "type": "string",
@@ -1319,6 +1386,10 @@
           },
           "imageAlt": {
             "type": "string"
+          },
+          "dynamicImageResizingUrl": {
+            "type": "string",
+            "description": "Responsive image url. Supports transformation via query params. Allowed query params key=values width=number, height=number, quality=1..100, format=auto|jgp|png|webp|tiff, fit=cover|contain|inside|outside"
           }
         }
       },
@@ -1358,6 +1429,9 @@
             "type": "string"
           },
           "imageUrl": {
+            "type": "string"
+          },
+          "dynamicImageResizingUrl": {
             "type": "string"
           },
           "imageAlt": {
@@ -1531,7 +1605,9 @@
           "authorizationCode": {
             "authorizationUrl": "to_be_defined",
             "tokenUrl": "to_be_defined",
-            "scopes": {}
+            "scopes": {
+
+            }
           }
         }
       },
