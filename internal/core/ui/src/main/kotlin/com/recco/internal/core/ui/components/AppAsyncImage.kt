@@ -20,6 +20,8 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.recco.internal.core.ui.R
+import com.recco.internal.core.ui.extensions.dpToPx
+import com.recco.internal.core.ui.extensions.pxToDp
 
 // width/height positive ratio
 const val ASPECT_RATIO_1_1 = 1f
@@ -201,12 +203,4 @@ private fun normalize(value: Dp) = when {
     value <= 900.dp -> 900.dp
     else -> MAX_SERVER_SIZE.dp
 }.dpToPx()
-
-@Composable
-fun Dp.dpToPx() = with(LocalDensity.current) { this@dpToPx.toPx().toInt() }
-
-@Composable
-fun Int.pxToDp() = with(LocalDensity.current) {
-    this@pxToDp.toDp()
-}
 
