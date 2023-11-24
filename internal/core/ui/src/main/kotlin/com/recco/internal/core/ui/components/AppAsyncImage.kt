@@ -39,7 +39,6 @@ const val MAX_SERVER_SIZE = 1080
  * @param loadingAnimationDrawable Used for loading state if [loadingContent] is null. Not use both.
  * @param loadingContent Used for loading state if [loadingAnimationDrawable] is null. Not use both.
  * @param contentScale
- * @param aspectRatio Width/Height, i.e: 16f/9f, ASPECT_RATIO_16_9
  * @param onStateChange Useful for example if you need to get for example the size of the image loaded.
  */
 @Composable
@@ -52,12 +51,9 @@ fun AppAsyncImage(
     loadingAnimationDrawable: AnimationDrawable? = loadingAnimationDrawable(),
     loadingContent: (@Composable () -> Unit)? = null,
     contentScale: ContentScale = ContentScale.Crop,
-    aspectRatio: Float? = null,
     onStateChange: (AsyncImagePainter.State) -> Unit = {}
 ) {
-    BoxWithConstraints(
-        modifier = modifier
-    ) {
+    BoxWithConstraints(modifier = modifier) {
         if (data == null && placeholderContent != null) {
             placeholderContent()
         } else {
@@ -88,13 +84,7 @@ fun AppAsyncImage(
                 painter = painter,
                 contentScale = contentScale,
                 contentDescription = alt,
-                modifier = Modifier.fillMaxSize().let {
-                    if (aspectRatio != null) {
-                        it.aspectRatio(aspectRatio)
-                    } else {
-                        it
-                    }
-                }
+                modifier = Modifier.fillMaxSize()
             )
 
             when (state) {
