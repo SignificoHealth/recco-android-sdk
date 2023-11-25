@@ -129,7 +129,7 @@ class RecommendationRepository @Inject constructor(
     }
 
     suspend fun getArticle(contentId: ContentId): Article =
-        api.getArticle(itemId = contentId.itemId, catalogId = contentId.catalogId)
+        api.getArticle(catalogId = contentId.catalogId)
             .unwrap().asEntity()
 
     suspend fun setBookmarkRecommendation(contentId: ContentId, bookmarked: Boolean) {

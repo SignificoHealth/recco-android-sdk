@@ -26,8 +26,8 @@ interface FeedApi {
      * Get feed sections.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<FeedSectionDTO>]
      */

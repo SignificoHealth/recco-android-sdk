@@ -28,8 +28,8 @@ interface QuestionnaireApi {
      * Set user app answers for a questionnaire.
      * 
      * Responses:
-     *  - 204: No Content
      *  - 401: Unauthorized
+     *  - 204: No Content
      *
      * @param createQuestionnaireAnswerDTO 
      * @return [Unit]
@@ -38,11 +38,24 @@ interface QuestionnaireApi {
     suspend fun answers(@Body createQuestionnaireAnswerDTO: kotlin.collections.List<CreateQuestionnaireAnswerDTO>): Response<Unit>
 
     /**
+     * Get questionnaire.
+     * 
+     * Responses:
+     *  - 401: Unauthorized
+     *  - 200: OK
+     *
+     * @param itemId 
+     * @return [kotlin.collections.List<QuestionDTO>]
+     */
+    @GET("api/v1/me/questionnaire")
+    suspend fun getQuestionnaire(@Query("itemId") itemId: kotlin.String): Response<kotlin.collections.List<QuestionDTO>>
+
+    /**
      * Return the associated questionnaire for a given topic.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @param topic 
      * @return [kotlin.collections.List<QuestionDTO>]
@@ -54,8 +67,8 @@ interface QuestionnaireApi {
      * Return the onboarding questionnaire.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<QuestionDTO>]
      */
@@ -66,8 +79,8 @@ interface QuestionnaireApi {
      * Set user app answers for the onboarding questionnaires.
      * 
      * Responses:
-     *  - 204: No Content
      *  - 401: Unauthorized
+     *  - 204: No Content
      *
      * @param createQuestionnaireAnswerDTO 
      * @return [Unit]
