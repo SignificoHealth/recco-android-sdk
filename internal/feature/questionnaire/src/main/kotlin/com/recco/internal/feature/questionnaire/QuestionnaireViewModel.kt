@@ -216,13 +216,7 @@ internal class QuestionnaireViewModel @Inject constructor(
                     GlobalViewEvent.FeedSectionToUnlock(
                         topic!!,
                         feedSectionType!!,
-                        state = if (questionnaireUI.questions
-                                .all { it.isAnswerInputValid(requiredToBeAnswered = true) }
-                        ) {
-                            FeedSectionState.UNLOCKED
-                        } else {
-                            FeedSectionState.PARTIALLY_UNLOCKED
-                        }
+                        state = FeedSectionState.UNLOCKED
                     )
                 )
                 _viewEvents.emit(QuestionnaireViewEvent.QuestionnaireSubmitted)

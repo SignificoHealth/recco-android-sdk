@@ -396,16 +396,6 @@ private fun UnlockedItems(
         ) { recommendation ->
             AppRecommendationCard(recommendation, navigateToArticle)
         }
-
-        if (section.feedSection.state == FeedSectionState.PARTIALLY_UNLOCKED) {
-            item {
-                PartiallyUnlockedCard {
-                    section.feedSection.topic?.let { topic ->
-                        navigateToQuestionnaire(topic, section.feedSection.type)
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -434,41 +424,6 @@ private fun QuestionnaireStartDialog(
         textButtonPrimaryRes = R.string.recco_start,
         onClickPrimary = onClick
     )
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun PartiallyUnlockedCard(
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .height(heightRecommendationCard)
-            .width(widthRecommendationCard),
-        elevation = 0.dp,
-        onClick = onClick,
-        backgroundColor = AppTheme.colors.primary
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(AppSpacing.dp_12),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.recco_ic_refresh),
-                tint = AppTheme.colors.onPrimary,
-                contentDescription = null
-            )
-            Spacer(Modifier.height(AppSpacing.dp_8))
-            Text(
-                text = stringResource(R.string.recco_dashboard_review_area),
-                style = AppTheme.typography.h3.copy(color = AppTheme.colors.onPrimary),
-                textAlign = TextAlign.Center
-            )
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
