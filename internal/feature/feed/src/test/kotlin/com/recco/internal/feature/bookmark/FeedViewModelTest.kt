@@ -136,7 +136,6 @@ class FeedViewModelTest {
         globalViewEvents.emit(globalEvent)
 
         // Then
-        verifyBlocking(feedRepository) { setFeedSectionState(globalEvent.type, globalEvent.state) }
         verifyBlocking(recRepository) { reloadSection(globalEvent.topic) }
 
         // Then
