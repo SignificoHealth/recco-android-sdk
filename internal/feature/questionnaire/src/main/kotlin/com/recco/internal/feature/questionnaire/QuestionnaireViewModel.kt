@@ -7,7 +7,6 @@ import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.feed.FeedSectionState
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
-import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.repository.QuestionnaireRepository
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.pipelines.GlobalViewEvent
@@ -104,7 +103,7 @@ internal class QuestionnaireViewModel @Inject constructor(
             runCatching {
                 if (isOnboarding) {
                     questionnaireRepository.getOnboarding()
-                }  else if (questionnaireId != null) {
+                } else if (questionnaireId != null) {
                     questionnaireRepository.getQuestionnaireById(questionnaireId!!)
                 } else {
                     questionnaireRepository.getQuestionnaireByTopic(topic!!)

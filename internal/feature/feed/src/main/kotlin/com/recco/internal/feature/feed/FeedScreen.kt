@@ -143,7 +143,7 @@ private fun FeedScreen(
                 navigateToQuestionnaire = navigateToQuestionnaire,
                 onLockAnimationFinished = {
                     onUserInteract(FeedUserInteract.RefreshUnlockedFeedSection)
-                },
+                }
             )
         }
     }
@@ -301,7 +301,7 @@ private fun FeedSection(
                     openDialog = openDialog,
                     topicDialog = topicDialog,
                     contentIdDialog = contentIdDialog,
-                    navigateToArticle = navigateToArticle,
+                    navigateToArticle = navigateToArticle
                 )
             }
         }
@@ -382,7 +382,7 @@ private fun UnlockedItems(
     openDialog: MutableState<Boolean>,
     topicDialog: MutableState<Topic?>,
     contentIdDialog: MutableState<ContentId?>,
-    navigateToArticle: (ContentId) -> Unit,
+    navigateToArticle: (ContentId) -> Unit
 ) {
     val recommendations =
         (section.recommendations as FlowDataState.Success<List<Recommendation>>).data

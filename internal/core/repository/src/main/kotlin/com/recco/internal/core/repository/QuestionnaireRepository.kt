@@ -2,7 +2,6 @@ package com.recco.internal.core.repository
 
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.questionnaire.Question
-import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.network.http.unwrap
 import com.recco.internal.core.openapi.api.QuestionnaireApi
 import com.recco.internal.core.openapi.model.QuestionDTO
