@@ -21,6 +21,7 @@
     <string name="recco_dashboard_welcome_back_body">Let\'s see how we can improve your health today...</string>
     <string name="recco_dashboard_welcome_back_title">Great to see you!</string>
     <string name="recco_dashboard_you_may_also_like">Totally You</string>
+    <string name="recco_dashboard_recommended_questionnaire_topic">Tailor your <xliff:g id="section_name">%1$s</xliff:g> journey</string>
     <string name="recco_error_connection_body">Please check your network connection and try again. </string>
     <string name="recco_error_connection_title">No Connection</string>
     <string name="recco_error_generic_body">Hmmm... we\'re not sure what happened. Please try again later.</string>

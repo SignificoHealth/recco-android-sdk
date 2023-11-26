@@ -2,6 +2,7 @@ package com.recco.internal.core.repository
 
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.questionnaire.Question
+import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.network.http.unwrap
 import com.recco.internal.core.openapi.api.QuestionnaireApi
 import com.recco.internal.core.openapi.model.QuestionDTO
@@ -16,6 +17,9 @@ class QuestionnaireRepository @Inject constructor(
 ) {
     suspend fun getQuestionnaireByTopic(topic: Topic): List<Question> =
         api.getQuestionnaireByTopic(topic.asDTO()).unwrap().map(QuestionDTO::asEntity)
+
+    suspend fun getQuestionnaireById(id: String): List<Question> =
+        api.getQuestionnaire(id).unwrap().map(QuestionDTO::asEntity)
 
     suspend fun getOnboarding(): List<Question> =
         api.onboarding().unwrap().map(QuestionDTO::asEntity)

@@ -23,9 +23,11 @@ import javax.inject.Inject
 class RecommendationRepository @Inject constructor(
     private val api: RecommendationApi
 ) {
+    private val supportedContentTypes = listOf(ContentTypeDTO.ARTICLES, ContentTypeDTO.QUESTIONNAIRES)
+
     private val sectionsPipelines = mapOf(
         FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS to PipelineStateAware {
-            api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_ACTIVITY).unwrap()
+            api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_ACTIVITY, supportedContentTypes).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE to PipelineStateAware {
@@ -33,7 +35,7 @@ class RecommendationRepository @Inject constructor(
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.NUTRITION_RECOMMENDATIONS to PipelineStateAware {
-            api.getTailoredRecommendationsByTopic(TopicDTO.NUTRITION).unwrap()
+            api.getTailoredRecommendationsByTopic(TopicDTO.NUTRITION, supportedContentTypes).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.NUTRITION_EXPLORE to PipelineStateAware {
@@ -41,7 +43,7 @@ class RecommendationRepository @Inject constructor(
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS to PipelineStateAware {
-            api.getTailoredRecommendationsByTopic(TopicDTO.MENTAL_WELLBEING).unwrap()
+            api.getTailoredRecommendationsByTopic(TopicDTO.MENTAL_WELLBEING, supportedContentTypes).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.MENTAL_WELLBEING_EXPLORE to PipelineStateAware {
@@ -49,7 +51,7 @@ class RecommendationRepository @Inject constructor(
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.SLEEP_RECOMMENDATIONS to PipelineStateAware {
-            api.getTailoredRecommendationsByTopic(TopicDTO.SLEEP).unwrap()
+            api.getTailoredRecommendationsByTopic(TopicDTO.SLEEP, supportedContentTypes).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.SLEEP_EXPLORE to PipelineStateAware {

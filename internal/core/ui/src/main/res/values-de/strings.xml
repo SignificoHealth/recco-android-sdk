@@ -21,7 +21,7 @@
     <string name="recco_dashboard_welcome_back_body">Mal sehen, was Deiner Gesundheit heute guttun könnte...</string>
     <string name="recco_dashboard_welcome_back_title">Willkommen!</string>
     <string name="recco_dashboard_you_may_also_like">Speziell für dich</string>
-    <string name="recco_error_connection_body">Nimm dir eine kleine Auszeit und versuche es später nochmal.</string>
+    <string name="recco_dashboard_recommended_questionnaire_topic">Passen Sie Ihre <xliff:g id="section_name">%1$s</xliff:g> Reise individuell an</string>    <string name="recco_error_connection_body">Nimm dir eine kleine Auszeit und versuche es später nochmal.</string>
     <string name="recco_error_connection_title">Keine Verbindung</string>
     <string name="recco_error_generic_body">Irgendwas ist schief gegangen. Überprüfe bitte Deine Netzwerkverbindung und lade die Seite neu.</string>
     <string name="recco_error_generic_title">Oh nein!</string>

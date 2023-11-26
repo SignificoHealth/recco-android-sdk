@@ -7,6 +7,7 @@ import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.feed.FeedSectionState
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
+import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.repository.QuestionnaireRepository
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.pipelines.GlobalViewEvent
@@ -18,6 +19,7 @@ import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.NextCl
 import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.Retry
 import com.recco.internal.feature.questionnaire.QuestionnaireUserInteract.WriteOnNumericQuestion
 import com.recco.internal.feature.questionnaire.navigation.feedSectionTypeArg
+import com.recco.internal.feature.questionnaire.navigation.idArg
 import com.recco.internal.feature.questionnaire.navigation.topicArg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -34,6 +36,8 @@ internal class QuestionnaireViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val topic by lazy { savedStateHandle.get<Topic>(topicArg) }
+    private val questionnaireId by lazy { savedStateHandle.get<String>(idArg) }
+
     private val feedSectionType by lazy { savedStateHandle.get<FeedSectionType>(feedSectionTypeArg) }
     private val isOnboarding by lazy { topic == null }
 
@@ -100,6 +104,8 @@ internal class QuestionnaireViewModel @Inject constructor(
             runCatching {
                 if (isOnboarding) {
                     questionnaireRepository.getOnboarding()
+                }  else if (questionnaireId != null) {
+                    questionnaireRepository.getQuestionnaireById(questionnaireId!!)
                 } else {
                     questionnaireRepository.getQuestionnaireByTopic(topic!!)
                 }
