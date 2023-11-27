@@ -5,17 +5,21 @@ import android.graphics.drawable.AnimationDrawable
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.recco.internal.core.ui.R
+import com.recco.internal.core.ui.extensions.dpToPx
+import com.recco.internal.core.ui.extensions.pxToDp
 
 // width/height positive ratio
 const val ASPECT_RATIO_1_1 = 1f
@@ -34,7 +38,6 @@ const val MAX_SERVER_SIZE = 1080
  * @param loadingAnimationDrawable Used for loading state if [loadingContent] is null. Not use both.
  * @param loadingContent Used for loading state if [loadingAnimationDrawable] is null. Not use both.
  * @param contentScale
- * @param aspectRatio Width/Height, i.e: 16f/9f, ASPECT_RATIO_16_9
  * @param onStateChange Useful for example if you need to get for example the size of the image loaded.
  */
 @Composable
@@ -47,12 +50,9 @@ fun AppAsyncImage(
     loadingAnimationDrawable: AnimationDrawable? = loadingAnimationDrawable(),
     loadingContent: (@Composable () -> Unit)? = null,
     contentScale: ContentScale = ContentScale.Crop,
-    aspectRatio: Float? = null,
     onStateChange: (AsyncImagePainter.State) -> Unit = {}
 ) {
-    BoxWithConstraints(
-        modifier = modifier
-    ) {
+    BoxWithConstraints(modifier = modifier) {
         if (data == null && placeholderContent != null) {
             placeholderContent()
         } else {
@@ -62,8 +62,8 @@ fun AppAsyncImage(
             val model = if (data is String) {
                 constructDynamicImageUrl(
                     url = data,
-                    viewWidthPx = constraints.maxWidth.toFloat(),
-                    viewHeightPx = constraints.maxHeight.toFloat()
+                    viewWidthPx = constraints.maxWidth,
+                    viewHeightPx = constraints.maxHeight
                 )
             } else {
                 data
@@ -83,13 +83,7 @@ fun AppAsyncImage(
                 painter = painter,
                 contentScale = contentScale,
                 contentDescription = alt,
-                modifier = modifier.let {
-                    if (aspectRatio != null) {
-                        it.aspectRatio(aspectRatio)
-                    } else {
-                        it
-                    }
-                }
+                modifier = Modifier.fillMaxSize()
             )
 
             when (state) {
@@ -99,7 +93,7 @@ fun AppAsyncImage(
                         loadingContent?.invoke()
                     } else {
                         Image(
-                            modifier = modifier,
+                            modifier = Modifier.fillMaxSize(),
                             painter = rememberDrawablePainter(loadingAnimationDrawable),
                             contentScale = ContentScale.Crop,
                             contentDescription = null
@@ -164,12 +158,14 @@ private fun loadingAnimationDrawable(
     return animationDrawable
 }
 
+@Composable
 private fun constructDynamicImageUrl(
     url: String,
-    viewWidthPx: Float,
-    viewHeightPx: Float
+    viewWidthPx: Int,
+    viewHeightPx: Int
 ): String {
-    val (standardWidth, standardHeight) = mapToStandardSize(viewWidthPx, viewHeightPx)
+    val standardWidth = normalize(viewWidthPx.pxToDp())
+    val standardHeight = normalize(viewHeightPx.pxToDp())
     val quality = 70
     val format = "webp"
     val fit = "cover"
@@ -182,20 +178,16 @@ private fun constructDynamicImageUrl(
         "&fit=$fit"
 }
 
-private fun mapToStandardSize(viewWidthPx: Float, viewHeightPx: Float): Pair<Int, Int> {
-    val standardWidth = when {
-        viewWidthPx <= 640 -> 320
-        viewWidthPx <= 930 -> 640
-        viewWidthPx <= MAX_SERVER_SIZE -> 930
-        else -> MAX_SERVER_SIZE // 1080
-    }
-
-    val standardHeight = when {
-        viewHeightPx <= 640 -> 320
-        viewHeightPx <= 930 -> 640
-        viewHeightPx <= MAX_SERVER_SIZE -> 930
-        else -> MAX_SERVER_SIZE // 1080
-    }
-
-    return Pair(standardWidth, standardHeight)
-}
+@Composable
+private fun normalize(value: Dp) = when {
+    value <= 100.dp -> 100.dp
+    value <= 200.dp -> 200.dp
+    value <= 300.dp -> 300.dp
+    value <= 400.dp -> 400.dp
+    value <= 500.dp -> 500.dp
+    value <= 600.dp -> 600.dp
+    value <= 700.dp -> 700.dp
+    value <= 800.dp -> 800.dp
+    value <= 900.dp -> 900.dp
+    else -> MAX_SERVER_SIZE.dp
+}.dpToPx()
