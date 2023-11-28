@@ -1,7 +1,9 @@
 package com.recco.internal.core.repository.mapper
 
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.Recommendation
 import com.recco.internal.core.openapi.model.AppUserRecommendationDTO
+import com.recco.internal.core.openapi.model.ContentTypeDTO
 
 internal fun AppUserRecommendationDTO.asEntity() = Recommendation(
     id = id.asEntity(),
@@ -11,5 +13,9 @@ internal fun AppUserRecommendationDTO.asEntity() = Recommendation(
     lead = lead,
     imageUrl = dynamicImageResizingUrl,
     bookmarked = bookmarked,
-    imageAlt = imageAlt
+    imageAlt = imageAlt,
+    type = when (type) {
+        ContentTypeDTO.ARTICLES -> ContentType.ARTICLE
+        ContentTypeDTO.QUESTIONNAIRES -> ContentType.QUESTIONNAIRE
+    }
 )

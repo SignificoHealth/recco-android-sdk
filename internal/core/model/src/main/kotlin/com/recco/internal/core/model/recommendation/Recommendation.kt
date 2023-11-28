@@ -2,6 +2,7 @@ package com.recco.internal.core.model.recommendation
 
 data class Recommendation(
     val id: ContentId,
+    val type: ContentType,
     val rating: Rating,
     val status: Status,
     val bookmarked: Boolean,

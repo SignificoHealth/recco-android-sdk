@@ -19,14 +19,17 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
- * Values: ARTICLES
+ * Values: ARTICLES,QUESTIONNAIRES
  */
 @Suppress("RemoveRedundantQualifierName")
 @JsonClass(generateAdapter = false)
 enum class ContentTypeDTO(val value: kotlin.String) {
 
     @Json(name = "articles")
-    ARTICLES("articles");
+    ARTICLES("articles"),
+
+    @Json(name = "questionnaires")
+    QUESTIONNAIRES("questionnaires");
 
     /**
      * Override toString() to avoid using the enum variable name as the value, and instead use

@@ -20,6 +20,7 @@ import com.squareup.moshi.Json
 import com.recco.internal.core.openapi.model.ApiErrorDTO
 import com.recco.internal.core.openapi.model.AppUserArticleDTO
 import com.recco.internal.core.openapi.model.AppUserRecommendationDTO
+import com.recco.internal.core.openapi.model.ContentTypeDTO
 import com.recco.internal.core.openapi.model.TopicDTO
 import com.recco.internal.core.openapi.model.UpdateBookmarkDTO
 import com.recco.internal.core.openapi.model.UpdateRatingDTO
@@ -30,8 +31,8 @@ interface RecommendationApi {
      * A list of content filtered by topic.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @param topic 
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
@@ -43,22 +44,21 @@ interface RecommendationApi {
      * Get article.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
-     * @param itemId 
      * @param catalogId 
      * @return [AppUserArticleDTO]
      */
     @GET("api/v1/me/recommendations/articles")
-    suspend fun getArticle(@Query("itemId") itemId: kotlin.String, @Query("catalogId") catalogId: kotlin.String): Response<AppUserArticleDTO>
+    suspend fun getArticle(@Query("catalogId") catalogId: kotlin.String): Response<AppUserArticleDTO>
 
     /**
      * A list of bookmarked recommendations.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -69,8 +69,8 @@ interface RecommendationApi {
      * A list of most popular content.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -81,8 +81,8 @@ interface RecommendationApi {
      * A list of newest content.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -93,8 +93,8 @@ interface RecommendationApi {
      * A list of starting recommendations.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -105,21 +105,22 @@ interface RecommendationApi {
      * A list of tailored recommendations filtered by topic.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @param topic 
+     * @param contentTypes  (optional)
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
     @GET("api/v1/me/recommendations/tailored/topics/{topic}")
-    suspend fun getTailoredRecommendationsByTopic(@Path("topic") topic: TopicDTO): Response<kotlin.collections.List<AppUserRecommendationDTO>>
+    suspend fun getTailoredRecommendationsByTopic(@Path("topic") topic: TopicDTO, @Query("contentTypes") contentTypes: @JvmSuppressWildcards kotlin.collections.List<ContentTypeDTO>? = null): Response<kotlin.collections.List<AppUserRecommendationDTO>>
 
     /**
      * A list of recommendations which are improved by the preferences.
      * 
      * Responses:
-     *  - 200: OK
      *  - 401: Unauthorized
+     *  - 200: OK
      *
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
@@ -130,8 +131,8 @@ interface RecommendationApi {
      * Set recommendation bookmark state.
      * 
      * Responses:
-     *  - 204: No Content
      *  - 401: Unauthorized
+     *  - 204: No Content
      *
      * @param updateBookmarkDTO 
      * @return [Unit]
@@ -143,8 +144,8 @@ interface RecommendationApi {
      * Set recommendation rating.
      * 
      * Responses:
-     *  - 204: No Content
      *  - 401: Unauthorized
+     *  - 204: No Content
      *
      * @param updateRatingDTO 
      * @return [Unit]
