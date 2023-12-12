@@ -8,14 +8,16 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
+import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.ui.extensions.asSerializable
 import com.recco.internal.feature.questionnaire.QuestionnaireOnboardingOutroRoute
 import com.recco.internal.feature.questionnaire.QuestionnaireRoute
 
 internal const val topicArg = "topic"
+internal const val idArg = "id"
 internal const val feedSectionTypeArg = "feedSectionType"
 const val QuestionnaireGraph = "questionnaire_graph"
-private const val QuestionnaireRoute = "questionnaire/{$topicArg}/{$feedSectionTypeArg}"
+private const val QuestionnaireRoute = "questionnaire/{$topicArg}/{$feedSectionTypeArg}?$idArg={$idArg}"
 private const val QuestionnaireOnboardingRoute = "questionnaire_onboarding"
 private const val QuestionnaireOnboardingOutroRoute = "questionnaire_onboarding_outro"
 
@@ -41,6 +43,10 @@ fun NavGraphBuilder.questionnaireGraph(
                 },
                 navArgument(feedSectionTypeArg) {
                     type = NavType.EnumType(FeedSectionType::class.java)
+                },
+                navArgument(idArg) {
+                    type = NavType.StringType
+                    nullable = true
                 }
             )
         ) { backStackEntry ->
@@ -50,6 +56,7 @@ fun NavGraphBuilder.questionnaireGraph(
                 navigateToOutro = navigateToOutro
             )
         }
+
         composable(
             route = QuestionnaireOnboardingRoute
         ) {
@@ -72,10 +79,15 @@ fun NavGraphBuilder.questionnaireGraph(
 
 fun NavController.navigateToTopicQuestionnaire(
     topic: Topic,
-    feedSectionType: FeedSectionType
+    feedSectionType: FeedSectionType,
+    contentId: ContentId? = null
 ) {
     navigate(
-        QuestionnaireRoute.replace(
+        if (contentId != null) {
+            QuestionnaireRoute.replaceAfter("$idArg=", contentId.itemId)
+        } else {
+            QuestionnaireRoute.replaceAfter("{$feedSectionTypeArg}", "")
+        }.replace(
             oldValue = "{$topicArg}",
             newValue = topic.name
         ).replace(

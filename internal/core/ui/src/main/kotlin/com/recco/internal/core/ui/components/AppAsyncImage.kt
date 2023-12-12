@@ -4,18 +4,22 @@ import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.recco.internal.core.ui.R
+import com.recco.internal.core.ui.extensions.dpToPx
+import com.recco.internal.core.ui.extensions.pxToDp
 
 // width/height positive ratio
 const val ASPECT_RATIO_1_1 = 1f
@@ -25,6 +29,7 @@ const val ASPECT_RATIO_10_7 = 10f / 7f // 0.7
 const val ASPECT_RATIO_16_9 = 16f / 9f // 0.56
 const val ASPECT_RATIO_10_5 = 10f / 5f // 0.5
 const val ASPECT_RATIO_10_4 = 10f / 4f // 0.4
+const val MAX_SERVER_SIZE = 1080
 
 /**
  * @param data This can be a URL, a [painterResource], a [java.io.File], ...
@@ -33,30 +38,39 @@ const val ASPECT_RATIO_10_4 = 10f / 4f // 0.4
  * @param loadingAnimationDrawable Used for loading state if [loadingContent] is null. Not use both.
  * @param loadingContent Used for loading state if [loadingAnimationDrawable] is null. Not use both.
  * @param contentScale
- * @param aspectRatio Width/Height, i.e: 16f/9f, ASPECT_RATIO_16_9
  * @param onStateChange Useful for example if you need to get for example the size of the image loaded.
  */
 @Composable
 fun AppAsyncImage(
     modifier: Modifier,
     data: Any?,
+    alt: String? = null,
     @DrawableRes placeholderRes: Int? = R.drawable.recco_bg_image_placeholder,
     placeholderContent: (@Composable () -> Unit)? = null,
     loadingAnimationDrawable: AnimationDrawable? = loadingAnimationDrawable(),
     loadingContent: (@Composable () -> Unit)? = null,
     contentScale: ContentScale = ContentScale.Crop,
-    aspectRatio: Float? = null,
     onStateChange: (AsyncImagePainter.State) -> Unit = {}
 ) {
-    Box {
+    BoxWithConstraints(modifier = modifier) {
         if (data == null && placeholderContent != null) {
             placeholderContent()
         } else {
             val placeholderPainter = placeholderRes?.let { painterResource(it) }
                 .takeIf { placeholderContent == null }
 
+            val model = if (data is String) {
+                constructDynamicImageUrl(
+                    url = data,
+                    viewWidthPx = constraints.maxWidth,
+                    viewHeightPx = constraints.maxHeight
+                )
+            } else {
+                data
+            }
+
             val painter = rememberAsyncImagePainter(
-                model = data,
+                model = model,
                 contentScale = contentScale,
                 error = placeholderPainter,
                 fallback = placeholderPainter
@@ -68,14 +82,8 @@ fun AppAsyncImage(
             Image(
                 painter = painter,
                 contentScale = contentScale,
-                contentDescription = null,
-                modifier = modifier.let {
-                    if (aspectRatio != null) {
-                        it.aspectRatio(aspectRatio)
-                    } else {
-                        it
-                    }
-                }
+                contentDescription = alt,
+                modifier = Modifier.fillMaxSize()
             )
 
             when (state) {
@@ -85,7 +93,7 @@ fun AppAsyncImage(
                         loadingContent?.invoke()
                     } else {
                         Image(
-                            modifier = modifier,
+                            modifier = Modifier.fillMaxSize(),
                             painter = rememberDrawablePainter(loadingAnimationDrawable),
                             contentScale = ContentScale.Crop,
                             contentDescription = null
@@ -149,3 +157,37 @@ private fun loadingAnimationDrawable(
 
     return animationDrawable
 }
+
+@Composable
+private fun constructDynamicImageUrl(
+    url: String,
+    viewWidthPx: Int,
+    viewHeightPx: Int
+): String {
+    val standardWidth = normalize(viewWidthPx.pxToDp())
+    val standardHeight = normalize(viewHeightPx.pxToDp())
+    val quality = 70
+    val format = "webp"
+    val fit = "cover"
+
+    return url +
+        "?width=$standardWidth" +
+        "&height=$standardHeight" +
+        "&quality=$quality" +
+        "&format=$format" +
+        "&fit=$fit"
+}
+
+@Composable
+private fun normalize(value: Dp) = when {
+    value <= 100.dp -> 100.dp
+    value <= 200.dp -> 200.dp
+    value <= 300.dp -> 300.dp
+    value <= 400.dp -> 400.dp
+    value <= 500.dp -> 500.dp
+    value <= 600.dp -> 600.dp
+    value <= 700.dp -> 700.dp
+    value <= 800.dp -> 800.dp
+    value <= 900.dp -> 900.dp
+    else -> MAX_SERVER_SIZE.dp
+}.dpToPx()

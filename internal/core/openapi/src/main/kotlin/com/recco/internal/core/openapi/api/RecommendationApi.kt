@@ -20,6 +20,7 @@ import com.squareup.moshi.Json
 import com.recco.internal.core.openapi.model.ApiErrorDTO
 import com.recco.internal.core.openapi.model.AppUserArticleDTO
 import com.recco.internal.core.openapi.model.AppUserRecommendationDTO
+import com.recco.internal.core.openapi.model.ContentTypeDTO
 import com.recco.internal.core.openapi.model.TopicDTO
 import com.recco.internal.core.openapi.model.UpdateBookmarkDTO
 import com.recco.internal.core.openapi.model.UpdateRatingDTO
@@ -46,12 +47,11 @@ interface RecommendationApi {
      *  - 401: Unauthorized
      *  - 200: OK
      *
-     * @param itemId 
      * @param catalogId 
      * @return [AppUserArticleDTO]
      */
     @GET("api/v1/me/recommendations/articles")
-    suspend fun getArticle(@Query("itemId") itemId: kotlin.String, @Query("catalogId") catalogId: kotlin.String): Response<AppUserArticleDTO>
+    suspend fun getArticle(@Query("catalogId") catalogId: kotlin.String): Response<AppUserArticleDTO>
 
     /**
      * A list of bookmarked recommendations.
@@ -109,10 +109,11 @@ interface RecommendationApi {
      *  - 200: OK
      *
      * @param topic 
+     * @param contentTypes  (optional)
      * @return [kotlin.collections.List<AppUserRecommendationDTO>]
      */
     @GET("api/v1/me/recommendations/tailored/topics/{topic}")
-    suspend fun getTailoredRecommendationsByTopic(@Path("topic") topic: TopicDTO): Response<kotlin.collections.List<AppUserRecommendationDTO>>
+    suspend fun getTailoredRecommendationsByTopic(@Path("topic") topic: TopicDTO, @Query("contentTypes") contentTypes: @JvmSuppressWildcards kotlin.collections.List<ContentTypeDTO>? = null): Response<kotlin.collections.List<AppUserRecommendationDTO>>
 
     /**
      * A list of recommendations which are improved by the preferences.

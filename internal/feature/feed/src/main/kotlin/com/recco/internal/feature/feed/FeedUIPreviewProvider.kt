@@ -30,11 +30,6 @@ internal class FeedUIPreviewProvider :
                     type = FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS,
                     state = FeedSectionState.LOCKED,
                     recommendationsSize = 1
-                ),
-                FeedPreviewProvider.data(
-                    type = FeedSectionType.SLEEP_RECOMMENDATIONS,
-                    state = FeedSectionState.PARTIALLY_UNLOCKED,
-                    recommendationsSize = 1
                 )
             )
         )

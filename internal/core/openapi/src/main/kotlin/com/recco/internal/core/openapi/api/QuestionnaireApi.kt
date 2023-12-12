@@ -38,6 +38,19 @@ interface QuestionnaireApi {
     suspend fun answers(@Body createQuestionnaireAnswerDTO: kotlin.collections.List<CreateQuestionnaireAnswerDTO>): Response<Unit>
 
     /**
+     * Get questionnaire.
+     * 
+     * Responses:
+     *  - 401: Unauthorized
+     *  - 200: OK
+     *
+     * @param itemId 
+     * @return [kotlin.collections.List<QuestionDTO>]
+     */
+    @GET("api/v1/me/questionnaire")
+    suspend fun getQuestionnaire(@Query("itemId") itemId: kotlin.String): Response<kotlin.collections.List<QuestionDTO>>
+
+    /**
      * Return the associated questionnaire for a given topic.
      * 
      * Responses:

@@ -9,7 +9,8 @@ internal fun AppUserArticleDTO.asEntity() = Article(
     status = status.asEntity(),
     headline = headline,
     lead = lead,
-    imageUrl = imageUrl,
+    imageUrl = dynamicImageResizingUrl,
+    imageAlt = imageAlt,
     articleBodyHtml = articleBodyHtml,
     isBookmarked = bookmarked
 )

@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.feed.FeedSectionAndRecommendations
-import com.recco.internal.core.model.feed.FeedSectionState.PARTIALLY_UNLOCKED
-import com.recco.internal.core.model.feed.FeedSectionState.UNLOCKED
 import com.recco.internal.core.model.feed.FeedSectionType.MENTAL_WELLBEING_EXPLORE
 import com.recco.internal.core.model.feed.FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS
 import com.recco.internal.core.model.feed.FeedSectionType.MOST_POPULAR
@@ -100,21 +98,6 @@ internal class FeedViewModel @Inject constructor(
                     _viewState.value = _viewState.value.copy(
                         data = data.copy(feedSectionToUnlock = feedSectionToUnlock)
                     )
-
-                    val previousStateSection = data.sections
-                        .first { it.feedSection.type == feedSectionToUnlock.type }
-                        .feedSection.state
-
-                    // If previous state was already unlocked or partially unlocked we update its state right away
-                    // as the animation for unlocking won't happen. Therefore, the state of the feed won't get updated,
-                    // as the animation was doing that, that's why we need to update here the state for the feed for this
-                    // particular section to avoid showing the card Retake questionnaire.
-                    if (previousStateSection == UNLOCKED || previousStateSection == PARTIALLY_UNLOCKED) {
-                        feedRepository.setFeedSectionState(
-                            feedSectionToUnlock.type,
-                            feedSectionToUnlock.state
-                        )
-                    }
 
                     recommendationRepository.reloadSection(topic = feedSectionToUnlock.topic)
                 }

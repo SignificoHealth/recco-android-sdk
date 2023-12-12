@@ -91,6 +91,7 @@ private fun ArticleScreen(
                         .fillMaxWidth()
                         .aspectRatio(ASPECT_RATIO_4_3),
                     data = it.article.imageUrl,
+                    alt = it.article.imageAlt,
                     contentScale = ContentScale.Crop
                 )
             },

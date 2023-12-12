@@ -50,7 +50,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -64,9 +63,11 @@ import com.recco.internal.core.model.feed.FeedSectionState
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.Recommendation
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppAlertDialog
+import com.recco.internal.core.ui.components.AppQuestionnaireCard
 import com.recco.internal.core.ui.components.AppRecommendationCard
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTintedImagePeopleDigital
@@ -91,7 +92,7 @@ private const val LOADING_PLACEHOLDER_ELEMENTS = 3
 @Composable
 internal fun FeedRoute(
     navigateToArticle: (ContentId) -> Unit,
-    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
+    navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     navigateToBookmarks: () -> Unit,
     viewModel: FeedViewModel = hiltViewModel()
 ) {
@@ -109,7 +110,7 @@ internal fun FeedRoute(
 private fun FeedScreen(
     uiState: UiState<FeedUI>,
     onUserInteract: (FeedUserInteract) -> Unit,
-    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
+    navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
     navigateToBookmarks: () -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
@@ -139,9 +140,7 @@ private fun FeedScreen(
                 feedUI = data,
                 navigateToArticle = navigateToArticle,
                 navigateToBookmarks = navigateToBookmarks,
-                navigateToQuestionnaire = { topic, feedSectionType ->
-                    navigateToQuestionnaire(topic, feedSectionType)
-                },
+                navigateToQuestionnaire = navigateToQuestionnaire,
                 onLockAnimationFinished = {
                     onUserInteract(FeedUserInteract.RefreshUnlockedFeedSection)
                 }
@@ -153,7 +152,7 @@ private fun FeedScreen(
 @Composable
 private fun FeedContent(
     feedUI: FeedUI,
-    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
+    navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
     navigateToBookmarks: () -> Unit,
     onLockAnimationFinished: () -> Unit
@@ -184,8 +183,8 @@ private fun FeedContent(
                             section = section,
                             feedSectionToUnlock = feedUI.feedSectionToUnlock,
                             navigateToArticle = navigateToArticle,
-                            navigateToQuestionnaire = navigateToQuestionnaire,
-                            onLockAnimationFinished = onLockAnimationFinished
+                            onLockAnimationFinished = onLockAnimationFinished,
+                            navigateToQuestionnaire = navigateToQuestionnaire
                         )
                     }
                     Spacer(Modifier.height(AppSpacing.dp_40))
@@ -252,20 +251,21 @@ private fun FeedSection(
     section: FeedSectionAndRecommendations,
     feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock?,
     navigateToArticle: (ContentId) -> Unit,
-    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
+    navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     onLockAnimationFinished: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
     val openDialog = remember { mutableStateOf(false) }
     val topicDialog: MutableState<Topic?> = remember { mutableStateOf(null) }
+    val contentIdDialog: MutableState<ContentId?> = remember { mutableStateOf(null) }
     val feedSection = section.feedSection
 
     topicDialog.value?.let { topic ->
         QuestionnaireStartDialog(
             openDialog = openDialog,
             topic = topic,
-            onClick = { navigateToQuestionnaire(topic, feedSection.type) }
+            onClick = { navigateToQuestionnaire(topic, feedSection.type, contentIdDialog.value) }
         )
     }
 
@@ -298,8 +298,10 @@ private fun FeedSection(
                 UnlockedItems(
                     scrollState = scrollState,
                     section = section,
-                    navigateToArticle = navigateToArticle,
-                    navigateToQuestionnaire = navigateToQuestionnaire
+                    openDialog = openDialog,
+                    topicDialog = topicDialog,
+                    contentIdDialog = contentIdDialog,
+                    navigateToArticle = navigateToArticle
                 )
             }
         }
@@ -377,8 +379,10 @@ private fun LockedItems(
 private fun UnlockedItems(
     scrollState: LazyListState,
     section: FeedSectionAndRecommendations,
-    navigateToArticle: (ContentId) -> Unit,
-    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit
+    openDialog: MutableState<Boolean>,
+    topicDialog: MutableState<Topic?>,
+    contentIdDialog: MutableState<ContentId?>,
+    navigateToArticle: (ContentId) -> Unit
 ) {
     val recommendations =
         (section.recommendations as FlowDataState.Success<List<Recommendation>>).data
@@ -394,14 +398,16 @@ private fun UnlockedItems(
             items = recommendations,
             key = { item -> item.id.itemId }
         ) { recommendation ->
-            AppRecommendationCard(recommendation, navigateToArticle)
-        }
+            when (recommendation.type) {
+                ContentType.ARTICLE -> {
+                    AppRecommendationCard(recommendation, navigateToArticle)
+                }
 
-        if (section.feedSection.state == FeedSectionState.PARTIALLY_UNLOCKED) {
-            item {
-                PartiallyUnlockedCard {
-                    section.feedSection.topic?.let { topic ->
-                        navigateToQuestionnaire(topic, section.feedSection.type)
+                ContentType.QUESTIONNAIRE -> {
+                    AppQuestionnaireCard(section.feedSection.topic!!) {
+                        openDialog.value = true
+                        topicDialog.value = section.feedSection.topic
+                        contentIdDialog.value = recommendation.id
                     }
                 }
             }
@@ -434,41 +440,6 @@ private fun QuestionnaireStartDialog(
         textButtonPrimaryRes = R.string.recco_start,
         onClickPrimary = onClick
     )
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun PartiallyUnlockedCard(
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .height(heightRecommendationCard)
-            .width(widthRecommendationCard),
-        elevation = 0.dp,
-        onClick = onClick,
-        backgroundColor = AppTheme.colors.primary
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(AppSpacing.dp_12),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.recco_ic_refresh),
-                tint = AppTheme.colors.onPrimary,
-                contentDescription = null
-            )
-            Spacer(Modifier.height(AppSpacing.dp_8))
-            Text(
-                text = stringResource(R.string.recco_dashboard_review_area),
-                style = AppTheme.typography.h3.copy(color = AppTheme.colors.onPrimary),
-                textAlign = TextAlign.Center
-            )
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -606,9 +577,9 @@ private fun Preview(
         FeedScreen(
             uiState = uiState,
             onUserInteract = {},
-            navigateToQuestionnaire = { _, _ -> },
             navigateToArticle = {},
-            navigateToBookmarks = {}
+            navigateToBookmarks = {},
+            navigateToQuestionnaire = { _, _, _ -> }
         )
     }
 }
@@ -624,9 +595,9 @@ private fun PreviewDark(
         FeedScreen(
             uiState = uiState,
             onUserInteract = {},
-            navigateToQuestionnaire = { _, _ -> },
             navigateToArticle = {},
-            navigateToBookmarks = {}
+            navigateToBookmarks = {},
+            navigateToQuestionnaire = { _, _, _ -> }
         )
     }
 }

@@ -14,7 +14,7 @@ const val FeedRoute = "feed"
 
 fun NavGraphBuilder.feedGraph(
     navigateToArticle: (ContentId) -> Unit,
-    navigateToQuestionnaire: (Topic, FeedSectionType) -> Unit,
+    navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     navigateToBookmarks: () -> Unit
 ) {
     navigation(
@@ -22,7 +22,11 @@ fun NavGraphBuilder.feedGraph(
         startDestination = FeedRoute
     ) {
         composable(route = FeedRoute) {
-            FeedRoute(navigateToArticle, navigateToQuestionnaire, navigateToBookmarks)
+            FeedRoute(
+                navigateToArticle = navigateToArticle,
+                navigateToQuestionnaire = navigateToQuestionnaire,
+                navigateToBookmarks = navigateToBookmarks
+            )
         }
     }
 }

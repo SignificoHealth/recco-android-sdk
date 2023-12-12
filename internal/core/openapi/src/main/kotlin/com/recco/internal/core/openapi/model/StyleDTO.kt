@@ -16,19 +16,27 @@ package com.recco.internal.core.openapi.model
 import com.recco.internal.core.openapi.model.AndroidFontDTO
 import com.recco.internal.core.openapi.model.ColorsDTO
 import com.recco.internal.core.openapi.model.IOSFontDTO
+import com.recco.internal.core.openapi.model.WebFontDTO
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
  * 
  *
+ * @param name 
  * @param darkColors 
  * @param lightColors 
  * @param iosFont 
  * @param androidFont 
+ * @param webFont 
+ * @param isPredefined 
+ * @param id 
  */
 @JsonClass(generateAdapter = true)
 data class StyleDTO(
+
+    @Json(name = "name")
+    val name: kotlin.String,
 
     @Json(name = "darkColors")
     val darkColors: ColorsDTO,
@@ -40,5 +48,14 @@ data class StyleDTO(
     val iosFont: IOSFontDTO,
 
     @Json(name = "androidFont")
-    val androidFont: AndroidFontDTO
+    val androidFont: AndroidFontDTO,
+
+    @Json(name = "webFont")
+    val webFont: WebFontDTO,
+
+    @Json(name = "isPredefined")
+    val isPredefined: kotlin.Boolean,
+
+    @Json(name = "id")
+    val id: java.util.UUID? = null
 )
