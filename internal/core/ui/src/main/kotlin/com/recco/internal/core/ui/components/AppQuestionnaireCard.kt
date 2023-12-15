@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
@@ -84,32 +86,32 @@ private fun TopicImage(
     when(topic) {
         PHYSICAL_ACTIVITY -> {
             AppTintedImageActivity(
-                modifier = Modifier.width(widthRecommendationCard)
+                modifier = modifier
             )
         }
         NUTRITION -> {
             AppTintedImageEating(
-                modifier = Modifier.width(widthRecommendationCard)
+                modifier = modifier
             )
         }
         MENTAL_WELLBEING -> {
             AppTintedImagePeopleDigital(
-                modifier = Modifier.width(widthRecommendationCard)
+                modifier = modifier
             )
         }
         SLEEP -> {
             AppTintedImageSleep(
-                modifier = Modifier.width(widthRecommendationCard)
+                modifier = modifier
             )
         }
     }
 }
 
-@Preview
+@Preview(widthDp = 600)
 @Composable
 private fun Preview() {
     AppTheme(darkTheme = false) {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp),) {
             entries.forEach {
                 AppQuestionnaireCard(
                     topic = it,
@@ -120,7 +122,7 @@ private fun Preview() {
     }
 }
 
-@Preview
+@Preview(widthDp = 600)
 @Composable
 private fun PreviewDark() {
     AppTheme(darkTheme = true) {
