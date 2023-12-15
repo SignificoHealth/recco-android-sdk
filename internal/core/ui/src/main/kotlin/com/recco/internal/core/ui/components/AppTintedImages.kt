@@ -80,6 +80,17 @@ fun AppTintedImageEating(
     )
 }
 
+@Composable
+fun AppTintedImageActivity(
+    modifier: Modifier = Modifier
+) {
+    AppTintedImage(
+        modifier = modifier,
+        drawableResStatic = R.drawable.recco_ic_activity_static,
+        drawableResTint = R.drawable.recco_ic_activity_tint,
+        drawableResOutline = R.drawable.recco_ic_activity_outline
+    )
+}
 
 @Composable
 fun AppTintedImagePortrait(
@@ -164,6 +175,7 @@ private fun PreviewLight(
             AppTintedImageContent()
             AppTintedImageSleep()
             AppTintedImageEating()
+            AppTintedImageActivity()
         }
     }
 }
@@ -183,6 +195,7 @@ private fun PreviewDark(
             AppTintedImageContent()
             AppTintedImageSleep()
             AppTintedImageEating()
+            AppTintedImageActivity()
         }
     }
 }
