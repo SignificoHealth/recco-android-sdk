@@ -145,7 +145,8 @@ private fun PreviewDark() {
 @Composable
 private fun PreviewOcean() {
     AppTheme(
-        darkTheme = true, style = ReccoStyle(
+        darkTheme = true,
+        style = ReccoStyle(
             font = ReccoFont.NUNITO_SANS,
             palette = ReccoPalette.Ocean
         )
@@ -160,4 +161,3 @@ private fun PreviewOcean() {
         }
     }
 }
-
