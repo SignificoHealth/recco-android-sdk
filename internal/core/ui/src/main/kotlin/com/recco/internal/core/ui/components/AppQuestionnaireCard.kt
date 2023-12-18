@@ -21,6 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.recco.api.model.ReccoFont
+import com.recco.api.model.ReccoPalette
+import com.recco.api.model.ReccoStyle
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.feed.Topic.MENTAL_WELLBEING
 import com.recco.internal.core.model.feed.Topic.NUTRITION
@@ -137,3 +140,24 @@ private fun PreviewDark() {
         }
     }
 }
+
+@Preview(widthDp = 600)
+@Composable
+private fun PreviewOcean() {
+    AppTheme(
+        darkTheme = true, style = ReccoStyle(
+            font = ReccoFont.NUNITO_SANS,
+            palette = ReccoPalette.Ocean
+        )
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Topic.entries.forEach {
+                AppQuestionnaireCard(
+                    topic = it,
+                    onClick = {}
+                )
+            }
+        }
+    }
+}
+
