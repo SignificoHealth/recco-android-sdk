@@ -88,26 +88,10 @@ private fun TopicImage(
     modifier: Modifier
 ) {
     when (topic) {
-        PHYSICAL_ACTIVITY -> {
-            AppTintedImageActivity(
-                modifier = modifier
-            )
-        }
-        NUTRITION -> {
-            AppTintedImageEating(
-                modifier = modifier
-            )
-        }
-        MENTAL_WELLBEING -> {
-            AppTintedImagePeopleDigital(
-                modifier = modifier
-            )
-        }
-        SLEEP -> {
-            AppTintedImageSleep(
-                modifier = modifier
-            )
-        }
+        PHYSICAL_ACTIVITY -> AppTintedImageActivity(modifier = modifier)
+        NUTRITION -> AppTintedImageEating(modifier = modifier)
+        MENTAL_WELLBEING -> AppTintedImagePeopleDigital(modifier = modifier)
+        SLEEP -> AppTintedImageSleep(modifier = modifier)
     }
 }
 
