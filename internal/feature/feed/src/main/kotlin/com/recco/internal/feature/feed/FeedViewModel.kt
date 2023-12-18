@@ -3,6 +3,7 @@ package com.recco.internal.feature.feed
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.recco.internal.core.logger.Logger
+import com.recco.internal.core.model.FlowDataState
 import com.recco.internal.core.model.feed.FeedSectionAndRecommendations
 import com.recco.internal.core.model.feed.FeedSectionType.MENTAL_WELLBEING_EXPLORE
 import com.recco.internal.core.model.feed.FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS
@@ -19,6 +20,8 @@ import com.recco.internal.core.model.feed.FeedSectionType.STARTING_RECOMMENDATIO
 import com.recco.internal.core.model.metric.AppUserMetricAction
 import com.recco.internal.core.model.metric.AppUserMetricCategory
 import com.recco.internal.core.model.metric.AppUserMetricEvent
+import com.recco.internal.core.model.recommendation.ContentType
+import com.recco.internal.core.model.recommendation.Recommendation
 import com.recco.internal.core.repository.FeedRepository
 import com.recco.internal.core.repository.MetricRepository
 import com.recco.internal.core.repository.RecommendationRepository
@@ -130,7 +133,7 @@ internal class FeedViewModel @Inject constructor(
                 recommendationRepository.newestContent,
                 recommendationRepository.starting
             ) { feedSections,
-                tailoredPhysicalActivity, explorePhysicalActivity,
+                tailoredPhysicalActivity, explorePhysicalActivity: FlowDataState<List<Recommendation>>,
                 tailoredNutrition, exploreNutrition,
                 tailoredPhysicalWellbeing, explorePhysicalWellbeing,
                 tailoredSleep, exploreSleep,
@@ -138,14 +141,19 @@ internal class FeedViewModel @Inject constructor(
                 mostPopular,
                 newestContent,
                 starting ->
+
                 feedSections.map { feedSection ->
                     FeedSectionAndRecommendations(
                         feedSection = feedSection,
                         recommendations = when (feedSection.type) {
                             PHYSICAL_ACTIVITY_RECOMMENDATIONS -> tailoredPhysicalActivity
+                                .sortQuestionnairesFirst()
                             NUTRITION_RECOMMENDATIONS -> tailoredNutrition
+                                .sortQuestionnairesFirst()
                             MENTAL_WELLBEING_RECOMMENDATIONS -> tailoredPhysicalWellbeing
+                                .sortQuestionnairesFirst()
                             SLEEP_RECOMMENDATIONS -> tailoredSleep
+                                .sortQuestionnairesFirst()
                             PREFERRED_RECOMMENDATIONS -> preferredRecommendations
                             MOST_POPULAR -> mostPopular
                             NEW_CONTENT -> newestContent
@@ -173,4 +181,12 @@ internal class FeedViewModel @Inject constructor(
             }
         }
     }
+
+    private fun FlowDataState<List<Recommendation>>.sortQuestionnairesFirst(): FlowDataState<List<Recommendation>> {
+        val sortedRecommendations: List<Recommendation>? = (this as? FlowDataState.Success<List<Recommendation>>)
+            ?.data?.sortedBy { it.type != ContentType.QUESTIONNAIRE }
+
+        return sortedRecommendations?.let { FlowDataState.Success(it) } ?: this
+    }
+
 }
