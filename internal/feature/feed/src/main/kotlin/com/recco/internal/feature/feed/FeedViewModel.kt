@@ -146,14 +146,18 @@ internal class FeedViewModel @Inject constructor(
                     FeedSectionAndRecommendations(
                         feedSection = feedSection,
                         recommendations = when (feedSection.type) {
-                            PHYSICAL_ACTIVITY_RECOMMENDATIONS -> tailoredPhysicalActivity
-                                .sortQuestionnairesFirst()
-                            NUTRITION_RECOMMENDATIONS -> tailoredNutrition
-                                .sortQuestionnairesFirst()
-                            MENTAL_WELLBEING_RECOMMENDATIONS -> tailoredPhysicalWellbeing
-                                .sortQuestionnairesFirst()
-                            SLEEP_RECOMMENDATIONS -> tailoredSleep
-                                .sortQuestionnairesFirst()
+                            PHYSICAL_ACTIVITY_RECOMMENDATIONS ->
+                                tailoredPhysicalActivity
+                                    .sortQuestionnairesFirst()
+                            NUTRITION_RECOMMENDATIONS ->
+                                tailoredNutrition
+                                    .sortQuestionnairesFirst()
+                            MENTAL_WELLBEING_RECOMMENDATIONS ->
+                                tailoredPhysicalWellbeing
+                                    .sortQuestionnairesFirst()
+                            SLEEP_RECOMMENDATIONS ->
+                                tailoredSleep
+                                    .sortQuestionnairesFirst()
                             PREFERRED_RECOMMENDATIONS -> preferredRecommendations
                             MOST_POPULAR -> mostPopular
                             NEW_CONTENT -> newestContent
@@ -188,5 +192,4 @@ internal class FeedViewModel @Inject constructor(
 
         return sortedRecommendations?.let { FlowDataState.Success(it) } ?: this
     }
-
 }

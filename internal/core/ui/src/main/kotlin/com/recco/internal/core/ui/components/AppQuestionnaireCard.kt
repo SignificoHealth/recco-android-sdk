@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
@@ -24,7 +22,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.recco.internal.core.model.feed.Topic
-import com.recco.internal.core.model.feed.Topic.*
+import com.recco.internal.core.model.feed.Topic.MENTAL_WELLBEING
+import com.recco.internal.core.model.feed.Topic.NUTRITION
+import com.recco.internal.core.model.feed.Topic.PHYSICAL_ACTIVITY
+import com.recco.internal.core.model.feed.Topic.SLEEP
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.extensions.asResTitle
 import com.recco.internal.core.ui.theme.AppSpacing
@@ -83,7 +84,7 @@ private fun TopicImage(
     topic: Topic,
     modifier: Modifier
 ) {
-    when(topic) {
+    when (topic) {
         PHYSICAL_ACTIVITY -> {
             AppTintedImageActivity(
                 modifier = modifier
@@ -111,8 +112,8 @@ private fun TopicImage(
 @Composable
 private fun Preview() {
     AppTheme(darkTheme = false) {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp),) {
-            entries.forEach {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Topic.entries.forEach {
                 AppQuestionnaireCard(
                     topic = it,
                     onClick = {}
@@ -127,7 +128,7 @@ private fun Preview() {
 private fun PreviewDark() {
     AppTheme(darkTheme = true) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            entries.forEach {
+            Topic.entries.forEach {
                 AppQuestionnaireCard(
                     topic = it,
                     onClick = {}
