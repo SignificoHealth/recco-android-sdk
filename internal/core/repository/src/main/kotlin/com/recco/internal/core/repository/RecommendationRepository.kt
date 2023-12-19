@@ -30,7 +30,6 @@ class RecommendationRepository @Inject constructor(
         FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS to PipelineStateAware {
             api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_ACTIVITY, supportedContentTypes).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
-                .sortedBy { it.type != ContentType.QUESTIONNAIRE }
         },
         FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE to PipelineStateAware {
             api.exploreContentByTopic(TopicDTO.PHYSICAL_ACTIVITY).unwrap()
@@ -39,7 +38,6 @@ class RecommendationRepository @Inject constructor(
         FeedSectionType.NUTRITION_RECOMMENDATIONS to PipelineStateAware {
             api.getTailoredRecommendationsByTopic(TopicDTO.NUTRITION, supportedContentTypes).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
-                .sortedBy { it.type != ContentType.QUESTIONNAIRE }
         },
         FeedSectionType.NUTRITION_EXPLORE to PipelineStateAware {
             api.exploreContentByTopic(TopicDTO.NUTRITION).unwrap()
@@ -48,7 +46,6 @@ class RecommendationRepository @Inject constructor(
         FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS to PipelineStateAware {
             api.getTailoredRecommendationsByTopic(TopicDTO.MENTAL_WELLBEING, supportedContentTypes).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
-                .sortedBy { it.type != ContentType.QUESTIONNAIRE }
         },
         FeedSectionType.MENTAL_WELLBEING_EXPLORE to PipelineStateAware {
             api.exploreContentByTopic(TopicDTO.MENTAL_WELLBEING).unwrap()
@@ -57,7 +54,6 @@ class RecommendationRepository @Inject constructor(
         FeedSectionType.SLEEP_RECOMMENDATIONS to PipelineStateAware {
             api.getTailoredRecommendationsByTopic(TopicDTO.SLEEP, supportedContentTypes).unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
-                .sortedBy { it.type != ContentType.QUESTIONNAIRE }
         },
         FeedSectionType.SLEEP_EXPLORE to PipelineStateAware {
             api.exploreContentByTopic(TopicDTO.SLEEP).unwrap()
