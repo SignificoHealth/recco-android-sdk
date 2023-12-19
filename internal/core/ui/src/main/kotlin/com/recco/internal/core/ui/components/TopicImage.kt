@@ -8,7 +8,6 @@ import com.recco.internal.core.model.feed.Topic.NUTRITION
 import com.recco.internal.core.model.feed.Topic.PHYSICAL_ACTIVITY
 import com.recco.internal.core.model.feed.Topic.SLEEP
 
-
 @Composable
 fun TopicImage(
     topic: Topic,

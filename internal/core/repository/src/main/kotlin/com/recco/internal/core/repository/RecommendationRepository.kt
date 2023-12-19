@@ -5,7 +5,6 @@ import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.recommendation.Article
 import com.recco.internal.core.model.recommendation.ContentId
-import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.Status
 import com.recco.internal.core.network.http.unwrap
