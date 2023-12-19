@@ -25,10 +25,6 @@ import com.recco.api.model.ReccoFont
 import com.recco.api.model.ReccoPalette
 import com.recco.api.model.ReccoStyle
 import com.recco.internal.core.model.feed.Topic
-import com.recco.internal.core.model.feed.Topic.MENTAL_WELLBEING
-import com.recco.internal.core.model.feed.Topic.NUTRITION
-import com.recco.internal.core.model.feed.Topic.PHYSICAL_ACTIVITY
-import com.recco.internal.core.model.feed.Topic.SLEEP
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.extensions.asResTitle
 import com.recco.internal.core.ui.theme.AppSpacing
@@ -79,19 +75,6 @@ fun AppQuestionnaireCard(
                 modifier = Modifier.width(widthRecommendationCard)
             )
         }
-    }
-}
-
-@Composable
-private fun TopicImage(
-    topic: Topic,
-    modifier: Modifier
-) {
-    when (topic) {
-        PHYSICAL_ACTIVITY -> AppTintedImageActivity(modifier = modifier)
-        NUTRITION -> AppTintedImageEating(modifier = modifier)
-        MENTAL_WELLBEING -> AppTintedImagePeopleDigital(modifier = modifier)
-        SLEEP -> AppTintedImageSleep(modifier = modifier)
     }
 }
 
