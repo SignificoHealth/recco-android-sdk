@@ -1,6 +1,16 @@
 # Changelog
 
-## [1.1.0] - 2023-10-16 - YYYY-MM-DD
+## [1.?.?] - 2023-12-12 - YYYY-MM-DD
+
+### Added
+
+- Support questionnaires as new type of recommendation [SHAD-460](https://vilua.atlassian.net/browse/SHAD-460)
+
+### Changed
+
+- Update questionnaires card visuals [SHAD-570](https://vilua.atlassian.net/browse/SHAD-570)
+
+## [1.1.0] - 2023-10-16 - 2023-12-12 
 
 ### Changed 
 - Docs updated to explain the process to request an apiKey for testing purposes

@@ -17,6 +17,9 @@ class QuestionnaireRepository @Inject constructor(
     suspend fun getQuestionnaireByTopic(topic: Topic): List<Question> =
         api.getQuestionnaireByTopic(topic.asDTO()).unwrap().map(QuestionDTO::asEntity)
 
+    suspend fun getQuestionnaireById(id: String): List<Question> =
+        api.getQuestionnaire(id).unwrap().map(QuestionDTO::asEntity)
+
     suspend fun getOnboarding(): List<Question> =
         api.onboarding().unwrap().map(QuestionDTO::asEntity)
 

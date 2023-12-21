@@ -9,8 +9,8 @@ internal fun FeedSectionDTO.asEntity() = FeedSection(
     type = type.asEntity(),
     state = when (state) {
         FeedSectionStateDTO.LOCK -> FeedSectionState.LOCKED
-        FeedSectionStateDTO.UNLOCK -> FeedSectionState.UNLOCKED
-        FeedSectionStateDTO.PARTIALLY_UNLOCK -> FeedSectionState.PARTIALLY_UNLOCKED
+        FeedSectionStateDTO.PARTIALLY_UNLOCK, FeedSectionStateDTO.UNLOCK ->
+            FeedSectionState.UNLOCKED
     },
     topic = topic?.asEntity()
 )

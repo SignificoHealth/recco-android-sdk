@@ -1,6 +1,7 @@
 package com.recco.internal.core.ui.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.Recommendation
 import com.recco.internal.core.model.recommendation.Status
@@ -17,7 +18,8 @@ class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
                 headline = "Some headline",
                 lead = "Some lead",
                 bookmarked = true,
-                imageUrl = null
+                imageUrl = null,
+                type = ContentType.ARTICLE
             )
     }
 }
