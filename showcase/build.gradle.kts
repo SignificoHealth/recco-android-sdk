@@ -74,6 +74,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.3"
@@ -115,7 +116,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
-
+    coreLibraryDesugaring(libs.android.desugar)
     //debugImplementation("androidx.compose.ui:ui-tooling:1.6.0-alpha03")
 }
 
