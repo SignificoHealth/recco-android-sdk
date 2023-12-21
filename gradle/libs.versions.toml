@@ -6,7 +6,7 @@ compileSdk = "34"
 minSdk = "24"
 targetSdk = "34"
 
-android-gradle-plugin = "8.1.2"
+android-gradle-plugin = "8.2.0"
 
 accompanist = "0.32.0" # Depends on Compose 1.4.x
 android-desugar = "2.0.3"
