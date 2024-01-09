@@ -1310,6 +1310,7 @@
         "required": [
           "androidFont",
           "darkColors",
+          "id",
           "iosFont",
           "isPredefined",
           "lightColors",
@@ -1348,7 +1349,12 @@
       "WebFont": {
         "type": "string",
         "enum": [
-          "poppins"
+          "poppins",
+          "roboto",
+          "montserrat",
+          "work_sans",
+          "nunito_sans",
+          "bitter"
         ]
       },
       "Topic": {
