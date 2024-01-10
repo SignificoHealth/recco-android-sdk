@@ -134,7 +134,7 @@ private fun ArticleContent(
 
                 Text(
                     text = article.headline,
-                    style = AppTheme.typography.h1.copy(color = AppTheme.colors.onBackground)
+                    style = AppTheme.typography.h1.copy(color = AppTheme.colors.primary)
                 )
                 Spacer(Modifier.height(AppSpacing.dp_32))
 
@@ -149,7 +149,7 @@ private fun ArticleContent(
                 article.lead?.let { lead ->
                     Text(
                         text = lead,
-                        style = AppTheme.typography.body1Bold.copy(color = AppTheme.colors.onBackground)
+                        style = AppTheme.typography.body1Bold.copy(color = AppTheme.colors.primary)
                     )
                     Spacer(Modifier.height(AppSpacing.dp_32))
                 }
@@ -158,7 +158,7 @@ private fun ArticleContent(
                     HtmlText(
                         text = body.replace("\n", "<br/>"),
                         linkClicked = linkClicked,
-                        style = AppTheme.typography.body2.copy(color = AppTheme.colors.onBackground)
+                        style = AppTheme.typography.body2.copy(color = AppTheme.colors.primary)
                     )
                 }
 
