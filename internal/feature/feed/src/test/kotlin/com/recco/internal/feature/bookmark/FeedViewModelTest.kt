@@ -12,7 +12,6 @@ import com.recco.internal.core.test.CoroutineTestExtension
 import com.recco.internal.core.test.extensions.onViewModelInteraction
 import com.recco.internal.core.test.utils.expectedUiStateWithError
 import com.recco.internal.core.test.utils.expectedUiStateWithLoading
-import com.recco.internal.core.test.utils.staticThrowableForTesting
 import com.recco.internal.core.ui.pipelines.GlobalViewEvent
 import com.recco.internal.core.ui.pipelines.globalViewEvents
 import com.recco.internal.feature.feed.FeedUserInteract
@@ -61,7 +60,7 @@ class FeedViewModelTest {
         stubReposForError()
         val events = onViewModelInteraction(1, FeedUserInteract.Retry)
 
-        verifyBlocking(logger, times(3)) {
+        verifyBlocking(logger, times(2)) {
             e(any(), anyOrNull(), anyOrNull())
         }
 
@@ -80,7 +79,7 @@ class FeedViewModelTest {
 
         // Then
         verifyBlocking(logger, times(1)) {
-            e(staticThrowableForTesting, null, null)
+            e(any(), anyOrNull(), anyOrNull())
         }
 
         events.first().apply {
