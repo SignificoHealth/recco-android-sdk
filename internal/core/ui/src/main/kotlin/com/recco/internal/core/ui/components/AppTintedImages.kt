@@ -57,6 +57,42 @@ fun AppTintedImagePeopleDigital(
 }
 
 @Composable
+fun AppTintedImageSleep(
+    modifier: Modifier = Modifier
+) {
+    AppTintedImage(
+        modifier = modifier,
+        drawableResStatic = R.drawable.recco_ic_sleep_static,
+        drawableResTint = R.drawable.recco_ic_sleep_tint,
+        drawableResOutline = R.drawable.recco_ic_sleep_outline
+    )
+}
+
+@Composable
+fun AppTintedImageEating(
+    modifier: Modifier = Modifier
+) {
+    AppTintedImage(
+        modifier = modifier,
+        drawableResStatic = R.drawable.recco_ic_eating_static,
+        drawableResTint = R.drawable.recco_ic_eating_tint,
+        drawableResOutline = R.drawable.recco_ic_eating_outline
+    )
+}
+
+@Composable
+fun AppTintedImageActivity(
+    modifier: Modifier = Modifier
+) {
+    AppTintedImage(
+        modifier = modifier,
+        drawableResStatic = R.drawable.recco_ic_activity_static,
+        drawableResTint = R.drawable.recco_ic_activity_tint,
+        drawableResOutline = R.drawable.recco_ic_activity_outline
+    )
+}
+
+@Composable
 fun AppTintedImagePortrait(
     modifier: Modifier = Modifier
 ) {
@@ -137,6 +173,9 @@ private fun PreviewLight(
             AppTintedImagePortrait()
             AppTintedImageFlying()
             AppTintedImageContent()
+            AppTintedImageSleep()
+            AppTintedImageEating()
+            AppTintedImageActivity()
         }
     }
 }
@@ -154,6 +193,9 @@ private fun PreviewDark(
             AppTintedImagePortrait()
             AppTintedImageFlying()
             AppTintedImageContent()
+            AppTintedImageSleep()
+            AppTintedImageEating()
+            AppTintedImageActivity()
         }
     }
 }

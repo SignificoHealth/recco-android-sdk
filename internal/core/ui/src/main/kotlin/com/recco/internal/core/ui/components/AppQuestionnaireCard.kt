@@ -1,8 +1,10 @@
 package com.recco.internal.core.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.recco.api.model.ReccoFont
+import com.recco.api.model.ReccoPalette
+import com.recco.api.model.ReccoStyle
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.extensions.asResTitle
@@ -64,31 +70,61 @@ fun AppQuestionnaireCard(
                 )
             }
 
-            AppTintedImagePeopleDigital(
+            TopicImage(
+                topic = topic,
                 modifier = Modifier.width(widthRecommendationCard)
             )
         }
     }
 }
 
-@Preview
+@Preview(widthDp = 600)
 @Composable
 private fun Preview() {
     AppTheme(darkTheme = false) {
-        AppQuestionnaireCard(
-            topic = Topic.MENTAL_WELLBEING,
-            onClick = {}
-        )
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Topic.entries.forEach {
+                AppQuestionnaireCard(
+                    topic = it,
+                    onClick = {}
+                )
+            }
+        }
     }
 }
 
-@Preview
+@Preview(widthDp = 600)
 @Composable
 private fun PreviewDark() {
     AppTheme(darkTheme = true) {
-        AppQuestionnaireCard(
-            topic = Topic.MENTAL_WELLBEING,
-            onClick = {}
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Topic.entries.forEach {
+                AppQuestionnaireCard(
+                    topic = it,
+                    onClick = {}
+                )
+            }
+        }
+    }
+}
+
+@Preview(widthDp = 600)
+@Composable
+private fun PreviewOcean() {
+    AppTheme(
+        darkTheme = true,
+        style = ReccoStyle(
+            font = ReccoFont.NUNITO_SANS,
+            palette = ReccoPalette.Ocean
         )
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Topic.entries.forEach {
+                AppQuestionnaireCard(
+                    topic = it,
+                    onClick = {}
+                )
+            }
+        }
     }
 }

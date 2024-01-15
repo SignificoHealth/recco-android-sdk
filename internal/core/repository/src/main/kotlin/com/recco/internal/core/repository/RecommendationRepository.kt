@@ -23,7 +23,7 @@ import javax.inject.Inject
 class RecommendationRepository @Inject constructor(
     private val api: RecommendationApi
 ) {
-    private val supportedContentTypes = listOf(ContentTypeDTO.ARTICLES)
+    private val supportedContentTypes = listOf(ContentTypeDTO.ARTICLES, ContentTypeDTO.QUESTIONNAIRES)
 
     private val sectionsPipelines = mapOf(
         FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS to PipelineStateAware {

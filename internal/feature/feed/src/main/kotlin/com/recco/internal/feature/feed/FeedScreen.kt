@@ -70,9 +70,9 @@ import com.recco.internal.core.ui.components.AppAlertDialog
 import com.recco.internal.core.ui.components.AppQuestionnaireCard
 import com.recco.internal.core.ui.components.AppRecommendationCard
 import com.recco.internal.core.ui.components.AppScreenStateAware
-import com.recco.internal.core.ui.components.AppTintedImagePeopleDigital
 import com.recco.internal.core.ui.components.AppTintedImagePottedPlant
 import com.recco.internal.core.ui.components.AppTopBar
+import com.recco.internal.core.ui.components.TopicImage
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.heightRecommendationCard
 import com.recco.internal.core.ui.components.widthRecommendationCard
@@ -430,8 +430,10 @@ private fun QuestionnaireStartDialog(
                     .background(AppTheme.colors.accent20),
                 contentAlignment = Alignment.Center
             ) {
-                AppTintedImagePeopleDigital(
+                TopicImage(
+                    topic = topic,
                     modifier = Modifier.size(237.dp)
+                        .padding(top = AppSpacing.dp_16)
                 )
             }
         },

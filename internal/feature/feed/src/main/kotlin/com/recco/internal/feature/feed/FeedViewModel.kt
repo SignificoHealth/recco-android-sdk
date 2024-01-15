@@ -16,9 +16,6 @@ import com.recco.internal.core.model.feed.FeedSectionType.PREFERRED_RECOMMENDATI
 import com.recco.internal.core.model.feed.FeedSectionType.SLEEP_EXPLORE
 import com.recco.internal.core.model.feed.FeedSectionType.SLEEP_RECOMMENDATIONS
 import com.recco.internal.core.model.feed.FeedSectionType.STARTING_RECOMMENDATIONS
-import com.recco.internal.core.model.metric.AppUserMetricAction
-import com.recco.internal.core.model.metric.AppUserMetricCategory
-import com.recco.internal.core.model.metric.AppUserMetricEvent
 import com.recco.internal.core.repository.FeedRepository
 import com.recco.internal.core.repository.MetricRepository
 import com.recco.internal.core.repository.RecommendationRepository
@@ -55,14 +52,6 @@ internal class FeedViewModel @Inject constructor(
     )
 
     init {
-        runCatching {
-            metricsRepository.logEvent(
-                AppUserMetricEvent(
-                    category = AppUserMetricCategory.DASHBOARD_SCREEN,
-                    action = AppUserMetricAction.VIEW
-                )
-            )
-        }.onFailure(logger::e)
         setUpGlobalViewEvents()
         initialLoadOrRetry()
     }

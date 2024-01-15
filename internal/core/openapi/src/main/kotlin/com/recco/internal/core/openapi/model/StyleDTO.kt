@@ -23,6 +23,7 @@ import com.squareup.moshi.JsonClass
 /**
  * 
  *
+ * @param id 
  * @param name 
  * @param darkColors 
  * @param lightColors 
@@ -30,10 +31,12 @@ import com.squareup.moshi.JsonClass
  * @param androidFont 
  * @param webFont 
  * @param isPredefined 
- * @param id 
  */
 @JsonClass(generateAdapter = true)
 data class StyleDTO(
+
+    @Json(name = "id")
+    val id: java.util.UUID,
 
     @Json(name = "name")
     val name: kotlin.String,
@@ -54,8 +57,5 @@ data class StyleDTO(
     val webFont: WebFontDTO,
 
     @Json(name = "isPredefined")
-    val isPredefined: kotlin.Boolean,
-
-    @Json(name = "id")
-    val id: java.util.UUID? = null
+    val isPredefined: kotlin.Boolean
 )
