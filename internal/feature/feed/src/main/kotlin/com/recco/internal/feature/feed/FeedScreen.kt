@@ -63,7 +63,10 @@ import com.recco.internal.core.model.feed.FeedSectionState
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.recommendation.ContentId
-import com.recco.internal.core.model.recommendation.ContentType
+import com.recco.internal.core.model.recommendation.ContentType.ARTICLE
+import com.recco.internal.core.model.recommendation.ContentType.AUDIO
+import com.recco.internal.core.model.recommendation.ContentType.QUESTIONNAIRE
+import com.recco.internal.core.model.recommendation.ContentType.VIDEO
 import com.recco.internal.core.model.recommendation.Recommendation
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppAlertDialog
@@ -399,17 +402,20 @@ private fun UnlockedItems(
             key = { item -> item.id.itemId }
         ) { recommendation ->
             when (recommendation.type) {
-                ContentType.ARTICLE -> {
+                ARTICLE -> {
                     AppRecommendationCard(recommendation, navigateToArticle)
                 }
 
-                ContentType.QUESTIONNAIRE -> {
+                QUESTIONNAIRE -> {
                     AppQuestionnaireCard(section.feedSection.topic!!) {
                         openDialog.value = true
                         topicDialog.value = section.feedSection.topic
                         contentIdDialog.value = recommendation.id
                     }
                 }
+
+                AUDIO, VIDEO ->
+                    throw UnsupportedOperationException("${recommendation.type} Not supported ATM")
             }
         }
     }
@@ -432,7 +438,8 @@ private fun QuestionnaireStartDialog(
             ) {
                 TopicImage(
                     topic = topic,
-                    modifier = Modifier.size(237.dp)
+                    modifier = Modifier
+                        .size(237.dp)
                         .padding(top = AppSpacing.dp_16)
                 )
             }

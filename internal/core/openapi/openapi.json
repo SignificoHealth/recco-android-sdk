@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "https://recco-api.significo.dev",
+      "url": "http://localhost:8080",
       "description": "Generated server url"
     }
   ],
@@ -485,6 +485,52 @@
         ]
       }
     },
+    "/api/v1/me/recommendations/videos": {
+      "get": {
+        "tags": [
+          "Recommendation"
+        ],
+        "summary": "Get a video.",
+        "operationId": "getVideo",
+        "parameters": [
+          {
+            "name": "catalogId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppUserVideo"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/v1/me/recommendations/tailored/topics/{topic}": {
       "get": {
         "tags": [
@@ -552,6 +598,19 @@
         ],
         "summary": "A list of starting recommendations.",
         "operationId": "getStartingRecommendations",
+        "parameters": [
+          {
+            "name": "contentTypes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContentType"
+              }
+            }
+          }
+        ],
         "responses": {
           "401": {
             "description": "Unauthorized",
@@ -591,6 +650,19 @@
         ],
         "summary": "A list of recommendations which are improved by the preferences.",
         "operationId": "getUserPreferredRecommendations",
+        "parameters": [
+          {
+            "name": "contentTypes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContentType"
+              }
+            }
+          }
+        ],
         "responses": {
           "401": {
             "description": "Unauthorized",
@@ -630,6 +702,19 @@
         ],
         "summary": "A list of newest content.",
         "operationId": "getNewestContent",
+        "parameters": [
+          {
+            "name": "contentTypes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContentType"
+              }
+            }
+          }
+        ],
         "responses": {
           "401": {
             "description": "Unauthorized",
@@ -669,6 +754,19 @@
         ],
         "summary": "A list of most popular content.",
         "operationId": "getMostPopularContent",
+        "parameters": [
+          {
+            "name": "contentTypes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContentType"
+              }
+            }
+          }
+        ],
         "responses": {
           "401": {
             "description": "Unauthorized",
@@ -715,6 +813,17 @@
             "required": true,
             "schema": {
               "$ref": "#/components/schemas/Topic"
+            }
+          },
+          {
+            "name": "contentTypes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ContentType"
+              }
             }
           }
         ],
@@ -789,12 +898,58 @@
         ]
       }
     },
+    "/api/v1/me/recommendations/audios": {
+      "get": {
+        "tags": [
+          "Recommendation"
+        ],
+        "summary": "Get an audio.",
+        "operationId": "getAudio",
+        "parameters": [
+          {
+            "name": "catalogId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppUserAudio"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/api/v1/me/recommendations/articles": {
       "get": {
         "tags": [
           "Recommendation"
         ],
-        "summary": "Get article.",
+        "summary": "Get an article.",
         "operationId": "getArticle",
         "parameters": [
           {
@@ -1033,7 +1188,9 @@
         "type": "string",
         "enum": [
           "articles",
-          "questionnaires"
+          "questionnaires",
+          "audios",
+          "videos"
         ]
       },
       "Rating": {
@@ -1150,8 +1307,6 @@
       "AppUserMetricAction": {
         "type": "string",
         "enum": [
-          "login",
-          "duration",
           "view",
           "host_app_open",
           "recco_sdk_open"
@@ -1357,6 +1512,68 @@
           "bitter"
         ]
       },
+      "AppUserVideo": {
+        "required": [
+          "bookmarked",
+          "category",
+          "headline",
+          "id",
+          "rating",
+          "status",
+          "videoUrl"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/Rating"
+          },
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          },
+          "bookmarked": {
+            "type": "boolean"
+          },
+          "headline": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "disclaimer": {
+            "type": "string"
+          },
+          "warning": {
+            "type": "string"
+          },
+          "dynamicImageResizingUrl": {
+            "type": "string"
+          },
+          "imageAlt": {
+            "type": "string"
+          },
+          "videoUrl": {
+            "type": "string"
+          },
+          "length": {
+            "type": "integer",
+            "description": "The estimated duration in seconds to read this article",
+            "format": "int32"
+          }
+        }
+      },
+      "Status": {
+        "type": "string",
+        "enum": [
+          "no_interaction",
+          "viewed"
+        ]
+      },
       "Topic": {
         "type": "string",
         "enum": [
@@ -1395,14 +1612,16 @@
           "headline": {
             "type": "string"
           },
-          "lead": {
-            "type": "string"
-          },
           "imageUrl": {
             "type": "string"
           },
           "imageAlt": {
             "type": "string"
+          },
+          "length": {
+            "type": "integer",
+            "description": "The estimated duration in seconds to consume this content",
+            "format": "int32"
           },
           "dynamicImageResizingUrl": {
             "type": "string",
@@ -1410,12 +1629,54 @@
           }
         }
       },
-      "Status": {
-        "type": "string",
-        "enum": [
-          "no_interaction",
-          "viewed"
-        ]
+      "AppUserAudio": {
+        "required": [
+          "audioUrl",
+          "bookmarked",
+          "category",
+          "headline",
+          "id",
+          "rating",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ContentId"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/Rating"
+          },
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          },
+          "bookmarked": {
+            "type": "boolean"
+          },
+          "headline": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "dynamicImageResizingUrl": {
+            "type": "string"
+          },
+          "imageAlt": {
+            "type": "string"
+          },
+          "audioUrl": {
+            "type": "string"
+          },
+          "length": {
+            "type": "integer",
+            "description": "The estimated duration in seconds to read this article",
+            "format": "int32"
+          }
+        }
       },
       "AppUserArticle": {
         "required": [
@@ -1454,8 +1715,16 @@
           "imageAlt": {
             "type": "string"
           },
+          "audioUrl": {
+            "type": "string"
+          },
           "articleBodyHtml": {
             "type": "string"
+          },
+          "length": {
+            "type": "integer",
+            "description": "The estimated duration in seconds to read this article",
+            "format": "int32"
           }
         }
       },
