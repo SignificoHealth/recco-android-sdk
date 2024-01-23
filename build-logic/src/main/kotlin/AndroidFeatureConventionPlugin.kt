@@ -37,6 +37,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 
                 "implementation"(libs.accompanist.navigation.animation)
                 "implementation"(libs.accompanist.navigation.material)
+                "implementation"(libs.exoplayer.core) // TODO Saúl, maybe too aggressive for each feature
 
                 "testImplementation"(project(":internal:core:test"))
             }
