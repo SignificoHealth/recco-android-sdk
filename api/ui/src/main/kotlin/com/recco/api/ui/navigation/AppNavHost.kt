@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.User
 import com.recco.internal.feature.article.navigation.articleGraph
 import com.recco.internal.feature.article.navigation.navigateToArticle
@@ -38,7 +39,8 @@ internal fun AppNavHost(
         onboardingGraph(navigateToQuestionnaire = navController::navigateToOnboardingQuestionnaire)
         feedGraph(
             navigateToArticle = {
-                navController.navigateToFullAudioPlayer(it)
+//                navController.navigateToFullAudioPlayer(it)
+                navController.navigateToFullAudioPlayer(contentId = ContentId("99", catalogId = "99"))
             },
             navigateToQuestionnaire = navController::navigateToTopicQuestionnaire,
             navigateToBookmarks = navController::navigateToBookmarks
