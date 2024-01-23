@@ -18,8 +18,8 @@ import com.recco.internal.feature.questionnaire.navigation.navigateToOnboardingQ
 import com.recco.internal.feature.questionnaire.navigation.navigateToOnboardingQuestionnaireOutro
 import com.recco.internal.feature.questionnaire.navigation.navigateToTopicQuestionnaire
 import com.recco.internal.feature.questionnaire.navigation.questionnaireGraph
-import com.recco.internal.feature.video.navigation.navigateToFullAudioPlayer
 import com.recco.internal.feature.video.navigation.audioGraph
+import com.recco.internal.feature.video.navigation.navigateToFullAudioPlayer
 
 @Composable
 internal fun AppNavHost(
