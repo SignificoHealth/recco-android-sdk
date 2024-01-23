@@ -11,6 +11,7 @@ data class Video(
     val isBookmarked: Boolean,
     val videoUrl: String,
     val headline: String,
+    val description: String? = null,
     val lead: String? = null,
     val imageUrl: String? = null,
     val imageAlt: String? = null,
