@@ -3,6 +3,8 @@ package com.recco.internal.core.repository
 import com.recco.internal.core.model.FlowDataState
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
+import com.recco.internal.core.model.media.Audio
+import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.Article
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
@@ -189,5 +191,13 @@ class RecommendationRepository @Inject constructor(
                     }
                 )
             }
+    }
+
+    suspend fun getAudio(contentId: ContentId): Audio {
+        return api.getAudio(catalogId = contentId.catalogId).unwrap().asEntity()
+    }
+
+    suspend fun getVideo(contentId: ContentId): Video {
+        return api.getVideo(catalogId = contentId.catalogId).unwrap().asEntity()
     }
 }
