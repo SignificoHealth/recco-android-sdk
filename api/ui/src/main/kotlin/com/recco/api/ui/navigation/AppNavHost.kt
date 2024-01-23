@@ -39,7 +39,7 @@ internal fun AppNavHost(
         onboardingGraph(navigateToQuestionnaire = navController::navigateToOnboardingQuestionnaire)
         feedGraph(
             navigateToArticle = {
-//                navController.navigateToFullAudioPlayer(it)
+//                navController.navigateToArticle(it)
                 navController.navigateToFullAudioPlayer(contentId = ContentId("99", catalogId = "99"))
             },
             navigateToQuestionnaire = navController::navigateToTopicQuestionnaire,
