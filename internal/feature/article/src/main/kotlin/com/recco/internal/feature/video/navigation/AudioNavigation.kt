@@ -7,33 +7,33 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.ui.navigation.ContentIdNavType
-import com.recco.internal.feature.video.VideoRoute
+import com.recco.internal.feature.video.FullAudioPlayer
 
 internal const val idArg = "id"
-const val VideoGraph = "video_graph/{$idArg}"
-private const val VideoRoute = "videoRoute/{$idArg}"
+const val AudioGraph = "audio_graph/{$idArg}"
+private const val FullAudioPlayerRoute = "fullAudioRoute/{$idArg}"
 
-fun NavGraphBuilder.videoGraph(
+fun NavGraphBuilder.audioGraph(
     navigateUp: () -> Unit
 ) {
     navigation(
-        route = VideoGraph,
-        startDestination = VideoRoute
+        route = AudioGraph,
+        startDestination = FullAudioPlayerRoute
     ) {
         composable(
-            route = VideoRoute,
+            route = FullAudioPlayerRoute,
             arguments = listOf(navArgument(idArg) { type = ContentIdNavType })
         ) {
-            VideoRoute(navigateUp)
+            FullAudioPlayer(navigateUp)
         }
     }
 }
 
-fun NavController.navigateToVideo(
+fun NavController.navigateToFullAudioPlayer(
     contentId: ContentId
 ) {
     navigate(
-        VideoRoute.replace(
+        FullAudioPlayerRoute.replace(
             oldValue = "{$idArg}",
             newValue = ContentIdNavType.serializeAsValue(contentId)
         )

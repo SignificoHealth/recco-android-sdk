@@ -18,8 +18,8 @@ import com.recco.internal.feature.questionnaire.navigation.navigateToOnboardingQ
 import com.recco.internal.feature.questionnaire.navigation.navigateToOnboardingQuestionnaireOutro
 import com.recco.internal.feature.questionnaire.navigation.navigateToTopicQuestionnaire
 import com.recco.internal.feature.questionnaire.navigation.questionnaireGraph
-import com.recco.internal.feature.video.navigation.navigateToVideo
-import com.recco.internal.feature.video.navigation.videoGraph
+import com.recco.internal.feature.video.navigation.navigateToFullAudioPlayer
+import com.recco.internal.feature.video.navigation.audioGraph
 
 @Composable
 internal fun AppNavHost(
@@ -38,7 +38,7 @@ internal fun AppNavHost(
         onboardingGraph(navigateToQuestionnaire = navController::navigateToOnboardingQuestionnaire)
         feedGraph(
             navigateToArticle = {
-                navController.navigateToVideo(it)
+                navController.navigateToFullAudioPlayer(it)
             },
             navigateToQuestionnaire = navController::navigateToTopicQuestionnaire,
             navigateToBookmarks = navController::navigateToBookmarks
@@ -54,6 +54,6 @@ internal fun AppNavHost(
             navigateToArticle = navController::navigateToArticle,
             navigateUp = navController::navigateUp
         )
-        videoGraph(navigateUp = navController::navigateUp)
+        audioGraph(navigateUp = navController::navigateUp)
     }
 }

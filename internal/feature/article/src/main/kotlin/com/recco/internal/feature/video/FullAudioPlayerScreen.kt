@@ -29,15 +29,15 @@ import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 
 @Composable
-internal fun VideoRoute(
+internal fun FullAudioPlayer(
     navigateUp: () -> Unit,
-    viewModel: VideoViewModel = hiltViewModel()
+    viewModel: FullAudioPlayerViewModel = hiltViewModel()
 ) {
-    VideoScreen(navigateUp)
+    FullAudioPlayerScreen(navigateUp)
 }
 
 @Composable
-private fun VideoScreen(
+private fun FullAudioPlayerScreen(
     navigateUp: () -> Unit,
 ) {
     Box(
@@ -192,6 +192,6 @@ private fun VideoScreen(
 @Composable
 private fun VideoScreenPreview() {
     AppTheme {
-        VideoScreen(navigateUp = {})
+        FullAudioPlayerScreen(navigateUp = {})
     }
 }
