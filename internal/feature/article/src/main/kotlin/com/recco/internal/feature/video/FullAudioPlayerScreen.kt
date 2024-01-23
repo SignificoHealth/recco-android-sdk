@@ -72,7 +72,8 @@ private fun FullAudioPlayerScreen(
                         iconTint = Color.White
                     )
                 },
-                backgroundColor = Color.Transparent
+                backgroundColor = Color.Transparent,
+                actions = {  },
             )
 
             Text(
@@ -197,7 +198,6 @@ private fun FullAudioPlayerScreen(
         }
     }
 }
-
 
 
 @Preview
