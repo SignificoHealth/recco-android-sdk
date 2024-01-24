@@ -35,24 +35,28 @@ class PlayerState(
 
 class VideoPlayerState(
     val playerView: PlayerView,
-    val exoPlayer: ExoPlayer,
     val play: () -> Unit,
 )
 
 @Composable
 fun rememberVideoPlayerStateWithLifecycle(video: Video): VideoPlayerState {
     val context = LocalContext.current
+    val isInPreviewMode = LocalInspectionMode.current
 
-    val exoPlayer = remember {
-        val player = ExoPlayer.Builder(context).build()
-        player.setMediaItem(video.asMediaItem())
-        player.prepare()
-        player
+    val exoPlayer: ExoPlayer? = remember {
+        if (!isInPreviewMode) {
+            val player = ExoPlayer.Builder(context).build()
+            player.setMediaItem(video.asMediaItem())
+            player.prepare()
+            player
+        } else {
+            null
+        }
     }
 
     val playerView = remember {
-        exoPlayer.setMediaItem(video.asMediaItem())
-        exoPlayer.prepare()
+        exoPlayer?.setMediaItem(video.asMediaItem())
+        exoPlayer?.prepare()
 
         PlayerView(context).apply {
             player = exoPlayer
@@ -70,9 +74,8 @@ fun rememberVideoPlayerStateWithLifecycle(video: Video): VideoPlayerState {
     }
     return VideoPlayerState(
         playerView = playerView,
-        exoPlayer = exoPlayer,
         play = {
-            exoPlayer.play()
+            exoPlayer?.play()
         }
     )
 }

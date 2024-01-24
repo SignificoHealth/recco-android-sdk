@@ -1,5 +1,6 @@
 @file:UnstableApi package com.recco.internal.feature.video
 
+import android.view.View
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -8,10 +9,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -26,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,12 +35,15 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.ui.PlayerView
+import com.recco.internal.core.media.VideoPlayerState
 import com.recco.internal.core.media.rememberVideoPlayerStateWithLifecycle
 import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.Status
 import com.recco.internal.core.ui.R
+import com.recco.internal.core.ui.components.AppAsyncImage
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.AppTopBarDefaults
@@ -46,6 +51,8 @@ import com.recco.internal.core.ui.components.BackIconButton
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
+import com.recco.internal.feature.article.UserInteractionRecommendation
+import com.recco.internal.feature.article.UserInteractionRecommendationCard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -80,37 +87,72 @@ private fun FullAudioPlayerScreen(
         AppScreenStateAware(
             uiState = uiState,
             retry = { onUserInteract(FullAudioPlayerUserInteract.Retry) },
+            isFloatingFooter = true,
+            footerContent = {
+                UserInteractionRecommendationCard(
+                    modifier = Modifier.padding(bottom = AppSpacing.dp_24),
+                    userInteraction = UserInteractionRecommendation(
+                        rating = Rating.DISLIKE,
+                        isBookmarked = false,
+                        isBookmarkLoading = false,
+                        isLikeLoading = false,
+                        isDislikeLoading = false
+                    ),
+                    toggleBookmarkState = { TODO() },
+                    toggleLikeState = { TODO() },
+                    toggleDislikeState = { TODO() }
+                )
+            }
+
         ) {
             Box {
                 val playerState = rememberVideoPlayerStateWithLifecycle(video = dummyVideo)
+                var shouldShowHeader by remember { mutableStateOf(true) }
+                var isPlayButtonShown by remember { mutableStateOf(true) }
+                val scope = rememberCoroutineScope()
 
-//                AppAsyncImage(
-//                    modifier = Modifier.fillMaxSize(),
-//                    data = "https://rec-directus.stg.significo.dev/assets/fefcd6a3-fb6a-4f76-afe0-dd816ce5f370",
-//                    contentScale = ContentScale.Crop
-//                )
+                LaunchedEffect(playerState.playerView) {
+                    scope.launch {
+                        playerState.playerView.setControllerVisibilityListener(object : PlayerView.ControllerVisibilityListener {
+                            override fun onVisibilityChanged(visibility: Int) {
+                                shouldShowHeader = visibility == View.VISIBLE || isPlayButtonShown
+                            }
+                        })
+                    }
+                }
 
-                AndroidView(
-                    factory = { ctx ->
-                        playerState.playerView
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center)
-                        .fillMaxHeight() // Set your desired height
+                MediaPlayer(
+                    playerState = playerState,
+                    modifier = Modifier.align(Alignment.Center)
                 )
 
-//                Header()
+                (uiState.data as? FullPlayerUI.AudioUi)?.audio?.let { audio ->
+                    audio.imageUrl.let {
+                        AppAsyncImage(
+                            modifier = Modifier.fillMaxSize(),
+                            data = it,
+                            alt = audio.imageAlt,
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+
+                    androidx.compose.animation.AnimatedVisibility(visible = shouldShowHeader) {
+                        DarkOverlay()
+
+                        AudioHeader()
+                    }
+                }
+
 
                 LaunchedEffect(key1 = Unit) {
                     playerState.playerView.hideController()
                 }
 
-
                 val coroutineScope = rememberCoroutineScope()
                 PlayButton(
                     onClick = {
                         playerState.play()
+                        isPlayButtonShown = false
 
                         coroutineScope.launch {
                             delay(1_500)
@@ -138,7 +180,30 @@ private fun FullAudioPlayerScreen(
 }
 
 @Composable
-private fun Header() {
+private fun MediaPlayer(
+    playerState: VideoPlayerState,
+    modifier: Modifier = Modifier
+) {
+    AndroidView(
+        factory = { ctx ->
+            playerState.playerView
+        },
+        modifier = modifier
+            .fillMaxSize()
+    )
+}
+
+@Composable
+private fun DarkOverlay() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.6f))
+    )
+}
+
+@Composable
+private fun AudioHeader() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(AppSpacing.dp_16),
@@ -167,8 +232,6 @@ private fun PlayButton(
     var showPlayButton by remember {
         mutableStateOf(true)
     }
-
-    val scope = rememberCoroutineScope()
 
     AnimatedVisibility(
         visible = showPlayButton,
