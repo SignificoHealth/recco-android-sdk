@@ -13,14 +13,14 @@ import com.recco.internal.feature.bookmark.navigation.navigateToBookmarks
 import com.recco.internal.feature.feed.navigation.FeedGraph
 import com.recco.internal.feature.feed.navigation.feedGraph
 import com.recco.internal.feature.feed.navigation.navigateToFeed
+import com.recco.internal.feature.media.video.navigation.mediaGraph
+import com.recco.internal.feature.media.video.navigation.navigateToFullAudioPlayer
 import com.recco.internal.feature.onboarding.navigation.OnboardingGraph
 import com.recco.internal.feature.onboarding.navigation.onboardingGraph
 import com.recco.internal.feature.questionnaire.navigation.navigateToOnboardingQuestionnaire
 import com.recco.internal.feature.questionnaire.navigation.navigateToOnboardingQuestionnaireOutro
 import com.recco.internal.feature.questionnaire.navigation.navigateToTopicQuestionnaire
 import com.recco.internal.feature.questionnaire.navigation.questionnaireGraph
-import com.recco.internal.feature.video.navigation.audioGraph
-import com.recco.internal.feature.video.navigation.navigateToFullAudioPlayer
 
 @Composable
 internal fun AppNavHost(
@@ -56,6 +56,6 @@ internal fun AppNavHost(
             navigateToArticle = navController::navigateToArticle,
             navigateUp = navController::navigateUp
         )
-        audioGraph(navigateUp = navController::navigateUp)
+        mediaGraph(navigateUp = navController::navigateUp)
     }
 }
