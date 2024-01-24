@@ -57,27 +57,26 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun FullAudioPLayerRoute(
+internal fun FullMediaPlayerRoute(
     navigateUp: () -> Unit,
-    viewModel: FullAudioPlayerViewModel = hiltViewModel()
+    viewModel: FullMediaPlayerViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
         initialValue = UiState()
     )
 
-    FullAudioPlayerScreen(
+    FullMediaPlayerScreen(
         navigateUp = navigateUp,
         uiState = uiState,
         onUserInteract = viewModel::onUserInteract
     )
 }
 
-
 @Composable
-private fun FullAudioPlayerScreen(
+private fun FullMediaPlayerScreen(
     navigateUp: () -> Unit,
     uiState: UiState<FullPlayerUI>,
-    onUserInteract: (FullAudioPlayerUserInteract) -> Unit,
+    onUserInteract: (FullMediaPlayerUserInteract) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -86,7 +85,7 @@ private fun FullAudioPlayerScreen(
     ) {
         AppScreenStateAware(
             uiState = uiState,
-            retry = { onUserInteract(FullAudioPlayerUserInteract.Retry) },
+            retry = { onUserInteract(FullMediaPlayerUserInteract.Retry) },
             isFloatingFooter = true,
             footerContent = {
                 UserInteractionRecommendationCard(
@@ -277,7 +276,7 @@ private fun VideoScreenPreview() {
     )
 
     AppTheme {
-        FullAudioPlayerScreen(
+        FullMediaPlayerScreen(
             navigateUp = {},
             uiState = UiState(
                 isLoading = false,

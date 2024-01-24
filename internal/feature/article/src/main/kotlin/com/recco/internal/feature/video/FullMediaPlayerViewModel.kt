@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class FullAudioPlayerViewModel @Inject constructor(
+internal class FullMediaPlayerViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val recommendationRepository: RecommendationRepository,
     private val logger: Logger
@@ -60,12 +60,12 @@ internal class FullAudioPlayerViewModel @Inject constructor(
         }
     }
 
-    fun onUserInteract(userInteract: FullAudioPlayerUserInteract) {
+    fun onUserInteract(userInteract: FullMediaPlayerUserInteract) {
         when (userInteract) {
-            FullAudioPlayerUserInteract.Retry -> {
+            FullMediaPlayerUserInteract.Retry -> {
                 initialLoad()
             }
-            FullAudioPlayerUserInteract.ToggleBookmarkState -> TODO()
+            FullMediaPlayerUserInteract.ToggleBookmarkState -> TODO()
         }
     }
 }
