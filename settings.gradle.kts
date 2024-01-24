@@ -63,3 +63,4 @@ include(
     "internal:feature:onboarding",
     "internal:feature:bookmark"
 )
+include(":internal:core:media")
