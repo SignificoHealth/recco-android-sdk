@@ -21,16 +21,16 @@ import com.recco.internal.core.model.media.Video
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
-class PlayerState(
+class AudioPlayerState(
     val video: Video,
-    val videoPlayer: VideoPlayer?,
+    val audioPlayer: AudioPlayer?,
     val isPlaying: Boolean,
     val currentPosition: Long,
     val play: () -> Unit,
     val pause: () -> Unit,
     val seekTo: (Long) -> Unit
 ) {
-    fun requireExoPlayer() = checkNotNull(videoPlayer?.exoPlayer)
+    fun requireExoPlayer() = checkNotNull(audioPlayer?.exoPlayer)
 }
 
 class VideoPlayerState(
@@ -99,7 +99,7 @@ private fun rememberPlayerLifecycleObserver(player: PlayerView): LifecycleEventO
 fun rememberPlayerState(
     video: Video,
     onTrackEnd: (() -> Unit)? = null
-): PlayerState {
+): AudioPlayerState {
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
     val isInPreviewMode = LocalInspectionMode.current
@@ -107,7 +107,7 @@ fun rememberPlayerState(
     var isPlaying by remember { mutableStateOf(false) }
 
     val player = remember {
-        VideoPlayer(
+        AudioPlayer(
             context = context,
             onTrackEnded = { onTrackEnd?.invoke() },
             onIsPlayingChange = {
@@ -147,10 +147,10 @@ fun rememberPlayerState(
         player.load(video)
     }
 
-    return PlayerState(
+    return AudioPlayerState(
         video = video,
         isPlaying = isPlaying,
-        videoPlayer = player,
+        audioPlayer = player,
         currentPosition = currentPosition,
         play = { player.play() },
         pause = { player.pause() },
