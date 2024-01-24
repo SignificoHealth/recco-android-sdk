@@ -76,7 +76,7 @@ internal fun FullMediaPlayerRoute(
 @Composable
 private fun FullMediaPlayerScreen(
     navigateUp: () -> Unit,
-    uiState: UiState<FullPlayerUI>,
+    uiState: UiState<FullMediaPlayerUI>,
     onUserInteract: (FullMediaPlayerUserInteract) -> Unit,
 ) {
     Box(
@@ -125,7 +125,7 @@ private fun FullMediaPlayerScreen(
                     modifier = Modifier.align(Alignment.Center)
                 )
 
-                (uiState.data as? FullPlayerUI.AudioUi)?.audio?.let { audio ->
+                (uiState.data as? FullMediaPlayerUI.AudioUi)?.audio?.let { audio ->
                     audio.imageUrl.let {
                         AppAsyncImage(
                             modifier = Modifier.fillMaxSize(),
@@ -281,7 +281,7 @@ private fun VideoScreenPreview() {
             uiState = UiState(
                 isLoading = false,
                 error = null,
-                data = FullPlayerUI.AudioUi(dummyAudio)
+                data = FullMediaPlayerUI.AudioUi(dummyAudio)
             ),
             onUserInteract = {}
         )

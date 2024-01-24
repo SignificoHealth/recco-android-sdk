@@ -24,8 +24,8 @@ internal class FullMediaPlayerViewModel @Inject constructor(
     private val logger: Logger
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow(UiState<FullPlayerUI>())
-    val viewState: Flow<UiState<FullPlayerUI>> = _viewState
+    private val _viewState = MutableStateFlow(UiState<FullMediaPlayerUI>())
+    val viewState: Flow<UiState<FullMediaPlayerUI>> = _viewState
 
     // TODO, remove
     val initialContentType: ContentType = VIDEO
@@ -52,10 +52,10 @@ internal class FullMediaPlayerViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadFullPlayerUI(): FullPlayerUI {
+    private suspend fun loadFullPlayerUI(): FullMediaPlayerUI {
         return when (initialContentType) {
-            AUDIO -> FullPlayerUI.AudioUi(recommendationRepository.getAudio(mediaId))
-            VIDEO -> FullPlayerUI.VideoUi(recommendationRepository.getVideo(mediaId))
+            AUDIO -> FullMediaPlayerUI.AudioUi(recommendationRepository.getAudio(mediaId))
+            VIDEO -> FullMediaPlayerUI.VideoUi(recommendationRepository.getVideo(mediaId))
             else -> error("Attempted to open the player with a $initialContentType content type")
         }
     }
