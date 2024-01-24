@@ -11,7 +11,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import com.recco.internal.core.model.media.Video
 
-class VideoPlayer(
+class AudioPlayer(
     private val context: Context,
     val exoPlayer: ExoPlayer?,
     val onTrackEnded: (() -> Unit)? = null,
@@ -34,7 +34,7 @@ class VideoPlayer(
         exoPlayer?.apply {
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
-                .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
+                .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
                 .build()
 
             setAudioAttributes(audioAttributes, true)
