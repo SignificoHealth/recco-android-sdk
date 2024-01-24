@@ -1,4 +1,4 @@
-package com.recco.internal.feature.video
+package com.recco.internal.feature.media.player
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,7 +10,7 @@ import com.recco.internal.core.model.recommendation.ContentType.AUDIO
 import com.recco.internal.core.model.recommendation.ContentType.VIDEO
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.feature.article.navigation.idArg
+import com.recco.internal.feature.media.video.navigation.idArg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,14 +18,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class FullAudioPlayerViewModel @Inject constructor(
+internal class FullMediaPlayerViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val recommendationRepository: RecommendationRepository,
     private val logger: Logger
 ) : ViewModel() {
 
-    private val _viewState = MutableStateFlow(UiState<FullPlayerUI>())
-    val viewState: Flow<UiState<FullPlayerUI>> = _viewState
+    private val _viewState = MutableStateFlow(UiState<FullMediaPlayerUI>())
+    val viewState: Flow<UiState<FullMediaPlayerUI>> = _viewState
 
     // TODO, remove
     val initialContentType: ContentType = VIDEO
@@ -52,20 +52,20 @@ internal class FullAudioPlayerViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadFullPlayerUI(): FullPlayerUI {
+    private suspend fun loadFullPlayerUI(): FullMediaPlayerUI {
         return when (initialContentType) {
-            AUDIO -> FullPlayerUI.AudioUi(recommendationRepository.getAudio(mediaId))
-            VIDEO -> FullPlayerUI.VideoUi(recommendationRepository.getVideo(mediaId))
+            AUDIO -> FullMediaPlayerUI.AudioUi(recommendationRepository.getAudio(mediaId))
+            VIDEO -> FullMediaPlayerUI.VideoUi(recommendationRepository.getVideo(mediaId))
             else -> error("Attempted to open the player with a $initialContentType content type")
         }
     }
 
-    fun onUserInteract(userInteract: FullAudioPlayerUserInteract) {
+    fun onUserInteract(userInteract: FullMediaPlayerUserInteract) {
         when (userInteract) {
-            FullAudioPlayerUserInteract.Retry -> {
+            FullMediaPlayerUserInteract.Retry -> {
                 initialLoad()
             }
-            FullAudioPlayerUserInteract.ToggleBookmarkState -> TODO()
+            FullMediaPlayerUserInteract.ToggleBookmarkState -> TODO()
         }
     }
 }

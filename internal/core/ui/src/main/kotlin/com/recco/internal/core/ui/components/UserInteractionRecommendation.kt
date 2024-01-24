@@ -1,4 +1,4 @@
-package com.recco.internal.feature.article
+package com.recco.internal.core.ui.components
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.fadeIn
@@ -27,12 +27,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.ui.R
-import com.recco.internal.core.ui.components.AppProgressLoading
+import com.recco.internal.core.ui.preview.UserInteractionRecommendationPreviewProvider
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
-import com.recco.internal.feature.article.preview.UserInteractionRecommendationPreviewProvider
 
-internal data class UserInteractionRecommendation(
+data class UserInteractionRecommendation(
     val rating: Rating,
     val isBookmarked: Boolean = false,
     val isBookmarkLoading: Boolean = false,
@@ -41,7 +40,7 @@ internal data class UserInteractionRecommendation(
 )
 
 @Composable
-internal fun UserInteractionRecommendationCard(
+fun UserInteractionRecommendationCard(
     modifier: Modifier = Modifier,
     isScrollEndReached: Boolean = false,
     userInteraction: UserInteractionRecommendation,
@@ -52,7 +51,10 @@ internal fun UserInteractionRecommendationCard(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(AppSpacing.dp_24),
-        elevation = animateDpAsState(targetValue = if (isScrollEndReached) 0.dp else 2.dp).value,
+        elevation = animateDpAsState(
+            targetValue = if (isScrollEndReached) 0.dp else 2.dp,
+            label = "UserInteractionRecommendationCard"
+        ).value,
         backgroundColor = AppTheme.colors.background
     ) {
         val alphaDisabledColor = .5f

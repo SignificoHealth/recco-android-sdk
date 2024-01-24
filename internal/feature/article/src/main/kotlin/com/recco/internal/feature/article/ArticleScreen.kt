@@ -36,6 +36,7 @@ import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.BackIconButton
 import com.recco.internal.core.ui.components.UiState
+import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.extensions.isEndReached
 import com.recco.internal.core.ui.extensions.openUrlInBrowser
 import com.recco.internal.core.ui.theme.AppSpacing

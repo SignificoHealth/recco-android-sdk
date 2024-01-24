@@ -1,4 +1,4 @@
-package com.recco.internal.feature.video
+package com.recco.internal.feature.media.video
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -56,7 +56,7 @@ val dummyVideo = Video(
     rating = Rating.LIKE,
     status = Status.NO_INTERACTION,
     isBookmarked = false,
-    videoUrl = "http://www.bing.com/search?q=indoctum",
+    videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     headline = "vidisse",
     imageUrl = null,
     disclaimer = "This exercise is not for you if you have a heart condition. Consult with your doctor before engaging in heavy cardio exercise",
