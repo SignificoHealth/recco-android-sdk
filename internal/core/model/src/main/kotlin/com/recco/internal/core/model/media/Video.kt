@@ -12,6 +12,7 @@ data class Video(
     val videoUrl: String,
     val headline: String,
     val description: String? = null,
+    val disclaimer: String? = null,
     val lead: String? = null,
     val imageUrl: String? = null,
     val imageAlt: String? = null,

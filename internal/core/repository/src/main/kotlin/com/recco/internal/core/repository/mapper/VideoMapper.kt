@@ -15,5 +15,6 @@ fun AppUserVideoDTO.asEntity(): Video {
         imageAlt = imageAlt,
         length = length,
         description = description,
+        disclaimer = disclaimer
     )
 }

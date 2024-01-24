@@ -51,7 +51,8 @@
     <string name="recco_questionnaire_outro_body">Keep going! The more questionnaires you complete, the more accurate your health score will be. \nThen, Recco can make personalized recommendations for you to make real health improvements.</string>
     <string name="recco_questionnaire_outro_title">Great! You finished the <xliff:g id="section_name">%1$s</xliff:g> section.</string>
     <string name="recco_start">Start</string>
-
     <string name="recco_media_channel_name">Media Notifications</string>
     <string name="recco_media_channel_description">Notifications for managing video and audio playbacks</string>
+    <string name="recco_reccomendation_type_podcast">Podcast</string>
+    <string name="recco_play">Play</string>
 </resources>
