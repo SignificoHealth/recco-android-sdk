@@ -64,3 +64,4 @@ include(
     "internal:feature:bookmark"
 )
 include(":internal:core:media")
+include(":internal:feature:media")

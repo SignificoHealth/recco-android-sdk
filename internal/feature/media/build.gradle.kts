@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.recco.internal.feature.article"
+    namespace = "com.recco.internal.feature.media"
 
 }
 
 dependencies {
-    implementation(project(":internal:core:media"))
+    "implementation"(project(":internal:core:media"))
     implementation(libs.exoplayer.ui)
 }

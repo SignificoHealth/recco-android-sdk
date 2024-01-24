@@ -1,4 +1,4 @@
-package com.recco.internal.feature.video.navigation
+package com.recco.internal.feature.media.video.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -7,7 +7,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.ui.navigation.ContentIdNavType
-import com.recco.internal.feature.video.FullMediaPlayerRoute
+import com.recco.internal.feature.media.player.FullMediaPlayerRoute
 
 internal const val idArg = "id"
 const val AudioGraph = "audio_graph/{$idArg}"
@@ -24,7 +24,7 @@ fun NavGraphBuilder.audioGraph(
             route = FullAudioPlayerRoute,
             arguments = listOf(navArgument(idArg) { type = ContentIdNavType })
         ) {
-            FullMediaPlayerRoute(navigateUp)
+            com.recco.internal.feature.media.player.FullMediaPlayerRoute(navigateUp)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.recco.internal.feature.video
+package com.recco.internal.feature.media.video
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

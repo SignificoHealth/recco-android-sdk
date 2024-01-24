@@ -1,4 +1,4 @@
-package com.recco.internal.feature.video
+package com.recco.internal.feature.media.player
 
 sealed class FullMediaPlayerUserInteract {
     object Retry : FullMediaPlayerUserInteract()

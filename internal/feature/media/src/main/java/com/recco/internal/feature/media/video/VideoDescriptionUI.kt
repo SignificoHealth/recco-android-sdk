@@ -1,4 +1,4 @@
-package com.recco.internal.feature.video
+package com.recco.internal.feature.media.video
 
 import com.recco.internal.core.model.media.Video
 

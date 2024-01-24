@@ -1,8 +1,8 @@
-package com.recco.internal.feature.article.preview
+package com.recco.internal.core.ui.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.recco.internal.core.model.recommendation.Rating
-import com.recco.internal.feature.article.UserInteractionRecommendation
+import com.recco.internal.core.ui.components.UserInteractionRecommendation
 
 internal class UserInteractionRecommendationPreviewProvider :
     PreviewParameterProvider<UserInteractionRecommendation> {

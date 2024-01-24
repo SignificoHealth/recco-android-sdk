@@ -1,4 +1,4 @@
-@file:UnstableApi package com.recco.internal.feature.video
+@file:UnstableApi package com.recco.internal.feature.media.player
 
 import android.view.View
 import androidx.compose.animation.AnimatedVisibility
@@ -49,10 +49,11 @@ import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.AppTopBarDefaults
 import com.recco.internal.core.ui.components.BackIconButton
 import com.recco.internal.core.ui.components.UiState
+import com.recco.internal.core.ui.components.UserInteractionRecommendation
+import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
-import com.recco.internal.feature.article.UserInteractionRecommendation
-import com.recco.internal.feature.article.UserInteractionRecommendationCard
+import com.recco.internal.feature.media.video.dummyVideo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
