@@ -8,6 +8,7 @@ import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.ui.components.UiState
+import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.pipelines.globalViewEvents
 import com.recco.internal.core.ui.pipelines.showErrorToast
 import com.recco.internal.feature.article.navigation.idArg

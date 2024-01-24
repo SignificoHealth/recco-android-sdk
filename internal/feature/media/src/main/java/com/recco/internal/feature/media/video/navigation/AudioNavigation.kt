@@ -13,7 +13,7 @@ internal const val idArg = "id"
 const val AudioGraph = "audio_graph/{$idArg}"
 private const val FullAudioPlayerRoute = "fullAudioRoute/{$idArg}"
 
-fun NavGraphBuilder.audioGraph(
+fun NavGraphBuilder.mediaGraph(
     navigateUp: () -> Unit
 ) {
     navigation(
@@ -24,7 +24,7 @@ fun NavGraphBuilder.audioGraph(
             route = FullAudioPlayerRoute,
             arguments = listOf(navArgument(idArg) { type = ContentIdNavType })
         ) {
-            com.recco.internal.feature.media.player.FullMediaPlayerRoute(navigateUp)
+            FullMediaPlayerRoute(navigateUp)
         }
     }
 }

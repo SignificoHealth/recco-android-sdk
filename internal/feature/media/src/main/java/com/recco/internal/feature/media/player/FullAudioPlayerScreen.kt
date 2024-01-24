@@ -113,11 +113,10 @@ private fun FullMediaPlayerScreen(
 
                 LaunchedEffect(playerState.playerView) {
                     scope.launch {
-                        playerState.playerView.setControllerVisibilityListener(object : PlayerView.ControllerVisibilityListener {
-                            override fun onVisibilityChanged(visibility: Int) {
-                                shouldShowHeader = visibility == View.VISIBLE || isPlayButtonShown
-                            }
-                        })
+                        playerState.playerView.setControllerVisibilityListener(
+                            PlayerView.ControllerVisibilityListener {
+                                visibility -> shouldShowHeader = visibility == View.VISIBLE || isPlayButtonShown
+                            })
                     }
                 }
 

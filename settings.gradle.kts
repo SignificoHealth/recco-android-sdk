@@ -57,11 +57,11 @@ include(
     "internal:core:model",
     "internal:core:repository",
     ":internal:core:test",
+    ":internal:core:media",
     "internal:feature:questionnaire",
     "internal:feature:feed",
     "internal:feature:article",
     "internal:feature:onboarding",
-    "internal:feature:bookmark"
+    "internal:feature:bookmark",
+    "internal:feature:media",
 )
-include(":internal:core:media")
-include(":internal:feature:media")

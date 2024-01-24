@@ -16,5 +16,6 @@ dependencies {
     implementation(project(":internal:feature:article"))
     implementation(project(":internal:feature:questionnaire"))
     implementation(project(":internal:feature:bookmark"))
+    implementation(project(":internal:feature:media"))
     implementation(libs.androidx.lifecycle.process)
 }

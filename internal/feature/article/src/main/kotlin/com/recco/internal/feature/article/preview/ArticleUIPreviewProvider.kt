@@ -3,9 +3,9 @@ package com.recco.internal.feature.article.preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.ui.components.UiState
+import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.preview.ArticlePreviewProvider
 import com.recco.internal.feature.article.ArticleUI
-import com.recco.internal.feature.article.UserInteractionRecommendation
 
 internal class ArticleUIPreviewProvider :
     PreviewParameterProvider<UiState<ArticleUI>> {
