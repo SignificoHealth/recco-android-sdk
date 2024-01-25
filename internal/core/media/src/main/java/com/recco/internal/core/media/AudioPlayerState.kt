@@ -47,10 +47,10 @@ fun rememberAudioPlayerState(
     var isPlaying by remember { mutableStateOf(false) }
 
     val exoPlayer = remember(trackItem) {
-        if (isInPreviewMode) {
-            null
-        } else {
+        if (!isInPreviewMode) {
             ExoPlayer.Builder(context).build()
+        } else {
+            null
         }
     }
 
@@ -71,12 +71,12 @@ fun rememberAudioPlayerState(
     }
 
     val notificationManager = remember(mediaSession, sessionActivityPendingIntent) {
-        if (mediaSession == null) {
-            null
-        } else {
+        if (mediaSession != null) {
             MediaNotificationManager(
                 context, mediaSession.token, exoPlayer!!
             )
+        } else {
+            null
         }
     }
 
