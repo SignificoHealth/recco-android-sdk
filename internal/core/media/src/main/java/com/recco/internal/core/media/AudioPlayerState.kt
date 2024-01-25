@@ -63,7 +63,6 @@ fun rememberAudioPlayerState(
         )
     }
 
-    // Create MediaSession
     val mediaSession = remember(exoPlayer, sessionActivityPendingIntent) {
         if (exoPlayer == null) null else MediaSession.Builder(context, exoPlayer)
             .setId(trackItem.id)
@@ -71,7 +70,6 @@ fun rememberAudioPlayerState(
             .build()
     }
 
-    // Create PlayerNotificationManager
     val notificationManager = remember(mediaSession, sessionActivityPendingIntent) {
         if (mediaSession == null) {
             null
