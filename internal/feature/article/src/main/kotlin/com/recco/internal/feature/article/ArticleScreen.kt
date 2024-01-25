@@ -31,6 +31,7 @@ import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -272,8 +273,8 @@ private fun AudioPlayer(
 
             AudioSlider(
                 modifier = Modifier.weight(1f),
-                audioDuration = playerState.trackDuration ?: 0L,
-                currentPosition = playerState.currentPosition,
+                audioDurationMs = playerState.trackDuration ?: 0L,
+                currentPositionMs = playerState.currentPosition,
                 enabled = playerState.isReady,
                 onSeekPosition = { playerState.seekTo(it) },
             )
@@ -328,32 +329,40 @@ private fun showPlayerNotification(context: Context, player: ExoPlayer) {
     notificationManager.showNotificationForPlayer(player)
 }
 
-@Composable
+ @Composable
 fun AudioSlider(
-    modifier: Modifier,
-    audioDuration: Long,
-    currentPosition: Long,
-    enabled: Boolean,
-    onSeekPosition: (Long) -> Unit
+     modifier: Modifier,
+     audioDurationMs: Long,
+     currentPositionMs: Long,
+     enabled: Boolean,
+     onSeekPosition: (Long) -> Unit
 ) {
-    var sliderPositionState by remember { mutableStateOf(currentPosition.toFloat()) }
+    // Convert milliseconds to seconds for Slider
+    val currentPositionSeconds = currentPositionMs / 1000f
+    val audioDurationSeconds = audioDurationMs / 1000f
+    var sliderPosition by remember { mutableFloatStateOf(currentPositionSeconds) }
+    var isDragging by remember { mutableStateOf(false) }
 
-    LaunchedEffect1(key1 = currentPosition) {
-        sliderPositionState = (currentPosition / 1000).toFloat()
+    // Update slider only when not dragging
+    LaunchedEffect1(currentPositionMs) {
+        if (!isDragging) {
+            sliderPosition = currentPositionSeconds
+        }
     }
 
     Slider(
-        value = sliderPositionState,
-        enabled = enabled,
+        value = sliderPosition,
         onValueChange = { newPosition ->
-            sliderPositionState = newPosition
+            sliderPosition = newPosition
+            isDragging = true
         },
         onValueChangeFinished = {
-            onSeekPosition((sliderPositionState * 1000).toLong())
-
+            // Convert seconds back to milliseconds for accurate seeking
+            onSeekPosition((sliderPosition * 1000).toLong())
+            isDragging = false
         },
-        valueRange = 0f..(audioDuration.coerceAtLeast(0) /1000).toFloat(),
-        steps = 0,
+        valueRange = 0f..audioDurationSeconds,
+        enabled = enabled,
         modifier = modifier,
         colors = SliderDefaults.colors(
             thumbColor = AppTheme.colors.background,
@@ -362,6 +371,7 @@ fun AudioSlider(
         )
     )
 }
+
 
 @Preview
 @Composable
