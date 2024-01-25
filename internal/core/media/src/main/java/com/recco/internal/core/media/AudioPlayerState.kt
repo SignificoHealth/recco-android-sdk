@@ -18,18 +18,23 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.recco.internal.core.model.media.Video
+import com.recco.internal.core.model.recommendation.TrackItem
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
 class AudioPlayerState(
-    val video: Video,
+    val trackItem: TrackItem,
     val audioPlayer: AudioPlayer?,
     val isPlaying: Boolean,
     val currentPosition: Long,
     val play: () -> Unit,
     val pause: () -> Unit,
-    val seekTo: (Long) -> Unit
+    val seekTo: (Long) -> Unit,
+    val trackDuration: Long?,
 ) {
+    val isReady: Boolean
+        get() = trackDuration != null
+
     fun requireExoPlayer() = checkNotNull(audioPlayer?.exoPlayer)
 }
 
@@ -96,14 +101,15 @@ private fun rememberPlayerLifecycleObserver(player: PlayerView): LifecycleEventO
 
 
 @Composable
-fun rememberPlayerState(
-    video: Video,
+fun rememberAudioPlayerState(
+    trackItem: TrackItem,
     onTrackEnd: (() -> Unit)? = null
 ): AudioPlayerState {
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
     val isInPreviewMode = LocalInspectionMode.current
     var currentPosition by remember { mutableStateOf(0L) }
+    var trackDuration by remember { mutableStateOf(0L)  }
     var isPlaying by remember { mutableStateOf(false) }
 
     val player = remember {
@@ -117,6 +123,9 @@ fun rememberPlayerState(
                 null
             } else {
                 ExoPlayer.Builder(context).build()
+            },
+            onPlayerReady = { duration ->
+                trackDuration = duration
             }
         )
     }
@@ -135,6 +144,7 @@ fun rememberPlayerState(
             lifeCycleOwner.lifecycle.removeObserver(observer)
         }
     }
+
     LaunchedEffect(isPlaying) {
         currentPosition = player.currentPositionMs
 
@@ -143,14 +153,17 @@ fun rememberPlayerState(
             delay(1.seconds)
         }
     }
-    LaunchedEffect(video) {
-        player.load(video)
+
+
+    LaunchedEffect(trackItem) {
+        player.load(trackItem)
     }
 
     return AudioPlayerState(
-        video = video,
+        trackItem = trackItem,
         isPlaying = isPlaying,
         audioPlayer = player,
+        trackDuration = trackDuration,
         currentPosition = currentPosition,
         play = { player.play() },
         pause = { player.pause() },

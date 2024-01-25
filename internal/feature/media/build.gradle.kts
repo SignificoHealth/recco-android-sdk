@@ -9,6 +9,8 @@ android {
 }
 
 dependencies {
-    "implementation"(project(":internal:core:media"))
+    implementation(project(":internal:core:media"))
+    implementation(libs.exoplayer.media.session)
     implementation(libs.exoplayer.ui)
+    implementation(libs.exoplayer.core)
 }

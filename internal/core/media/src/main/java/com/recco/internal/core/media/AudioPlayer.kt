@@ -9,22 +9,19 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import com.recco.internal.core.model.media.Video
+import com.recco.internal.core.model.recommendation.TrackItem
 
 class AudioPlayer(
     private val context: Context,
     val exoPlayer: ExoPlayer?,
     val onTrackEnded: (() -> Unit)? = null,
-    val onIsPlayingChange: ((Boolean) -> Unit)? = null
+    val onIsPlayingChange: ((Boolean) -> Unit)? = null,
+    val onPlayerReady: ((duration: Long) -> Unit)? = null
 ) {
-    var isPlayerReady = false
-        private set
-
-
     val currentPositionMs: Long
         get() = exoPlayer?.currentPosition?.coerceAtLeast(0) ?: 0
 
-    private lateinit var video: Video
+    private lateinit var trackItem: TrackItem
 
     init {
         setupPlayer()
@@ -41,10 +38,12 @@ class AudioPlayer(
             addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     super.onPlaybackStateChanged(playbackState)
-                    isPlayerReady = playbackState == Player.STATE_READY
 
                     if (playbackState == Player.STATE_ENDED)
                         onTrackEnded?.invoke()
+
+                    if (playbackState == Player.STATE_READY)
+                        onPlayerReady?.invoke(duration)
                 }
 
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -56,7 +55,7 @@ class AudioPlayer(
     }
 
     fun play() {
-        if (::video.isInitialized) {
+        if (::trackItem.isInitialized) {
             exoPlayer?.play()
         } else {
             throw UninitializedPropertyAccessException(
@@ -75,12 +74,12 @@ class AudioPlayer(
         exoPlayer?.release()
     }
 
-    fun load(video: Video) {
-        this.video = video
+    fun load(trackItem: TrackItem) {
+        this.trackItem = trackItem
 
         val dataSourceFactory = DefaultDataSource.Factory(context)
         val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(video.asMediaItem())
+            .createMediaSource(trackItem.asMediaItem())
 
         exoPlayer?.setMediaSource(mediaSource)
         exoPlayer?.prepare()
