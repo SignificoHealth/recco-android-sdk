@@ -9,5 +9,10 @@ data class Article(
     val lead: String? = null,
     val imageUrl: String? = null,
     val imageAlt: String? = null,
+    val audioUrl: String? = null,
+    val readingTimeInSeconds: Int? = null,
     val articleBodyHtml: String? = null
-)
+) {
+    val hasAudio: Boolean
+        get() = audioUrl != null
+}

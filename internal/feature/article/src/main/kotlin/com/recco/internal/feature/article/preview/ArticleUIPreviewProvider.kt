@@ -14,7 +14,16 @@ internal class ArticleUIPreviewProvider :
             UiState(
                 isLoading = false,
                 data = ArticleUI(
-                    article = ArticlePreviewProvider.data(),
+                    article = ArticlePreviewProvider.NO_AUDIO_ARTICLE,
+                    userInteraction = UserInteractionRecommendation(
+                        rating = Rating.LIKE
+                    )
+                )
+            ),
+            UiState(
+                isLoading = false,
+                data = ArticleUI(
+                    article = ArticlePreviewProvider.AUDIO_ARTICLE,
                     userInteraction = UserInteractionRecommendation(
                         rating = Rating.LIKE
                     )

@@ -9,22 +9,25 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import com.recco.internal.core.model.media.Video
+import androidx.media3.session.MediaSession
+import com.recco.internal.core.model.recommendation.TrackItem
+import com.recco.internal.core.ui.notifications.MediaNotificationManager
 
 class AudioPlayer(
     private val context: Context,
     val exoPlayer: ExoPlayer?,
-    val onTrackEnded: (() -> Unit)? = null,
-    val onIsPlayingChange: ((Boolean) -> Unit)? = null
+    val onIsPlayingChange: ((Boolean) -> Unit)? = null,
+    val onPlayerReady: ((duration: Long) -> Unit)? = null,
+    val onPositionChange: ((newPosition: Long) -> Unit)? = null,
+    val mediaNotificationManager: MediaNotificationManager? = null,
+    val mediaSession: MediaSession? = null
 ) {
-    var isPlayerReady = false
-        private set
-
-
     val currentPositionMs: Long
         get() = exoPlayer?.currentPosition?.coerceAtLeast(0) ?: 0
 
-    private lateinit var video: Video
+    private var isMediaNotificationShown = false
+
+    private lateinit var trackItem: TrackItem
 
     init {
         setupPlayer()
@@ -41,23 +44,45 @@ class AudioPlayer(
             addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     super.onPlaybackStateChanged(playbackState)
-                    isPlayerReady = playbackState == Player.STATE_READY
 
-                    if (playbackState == Player.STATE_ENDED)
-                        onTrackEnded?.invoke()
+                    if (playbackState == Player.STATE_ENDED) {
+                        isMediaNotificationShown = false
+                        mediaNotificationManager?.hideNotification()
+                    }
+
+                    if (playbackState == Player.STATE_READY) {
+                        onPlayerReady?.invoke(duration)
+                    }
                 }
 
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
                     super.onIsPlayingChanged(isPlaying)
                     onIsPlayingChange?.invoke(isPlaying)
                 }
+
+                override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
+                    super.onPositionDiscontinuity(oldPosition, newPosition, reason)
+                    if (reason == Player.DISCONTINUITY_REASON_SEEK || reason == Player.DISCONTINUITY_REASON_SEEK_ADJUSTMENT) {
+                        onPositionChange?.invoke(newPosition.positionMs)
+                    }
+                }
             })
         }
     }
 
+
     fun play() {
-        if (::video.isInitialized) {
-            exoPlayer?.play()
+        if (::trackItem.isInitialized) {
+            if (exoPlayer != null) {
+                exoPlayer.play()
+
+                if (!isMediaNotificationShown) {
+                    mediaNotificationManager?.showNotificationForPlayer(exoPlayer)
+                    isMediaNotificationShown = true
+                }
+            }
+
+
         } else {
             throw UninitializedPropertyAccessException(
                 "You must call load(TrackItem) before playing the player"
@@ -72,15 +97,15 @@ class AudioPlayer(
     }
 
     fun release() {
+        mediaNotificationManager?.hideNotification()
         exoPlayer?.release()
     }
 
-    fun load(video: Video) {
-        this.video = video
-
+    fun load(trackItem: TrackItem) {
+        this.trackItem = trackItem
         val dataSourceFactory = DefaultDataSource.Factory(context)
         val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(video.asMediaItem())
+            .createMediaSource(trackItem.asMediaItem())
 
         exoPlayer?.setMediaSource(mediaSource)
         exoPlayer?.prepare()

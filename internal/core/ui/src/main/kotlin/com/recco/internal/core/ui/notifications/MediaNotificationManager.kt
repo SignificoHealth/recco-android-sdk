@@ -29,14 +29,14 @@ class MediaNotificationManager(
     private val context: Context,
     sessionToken: SessionToken,
     private val player: Player,
-    notificationListener: PlayerNotificationManager.NotificationListener
 ) {
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
     private val notificationManager: PlayerNotificationManager
 
     init {
-        val mediaController = MediaController.Builder(context, sessionToken).buildAsync()
+        val mediaController = MediaController.Builder(context, sessionToken)
+            .buildAsync()
 
         notificationManager = PlayerNotificationManager.Builder(
             context,
@@ -46,11 +46,9 @@ class MediaNotificationManager(
             .setChannelNameResourceId(R.string.recco_media_channel_name)
             .setChannelDescriptionResourceId(R.string.recco_media_channel_description)
             .setMediaDescriptionAdapter(DescriptionAdapter(mediaController))
-            .setNotificationListener(notificationListener)
             .setSmallIconResourceId(R.drawable.recco_ic_play)
             .build()
             .apply {
-                setPlayer(player)
                 setUseRewindAction(true)
                 setUseFastForwardAction(true)
             }
