@@ -1,6 +1,7 @@
 @file:OptIn(UnstableApi::class) package com.recco.internal.core.media
 
 import android.content.Context
+import android.util.Log
 import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
@@ -16,7 +17,8 @@ class AudioPlayer(
     val exoPlayer: ExoPlayer?,
     val onTrackEnded: (() -> Unit)? = null,
     val onIsPlayingChange: ((Boolean) -> Unit)? = null,
-    val onPlayerReady: ((duration: Long) -> Unit)? = null
+    val onPlayerReady: ((duration: Long) -> Unit)? = null,
+    val onPositionChange: ((newPosition: Long) -> Unit)? = null
 ) {
     val currentPositionMs: Long
         get() = exoPlayer?.currentPosition?.coerceAtLeast(0) ?: 0
@@ -42,13 +44,25 @@ class AudioPlayer(
                     if (playbackState == Player.STATE_ENDED)
                         onTrackEnded?.invoke()
 
-                    if (playbackState == Player.STATE_READY)
+                    if (playbackState == Player.STATE_READY) {
+                        Log.i("player-debug", "ExoPlayer onPlaybackStateChanged - duration $duration")
                         onPlayerReady?.invoke(duration)
+                    }
                 }
 
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
+                    Log.i("player-debug", "onIsPlayingChanged: isPlaying")
+
                     super.onIsPlayingChanged(isPlaying)
                     onIsPlayingChange?.invoke(isPlaying)
+                }
+
+                override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
+                    super.onPositionDiscontinuity(oldPosition, newPosition, reason)
+                    if (reason == Player.DISCONTINUITY_REASON_SEEK || reason == Player.DISCONTINUITY_REASON_SEEK_ADJUSTMENT) {
+                        Log.i("player-debug", "onPositionDiscontinuity: ${newPosition.positionMs}")
+                        onPositionChange?.invoke(newPosition.positionMs)
+                    }
                 }
             })
         }

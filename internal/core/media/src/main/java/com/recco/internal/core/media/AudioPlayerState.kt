@@ -12,19 +12,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.PlayerView
-import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.TrackItem
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
 class AudioPlayerState(
-    val trackItem: TrackItem,
     val audioPlayer: AudioPlayer?,
     val isPlaying: Boolean,
     val currentPosition: Long,
@@ -38,68 +33,6 @@ class AudioPlayerState(
 
     fun requireExoPlayer() = checkNotNull(audioPlayer?.exoPlayer)
 }
-
-class VideoPlayerState(
-    val playerView: PlayerView,
-    val play: () -> Unit,
-)
-
-@Composable
-fun rememberVideoPlayerStateWithLifecycle(video: Video): VideoPlayerState {
-    val context = LocalContext.current
-    val isInPreviewMode = LocalInspectionMode.current
-
-    val exoPlayer: ExoPlayer? = remember {
-        if (!isInPreviewMode) {
-            val player = ExoPlayer.Builder(context).build()
-            player.setMediaItem(video.asMediaItem())
-            player.prepare()
-            player
-        } else {
-            null
-        }
-    }
-
-    val playerView = remember {
-        exoPlayer?.setMediaItem(video.asMediaItem())
-        exoPlayer?.prepare()
-
-        PlayerView(context).apply {
-            player = exoPlayer
-            controllerAutoShow = false
-        }
-    }
-    val lifecycleObserver = rememberPlayerLifecycleObserver(playerView)
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-
-    DisposableEffect(lifecycle) {
-        lifecycle.addObserver(lifecycleObserver)
-        onDispose {
-            lifecycle.removeObserver(lifecycleObserver)
-        }
-    }
-    return VideoPlayerState(
-        playerView = playerView,
-        play = {
-            exoPlayer?.play()
-        }
-    )
-}
-
-@Composable
-private fun rememberPlayerLifecycleObserver(player: PlayerView): LifecycleEventObserver = remember(player) {
-    LifecycleEventObserver { _, event ->
-        when (event) {
-            Lifecycle.Event.ON_RESUME -> player.onResume()
-            Lifecycle.Event.ON_PAUSE -> player.onPause()
-            Lifecycle.Event.ON_DESTROY -> player.player?.release()
-            else -> {
-                // Do Nothing
-            }
-        }
-    }
-}
-
 
 @Composable
 fun rememberAudioPlayerState(
@@ -127,6 +60,9 @@ fun rememberAudioPlayerState(
             },
             onPlayerReady = { duration ->
                 trackDuration = duration
+            },
+            onPositionChange = { newPosition ->
+                currentPosition = newPosition
             }
         )
     }
@@ -160,16 +96,15 @@ fun rememberAudioPlayerState(
     }
 
     return AudioPlayerState(
-        trackItem = trackItem,
-        isPlaying = isPlaying,
         audioPlayer = player,
-        trackDuration = trackDuration,
+        isPlaying = isPlaying,
         currentPosition = currentPosition,
         play = { player.play() },
         pause = { player.pause() },
         seekTo = {
             currentPosition = it
             player.seekTo(currentPosition)
-        }
+        },
+        trackDuration = trackDuration
     )
 }

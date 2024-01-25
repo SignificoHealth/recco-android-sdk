@@ -73,7 +73,7 @@ import com.recco.internal.core.ui.notifications.MediaNotificationManager
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.article.preview.ArticleUIPreviewProvider
-
+import androidx.compose.runtime.LaunchedEffect as LaunchedEffect1
 
 @Composable
 internal fun ArticleRoute(
@@ -336,18 +336,20 @@ fun AudioSlider(
     enabled: Boolean,
     onSeekPosition: (Long) -> Unit
 ) {
-    var sliderPosition by remember {
-        mutableStateOf(currentPosition.toFloat())
+    var sliderPositionState by remember { mutableStateOf(currentPosition.toFloat()) }
+
+    LaunchedEffect1(key1 = currentPosition) {
+        sliderPositionState = (currentPosition / 1000).toFloat()
     }
 
     Slider(
-        value = sliderPosition,
+        value = sliderPositionState,
         enabled = enabled,
         onValueChange = { newPosition ->
-            sliderPosition = newPosition
+            sliderPositionState = newPosition
         },
         onValueChangeFinished = {
-            onSeekPosition((sliderPosition * 1000).toLong())
+            onSeekPosition((sliderPositionState * 1000).toLong())
 
         },
         valueRange = 0f..(audioDuration.coerceAtLeast(0) /1000).toFloat(),
