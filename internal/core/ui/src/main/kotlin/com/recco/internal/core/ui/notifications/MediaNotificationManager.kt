@@ -36,7 +36,8 @@ class MediaNotificationManager(
     private val notificationManager: PlayerNotificationManager
 
     init {
-        val mediaController = MediaController.Builder(context, sessionToken).buildAsync()
+        val mediaController = MediaController.Builder(context, sessionToken)
+            .buildAsync()
 
         notificationManager = PlayerNotificationManager.Builder(
             context,
@@ -50,7 +51,6 @@ class MediaNotificationManager(
             .setSmallIconResourceId(R.drawable.recco_ic_play)
             .build()
             .apply {
-                setPlayer(player)
                 setUseRewindAction(true)
                 setUseFastForwardAction(true)
             }

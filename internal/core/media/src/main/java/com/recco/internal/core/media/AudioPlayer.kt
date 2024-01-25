@@ -1,7 +1,6 @@
 @file:OptIn(UnstableApi::class) package com.recco.internal.core.media
 
 import android.content.Context
-import android.util.Log
 import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
@@ -10,15 +9,18 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import androidx.media3.session.MediaSession
 import com.recco.internal.core.model.recommendation.TrackItem
+import com.recco.internal.core.ui.notifications.MediaNotificationManager
 
 class AudioPlayer(
     private val context: Context,
     val exoPlayer: ExoPlayer?,
-    val onTrackEnded: (() -> Unit)? = null,
     val onIsPlayingChange: ((Boolean) -> Unit)? = null,
     val onPlayerReady: ((duration: Long) -> Unit)? = null,
-    val onPositionChange: ((newPosition: Long) -> Unit)? = null
+    val onPositionChange: ((newPosition: Long) -> Unit)? = null,
+    val mediaNotificationManager: MediaNotificationManager? = null,
+    val mediaSession: MediaSession? = null
 ) {
     val currentPositionMs: Long
         get() = exoPlayer?.currentPosition?.coerceAtLeast(0) ?: 0
@@ -42,17 +44,14 @@ class AudioPlayer(
                     super.onPlaybackStateChanged(playbackState)
 
                     if (playbackState == Player.STATE_ENDED)
-                        onTrackEnded?.invoke()
+                        mediaNotificationManager?.hideNotification()
 
                     if (playbackState == Player.STATE_READY) {
-                        Log.i("player-debug", "ExoPlayer onPlaybackStateChanged - duration $duration")
                         onPlayerReady?.invoke(duration)
                     }
                 }
 
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
-                    Log.i("player-debug", "onIsPlayingChanged: isPlaying")
-
                     super.onIsPlayingChanged(isPlaying)
                     onIsPlayingChange?.invoke(isPlaying)
                 }
@@ -60,7 +59,6 @@ class AudioPlayer(
                 override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
                     super.onPositionDiscontinuity(oldPosition, newPosition, reason)
                     if (reason == Player.DISCONTINUITY_REASON_SEEK || reason == Player.DISCONTINUITY_REASON_SEEK_ADJUSTMENT) {
-                        Log.i("player-debug", "onPositionDiscontinuity: ${newPosition.positionMs}")
                         onPositionChange?.invoke(newPosition.positionMs)
                     }
                 }
@@ -68,9 +66,20 @@ class AudioPlayer(
         }
     }
 
+    var showingNotification = false
+
     fun play() {
         if (::trackItem.isInitialized) {
-            exoPlayer?.play()
+            if (exoPlayer != null) {
+                exoPlayer.play()
+
+                if (!showingNotification) {
+                    mediaNotificationManager?.showNotificationForPlayer(exoPlayer)
+                    showingNotification = true
+                }
+            }
+
+
         } else {
             throw UninitializedPropertyAccessException(
                 "You must call load(TrackItem) before playing the player"
@@ -85,6 +94,7 @@ class AudioPlayer(
     }
 
     fun release() {
+        mediaNotificationManager?.hideNotification()
         exoPlayer?.release()
     }
 

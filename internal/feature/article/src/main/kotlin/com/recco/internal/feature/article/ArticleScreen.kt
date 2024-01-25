@@ -1,8 +1,5 @@
 package com.recco.internal.feature.article
 
-import android.app.Notification
-import android.app.PendingIntent
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,10 +43,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.session.MediaSession
-import androidx.media3.ui.PlayerNotificationManager
 import com.google.accompanist.insets.ui.Scaffold
 import com.ireward.htmlcompose.HtmlText
 import com.recco.internal.core.media.AudioPlayerState
@@ -70,7 +63,6 @@ import com.recco.internal.core.ui.extensions.MeasureTextWidth
 import com.recco.internal.core.ui.extensions.formatElapsedTime
 import com.recco.internal.core.ui.extensions.isEndReached
 import com.recco.internal.core.ui.extensions.openUrlInBrowser
-import com.recco.internal.core.ui.notifications.MediaNotificationManager
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.article.preview.ArticleUIPreviewProvider
@@ -185,7 +177,6 @@ private fun ArticleContent(
                     AudioPlayer(
                         playerState = rememberAudioPlayerState(
                             trackItem = article.asTrackItem(),
-                            onTrackEnd = { notificationManager.hideNotification() }
                         )
                     )
 
@@ -230,8 +221,6 @@ private fun ArticleContent(
 private fun AudioPlayer(
     playerState: AudioPlayerState
 ) {
-    val context = LocalContext.current
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -249,7 +238,6 @@ private fun AudioPlayer(
                         playerState.pause()
                     } else {
                         playerState.play()
-                        showPlayerNotification(context, playerState.requireExoPlayer())
 
                     }
                 },
@@ -287,46 +275,6 @@ private fun AudioPlayer(
             }
         }
     }
-}
-
-var isPlayerReady: Boolean = false
-var isStarted: Boolean = false
-lateinit var mediaSession: MediaSession
-private lateinit var notificationManager: MediaNotificationManager
-
-private fun showPlayerNotification(context: Context, player: ExoPlayer) {
-    if (isStarted) return
-
-    isStarted = true
-
-    val sessionActivityPendingIntent = context.packageManager
-        ?.getLaunchIntentForPackage(context.packageName)
-        ?.let { sessionIntent ->
-            PendingIntent.getActivity(
-                context,
-                0,
-                sessionIntent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
-    }
-
-    mediaSession = MediaSession.Builder(context, player)
-        .setCallback(object : MediaSession.Callback {})
-        .setSessionActivity(sessionActivityPendingIntent!!).build()
-
-
-    notificationManager =
-        MediaNotificationManager(
-            context,
-            mediaSession.token,
-            player, @UnstableApi object : PlayerNotificationManager.NotificationListener {
-                override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {}
-                // TODO, check super calls
-                override fun onNotificationPosted(notificationId: Int, notification: Notification, ongoing: Boolean) {}
-            }
-        )
-
-    notificationManager.showNotificationForPlayer(player)
 }
 
  @Composable

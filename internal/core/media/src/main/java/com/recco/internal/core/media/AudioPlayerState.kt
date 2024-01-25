@@ -1,5 +1,6 @@
 @file:UnstableApi package com.recco.internal.core.media
 
+import android.app.PendingIntent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -15,12 +16,14 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.MediaSession
+import androidx.media3.ui.PlayerNotificationManager
 import com.recco.internal.core.model.recommendation.TrackItem
+import com.recco.internal.core.ui.notifications.MediaNotificationManager
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
 class AudioPlayerState(
-    val audioPlayer: AudioPlayer?,
     val isPlaying: Boolean,
     val currentPosition: Long,
     val play: () -> Unit,
@@ -30,14 +33,11 @@ class AudioPlayerState(
 ) {
     val isReady: Boolean
         get() = trackDuration != null
-
-    fun requireExoPlayer() = checkNotNull(audioPlayer?.exoPlayer)
 }
 
 @Composable
 fun rememberAudioPlayerState(
     trackItem: TrackItem,
-    onTrackEnd: (() -> Unit)? = null
 ): AudioPlayerState {
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
@@ -46,18 +46,50 @@ fun rememberAudioPlayerState(
     var trackDuration by remember { mutableLongStateOf(0L)  }
     var isPlaying by remember { mutableStateOf(false) }
 
+    val exoPlayer = remember(trackItem) {
+        if (isInPreviewMode) {
+            null
+        } else {
+            ExoPlayer.Builder(context).build()
+        }
+    }
+
+    val sessionActivityPendingIntent = remember(context) {
+        PendingIntent.getActivity(
+            context,
+            0,
+            context.packageManager.getLaunchIntentForPackage(context.packageName),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
+
+    // Create MediaSession
+    val mediaSession = remember(exoPlayer, sessionActivityPendingIntent) {
+        if (exoPlayer == null) null else MediaSession.Builder(context, exoPlayer)
+            .setSessionActivity(sessionActivityPendingIntent)
+            .build()
+    }
+
+    // Create PlayerNotificationManager
+    val notificationManager = remember(mediaSession, sessionActivityPendingIntent) {
+        if (mediaSession == null) {
+            null
+        } else {
+            MediaNotificationManager(
+                context, mediaSession.token, exoPlayer!!, object : PlayerNotificationManager.NotificationListener {}
+            )
+        }
+    }
+
     val player = remember {
         AudioPlayer(
             context = context,
-            onTrackEnded = { onTrackEnd?.invoke() },
             onIsPlayingChange = {
                 isPlaying = it
             },
-            exoPlayer = if (isInPreviewMode) {
-                null
-            } else {
-                ExoPlayer.Builder(context).build()
-            },
+            exoPlayer = exoPlayer,
+            mediaSession = mediaSession,
+            mediaNotificationManager = notificationManager,
             onPlayerReady = { duration ->
                 trackDuration = duration
             },
@@ -67,9 +99,16 @@ fun rememberAudioPlayerState(
         )
     }
 
+    DisposableEffect(key1 = player) {
+        onDispose {
+            player.release()
+        }
+    }
+
     DisposableEffect(LocalLifecycleOwner.current) {
         val observer = object: DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
+                notificationManager?.hideNotification()
                 player.release()
                 super.onDestroy(owner)
             }
@@ -78,6 +117,7 @@ fun rememberAudioPlayerState(
         lifeCycleOwner.lifecycle.addObserver(observer)
 
         onDispose {
+            notificationManager?.hideNotification()
             lifeCycleOwner.lifecycle.removeObserver(observer)
         }
     }
@@ -96,7 +136,6 @@ fun rememberAudioPlayerState(
     }
 
     return AudioPlayerState(
-        audioPlayer = player,
         isPlaying = isPlaying,
         currentPosition = currentPosition,
         play = { player.play() },
