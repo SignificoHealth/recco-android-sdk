@@ -95,12 +95,22 @@ private fun ArticleScreen(
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
     val scrollState = rememberScrollState()
+    val audioPlayerState = if (uiState.data?.article?.hasAudio == true) {
+        rememberAudioPlayerState(uiState.data!!.article.asTrackItem())
+    } else {
+        null
+    }
 
     Scaffold(
         topBar = {
             AppTopBar(
                 title = uiState.data?.article?.headline.orEmpty(),
-                navigationIcon = { BackIconButton(onClick = navigateUp) }
+                navigationIcon = {
+                    BackIconButton(onClick = {
+                        navigateUp.invoke()
+                        audioPlayerState?.release?.invoke()
+                    })
+                }
             )
         },
         backgroundColor = AppTheme.colors.background,
@@ -135,7 +145,8 @@ private fun ArticleScreen(
         ) {
             ArticleContent(
                 linkClicked = linkClicked,
-                article = it.article
+                article = it.article,
+                audioPlayerState = audioPlayerState
             )
         }
     }
@@ -144,7 +155,8 @@ private fun ArticleScreen(
 @Composable
 private fun ArticleContent(
     linkClicked: (String) -> Unit,
-    article: Article
+    article: Article,
+    audioPlayerState: AudioPlayerState? = null
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Card(
@@ -164,7 +176,7 @@ private fun ArticleContent(
                 )
                 Spacer(Modifier.height(AppSpacing.dp_16))
 
-                if (article.hasAudio) {
+                if (article.hasAudio && audioPlayerState != null) {
                     RecommendationTypeRow(
                         contentType = ContentType.ARTICLE,
                         lengthInMinutes = article.readingTimeInSeconds?.let {
@@ -175,10 +187,7 @@ private fun ArticleContent(
                     Spacer(Modifier.height(AppSpacing.dp_16))
 
                     AudioPlayer(
-                        playerState = rememberAudioPlayerState(
-                            trackItem = article.asTrackItem(),
-                        )
-                    )
+                        playerState = audioPlayerState)
 
                     Spacer(Modifier.height(AppSpacing.dp_32))
                 }

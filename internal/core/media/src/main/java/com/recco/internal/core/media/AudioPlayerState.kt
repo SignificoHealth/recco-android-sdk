@@ -17,7 +17,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
-import androidx.media3.ui.PlayerNotificationManager
 import com.recco.internal.core.model.recommendation.TrackItem
 import com.recco.internal.core.ui.notifications.MediaNotificationManager
 import kotlinx.coroutines.delay
@@ -28,6 +27,7 @@ class AudioPlayerState(
     val currentPosition: Long,
     val play: () -> Unit,
     val pause: () -> Unit,
+    val release: () -> Unit,
     val seekTo: (Long) -> Unit,
     val trackDuration: Long?,
 ) {
@@ -66,6 +66,7 @@ fun rememberAudioPlayerState(
     // Create MediaSession
     val mediaSession = remember(exoPlayer, sessionActivityPendingIntent) {
         if (exoPlayer == null) null else MediaSession.Builder(context, exoPlayer)
+            .setId(trackItem.id)
             .setSessionActivity(sessionActivityPendingIntent)
             .build()
     }
@@ -76,7 +77,7 @@ fun rememberAudioPlayerState(
             null
         } else {
             MediaNotificationManager(
-                context, mediaSession.token, exoPlayer!!, object : PlayerNotificationManager.NotificationListener {}
+                context, mediaSession.token, exoPlayer!!
             )
         }
     }
@@ -143,6 +144,10 @@ fun rememberAudioPlayerState(
         seekTo = {
             currentPosition = it
             player.seekTo(currentPosition)
+        },
+        release = {
+            mediaSession?.release()
+            player.release()
         },
         trackDuration = trackDuration
     )

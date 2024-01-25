@@ -25,6 +25,8 @@ class AudioPlayer(
     val currentPositionMs: Long
         get() = exoPlayer?.currentPosition?.coerceAtLeast(0) ?: 0
 
+    private var isMediaNotificationShown = false
+
     private lateinit var trackItem: TrackItem
 
     init {
@@ -43,8 +45,10 @@ class AudioPlayer(
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     super.onPlaybackStateChanged(playbackState)
 
-                    if (playbackState == Player.STATE_ENDED)
+                    if (playbackState == Player.STATE_ENDED) {
+                        isMediaNotificationShown = false
                         mediaNotificationManager?.hideNotification()
+                    }
 
                     if (playbackState == Player.STATE_READY) {
                         onPlayerReady?.invoke(duration)
@@ -66,16 +70,15 @@ class AudioPlayer(
         }
     }
 
-    var showingNotification = false
 
     fun play() {
         if (::trackItem.isInitialized) {
             if (exoPlayer != null) {
                 exoPlayer.play()
 
-                if (!showingNotification) {
+                if (!isMediaNotificationShown) {
                     mediaNotificationManager?.showNotificationForPlayer(exoPlayer)
-                    showingNotification = true
+                    isMediaNotificationShown = true
                 }
             }
 
