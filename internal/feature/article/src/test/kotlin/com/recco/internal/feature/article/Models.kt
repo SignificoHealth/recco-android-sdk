@@ -2,6 +2,7 @@ package com.recco.internal.feature.article
 
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.Status
+import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.preview.ArticlePreviewProvider
 
 /**
@@ -16,7 +17,7 @@ internal val genericUserInteraction = UserInteractionRecommendation(
  * ArticleUi
  */
 
-private val rawArticle = ArticlePreviewProvider.data()
+private val rawArticle = ArticlePreviewProvider.NO_AUDIO_ARTICLE
 
 internal fun createArticleUiGivenContent(
     rating: Rating = Rating.NOT_RATED,

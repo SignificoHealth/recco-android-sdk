@@ -54,5 +54,7 @@
     <string name="recco_media_channel_name">Media Notifications</string>
     <string name="recco_media_channel_description">Notifications for managing video and audio playbacks</string>
     <string name="recco_reccomendation_type_podcast">Podcast</string>
+    <string name="recco_reccomendation_type_read">Read</string>
+    <string name="recco_reccomendation_type_video">Video</string>
     <string name="recco_play">Play</string>
 </resources>

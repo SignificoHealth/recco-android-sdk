@@ -12,4 +12,7 @@ data class Article(
     val audioUrl: String? = null,
     val readingTimeInSeconds: Int? = null,
     val articleBodyHtml: String? = null
-)
+) {
+    val hasAudio: Boolean
+        get() = audioUrl != null
+}

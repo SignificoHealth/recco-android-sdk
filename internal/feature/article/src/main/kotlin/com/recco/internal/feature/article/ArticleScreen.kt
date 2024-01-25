@@ -55,15 +55,14 @@ import com.recco.internal.core.media.AudioPlayerState
 import com.recco.internal.core.media.asTrackItem
 import com.recco.internal.core.media.rememberAudioPlayerState
 import com.recco.internal.core.model.recommendation.Article
-import com.recco.internal.core.model.recommendation.ContentId
-import com.recco.internal.core.model.recommendation.Rating
-import com.recco.internal.core.model.recommendation.Status
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.ASPECT_RATIO_4_3
 import com.recco.internal.core.ui.components.AppAsyncImage
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.BackIconButton
+import com.recco.internal.core.ui.components.RecommendationTypeRow
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.extensions.MeasureTextWidth
@@ -172,43 +171,37 @@ private fun ArticleContent(
                 )
                 Spacer(Modifier.height(AppSpacing.dp_16))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.recco_ic_document),
-                        tint = AppTheme.colors.primary,
-                        contentDescription = null
+                if (article.hasAudio) {
+                    RecommendationTypeRow(
+                        contentType = ContentType.ARTICLE,
+                        lengthInMinutes = article.readingTimeInSeconds?.let {
+                            it / 60
+                        }
                     )
 
-                    Text(
-                        text = "Document • 5 min",
-                        style = AppTheme.typography.labelSmall.copy(color = AppTheme.colors.primary)
-                    )
-                }
+                    Spacer(Modifier.height(AppSpacing.dp_16))
 
-                Spacer(Modifier.height(AppSpacing.dp_16))
-
-                if (article.audioUrl != null) {
                     AudioPlayer(
                         playerState = rememberAudioPlayerState(
                             trackItem = article.asTrackItem(),
                             onTrackEnd = { notificationManager.hideNotification() }
                         )
                     )
+
+                    Spacer(Modifier.height(AppSpacing.dp_32))
                 }
 
-
-                Spacer(Modifier.height(AppSpacing.dp_32))
-
-                Divider(
-                    color = AppTheme.colors.accent,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(2.dp)
-                )
-                Spacer(Modifier.height(AppSpacing.dp_32))
+                if (!article.hasAudio) {
+                    Column {
+                        Divider(
+                            color = AppTheme.colors.accent,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(2.dp)
+                        )
+                        Spacer(Modifier.height(AppSpacing.dp_32))
+                    }
+                }
 
                 article.lead?.let { lead ->
                     Text(
@@ -335,7 +328,6 @@ private fun showPlayerNotification(context: Context, player: ExoPlayer) {
     notificationManager.showNotificationForPlayer(player)
 }
 
-
 @Composable
 fun AudioSlider(
     modifier: Modifier,
@@ -367,43 +359,6 @@ fun AudioSlider(
             inactiveTrackColor = AppTheme.colors.primary.copy(alpha = 0.2f),
         )
     )
-}
-
-@Preview
-@Composable
-private fun AudioPlayerPreview() {
-    AppTheme {
-        val article = Article(
-            id = ContentId(
-                itemId = "platonem",
-                catalogId = "lobortis"
-            ),
-            rating = Rating.DISLIKE,
-            status = Status.VIEWED,
-            isBookmarked = false,
-            headline = "An example article with audio",
-            lead = null,
-            imageUrl = "http://google.es",
-            imageAlt = null,
-            audioUrl = "http://google.es",
-            readingTimeInSeconds = 120,
-            articleBodyHtml = "A Long text"
-        )
-
-        val playerState = rememberAudioPlayerState(
-            trackItem = article.asTrackItem(),
-            onTrackEnd = {
-                notificationManager.hideNotification()
-            }
-        )
-
-        Box(modifier = Modifier
-            .background(color = AppTheme.colors.background)
-            .padding(16.dp)) {
-            AudioPlayer(playerState = playerState)
-        }
-    }
-
 }
 
 @Preview

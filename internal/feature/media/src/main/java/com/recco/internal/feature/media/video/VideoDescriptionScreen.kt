@@ -178,13 +178,13 @@ private fun CardDescriptionContent(video: Video) {
             shape = RoundedCornerShape(AppSpacing.dp_24),
             backgroundColor = AppTheme.colors.background
         ) {
-            RecommendationTypeRow(video)
+            VideoDescriptionContent(video)
         }
     }
 }
 
 @Composable
-private fun RecommendationTypeRow(video: Video) {
+private fun VideoDescriptionContent(video: Video) {
     Column(modifier = Modifier.padding(horizontal = AppSpacing.dp_16)) {
         Spacer(Modifier.height(AppSpacing.dp_32))
 
@@ -195,28 +195,7 @@ private fun RecommendationTypeRow(video: Video) {
 
         Spacer(Modifier.height(AppSpacing.dp_24))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.recco_ic_video),
-                tint = AppTheme.colors.primary,
-                contentDescription = null
-            )
-
-            val contentTypeText = stringResource(id = R.string.recco_reccomendation_type_podcast)
-            val minSuffixText = stringResource(id = R.string.recco_questionnaire_numeric_label_min)
-            val contentTypeDurationText = buildString {
-                append(contentTypeText)
-                append("  • ${video.length} $minSuffixText").takeIf { video.length != null }
-            }
-
-            Text(
-                text = contentTypeDurationText,
-                style = AppTheme.typography.labelSmall.copy(color = AppTheme.colors.primary)
-            )
-        }
+//        RecommendationTypeRow(contentType: ContentType)
 
         Spacer(Modifier.height(AppSpacing.dp_24))
 
