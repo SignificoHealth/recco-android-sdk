@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -108,8 +109,8 @@ fun rememberAudioPlayerState(
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
     val isInPreviewMode = LocalInspectionMode.current
-    var currentPosition by remember { mutableStateOf(0L) }
-    var trackDuration by remember { mutableStateOf(0L)  }
+    var currentPosition by remember { mutableLongStateOf(0L) }
+    var trackDuration by remember { mutableLongStateOf(0L)  }
     var isPlaying by remember { mutableStateOf(false) }
 
     val player = remember {
@@ -153,7 +154,6 @@ fun rememberAudioPlayerState(
             delay(1.seconds)
         }
     }
-
 
     LaunchedEffect(trackItem) {
         player.load(trackItem)

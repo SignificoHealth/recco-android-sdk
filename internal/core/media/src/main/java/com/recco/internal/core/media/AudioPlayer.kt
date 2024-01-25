@@ -76,7 +76,6 @@ class AudioPlayer(
 
     fun load(trackItem: TrackItem) {
         this.trackItem = trackItem
-
         val dataSourceFactory = DefaultDataSource.Factory(context)
         val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
             .createMediaSource(trackItem.asMediaItem())
