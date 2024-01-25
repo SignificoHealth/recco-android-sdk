@@ -12,7 +12,7 @@ import com.recco.internal.feature.bookmark.navigation.navigateToBookmarks
 import com.recco.internal.feature.feed.navigation.FeedGraph
 import com.recco.internal.feature.feed.navigation.feedGraph
 import com.recco.internal.feature.feed.navigation.navigateToFeed
-import com.recco.internal.feature.media.video.navigation.mediaGraph
+import com.recco.internal.feature.media.description.navigation.mediaGraph
 import com.recco.internal.feature.onboarding.navigation.OnboardingGraph
 import com.recco.internal.feature.onboarding.navigation.onboardingGraph
 import com.recco.internal.feature.questionnaire.navigation.navigateToOnboardingQuestionnaire

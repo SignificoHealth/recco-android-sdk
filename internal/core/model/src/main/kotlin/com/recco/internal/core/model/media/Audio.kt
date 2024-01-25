@@ -11,7 +11,8 @@ data class Audio(
     val isBookmarked: Boolean,
     val audioUrl: String,
     val headline: String,
+    val description: String? = null,
     val imageUrl: String? = null,
     val imageAlt: String? = null,
-    val length: Int? = null
+    val lengthInSeconds: Int? = null
 )

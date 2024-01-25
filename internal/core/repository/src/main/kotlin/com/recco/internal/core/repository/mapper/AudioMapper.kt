@@ -13,6 +13,6 @@ fun AppUserAudioDTO.asEntity(): Audio {
         headline = headline,
         imageUrl = dynamicImageResizingUrl,
         imageAlt = imageAlt,
-        length = length
+        lengthInSeconds = length
     )
 }
