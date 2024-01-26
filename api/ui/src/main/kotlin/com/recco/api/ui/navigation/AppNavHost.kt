@@ -41,7 +41,8 @@ internal fun AppNavHost(
         feedGraph(
             navigateToArticle = {
 //                navController::navigateToArticle
-                navController.navigateToMediaDescription(it, ContentType.VIDEO)
+                // TODO, just for the audio-video-feature development
+                navController.navigateToMediaDescription(it, ContentType.AUDIO)
             },
             navigateToQuestionnaire = navController::navigateToTopicQuestionnaire,
             navigateToBookmarks = navController::navigateToBookmarks,
