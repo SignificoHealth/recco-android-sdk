@@ -39,6 +39,7 @@ import androidx.media3.ui.PlayerView
 import com.recco.internal.core.media.VideoPlayerState
 import com.recco.internal.core.media.rememberVideoPlayerStateWithLifecycle
 import com.recco.internal.core.model.media.Audio
+import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.Status
@@ -53,9 +54,24 @@ import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
-import com.recco.internal.feature.media.video.dummyVideo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
+val dummyVideo = Video(
+    id = ContentId(
+        itemId = "corrumpit",
+        catalogId = "enim"
+    ),
+    rating = Rating.LIKE,
+    status = Status.NO_INTERACTION,
+    isBookmarked = false,
+    videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    headline = "vidisse",
+    imageUrl = null,
+    description = "This exercise is not for you if you have a heart condition. Consult with your doctor before engaging in heavy cardio exercise",
+    imageAlt = null,
+    length = 10
+)
 
 @Composable
 internal fun FullMediaPlayerRoute(
@@ -268,11 +284,12 @@ private fun VideoScreenPreview() {
         rating = Rating.LIKE,
         status = Status.NO_INTERACTION,
         isBookmarked = false,
-        audioUrl = "http://www.bing.com/search?q=indoctum",
+        audioUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         headline = "vidisse",
         imageUrl = null,
+        description = "This exercise is not for you if you have a heart condition. Consult with your doctor before engaging in heavy cardio exercise",
         imageAlt = null,
-        length = null
+        lengthInSeconds = 10
     )
 
     AppTheme {

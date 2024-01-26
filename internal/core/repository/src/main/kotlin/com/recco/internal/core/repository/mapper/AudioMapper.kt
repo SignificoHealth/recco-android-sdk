@@ -8,11 +8,12 @@ fun AppUserAudioDTO.asEntity(): Audio {
         id = id.asEntity(),
         rating = rating.asEntity(),
         status = status.asEntity(),
+        description = description,
         isBookmarked = bookmarked,
         audioUrl = audioUrl,
         headline = headline,
         imageUrl = dynamicImageResizingUrl,
         imageAlt = imageAlt,
-        length = length
+        lengthInSeconds = length
     )
 }

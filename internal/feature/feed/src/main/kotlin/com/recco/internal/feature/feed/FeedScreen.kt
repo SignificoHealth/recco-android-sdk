@@ -63,6 +63,7 @@ import com.recco.internal.core.model.feed.FeedSectionState
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.ContentType.ARTICLE
 import com.recco.internal.core.model.recommendation.ContentType.AUDIO
 import com.recco.internal.core.model.recommendation.ContentType.QUESTIONNAIRE
@@ -97,6 +98,7 @@ internal fun FeedRoute(
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     navigateToBookmarks: () -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
     viewModel: FeedViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle()
@@ -105,7 +107,8 @@ internal fun FeedRoute(
         onUserInteract = { viewModel.onUserInteract(it) },
         navigateToQuestionnaire = navigateToQuestionnaire,
         navigateToBookmarks = navigateToBookmarks,
-        navigateToArticle = navigateToArticle
+        navigateToArticle = navigateToArticle,
+        navigateToMediaDescription = navigateToMediaDescription
     )
 }
 
@@ -115,6 +118,7 @@ private fun FeedScreen(
     onUserInteract: (FeedUserInteract) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
     navigateToBookmarks: () -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
@@ -588,7 +592,8 @@ private fun Preview(
             onUserInteract = {},
             navigateToArticle = {},
             navigateToBookmarks = {},
-            navigateToQuestionnaire = { _, _, _ -> }
+            navigateToQuestionnaire = { _, _, _ -> },
+            navigateToMediaDescription = { _, _, -> }
         )
     }
 }
@@ -606,7 +611,8 @@ private fun PreviewDark(
             onUserInteract = {},
             navigateToArticle = {},
             navigateToBookmarks = {},
-            navigateToQuestionnaire = { _, _, _ -> }
+            navigateToQuestionnaire = { _, _, _ -> },
+            navigateToMediaDescription = { _, _, -> }
         )
     }
 }

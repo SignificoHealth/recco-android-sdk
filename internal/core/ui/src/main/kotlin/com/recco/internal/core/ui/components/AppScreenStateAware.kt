@@ -46,6 +46,14 @@ data class UiState<T>(
     val data: T? = null
 )
 
+fun <T> Throwable.toUiState(): UiState<T> {
+    return UiState(
+        isLoading = false,
+        error = this,
+        data = null
+    )
+}
+
 /**
  * Extracted from [SwipeRefresh] documentation:
  * A layout which implements the swipe-to-refresh pattern, allowing the user to refresh content via
