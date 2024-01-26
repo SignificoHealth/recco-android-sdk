@@ -36,6 +36,6 @@ sealed class MediaDescriptionUi(
         get() = when {
             this is AudioDescriptionUi -> ContentType.AUDIO
             this is VideoDescriptionUi -> ContentType.VIDEO
-            else -> error("Non supported content type for MediaDescriptionUi")
+            else -> error("Non supported ContentType: $this, for MediaDescriptionUi")
         }
 }

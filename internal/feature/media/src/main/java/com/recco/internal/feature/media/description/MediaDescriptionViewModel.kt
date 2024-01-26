@@ -39,14 +39,12 @@ internal class MediaDescriptionViewModel @Inject constructor(
 
     private fun loadData() {
         viewModelScope.launch {
-            runCatching {
-                loadMedia()
-            }.onFailure {
-                _viewState.value = it.toUiState()
-                logger.e(it)
-            }.onSuccess {
-                _viewState.value = it
-            }
+            runCatching { loadMedia() }
+                .onSuccess { _viewState.value = it }
+                .onFailure {
+                    _viewState.value = it.toUiState()
+                    logger.e(it)
+                }
         }
     }
 

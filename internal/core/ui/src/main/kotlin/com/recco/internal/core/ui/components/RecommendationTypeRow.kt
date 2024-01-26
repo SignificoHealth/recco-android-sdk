@@ -21,7 +21,7 @@ import com.recco.internal.core.ui.theme.AppTheme
 @Composable
 fun RecommendationTypeRow(
     contentType: ContentType,
-    lengthInMinutes: Int?,
+    lengthInSeconds: Int?,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -58,7 +58,11 @@ fun RecommendationTypeRow(
             val minSuffixText = stringResource(id = R.string.recco_questionnaire_numeric_label_min)
             val contentTypeDurationText = buildString {
                 append(contentTypeText)
-                append("  • $lengthInMinutes $minSuffixText").takeIf { lengthInMinutes != null }
+
+                if (lengthInSeconds != null) {
+                    val lengthInMinutes = (lengthInSeconds / 60)
+                    append("  • $lengthInMinutes $minSuffixText").takeIf { lengthInSeconds != null }
+                }
             }
 
             Text(
@@ -80,7 +84,7 @@ fun RecommendationTypeRowPreview() {
             ) {
                 ContentType.entries.forEach {
                     RecommendationTypeRow(
-                        contentType = it, lengthInMinutes = (it.ordinal + 1) * 5
+                        contentType = it, lengthInSeconds = (it.ordinal + 1) * 60
                     )
                 }
             }

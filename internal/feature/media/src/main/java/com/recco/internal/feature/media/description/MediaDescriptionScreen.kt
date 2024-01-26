@@ -180,7 +180,7 @@ private fun AudioDescriptionContent(audio: Audio) {
 
         RecommendationTypeRow(
             contentType = ContentType.AUDIO,
-            lengthInMinutes = audio.lengthInSeconds
+            lengthInSeconds = audio.lengthInSeconds
         )
 
         Spacer(Modifier.height(AppSpacing.dp_24))
@@ -208,7 +208,6 @@ private fun AudioDescriptionContent(audio: Audio) {
     }
 }
 
-
 @Composable
 private fun VideoDescriptionContent(video: Video) {
     Column(modifier = Modifier.padding(horizontal = AppSpacing.dp_16)) {
@@ -223,7 +222,7 @@ private fun VideoDescriptionContent(video: Video) {
 
         RecommendationTypeRow(
             contentType = ContentType.VIDEO,
-            lengthInMinutes = video.length
+            lengthInSeconds = video.length
         )
 
         Spacer(Modifier.height(AppSpacing.dp_24))

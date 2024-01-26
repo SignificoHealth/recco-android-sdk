@@ -179,9 +179,7 @@ private fun ArticleContent(
                 if (article.hasAudio && audioPlayerState != null) {
                     RecommendationTypeRow(
                         contentType = ContentType.ARTICLE,
-                        lengthInMinutes = article.readingTimeInSeconds?.let {
-                            it / 60
-                        }
+                        lengthInSeconds = article.readingTimeInSeconds
                     )
 
                     Spacer(Modifier.height(AppSpacing.dp_16))
