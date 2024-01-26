@@ -15,6 +15,7 @@ import com.recco.internal.feature.feed.navigation.feedGraph
 import com.recco.internal.feature.feed.navigation.navigateToFeed
 import com.recco.internal.feature.media.description.navigation.mediaGraph
 import com.recco.internal.feature.media.description.navigation.navigateToMediaDescription
+import com.recco.internal.feature.media.description.navigation.navigateToMediaPlayer
 import com.recco.internal.feature.onboarding.navigation.OnboardingGraph
 import com.recco.internal.feature.onboarding.navigation.onboardingGraph
 import com.recco.internal.feature.questionnaire.navigation.navigateToOnboardingQuestionnaire
@@ -40,7 +41,7 @@ internal fun AppNavHost(
         feedGraph(
             navigateToArticle = {
 //                navController::navigateToArticle
-                navController.navigateToMediaDescription(it, ContentType.AUDIO)
+                navController.navigateToMediaDescription(it, ContentType.VIDEO)
             },
             navigateToQuestionnaire = navController::navigateToTopicQuestionnaire,
             navigateToBookmarks = navController::navigateToBookmarks,
@@ -57,6 +58,9 @@ internal fun AppNavHost(
             navigateToArticle = navController::navigateToArticle,
             navigateUp = navController::navigateUp
         )
-        mediaGraph(navigateUp = navController::navigateUp)
+        mediaGraph(
+            navigateUp = navController::navigateUp,
+            navigateToMediaPlayer = navController::navigateToMediaPlayer
+        )
     }
 }

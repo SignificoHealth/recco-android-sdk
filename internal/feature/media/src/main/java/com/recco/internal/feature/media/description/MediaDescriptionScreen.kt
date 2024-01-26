@@ -37,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
 import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.media.Video
+import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.ASPECT_RATIO_4_3
@@ -56,22 +57,27 @@ import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPr
 @Composable
 internal fun MediaDescriptionRoute(
     navigateUp: () -> Unit,
-    viewModel: MediaDescriptionViewModel = hiltViewModel()
+    viewModel: MediaDescriptionViewModel = hiltViewModel(),
+    navigateToMediaPlayer: (ContentId, ContentType) -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
         initialValue = UiState()
     )
 
     MediaDescriptionScreen(
-        navigateUp = {},
-        uiState = uiState
+        navigateUp = navigateUp,
+        navigateToMediaPlayer = navigateToMediaPlayer,
+        uiState = uiState,
+        onUserInteract = viewModel::onUserInteract
     )
 }
 
 @Composable
-fun MediaDescriptionScreen(
+private fun MediaDescriptionScreen(
     navigateUp: () -> Unit,
+    navigateToMediaPlayer: (ContentId, ContentType) -> Unit,
     uiState: UiState<MediaDescriptionUi>,
+    onUserInteract: (MediaDescriptionUserInteract) -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
     val scrollState = rememberScrollState()
@@ -103,7 +109,11 @@ fun MediaDescriptionScreen(
 
                     LargePlayButton(
                         modifier = Modifier.align(Alignment.Center),
-                        onPLayButtonClick = {}
+                        onPlayButtonClick = {
+                            uiState.data?.apply {
+                                navigateToMediaPlayer(contentId, contentType)
+                            }
+                        }
                     )
                 }
             },
@@ -113,13 +123,21 @@ fun MediaDescriptionScreen(
                     modifier = Modifier.padding(bottom = AppSpacing.dp_24),
                     isScrollEndReached = scrollState.isEndReached(),
                     userInteraction = it.userInteraction,
-                    toggleBookmarkState = { TODO() },
-                    toggleLikeState = { TODO() },
-                    toggleDislikeState = { TODO() }
+                    toggleBookmarkState = {
+                        onUserInteract(MediaDescriptionUserInteract.ToggleBookmarkState)
+                    },
+                    toggleLikeState = {
+                        onUserInteract(MediaDescriptionUserInteract.ToggleLikeState)
+                    },
+                    toggleDislikeState = {
+                        onUserInteract(MediaDescriptionUserInteract.ToggleDislikeState)
+                    }
                 )
             },
-            retry = { TODO() }
-        ) { it ->
+            retry = {
+                onUserInteract(MediaDescriptionUserInteract.Retry)
+            }
+        ) {
             CardDescriptionContent(it)
         }
     }
@@ -256,7 +274,9 @@ fun VideoDescriptionScreenPreview(
     AppTheme {
         MediaDescriptionScreen(
             navigateUp = {},
-            uiState = uiState
+            uiState = uiState,
+            navigateToMediaPlayer = { _, _ -> },
+            onUserInteract = {}
         )
     }
 }

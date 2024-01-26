@@ -28,9 +28,9 @@ internal class MediaDescriptionViewModel @Inject constructor(
     private val reccomendationRepository: RecommendationRepository,
     private val logger: Logger
 ) : ViewModel() {
-    private val contentId by lazy { checkNotNull(savedStateHandle.get<ContentId>(idArg)) }
-    private val contentType by lazy { checkNotNull(savedStateHandle.get<ContentType>(contentTypeArg)) }
     private val _viewState = MutableStateFlow(UiState<MediaDescriptionUi>())
+    val contentId by lazy { checkNotNull(savedStateHandle.get<ContentId>(idArg)) }
+    val contentType by lazy { checkNotNull(savedStateHandle.get<ContentType>(contentTypeArg)) }
     val viewState: Flow<UiState<MediaDescriptionUi>> = _viewState
 
     init {
@@ -84,5 +84,17 @@ internal class MediaDescriptionViewModel @Inject constructor(
                 )
             )
         )
+    }
+
+    fun onUserInteract(mediaDescriptionUserInteract: MediaDescriptionUserInteract) {
+        when (mediaDescriptionUserInteract) {
+            MediaDescriptionUserInteract.OnPlayMedia -> TODO()
+            MediaDescriptionUserInteract.Retry -> {
+                loadData()
+            }
+            MediaDescriptionUserInteract.ToggleBookmarkState -> TODO()
+            MediaDescriptionUserInteract.ToggleDislikeState -> TODO()
+            MediaDescriptionUserInteract.ToggleLikeState -> TODO()
+        }
     }
 }

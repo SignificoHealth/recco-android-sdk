@@ -15,15 +15,16 @@ import com.recco.internal.feature.media.player.FullMediaPlayerRoute
 internal const val idArg = "id"
 internal const val contentTypeArg = "content_type"
 const val MediaGraph = "media/${contentTypeArg}/{$idArg}"
-private const val FullAudioPlayerRoute = "fullAudioRoute/{$idArg}"
+private const val MediaPlayerRoute = "media_player/{${contentTypeArg}}/{$idArg}"
 private const val MediaDescriptionRoute = "media_description/{${contentTypeArg}}/{$idArg}"
 
 fun NavGraphBuilder.mediaGraph(
-    navigateUp: () -> Unit
+    navigateUp: () -> Unit,
+    navigateToMediaPlayer: (ContentId, ContentType) -> Unit,
 ) {
     navigation(
         route = MediaGraph,
-        startDestination = FullAudioPlayerRoute
+        startDestination = MediaPlayerRoute
     ) {
         composable(
             route = MediaDescriptionRoute,
@@ -34,11 +35,19 @@ fun NavGraphBuilder.mediaGraph(
                 }
             )
         ) {
-            MediaDescriptionRoute(navigateUp)
+            MediaDescriptionRoute(
+                navigateUp = navigateUp,
+                navigateToMediaPlayer = navigateToMediaPlayer
+            )
         }
         composable(
-            route = FullAudioPlayerRoute,
-            arguments = listOf(navArgument(idArg) { type = ContentIdNavType })
+            route = MediaPlayerRoute,
+            arguments = listOf(
+                navArgument(idArg) { type = ContentIdNavType },
+                navArgument(contentTypeArg) {
+                    type = NavType.EnumType(ContentType::class.java)
+                }
+            )
         ) {
             FullMediaPlayerRoute(navigateUp)
         }
@@ -62,13 +71,19 @@ fun NavController.navigateToMediaDescription(
     )
 }
 
-fun NavController.navigateToFullAudioPlayer(
-    contentId: ContentId
+fun NavController.navigateToMediaPlayer(
+    contentId: ContentId,
+    contentType: ContentType
 ) {
     navigate(
-        FullAudioPlayerRoute.replace(
-            oldValue = "{$idArg}",
-            newValue = ContentIdNavType.serializeAsValue(contentId)
-        )
+        MediaPlayerRoute
+            .replace(
+                oldValue = "{$idArg}",
+                newValue = ContentIdNavType.serializeAsValue(contentId)
+            )
+            .replace(
+                oldValue = "{$contentTypeArg}",
+                newValue = contentType.toString()
+            )
     )
 }

@@ -2,10 +2,12 @@ package com.recco.internal.feature.media.description
 
 import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.media.Video
+import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.ui.components.UserInteractionRecommendation
 
 sealed class MediaDescriptionUi(
+    val contentId: ContentId,
     val imageUrl: String?,
     val imageAlt: String?,
     open val userInteraction: UserInteractionRecommendation
@@ -14,6 +16,7 @@ sealed class MediaDescriptionUi(
         override val userInteraction: UserInteractionRecommendation,
         val video: Video,
     ): MediaDescriptionUi(
+        contentId = video.id,
         userInteraction = userInteraction,
         imageAlt = video.imageAlt,
         imageUrl = video.imageUrl
@@ -23,6 +26,7 @@ sealed class MediaDescriptionUi(
         override val userInteraction: UserInteractionRecommendation,
         val audio: Audio,
     ): MediaDescriptionUi(
+        contentId = audio.id,
         userInteraction = userInteraction,
         imageAlt = audio.imageAlt,
         imageUrl = audio.imageUrl
@@ -30,15 +34,8 @@ sealed class MediaDescriptionUi(
 
     val contentType: ContentType
         get() = when {
-            isAudio -> ContentType.AUDIO
-            isVideo -> ContentType.VIDEO
+            this is AudioDescriptionUi -> ContentType.AUDIO
+            this is VideoDescriptionUi -> ContentType.VIDEO
             else -> error("Non supported content type for MediaDescriptionUi")
         }
-
-    val isAudio: Boolean
-        get() = this is AudioDescriptionUi
-
-    val isVideo: Boolean
-        get() = this is VideoDescriptionUi
-
 }

@@ -24,19 +24,19 @@ import com.recco.internal.core.ui.theme.AppTheme
 @Composable
 fun LargePlayButton(
     modifier: Modifier = Modifier,
-    onPLayButtonClick: () -> Unit,
+    onPlayButtonClick: () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .background(
-                color = Color.DarkGray.copy(alpha = 0.4f),
+                color = Color.DarkGray.copy(alpha = 0.6f),
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(AppSpacing.dp_8)
     ) {
         IconButton(
-            onClick = onPLayButtonClick,
+            onClick = onPlayButtonClick,
             modifier = Modifier
                 .background(
                     color = AppTheme.colors.accent,
