@@ -30,16 +30,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
 import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.media.Video
-import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.ContentType
-import com.recco.internal.core.model.recommendation.Rating
-import com.recco.internal.core.model.recommendation.Status
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.ASPECT_RATIO_4_3
 import com.recco.internal.core.ui.components.AppAsyncImage
@@ -49,11 +47,11 @@ import com.recco.internal.core.ui.components.BackIconButton
 import com.recco.internal.core.ui.components.LargePlayButton
 import com.recco.internal.core.ui.components.RecommendationTypeRow
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.extensions.isEndReached
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
+import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
 
 @Composable
 internal fun MediaDescriptionRoute(
@@ -109,6 +107,7 @@ fun MediaDescriptionScreen(
                     )
                 }
             },
+            isFloatingFooter = true,
             footerContent = {
                 UserInteractionRecommendationCard(
                     modifier = Modifier.padding(bottom = AppSpacing.dp_24),
@@ -251,90 +250,13 @@ private fun VideoDisclaimer(disclaimer: String) {
 
 @Preview
 @Composable
-fun VideoDescriptionScreenPreview() {
-    val dummyInteraction = UserInteractionRecommendation(
-        rating = Rating.DISLIKE,
-        isBookmarked = false,
-        isBookmarkLoading = false,
-        isLikeLoading = false,
-        isDislikeLoading = false
-    )
-
-    val dummyVideo = Video(
-        id = ContentId(
-            itemId = "corrumpit",
-            catalogId = "enim"
-        ),
-        rating = Rating.LIKE,
-        status = Status.NO_INTERACTION,
-        isBookmarked = false,
-        videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        headline = "vidisse",
-        imageUrl = null,
-        description = "This exercise is not for you if you have a heart condition. Consult with your doctor before engaging in heavy cardio exercise",
-        imageAlt = null,
-        length = 10
-    )
-
-    val mediaUi = MediaDescriptionUi.VideoDescriptionUi(
-        userInteraction = dummyInteraction,
-        video = dummyVideo
-    )
+fun VideoDescriptionScreenPreview(
+    @PreviewParameter(MediaDescriptionUiPreviewProvider::class) uiState: UiState<MediaDescriptionUi>) {
 
     AppTheme {
         MediaDescriptionScreen(
             navigateUp = {},
-            uiState = UiState(
-                isLoading = false,
-                error = null,
-                data = mediaUi
-            )
+            uiState = uiState
         )
     }
 }
-
-@Preview
-@Composable
-fun AudioDescriptionScreenPreview() {
-    val dummyInteraction = UserInteractionRecommendation(
-        rating = Rating.DISLIKE,
-        isBookmarked = false,
-        isBookmarkLoading = false,
-        isLikeLoading = false,
-        isDislikeLoading = false
-    )
-
-    val dummyAudio = Audio(
-        id = ContentId(
-            itemId = "corrumpit",
-            catalogId = "enim"
-        ),
-        rating = Rating.LIKE,
-        status = Status.NO_INTERACTION,
-        isBookmarked = false,
-        audioUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        headline = "vidisse",
-        imageUrl = null,
-        description = "This exercise is not for you if you have a heart condition. Consult with your doctor before engaging in heavy cardio exercise",
-        imageAlt = null,
-        lengthInSeconds = 10
-    )
-
-
-    val mediaUi = MediaDescriptionUi.AudioDescriptionUi(
-        userInteraction = dummyInteraction,
-        audio = dummyAudio
-    )
-
-    AppTheme {
-        MediaDescriptionScreen(
-            navigateUp = {},
-            uiState = UiState(
-                isLoading = false,
-                error = null,
-                data = mediaUi
-            )
-        )
-    }
-}
-

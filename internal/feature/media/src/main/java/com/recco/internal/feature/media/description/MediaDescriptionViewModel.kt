@@ -16,11 +16,13 @@ import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.toUiState
 import com.recco.internal.feature.media.description.navigation.contentTypeArg
 import com.recco.internal.feature.media.description.navigation.idArg
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 internal class MediaDescriptionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val reccomendationRepository: RecommendationRepository,
@@ -83,5 +85,4 @@ internal class MediaDescriptionViewModel @Inject constructor(
             )
         )
     }
-
 }

@@ -16,7 +16,7 @@ internal const val idArg = "id"
 internal const val contentTypeArg = "content_type"
 const val MediaGraph = "media/${contentTypeArg}/{$idArg}"
 private const val FullAudioPlayerRoute = "fullAudioRoute/{$idArg}"
-private const val MediaDescriptionRoute = "media_description/${contentTypeArg}/{$idArg}"
+private const val MediaDescriptionRoute = "media_description/{${contentTypeArg}}/{$idArg}"
 
 fun NavGraphBuilder.mediaGraph(
     navigateUp: () -> Unit

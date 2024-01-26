@@ -7,6 +7,7 @@ import androidx.navigation.compose.navigation
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.feature.feed.FeedRoute
 
 const val FeedGraph = "feed_graph"
@@ -15,7 +16,8 @@ const val FeedRoute = "feed"
 fun NavGraphBuilder.feedGraph(
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
-    navigateToBookmarks: () -> Unit
+    navigateToBookmarks: () -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
 ) {
     navigation(
         route = FeedGraph,
@@ -25,7 +27,8 @@ fun NavGraphBuilder.feedGraph(
             FeedRoute(
                 navigateToArticle = navigateToArticle,
                 navigateToQuestionnaire = navigateToQuestionnaire,
-                navigateToBookmarks = navigateToBookmarks
+                navigateToBookmarks = navigateToBookmarks,
+                navigateToMediaDescription = navigateToMediaDescription
             )
         }
     }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.User
 import com.recco.internal.feature.article.navigation.articleGraph
 import com.recco.internal.feature.article.navigation.navigateToArticle
@@ -13,6 +14,7 @@ import com.recco.internal.feature.feed.navigation.FeedGraph
 import com.recco.internal.feature.feed.navigation.feedGraph
 import com.recco.internal.feature.feed.navigation.navigateToFeed
 import com.recco.internal.feature.media.description.navigation.mediaGraph
+import com.recco.internal.feature.media.description.navigation.navigateToMediaDescription
 import com.recco.internal.feature.onboarding.navigation.OnboardingGraph
 import com.recco.internal.feature.onboarding.navigation.onboardingGraph
 import com.recco.internal.feature.questionnaire.navigation.navigateToOnboardingQuestionnaire
@@ -36,9 +38,13 @@ internal fun AppNavHost(
     ) {
         onboardingGraph(navigateToQuestionnaire = navController::navigateToOnboardingQuestionnaire)
         feedGraph(
-            navigateToArticle = navController::navigateToArticle,
+            navigateToArticle = {
+//                navController::navigateToArticle
+                navController.navigateToMediaDescription(it, ContentType.AUDIO)
+            },
             navigateToQuestionnaire = navController::navigateToTopicQuestionnaire,
-            navigateToBookmarks = navController::navigateToBookmarks
+            navigateToBookmarks = navController::navigateToBookmarks,
+            navigateToMediaDescription = navController::navigateToMediaDescription
         )
         articleGraph(navigateUp = navController::navigateUp)
         questionnaireGraph(
