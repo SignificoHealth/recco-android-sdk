@@ -157,15 +157,6 @@ private fun MediaPlayerContent(uiState: MediaDescriptionUi) {
 
         if (uiState is MediaDescriptionUi.AudioDescriptionUi) {
             AnimatedVisibility(
-                visible = !playerState.isPlaying,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                AudioImage(uiState.audio)
-                DarkOverlay()
-            }
-
-            AnimatedVisibility(
                 visible = areControlsShown || !playerState.isPlaying,
                 enter = fadeIn(),
                 exit = fadeOut()
@@ -181,23 +172,22 @@ private fun MediaPlayerContent(uiState: MediaDescriptionUi) {
 
         val coroutineScope = rememberCoroutineScope()
 
-        AnimatedVisibility(
-            visible = !playerState.isPlaying,
-            enter = fadeIn(),
-            exit = fadeOut(),
-            modifier = Modifier.align(Alignment.Center)
-        ) {
-            PlayButton(
-                onClick = {
+        PlayButton(
+            modifier = Modifier.align(Alignment.Center),
+            isPlaying = playerState.isPlaying,
+            onClick = {
+                if (!playerState.isPlaying) {
                     playerState.play()
-                    isPlayButtonShown = false
-
-                    coroutineScope.launch {
-                        playerState.playerView.showController()
-                    }
+                } else {
+                    playerState.pause()
                 }
-            )
-        }
+
+                coroutineScope.launch {
+                    playerState.playerView.showController()
+                }
+
+            }
+        )
     }
 }
 
@@ -261,6 +251,7 @@ private fun AudioHeader() {
 
 @Composable
 private fun PlayButton(
+    isPlaying: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -273,7 +264,12 @@ private fun PlayButton(
             .size(72.dp),
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.recco_ic_play),
+            painter = painterResource(
+                id = if (!isPlaying)
+                    R.drawable.recco_ic_play
+                else
+                    R.drawable.recco_ic_pause
+            ),
             tint = Color.White,
             contentDescription = null
         )

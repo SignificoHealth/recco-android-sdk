@@ -9,7 +9,7 @@ import com.recco.internal.core.model.recommendation.TrackItem
 
 fun Audio.asMediaItem(): MediaItem {
     val mediaMetaData = MediaMetadata.Builder().apply {
-        imageUrl?.let { setArtworkUri(Uri.parse(it)) }
+//        imageUrl?.let { setArtworkUri(Uri.parse(it)) }
         setTitle(headline)
     }.build()
 
@@ -24,7 +24,7 @@ fun Audio.asMediaItem(): MediaItem {
 
 fun Video.asMediaItem(): MediaItem {
     val mediaMetaData = MediaMetadata.Builder().apply {
-        imageUrl?.let { setArtworkUri(Uri.parse(it)) }
+//        imageUrl?.let { setArtworkUri(Uri.parse(it)) }
         setTitle(headline)
     }.build()
 
@@ -39,7 +39,7 @@ fun Video.asMediaItem(): MediaItem {
 
 fun TrackItem.asMediaItem(): MediaItem {
     val mediaMetaData = MediaMetadata.Builder().apply {
-        imageUrl?.let { setArtworkUri(Uri.parse(it)) }
+//        imageUrl?.let { setArtworkUri(Uri.parse(it)) }
         setTitle(title)
     }.build()
 

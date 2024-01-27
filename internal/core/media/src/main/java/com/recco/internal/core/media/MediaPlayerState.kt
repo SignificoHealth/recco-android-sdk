@@ -2,6 +2,10 @@
 
 package com.recco.internal.core.media
 
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.LayerDrawable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -19,6 +23,8 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import coil.ImageLoader
+import coil.request.ImageRequest
 import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.media.Video
 import kotlinx.coroutines.delay
@@ -26,9 +32,9 @@ import kotlin.time.Duration.Companion.seconds
 
 class MediaPlayerState(
     val isPlaying: Boolean,
-    val currentPositionMs: Long,
     val playerView: PlayerView,
     val play: () -> Unit,
+    val pause: () -> Unit,
 )
 
 @Composable
@@ -54,10 +60,19 @@ fun rememberMediaPlayerStateWithLifecycle(media: Any): MediaPlayerState {
         exoPlayer?.setMediaItem(mediaItem)
         exoPlayer?.prepare()
 
-        PlayerView(context).apply {
+        val imageUrl = (media as? Video)?.imageUrl ?: (media as? Audio)?.imageUrl ?:
+        error("media ($media) must be a ${Video::class} or ${Audio::class}")
+
+        val p = PlayerView(context).apply {
             player = exoPlayer
             controllerAutoShow = false
+            defaultArtwork = null
+            artworkDisplayMode = PlayerView.ARTWORK_DISPLAY_MODE_FILL
         }
+
+        loadArtworkWithCoil(context, imageUrl, p)
+
+        p
     }
     val lifecycleObserver = rememberPlayerLifecycleObserver(playerView)
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -91,13 +106,14 @@ fun rememberMediaPlayerStateWithLifecycle(media: Any): MediaPlayerState {
         }
     }
     return MediaPlayerState(
-        playerView = playerView,
         isPlaying = isPlayingState,
-        currentPositionMs = currentPosition,
+        playerView = playerView,
         play = {
             exoPlayer?.play()
         }
-    )
+    ) {
+        exoPlayer?.pause()
+    }
 }
 
 @Composable
@@ -112,5 +128,18 @@ private fun rememberPlayerLifecycleObserver(player: PlayerView): LifecycleEventO
             }
         }
     }
+}
+
+private fun loadArtworkWithCoil(context: Context, imageUrl: String, playerView: PlayerView) {
+    val request = ImageRequest.Builder(context)
+        .data(imageUrl)
+        .target { drawable ->
+            val overlay = ColorDrawable(Color.BLACK).apply { alpha = (0.6 * 255).toInt() } // 0.6 alpha black overlay
+            val combinedDrawable = LayerDrawable(arrayOf(drawable, overlay))
+            playerView.defaultArtwork = combinedDrawable
+        }
+        .build()
+
+    ImageLoader(context).enqueue(request)
 }
 
