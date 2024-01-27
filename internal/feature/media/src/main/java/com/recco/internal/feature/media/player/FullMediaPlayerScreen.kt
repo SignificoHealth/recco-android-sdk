@@ -49,7 +49,6 @@ import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
-import com.recco.internal.feature.media.asTrackItem
 import com.recco.internal.feature.media.description.MediaDescriptionUi
 import com.recco.internal.feature.media.description.MediaDescriptionViewModel
 import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
@@ -126,14 +125,52 @@ private fun FullMediaPlayerScreen(
 }
 
 @Composable
-private fun MediaPlayerContent(uiState: MediaDescriptionUi) {
-    Box {
-        val playerState = when (uiState) {
-            is MediaDescriptionUi.AudioDescriptionUi ->
-                rememberMediaPlayerStateWithLifecycle(trackItem = uiState.audio.asTrackItem())
-            is MediaDescriptionUi.VideoDescriptionUi ->
-                rememberMediaPlayerStateWithLifecycle(trackItem = uiState.video.asTrackItem())
+fun MediaPlayerContent(uiState: MediaDescriptionUi) {
+    val playerState = rememberMediaPlayerStateWithLifecycle(uiState.trackItem)
+
+    when (uiState) {
+        is MediaDescriptionUi.AudioDescriptionUi -> {
+            AudioPlayerContent(playerState = playerState)
         }
+        is MediaDescriptionUi.VideoDescriptionUi -> {
+            VideoPlayerContent(playerState = playerState)
+        }
+    }
+}
+
+@Composable
+private fun VideoPlayerContent(
+    playerState: MediaPlayerViewState,
+) {
+    Box(modifier = Modifier.background(Color.Black)) {
+        MediaPlayer(
+            playerState = playerState,
+            modifier = Modifier.align(Alignment.Center)
+        )
+
+        AnimatedVisibility(
+            visible = !playerState.isPlaying,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier.align(Alignment.Center),
+        ) {
+            PlayButton(
+                isPlaying = false,
+                onClick = {
+                    playerState.play()
+                    playerState.playerView.hideController()
+                }
+            )
+
+        }
+    }
+}
+
+@Composable
+private fun AudioPlayerContent(
+    playerState: MediaPlayerViewState,
+) {
+    Box {
         var areControlsShown by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
 
@@ -151,19 +188,12 @@ private fun MediaPlayerContent(uiState: MediaDescriptionUi) {
             modifier = Modifier.align(Alignment.Center)
         )
 
-        if (uiState is MediaDescriptionUi.AudioDescriptionUi) {
-            AnimatedVisibility(
-                visible = areControlsShown || !playerState.isPlaying,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                AudioHeader()
-            }
-
-        }
-
-        LaunchedEffect(key1 = Unit) {
-            playerState.playerView.hideController()
+        AnimatedVisibility(
+            visible = areControlsShown || !playerState.isPlaying,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            AudioHeader()
         }
 
         val coroutineScope = rememberCoroutineScope()
@@ -177,10 +207,10 @@ private fun MediaPlayerContent(uiState: MediaDescriptionUi) {
                 } else {
                     playerState.pause()
                 }
-
                 coroutineScope.launch {
                     playerState.playerView.showController()
                 }
+
 
             }
         )
@@ -193,11 +223,8 @@ private fun MediaPlayer(
     modifier: Modifier = Modifier
 ) {
     AndroidView(
-        factory = { ctx ->
-            playerState.playerView
-        },
-        modifier = modifier
-            .fillMaxSize()
+        factory = { playerState.playerView },
+        modifier = modifier.fillMaxSize()
     )
 }
 
@@ -258,7 +285,6 @@ private fun PlayButton(
         )
     }
 }
-
 
 @Preview
 @Composable
