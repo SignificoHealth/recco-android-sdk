@@ -43,7 +43,7 @@ fun TrackItem.asMediaItem(): MediaItem {
         setTitle(title)
     }.build()
 
-    val trackUri = Uri.parse(audioUrl)
+    val trackUri = Uri.parse(mediaUrl)
 
     return MediaItem.Builder()
         .setUri(trackUri)

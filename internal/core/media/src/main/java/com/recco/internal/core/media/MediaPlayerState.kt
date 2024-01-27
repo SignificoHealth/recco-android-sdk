@@ -25,8 +25,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import coil.ImageLoader
 import coil.request.ImageRequest
-import com.recco.internal.core.model.media.Audio
-import com.recco.internal.core.model.media.Video
+import com.recco.internal.core.model.recommendation.TrackItem
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
@@ -38,9 +37,7 @@ class MediaPlayerState(
 )
 
 @Composable
-fun rememberMediaPlayerStateWithLifecycle(media: Any): MediaPlayerState {
-    val mediaItem = (media as? Video)?.asMediaItem() ?: (media as? Audio)?.asMediaItem() ?:
-        error("media ($media) must be a ${Video::class} or ${Audio::class}")
+fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerState {
     val context = LocalContext.current
     val isInPreviewMode = LocalInspectionMode.current
     var currentPosition by remember { mutableLongStateOf(0L) }
@@ -48,7 +45,7 @@ fun rememberMediaPlayerStateWithLifecycle(media: Any): MediaPlayerState {
     val exoPlayer: ExoPlayer? = remember {
         if (!isInPreviewMode) {
             val player = ExoPlayer.Builder(context).build()
-            player.setMediaItem(mediaItem)
+            player.setMediaItem(trackItem.asMediaItem())
             player.prepare()
             player
         } else {
@@ -57,22 +54,16 @@ fun rememberMediaPlayerStateWithLifecycle(media: Any): MediaPlayerState {
     }
 
     val playerView = remember {
-        exoPlayer?.setMediaItem(mediaItem)
-        exoPlayer?.prepare()
-
-        val imageUrl = (media as? Video)?.imageUrl ?: (media as? Audio)?.imageUrl ?:
-        error("media ($media) must be a ${Video::class} or ${Audio::class}")
-
-        val p = PlayerView(context).apply {
+        val playerView = PlayerView(context).apply {
             player = exoPlayer
             controllerAutoShow = false
             defaultArtwork = null
             artworkDisplayMode = PlayerView.ARTWORK_DISPLAY_MODE_FILL
         }
 
-        loadArtworkWithCoil(context, imageUrl, p)
+        loadArtworkWithCoil(context, trackItem, playerView)
 
-        p
+        playerView
     }
     val lifecycleObserver = rememberPlayerLifecycleObserver(playerView)
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -130,9 +121,9 @@ private fun rememberPlayerLifecycleObserver(player: PlayerView): LifecycleEventO
     }
 }
 
-private fun loadArtworkWithCoil(context: Context, imageUrl: String, playerView: PlayerView) {
+private fun loadArtworkWithCoil(context: Context, trackItem: TrackItem, playerView: PlayerView) {
     val request = ImageRequest.Builder(context)
-        .data(imageUrl)
+        .data(trackItem.imageUrl)
         .target { drawable ->
             val overlay = ColorDrawable(Color.BLACK).apply { alpha = (0.6 * 255).toInt() } // 0.6 alpha black overlay
             val combinedDrawable = LayerDrawable(arrayOf(drawable, overlay))

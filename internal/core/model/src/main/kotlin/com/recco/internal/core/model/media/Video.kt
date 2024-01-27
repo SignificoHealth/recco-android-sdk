@@ -16,5 +16,5 @@ data class Video(
     val lead: String? = null,
     val imageUrl: String? = null,
     val imageAlt: String? = null,
-    val length: kotlin.Int? = null
+    val lengthInSeconds: kotlin.Int? = null
 )

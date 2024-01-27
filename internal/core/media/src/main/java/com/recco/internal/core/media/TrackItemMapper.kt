@@ -10,7 +10,7 @@ fun Article.asTrackItem(): TrackItem {
 
     return TrackItem(
         id = id.itemId,
-        audioUrl = checkNotNull(audioUrl),
+        mediaUrl = checkNotNull(audioUrl),
         title = headline,
         imageUrl = imageUrl,
         lengthInMs = readingTimeInSeconds?.let {

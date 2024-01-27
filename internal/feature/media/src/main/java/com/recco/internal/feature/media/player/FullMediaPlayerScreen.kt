@@ -52,6 +52,7 @@ import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
+import com.recco.internal.feature.media.asTrackItem
 import com.recco.internal.feature.media.description.MediaDescriptionUi
 import com.recco.internal.feature.media.description.MediaDescriptionViewModel
 import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
@@ -132,12 +133,10 @@ private fun MediaPlayerContent(uiState: MediaDescriptionUi) {
     Box {
         val playerState = when (uiState) {
             is MediaDescriptionUi.AudioDescriptionUi ->
-                rememberMediaPlayerStateWithLifecycle(media = uiState.audio)
+                rememberMediaPlayerStateWithLifecycle(trackItem = uiState.audio.asTrackItem())
             is MediaDescriptionUi.VideoDescriptionUi ->
-                rememberMediaPlayerStateWithLifecycle(media = uiState.video)
-
+                rememberMediaPlayerStateWithLifecycle(trackItem = uiState.video.asTrackItem())
         }
-        var isPlayButtonShown by remember { mutableStateOf(true) }
         var areControlsShown by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
 

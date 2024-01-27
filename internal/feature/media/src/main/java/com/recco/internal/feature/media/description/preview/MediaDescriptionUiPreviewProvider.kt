@@ -71,7 +71,7 @@ internal class MediaDescriptionUiPreviewProvider :
             disclaimer = "This exercise is not for you if you have a heart condition. " +
                 "Consult with your doctor before engaging in heavy cardio exercise",
             imageAlt = null,
-            length = 600
+            lengthInSeconds = 600
         )
 
         private val USER_INTERACTION = UserInteractionRecommendation(
