@@ -30,19 +30,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
-import com.recco.internal.core.media.VideoPlayerState
-import com.recco.internal.core.media.rememberVideoPlayerStateWithLifecycle
+import com.recco.internal.core.media.MediaPlayerState
+import com.recco.internal.core.media.rememberMediaPlayerStateWithLifecycle
 import com.recco.internal.core.model.media.Audio
-import com.recco.internal.core.model.media.Video
-import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
-import com.recco.internal.core.model.recommendation.Status
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppAsyncImage
 import com.recco.internal.core.ui.components.AppScreenStateAware
@@ -54,29 +52,15 @@ import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
-import kotlinx.coroutines.delay
+import com.recco.internal.feature.media.description.MediaDescriptionUi
+import com.recco.internal.feature.media.description.MediaDescriptionViewModel
+import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
 import kotlinx.coroutines.launch
-
-val dummyVideo = Video(
-    id = ContentId(
-        itemId = "corrumpit",
-        catalogId = "enim"
-    ),
-    rating = Rating.LIKE,
-    status = Status.NO_INTERACTION,
-    isBookmarked = false,
-    videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    headline = "vidisse",
-    imageUrl = null,
-    description = "This exercise is not for you if you have a heart condition. Consult with your doctor before engaging in heavy cardio exercise",
-    imageAlt = null,
-    length = 10
-)
 
 @Composable
 internal fun FullMediaPlayerRoute(
     navigateUp: () -> Unit,
-    viewModel: FullMediaPlayerViewModel = hiltViewModel()
+    viewModel: MediaDescriptionViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
         initialValue = UiState()
@@ -85,14 +69,16 @@ internal fun FullMediaPlayerRoute(
     FullMediaPlayerScreen(
         navigateUp = navigateUp,
         uiState = uiState,
-        onUserInteract = viewModel::onUserInteract
+        onUserInteract = {
+
+        }
     )
 }
 
 @Composable
 private fun FullMediaPlayerScreen(
     navigateUp: () -> Unit,
-    uiState: UiState<FullMediaPlayerUI>,
+    uiState: UiState<MediaDescriptionUi>,
     onUserInteract: (FullMediaPlayerUserInteract) -> Unit,
 ) {
     Box(
@@ -121,61 +107,8 @@ private fun FullMediaPlayerScreen(
             }
 
         ) {
-            Box {
-                val playerState = rememberVideoPlayerStateWithLifecycle(video = dummyVideo)
-                var shouldShowHeader by remember { mutableStateOf(true) }
-                var isPlayButtonShown by remember { mutableStateOf(true) }
-                val scope = rememberCoroutineScope()
-
-                LaunchedEffect(playerState.playerView) {
-                    scope.launch {
-                        playerState.playerView.setControllerVisibilityListener(
-                            PlayerView.ControllerVisibilityListener {
-                                visibility -> shouldShowHeader = visibility == View.VISIBLE || isPlayButtonShown
-                            })
-                    }
-                }
-
-                MediaPlayer(
-                    playerState = playerState,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-
-                (uiState.data as? FullMediaPlayerUI.AudioUi)?.audio?.let { audio ->
-                    audio.imageUrl.let {
-                        AppAsyncImage(
-                            modifier = Modifier.fillMaxSize(),
-                            data = it,
-                            alt = audio.imageAlt,
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-
-                    androidx.compose.animation.AnimatedVisibility(visible = shouldShowHeader) {
-                        DarkOverlay()
-
-                        AudioHeader()
-                    }
-                }
-
-
-                LaunchedEffect(key1 = Unit) {
-                    playerState.playerView.hideController()
-                }
-
-                val coroutineScope = rememberCoroutineScope()
-                PlayButton(
-                    onClick = {
-                        playerState.play()
-                        isPlayButtonShown = false
-
-                        coroutineScope.launch {
-                            delay(1_500)
-                            playerState.playerView.showController()
-                        }
-                    },
-                    modifier = Modifier.align(Alignment.Center)
-                )
+            if (uiState.data != null) {
+                MediaPlayerContent(checkNotNull(uiState.data))
             }
         }
 
@@ -195,8 +128,95 @@ private fun FullMediaPlayerScreen(
 }
 
 @Composable
+private fun MediaPlayerContent(uiState: MediaDescriptionUi) {
+    Box {
+        val playerState = when (uiState) {
+            is MediaDescriptionUi.AudioDescriptionUi ->
+                rememberMediaPlayerStateWithLifecycle(media = uiState.audio)
+            is MediaDescriptionUi.VideoDescriptionUi ->
+                rememberMediaPlayerStateWithLifecycle(media = uiState.video)
+
+        }
+        var isPlayButtonShown by remember { mutableStateOf(true) }
+        var areControlsShown by remember { mutableStateOf(false) }
+        val scope = rememberCoroutineScope()
+
+        LaunchedEffect(playerState.playerView) {
+            scope.launch {
+                playerState.playerView.setControllerVisibilityListener(
+                    PlayerView.ControllerVisibilityListener { visibility ->
+                        areControlsShown = visibility == View.VISIBLE
+                    })
+            }
+        }
+
+        MediaPlayer(
+            playerState = playerState,
+            modifier = Modifier.align(Alignment.Center)
+        )
+
+        if (uiState is MediaDescriptionUi.AudioDescriptionUi) {
+            AnimatedVisibility(
+                visible = !playerState.isPlaying,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                AudioImage(uiState.audio)
+                DarkOverlay()
+            }
+
+            AnimatedVisibility(
+                visible = areControlsShown || !playerState.isPlaying,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                AudioHeader()
+            }
+
+        }
+
+        LaunchedEffect(key1 = Unit) {
+            playerState.playerView.hideController()
+        }
+
+        val coroutineScope = rememberCoroutineScope()
+
+        AnimatedVisibility(
+            visible = !playerState.isPlaying,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier.align(Alignment.Center)
+        ) {
+            PlayButton(
+                onClick = {
+                    playerState.play()
+                    isPlayButtonShown = false
+
+                    coroutineScope.launch {
+                        playerState.playerView.showController()
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun AudioImage(audio: Audio) {
+    audio?.imageUrl?.let {
+        AppAsyncImage(
+            modifier = Modifier
+                .fillMaxSize(),
+            data = it,
+            alt = audio.imageAlt,
+            contentScale = ContentScale.Crop
+        )
+    }
+}
+
+@Composable
 private fun MediaPlayer(
-    playerState: VideoPlayerState,
+    playerState: MediaPlayerState,
     modifier: Modifier = Modifier
 ) {
     AndroidView(
@@ -242,64 +262,35 @@ private fun AudioHeader() {
 @Composable
 private fun PlayButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    var showPlayButton by remember {
-        mutableStateOf(true)
-    }
-
-    AnimatedVisibility(
-        visible = showPlayButton,
-        enter = fadeIn(),
-        exit = fadeOut(),
+    FloatingActionButton(
+        onClick = {
+            onClick.invoke()
+        },
+        backgroundColor = AppTheme.colors.accent,
         modifier = modifier
+            .size(72.dp),
     ) {
-        FloatingActionButton(
-            onClick = {
-                onClick.invoke()
-                showPlayButton = false
-            },
-            backgroundColor = AppTheme.colors.accent,
-            modifier = Modifier
-                .size(72.dp),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.recco_ic_play),
-                tint = Color.White,
-                contentDescription = null
-            )
-        }
+        Icon(
+            painter = painterResource(id = R.drawable.recco_ic_play),
+            tint = Color.White,
+            contentDescription = null
+        )
     }
 }
 
 
 @Preview
 @Composable
-private fun VideoScreenPreview() {
-    val dummyAudio = Audio(
-        id = ContentId(
-            itemId = "corrumpit",
-            catalogId = "enim"
-        ),
-        rating = Rating.LIKE,
-        status = Status.NO_INTERACTION,
-        isBookmarked = false,
-        audioUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        headline = "vidisse",
-        imageUrl = null,
-        description = "This exercise is not for you if you have a heart condition. Consult with your doctor before engaging in heavy cardio exercise",
-        imageAlt = null,
-        lengthInSeconds = 10
-    )
+private fun VideoScreenPreview(
+    @PreviewParameter(MediaDescriptionUiPreviewProvider::class) uiState: UiState<MediaDescriptionUi>
+) {
 
     AppTheme {
         FullMediaPlayerScreen(
             navigateUp = {},
-            uiState = UiState(
-                isLoading = false,
-                error = null,
-                data = FullMediaPlayerUI.AudioUi(dummyAudio)
-            ),
+            uiState = uiState,
             onUserInteract = {}
         )
     }

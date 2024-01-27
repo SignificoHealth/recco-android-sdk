@@ -10,7 +10,6 @@ import com.recco.internal.core.model.recommendation.ContentType.AUDIO
 import com.recco.internal.core.model.recommendation.ContentType.VIDEO
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.feature.media.description.navigation.contentTypeArg
 import com.recco.internal.feature.media.description.navigation.idArg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -28,7 +27,8 @@ internal class FullMediaPlayerViewModel @Inject constructor(
     private val _viewState = MutableStateFlow(UiState<FullMediaPlayerUI>())
     val viewState: Flow<UiState<FullMediaPlayerUI>> = _viewState
 
-    private val contentType by lazy { checkNotNull(savedStateHandle.get<ContentType>(contentTypeArg)) }
+    // TODO, remove
+    val initialContentType: ContentType = VIDEO
     private val mediaId by lazy { checkNotNull(savedStateHandle.get<ContentId>(idArg)) }
 
     init {
@@ -53,10 +53,10 @@ internal class FullMediaPlayerViewModel @Inject constructor(
     }
 
     private suspend fun loadFullPlayerUI(): FullMediaPlayerUI {
-        return when (contentType) {
+        return when (initialContentType) {
             AUDIO -> FullMediaPlayerUI.AudioUi(recommendationRepository.getAudio(mediaId))
             VIDEO -> FullMediaPlayerUI.VideoUi(recommendationRepository.getVideo(mediaId))
-            else -> error("Attempted to open the player with a $contentType content type")
+            else -> error("Attempted to open the player with a $initialContentType content type")
         }
     }
 

@@ -2,33 +2,47 @@
 
 package com.recco.internal.core.media
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.media3.common.util.UnstableApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.media.Video
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
-class VideoPlayerState(
+class MediaPlayerState(
+    val isPlaying: Boolean,
+    val currentPositionMs: Long,
     val playerView: PlayerView,
     val play: () -> Unit,
 )
 
 @Composable
-fun rememberVideoPlayerStateWithLifecycle(video: Video): VideoPlayerState {
+fun rememberMediaPlayerStateWithLifecycle(media: Any): MediaPlayerState {
+    val mediaItem = (media as? Video)?.asMediaItem() ?: (media as? Audio)?.asMediaItem() ?:
+        error("media ($media) must be a ${Video::class} or ${Audio::class}")
     val context = LocalContext.current
     val isInPreviewMode = LocalInspectionMode.current
+    var currentPosition by remember { mutableLongStateOf(0L) }
 
     val exoPlayer: ExoPlayer? = remember {
         if (!isInPreviewMode) {
             val player = ExoPlayer.Builder(context).build()
-            player.setMediaItem(video.asMediaItem())
+            player.setMediaItem(mediaItem)
             player.prepare()
             player
         } else {
@@ -37,7 +51,7 @@ fun rememberVideoPlayerStateWithLifecycle(video: Video): VideoPlayerState {
     }
 
     val playerView = remember {
-        exoPlayer?.setMediaItem(video.asMediaItem())
+        exoPlayer?.setMediaItem(mediaItem)
         exoPlayer?.prepare()
 
         PlayerView(context).apply {
@@ -47,6 +61,28 @@ fun rememberVideoPlayerStateWithLifecycle(video: Video): VideoPlayerState {
     }
     val lifecycleObserver = rememberPlayerLifecycleObserver(playerView)
     val lifecycle = LocalLifecycleOwner.current.lifecycle
+    var isPlayingState by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(isPlayingState) {
+        currentPosition = exoPlayer?.currentPosition?.coerceAtLeast(0) ?: 0
+
+        while(isPlayingState) {
+            currentPosition = exoPlayer?.currentPosition?.coerceAtLeast(0) ?: 0
+            delay(1.seconds)
+        }
+    }
+
+
+    LaunchedEffect(key1 = exoPlayer) {
+        exoPlayer?.addListener(object : Player.Listener {
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                super.onIsPlayingChanged(isPlaying)
+                isPlayingState = isPlaying
+            }
+        })
+    }
 
     DisposableEffect(lifecycle) {
         lifecycle.addObserver(lifecycleObserver)
@@ -54,8 +90,10 @@ fun rememberVideoPlayerStateWithLifecycle(video: Video): VideoPlayerState {
             lifecycle.removeObserver(lifecycleObserver)
         }
     }
-    return VideoPlayerState(
+    return MediaPlayerState(
         playerView = playerView,
+        isPlaying = isPlayingState,
+        currentPositionMs = currentPosition,
         play = {
             exoPlayer?.play()
         }
