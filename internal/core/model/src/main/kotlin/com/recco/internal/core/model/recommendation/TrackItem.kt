@@ -1,9 +1,12 @@
 package com.recco.internal.core.model.recommendation
 
+import com.recco.internal.core.model.media.MediaType
+
 data class TrackItem (
-    var id: String,
-    var mediaUrl: String,
-    var imageUrl: String?,
-    var title: String,
-    var lengthInMs: Long?,
+    val id: String,
+    val mediaUrl: String,
+    val imageUrl: String?,
+    val title: String,
+    val lengthInMs: Long?,
+    val mediaType: MediaType
 )

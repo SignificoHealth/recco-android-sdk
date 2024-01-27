@@ -22,23 +22,10 @@ import com.recco.internal.core.ui.notifications.MediaNotificationManager
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
-class AudioPlayerState(
-    val isPlaying: Boolean,
-    val currentPosition: Long,
-    val play: () -> Unit,
-    val pause: () -> Unit,
-    val release: () -> Unit,
-    val seekTo: (Long) -> Unit,
-    val trackDuration: Long?,
-) {
-    val isReady: Boolean
-        get() = trackDuration != null
-}
-
 @Composable
 fun rememberAudioPlayerState(
     trackItem: TrackItem,
-): AudioPlayerState {
+): MediaPlayerState {
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
     val isInPreviewMode = LocalInspectionMode.current
@@ -54,14 +41,7 @@ fun rememberAudioPlayerState(
         }
     }
 
-    val sessionActivityPendingIntent = remember(context) {
-        PendingIntent.getActivity(
-            context,
-            0,
-            context.packageManager.getLaunchIntentForPackage(context.packageName),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    }
+    val sessionActivityPendingIntent = rememberPendingIntent()
 
     val mediaSession = remember(exoPlayer, sessionActivityPendingIntent) {
         if (exoPlayer == null) null else MediaSession.Builder(context, exoPlayer)
@@ -72,9 +52,7 @@ fun rememberAudioPlayerState(
 
     val notificationManager = remember(mediaSession, sessionActivityPendingIntent) {
         if (mediaSession != null) {
-            MediaNotificationManager(
-                context, mediaSession.token, exoPlayer!!
-            )
+            MediaNotificationManager(context, mediaSession.token)
         } else {
             null
         }
@@ -83,25 +61,16 @@ fun rememberAudioPlayerState(
     val player = remember {
         AudioPlayer(
             context = context,
-            onIsPlayingChange = {
-                isPlaying = it
-            },
             exoPlayer = exoPlayer,
-            mediaSession = mediaSession,
-            mediaNotificationManager = notificationManager,
-            onPlayerReady = { duration ->
-                trackDuration = duration
-            },
-            onPositionChange = { newPosition ->
-                currentPosition = newPosition
-            }
+            onIsPlayingChange = { isPlaying = it },
+            onPlayerReady = { trackDuration = it },
+            onPositionChange = { currentPosition = it },
+            mediaNotificationManager = notificationManager
         )
     }
 
     DisposableEffect(key1 = player) {
-        onDispose {
-            player.release()
-        }
+        onDispose { player.release() }
     }
 
     DisposableEffect(LocalLifecycleOwner.current) {
@@ -134,7 +103,7 @@ fun rememberAudioPlayerState(
         player.load(trackItem)
     }
 
-    return AudioPlayerState(
+    return MediaPlayerState(
         isPlaying = isPlaying,
         currentPosition = currentPosition,
         play = { player.play() },
@@ -149,4 +118,18 @@ fun rememberAudioPlayerState(
         },
         trackDuration = trackDuration
     )
+}
+
+@Composable
+private fun rememberPendingIntent(): PendingIntent {
+    val context = LocalContext.current
+
+    return remember(context) {
+        PendingIntent.getActivity(
+            context,
+            0,
+            context.packageManager.getLaunchIntentForPackage(context.packageName),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
 }

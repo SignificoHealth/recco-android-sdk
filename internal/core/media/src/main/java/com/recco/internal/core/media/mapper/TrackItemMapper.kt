@@ -1,5 +1,6 @@
-package com.recco.internal.core.media
+package com.recco.internal.core.media.mapper
 
+import com.recco.internal.core.model.media.MediaType
 import com.recco.internal.core.model.recommendation.Article
 import com.recco.internal.core.model.recommendation.TrackItem
 
@@ -13,6 +14,7 @@ fun Article.asTrackItem(): TrackItem {
         mediaUrl = checkNotNull(audioUrl),
         title = headline,
         imageUrl = imageUrl,
+        mediaType = MediaType.AUDIO,
         lengthInMs = readingTimeInSeconds?.let {
             (it * 1000).toLong()
         }

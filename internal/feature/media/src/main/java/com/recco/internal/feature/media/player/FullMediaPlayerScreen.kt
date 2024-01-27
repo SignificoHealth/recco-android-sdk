@@ -27,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -37,12 +36,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
-import com.recco.internal.core.media.MediaPlayerState
+import com.recco.internal.core.media.MediaPlayerViewState
 import com.recco.internal.core.media.rememberMediaPlayerStateWithLifecycle
-import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.ui.R
-import com.recco.internal.core.ui.components.AppAsyncImage
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.AppTopBarDefaults
@@ -191,21 +188,8 @@ private fun MediaPlayerContent(uiState: MediaDescriptionUi) {
 }
 
 @Composable
-private fun AudioImage(audio: Audio) {
-    audio?.imageUrl?.let {
-        AppAsyncImage(
-            modifier = Modifier
-                .fillMaxSize(),
-            data = it,
-            alt = audio.imageAlt,
-            contentScale = ContentScale.Crop
-        )
-    }
-}
-
-@Composable
 private fun MediaPlayer(
-    playerState: MediaPlayerState,
+    playerState: MediaPlayerViewState,
     modifier: Modifier = Modifier
 ) {
     AndroidView(

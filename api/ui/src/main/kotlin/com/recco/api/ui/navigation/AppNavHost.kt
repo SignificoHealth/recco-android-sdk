@@ -40,7 +40,7 @@ internal fun AppNavHost(
         onboardingGraph(navigateToQuestionnaire = navController::navigateToOnboardingQuestionnaire)
         feedGraph(
             navigateToArticle = {
-//                navController::navigateToArticle
+//                navController.navigateToArticle(it)
                 // TODO, just for the audio-video-feature development
                 navController.navigateToMediaDescription(it, ContentType.AUDIO)
             },
