@@ -2,8 +2,10 @@
 
 import android.view.View
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -77,6 +79,10 @@ private fun FullMediaPlayerScreen(
     uiState: UiState<MediaDescriptionUi>,
     onUserInteract: (FullMediaPlayerUserInteract) -> Unit,
 ) {
+    val playerState = uiState.data?.trackItem?.let { trackItem ->
+        rememberMediaPlayerStateWithLifecycle(trackItem)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -87,24 +93,19 @@ private fun FullMediaPlayerScreen(
             retry = { onUserInteract(FullMediaPlayerUserInteract.Retry) },
             isFloatingFooter = true,
             footerContent = {
-                UserInteractionRecommendationCard(
-                    modifier = Modifier.padding(bottom = AppSpacing.dp_24),
-                    userInteraction = UserInteractionRecommendation(
-                        rating = Rating.DISLIKE,
-                        isBookmarked = false,
-                        isBookmarkLoading = false,
-                        isLikeLoading = false,
-                        isDislikeLoading = false
-                    ),
-                    toggleBookmarkState = { TODO() },
-                    toggleLikeState = { TODO() },
-                    toggleDislikeState = { TODO() }
+                AnimatedUserInteractionReccomendationCard(
+                    playerState?.isPlaying == false
                 )
             }
 
         ) {
-            if (uiState.data != null) {
-                MediaPlayerContent(checkNotNull(uiState.data))
+            playerState?.let { state ->
+                uiState.data?.let { mediaDescriptionUi ->
+                    MediaPlayerContent(
+                        playerState = state,
+                        mediaDescriptionUi = mediaDescriptionUi
+                    )
+                }
             }
         }
 
@@ -124,10 +125,38 @@ private fun FullMediaPlayerScreen(
 }
 
 @Composable
-fun MediaPlayerContent(uiState: MediaDescriptionUi) {
-    val playerState = rememberMediaPlayerStateWithLifecycle(uiState.trackItem)
+private fun AnimatedUserInteractionReccomendationCard(isVisible: Boolean) {
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = slideInVertically(
+            initialOffsetY = { fullHeight -> fullHeight / 10 },
+            animationSpec = tween(durationMillis = 300)
+        ) + fadeIn(animationSpec = tween(durationMillis = 300)),
+        exit = fadeOut(animationSpec = tween(durationMillis = 300))
+    ) {
+        UserInteractionRecommendationCard(
+            modifier = Modifier.padding(bottom = AppSpacing.dp_24),
+            userInteraction = UserInteractionRecommendation(
+                rating = Rating.DISLIKE,
+                isBookmarked = false,
+                isBookmarkLoading = false,
+                isLikeLoading = false,
+                isDislikeLoading = false
+            ),
+            toggleBookmarkState = { TODO() },
+            toggleLikeState = { TODO() },
+            toggleDislikeState = { TODO() }
+        )
+    }
+}
 
-    when (uiState) {
+@Composable
+fun MediaPlayerContent(
+    playerState: MediaPlayerViewState,
+    mediaDescriptionUi: MediaDescriptionUi
+) {
+
+    when (mediaDescriptionUi) {
         is MediaDescriptionUi.AudioDescriptionUi -> {
             AudioPlayerContent(playerState = playerState)
         }
