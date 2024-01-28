@@ -1,4 +1,4 @@
-package com.recco.internal.feature.media.description.navigation
+package com.recco.internal.feature.media.navigation
 
 import androidx.compose.animation.ExitTransition
 import androidx.navigation.NavController
@@ -15,9 +15,9 @@ import com.recco.internal.feature.media.player.FullMediaPlayerRoute
 
 internal const val idArg = "id"
 internal const val contentTypeArg = "content_type"
-const val MediaGraph = "media/${contentTypeArg}/{$idArg}"
-private const val MediaPlayerRoute = "media_player/{${contentTypeArg}}/{$idArg}"
-private const val MediaDescriptionRoute = "media_description/{${contentTypeArg}}/{$idArg}"
+const val MediaGraph = "media/$contentTypeArg/{$idArg}"
+private const val MediaPlayerRoute = "media_player/{$contentTypeArg}/{$idArg}"
+private const val MediaDescriptionRoute = "media_description/{$contentTypeArg}/{$idArg}"
 
 fun NavGraphBuilder.mediaGraph(
     navigateUp: () -> Unit,

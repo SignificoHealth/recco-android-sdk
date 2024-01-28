@@ -77,7 +77,7 @@ internal fun FullMediaPlayerRoute(
 private fun FullMediaPlayerScreen(
     navigateUp: () -> Unit,
     uiState: UiState<MediaDescriptionUi>,
-    onUserInteract: (FullMediaPlayerUserInteract) -> Unit,
+    onUserInteract: (MediaPlayerUserInteract) -> Unit,
 ) {
     val playerState = uiState.data?.trackItem?.let { trackItem ->
         rememberMediaPlayerStateWithLifecycle(trackItem)
@@ -90,7 +90,7 @@ private fun FullMediaPlayerScreen(
     ) {
         AppScreenStateAware(
             uiState = uiState,
-            retry = { onUserInteract(FullMediaPlayerUserInteract.Retry) },
+            retry = { onUserInteract(MediaPlayerUserInteract.Retry) },
             isFloatingFooter = true,
             footerContent = {
                 AnimatedUserInteractionReccomendationCard(
