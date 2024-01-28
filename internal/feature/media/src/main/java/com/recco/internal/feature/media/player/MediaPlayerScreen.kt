@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -186,7 +187,7 @@ private fun VideoPlayerContent(
                 isPlaying = false,
                 onClick = {
                     playerState.play()
-                    playerState.playerView.hideController()
+                    playerState.playerView?.hideController()
                 }
             )
 
@@ -204,7 +205,7 @@ private fun AudioPlayerContent(
 
         LaunchedEffect(playerState.playerView) {
             scope.launch {
-                playerState.playerView.setControllerVisibilityListener(
+                playerState.playerView?.setControllerVisibilityListener(
                     PlayerView.ControllerVisibilityListener { visibility ->
                         areControlsShown = visibility == View.VISIBLE
                     })
@@ -236,7 +237,7 @@ private fun AudioPlayerContent(
                     playerState.pause()
                 }
                 coroutineScope.launch {
-                    playerState.playerView.showController()
+                    playerState.playerView?.showController()
                 }
 
 
@@ -250,19 +251,21 @@ private fun MediaPlayer(
     playerState: MediaPlayerViewState,
     modifier: Modifier = Modifier
 ) {
-    AndroidView(
-        factory = { playerState.playerView },
-        modifier = modifier.fillMaxSize()
-    )
-}
+    val isInPreviewMode = LocalInspectionMode.current
 
-@Composable
-private fun DarkOverlay() {
-    Box(
-        modifier = Modifier
+    if (!isInPreviewMode) {
+        playerState.playerView?.let { playerView ->
+            AndroidView(
+                factory = { playerView },
+                modifier = modifier.fillMaxSize()
+            )
+        }
+    } else {
+        Box(modifier = modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.6f))
-    )
+            .background(Color.DarkGray)
+        )
+    }
 }
 
 @Composable
@@ -316,10 +319,10 @@ private fun PlayButton(
 
 @Preview
 @Composable
-private fun VideoScreenPreview(
-    @PreviewParameter(MediaDescriptionUiPreviewProvider::class) uiState: UiState<MediaDescriptionUi>
+private fun MediaScreenPreview(
+    @PreviewParameter(MediaDescriptionUiPreviewProvider::class)
+    uiState: UiState<MediaDescriptionUi>
 ) {
-
     AppTheme {
         FullMediaPlayerScreen(
             navigateUp = {},

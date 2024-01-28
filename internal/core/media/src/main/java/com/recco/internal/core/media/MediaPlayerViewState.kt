@@ -2,10 +2,12 @@
 
 package com.recco.internal.core.media
 
+import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.LayerDrawable
+import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -37,7 +39,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class MediaPlayerViewState(
     val isPlaying: Boolean,
-    val playerView: PlayerView,
+    val playerView: PlayerView?,
     val play: () -> Unit,
     val pause: () -> Unit,
 )
@@ -54,24 +56,17 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
     var isPlayingState by remember { mutableStateOf(false) }
     val sessionActivityPendingIntent = rememberPendingIntent()
 
-    val mediaSession = remember(exoPlayer, sessionActivityPendingIntent) {
-        if (exoPlayer != null && trackItem.mediaType == MediaType.AUDIO) {
-            MediaSession.Builder(context, exoPlayer)
-                .setId(trackItem.id)
-                .setSessionActivity(sessionActivityPendingIntent)
-                .build()
-        } else {
-            null
-        }
-    }
+    val mediaSession = rememberMediaSession(
+        exoPlayer = exoPlayer,
+        sessionActivityPendingIntent = sessionActivityPendingIntent,
+        trackItem = trackItem
+    )
 
-    val notificationManager = remember(mediaSession, sessionActivityPendingIntent) {
-        if (mediaSession != null && trackItem.mediaType == MediaType.AUDIO) {
-            MediaNotificationManager(context, mediaSession.token)
-        } else {
-            null
-        }
-    }
+    val notificationManager = rememberMediaNotificationManager(
+        mediaSession = mediaSession,
+        sessionActivityPendingIntent = sessionActivityPendingIntent,
+        trackItem = trackItem
+    )
 
     LaunchedEffect(isPlayingState) {
         currentPosition = exoPlayer?.currentPosition?.coerceAtLeast(0) ?: 0
@@ -128,10 +123,27 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
 
     return MediaPlayerViewState(
         isPlaying = isPlayingState,
-        playerView = playerView,
+        playerView = playerView ?: PlayerView(context).apply { visibility = View.GONE }, // Dummy view for preview
         play = { exoPlayer?.play() },
         pause = { exoPlayer?.pause() }
     )
+}
+
+@Composable
+private fun rememberMediaNotificationManager(
+    mediaSession: MediaSession?,
+    sessionActivityPendingIntent: PendingIntent?,
+    trackItem: TrackItem,
+): MediaNotificationManager? {
+    val context = LocalContext.current
+
+    return remember(mediaSession, sessionActivityPendingIntent) {
+        if (mediaSession != null && trackItem.mediaType == MediaType.AUDIO) {
+            MediaNotificationManager(context, mediaSession.token)
+        } else {
+            null
+        }
+    }
 }
 
 @Composable
@@ -154,28 +166,55 @@ private fun rememberExoPlayer(
 }
 
 @Composable
+private fun rememberMediaSession(
+    exoPlayer: ExoPlayer?,
+    sessionActivityPendingIntent: PendingIntent?,
+    trackItem: TrackItem
+): MediaSession? {
+    val context = LocalContext.current
+
+    return remember(exoPlayer, sessionActivityPendingIntent) {
+        if (trackItem.mediaType == MediaType.AUDIO) {
+            exoPlayer?.let { player ->
+                sessionActivityPendingIntent?.let { pendingIntent ->
+                    MediaSession.Builder(context, player)
+                        .setId(trackItem.id)
+                        .setSessionActivity(pendingIntent)
+                        .build()
+                }
+            }
+        } else null
+    }
+}
+
+@Composable
 private fun rememberPlayerView(
     exoPlayer: ExoPlayer?,
     trackItem: TrackItem
-): PlayerView {
+): PlayerView? {
     val context = LocalContext.current
+    val isInPreviewMode = LocalInspectionMode.current
 
-    return remember(trackItem) {
-        val playerView = PlayerView(context).apply {
-            player = exoPlayer
-            controllerAutoShow = false
-            defaultArtwork = null
-            artworkDisplayMode = PlayerView.ARTWORK_DISPLAY_MODE_FILL
+    return if (!isInPreviewMode) {
+        remember(trackItem) {
+            val playerView = PlayerView(context).apply {
+                player = exoPlayer
+                controllerAutoShow = false
+                defaultArtwork = null
+                artworkDisplayMode = PlayerView.ARTWORK_DISPLAY_MODE_FILL
+            }
+
+            loadArtworkWithCoil(context, trackItem, playerView)
+            playerView
         }
-
-        loadArtworkWithCoil(context, trackItem, playerView)
-        playerView
+    } else {
+        null
     }
 }
 
 @Composable
 private fun rememberPlayerLifecycleObserver(
-    player: PlayerView,
+    player: PlayerView?,
     exoPlayer: ExoPlayer?,
     mediaType: MediaType,
 ): LifecycleEventObserver {
@@ -183,17 +222,17 @@ private fun rememberPlayerLifecycleObserver(
         LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_RESUME -> {
-                    player.onResume()
+                    player?.onResume()
                 }
                 Lifecycle.Event.ON_PAUSE -> {
-                    player.onPause()
+                    player?.onPause()
 
                     // We want to pause the exoPlayer only if video on background
                     exoPlayer
                         ?.takeIf { mediaType == MediaType.VIDEO }
                         ?.pause()
                 }
-                Lifecycle.Event.ON_DESTROY -> player.player?.release()
+                Lifecycle.Event.ON_DESTROY -> player?.player?.release()
                 else -> {
                     // Do Nothing
                 }

@@ -42,7 +42,7 @@ internal fun AppNavHost(
             navigateToArticle = {
 //                navController.navigateToArticle(it)
                 // TODO, just for the audio-video-feature development
-                navController.navigateToMediaDescription(it, ContentType.AUDIO)
+                navController.navigateToMediaDescription(it, ContentType.VIDEO)
             },
             navigateToQuestionnaire = navController::navigateToTopicQuestionnaire,
             navigateToBookmarks = navController::navigateToBookmarks,
