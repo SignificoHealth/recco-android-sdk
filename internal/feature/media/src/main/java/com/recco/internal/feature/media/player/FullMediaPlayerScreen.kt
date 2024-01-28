@@ -67,7 +67,6 @@ internal fun FullMediaPlayerRoute(
         navigateUp = navigateUp,
         uiState = uiState,
         onUserInteract = {
-
         }
     )
 }

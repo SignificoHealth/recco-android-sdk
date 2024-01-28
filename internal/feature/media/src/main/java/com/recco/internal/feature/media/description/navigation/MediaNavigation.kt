@@ -1,5 +1,6 @@
 package com.recco.internal.feature.media.description.navigation
 
+import androidx.compose.animation.ExitTransition
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -42,6 +43,7 @@ fun NavGraphBuilder.mediaGraph(
         }
         composable(
             route = MediaPlayerRoute,
+            exitTransition = { ExitTransition.None }, // Disable default fadeOut() transition
             arguments = listOf(
                 navArgument(idArg) { type = ContentIdNavType },
                 navArgument(contentTypeArg) {

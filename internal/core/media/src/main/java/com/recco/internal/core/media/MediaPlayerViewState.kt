@@ -49,7 +49,7 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
     var currentPosition by remember { mutableLongStateOf(0L) }
     val exoPlayer: ExoPlayer? = rememberExoPlayer(trackItem)
     val playerView = rememberPlayerView(exoPlayer, trackItem)
-    val lifecycleObserver = rememberPlayerLifecycleObserver(playerView)
+    val lifecycleObserver = rememberPlayerLifecycleObserver(playerView, exoPlayer, trackItem.mediaType)
     var isNotificationShown by remember { mutableStateOf(false) }
     var isPlayingState by remember { mutableStateOf(false) }
     val sessionActivityPendingIntent = rememberPendingIntent()
@@ -104,13 +104,6 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
     }
 
     DisposableEffect(lifecycleOwner) {
-        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
-        }
-    }
-
-    DisposableEffect(lifecycleOwner) {
         val observer = object: DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 notificationManager?.hideNotification()
@@ -119,11 +112,17 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
             }
         }
 
-        lifecycleOwner.lifecycle.addObserver(observer)
-
+        lifecycleOwner.lifecycle.apply {
+            addObserver(lifecycleObserver)
+            addObserver(observer)
+        }
         onDispose {
+            exoPlayer?.release()
             notificationManager?.hideNotification()
-            lifecycleOwner.lifecycle.removeObserver(observer)
+            lifecycleOwner.lifecycle.apply {
+                removeObserver(observer)
+                removeObserver(lifecycleObserver)
+            }
         }
     }
 
@@ -175,12 +174,25 @@ private fun rememberPlayerView(
 }
 
 @Composable
-private fun rememberPlayerLifecycleObserver(player: PlayerView): LifecycleEventObserver {
+private fun rememberPlayerLifecycleObserver(
+    player: PlayerView,
+    exoPlayer: ExoPlayer?,
+    mediaType: MediaType,
+): LifecycleEventObserver {
     return remember(player) {
         LifecycleEventObserver { _, event ->
             when (event) {
-                Lifecycle.Event.ON_RESUME -> player.onResume()
-                Lifecycle.Event.ON_PAUSE -> player.onPause()
+                Lifecycle.Event.ON_RESUME -> {
+                    player.onResume()
+                }
+                Lifecycle.Event.ON_PAUSE -> {
+                    player.onPause()
+
+                    // We want to pause the exoPlayer only if video on background
+                    exoPlayer
+                        ?.takeIf { mediaType == MediaType.VIDEO }
+                        ?.pause()
+                }
                 Lifecycle.Event.ON_DESTROY -> player.player?.release()
                 else -> {
                     // Do Nothing
