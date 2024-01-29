@@ -12,8 +12,6 @@ import com.recco.internal.feature.article.navigation.idArg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,25 +25,16 @@ internal class ArticleViewModel @Inject constructor(
     private val articleId by lazy { checkNotNull(savedStateHandle.get<ContentId>(idArg)) }
     private val _viewState = MutableStateFlow(UiState<ArticleUI>())
     val viewState: Flow<UiState<ArticleUI>> = _viewState
+    val interactionViewState: Flow<UserInteractionRecommendation?> =
+        contentInteractViewModelDelegate.viewState
 
     init {
         initialLoadSubscribe()
+    }
 
-        viewModelScope.launch {
-            contentInteractViewModelDelegate.viewState
-                .filterNotNull()
-                .collect { userInteraction ->
-                    _viewState.value.data?.let {articleUi ->
-                        _viewState.update {
-                            it.copy(
-                                data = articleUi.copy(
-                                    userInteraction = userInteraction
-                                )
-                            )
-                        }
-                    }
-                }
-        }
+    override fun onCleared() {
+        contentInteractViewModelDelegate.onCleared()
+        super.onCleared()
     }
 
     fun onContentUserInteract(userInteract: ContentUserInteract) {
@@ -71,12 +60,7 @@ internal class ArticleViewModel @Inject constructor(
                     _viewState.emit(
                         UiState(
                             isLoading = false,
-                            data = ArticleUI(
-                                article = article,
-                                userInteraction = checkNotNull(
-                                    contentInteractViewModelDelegate.userInteraction
-                                )
-                            )
+                            data = ArticleUI(article = article)
                         )
                     )
                 }.onFailure {

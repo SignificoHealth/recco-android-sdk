@@ -50,6 +50,7 @@ import com.recco.internal.core.media.mapper.asTrackItem
 import com.recco.internal.core.media.rememberAudioPlayerState
 import com.recco.internal.core.model.recommendation.Article
 import com.recco.internal.core.model.recommendation.ContentType
+import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.ASPECT_RATIO_4_3
 import com.recco.internal.core.ui.components.AppAsyncImage
@@ -66,6 +67,7 @@ import com.recco.internal.core.ui.extensions.openUrlInBrowser
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.article.preview.ArticleUIPreviewProvider
+import com.recco.internal.feature.article.preview.ContentUserInteractionPreviewProvider
 import androidx.compose.runtime.LaunchedEffect as LaunchedEffect1
 
 @Composable
@@ -76,11 +78,15 @@ internal fun ArticleRoute(
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
         initialValue = UiState()
     )
+    val contentInteractionState by viewModel.interactionViewState
+        .collectAsStateWithLifecycle(null)
+
     val context = LocalContext.current
 
     ArticleScreen(
         linkClicked = { context.openUrlInBrowser(it) },
         uiState = uiState,
+        contentInteractionState = contentInteractionState,
         navigateUp = navigateUp,
         onUserInteract = { viewModel.onUserInteract(it) },
         onContentUserInteract = { viewModel.onContentUserInteract(it)}
@@ -94,13 +100,12 @@ private fun ArticleScreen(
     navigateUp: () -> Unit,
     onContentUserInteract: (ContentUserInteract) -> Unit,
     onUserInteract: (ArticleUserInteract) -> Unit,
-    contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
+    contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues(),
+    contentInteractionState: UserInteractionRecommendation?
 ) {
     val scrollState = rememberScrollState()
-    val audioPlayerState = if (uiState.data?.article?.hasAudio == true) {
-        rememberAudioPlayerState(uiState.data!!.article.asTrackItem())
-    } else {
-        null
+    val audioPlayerState = uiState.data?.takeIf { uiState.data?.article?.hasAudio == true }?.let { data ->
+        rememberAudioPlayerState(data.article.asTrackItem())
     }
 
     Scaffold(
@@ -135,20 +140,22 @@ private fun ArticleScreen(
             },
             isFloatingFooter = true,
             footerContent = {
-                UserInteractionRecommendationCard(
-                    modifier = Modifier.padding(bottom = AppSpacing.dp_24),
-                    isScrollEndReached = scrollState.isEndReached(),
-                    userInteraction = it.userInteraction,
-                    toggleBookmarkState = {
-                        onContentUserInteract(ContentUserInteract.ToggleBookmarkState(it.article.id))
-                    },
-                    toggleLikeState = {
-                        onContentUserInteract(ContentUserInteract.ToggleLikeState(it.article.id))
-                    },
-                    toggleDislikeState = {
-                        onContentUserInteract(ContentUserInteract.ToggleDislikeState(it.article.id))
-                    }
-                )
+                contentInteractionState?.let { contentInteraction ->
+                    UserInteractionRecommendationCard(
+                        modifier = Modifier.padding(bottom = AppSpacing.dp_24),
+                        isScrollEndReached = scrollState.isEndReached(),
+                        userInteraction = contentInteraction,
+                        toggleBookmarkState = {
+                            onContentUserInteract(ContentUserInteract.ToggleBookmarkState(it.article.id))
+                        },
+                        toggleLikeState = {
+                            onContentUserInteract(ContentUserInteract.ToggleLikeState(it.article.id))
+                        },
+                        toggleDislikeState = {
+                            onContentUserInteract(ContentUserInteract.ToggleDislikeState(it.article.id))
+                        }
+                    )
+                }
             }
         ) {
             ArticleContent(
@@ -345,8 +352,26 @@ private fun Preview(
         ArticleScreen(
             linkClicked = {},
             uiState = uiState,
-            navigateUp = { }, onUserInteract = {},
-            onContentUserInteract = {}
+            navigateUp = { }, onContentUserInteract = {},
+            onUserInteract = {},
+            contentInteractionState = null,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun Preview(
+    @PreviewParameter(ContentUserInteractionPreviewProvider::class)
+    userInteractionRecommendation: UserInteractionRecommendation
+) {
+    AppTheme {
+        ArticleScreen(
+            linkClicked = {},
+            uiState = ArticleUIPreviewProvider().values.first(),
+            navigateUp = { }, onContentUserInteract = {},
+            onUserInteract = {},
+            contentInteractionState = userInteractionRecommendation,
         )
     }
 }
@@ -354,15 +379,16 @@ private fun Preview(
 @Preview
 @Composable
 private fun PreviewDark(
-    @PreviewParameter(ArticleUIPreviewProvider::class) uiState: UiState<ArticleUI>
+    @PreviewParameter(ArticleUIPreviewProvider::class) uiState: UiState<ArticleUI>,
 ) {
     AppTheme(darkTheme = true) {
         ArticleScreen(
             linkClicked = {},
             uiState = uiState,
             navigateUp = { },
+            onContentUserInteract = {},
             onUserInteract = {},
-            onContentUserInteract = {}
+            contentInteractionState = null
         )
     }
 }

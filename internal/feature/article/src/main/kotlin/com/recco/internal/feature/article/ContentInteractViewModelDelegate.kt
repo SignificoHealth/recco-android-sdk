@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -132,5 +133,9 @@ class ContentInteractViewModelDelegate @Inject constructor(
                 globalViewEvents.emit(showErrorToast(it))
             }
         }
+    }
+
+    fun onCleared() {
+        job.cancel()
     }
 }
