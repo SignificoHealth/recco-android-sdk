@@ -64,5 +64,5 @@ include(
     "internal:feature:onboarding",
     "internal:feature:bookmark",
     "internal:feature:media",
+    "internal:feature:rating"
 )
-include(":internal:feature:rating")
