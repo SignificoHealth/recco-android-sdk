@@ -10,12 +10,14 @@ import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.ContentType.AUDIO
 import com.recco.internal.core.model.recommendation.ContentType.VIDEO
+import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.toUiState
 import com.recco.internal.feature.media.navigation.contentTypeArg
 import com.recco.internal.feature.media.navigation.idArg
+import com.recco.internal.feature.rating.delegates.ContentInteractViewModelDelegate
+import com.recco.internal.feature.rating.delegates.ContentUserInteract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,21 +28,33 @@ import javax.inject.Inject
 internal class MediaDescriptionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val reccomendationRepository: RecommendationRepository,
+    private val contentInteractViewModelDelegate: ContentInteractViewModelDelegate,
     private val logger: Logger
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(UiState<MediaDescriptionUi>())
-    val contentId by lazy { checkNotNull(savedStateHandle.get<ContentId>(idArg)) }
-    val contentType by lazy { checkNotNull(savedStateHandle.get<ContentType>(contentTypeArg)) }
+    private val contentId by lazy { checkNotNull(savedStateHandle.get<ContentId>(idArg)) }
+    private val contentType by lazy { checkNotNull(savedStateHandle.get<ContentType>(contentTypeArg)) }
     val viewState: Flow<UiState<MediaDescriptionUi>> = _viewState
+
+    val interactionViewState: Flow<UserInteractionRecommendation?> =
+        contentInteractViewModelDelegate.viewState
 
     init {
         loadData()
     }
 
+    fun onContentUserInteract(userInteract: ContentUserInteract) {
+        contentInteractViewModelDelegate.onContentUserInteract(userInteract)
+    }
+
     private fun loadData() {
         viewModelScope.launch {
             runCatching { loadMedia() }
-                .onSuccess { _viewState.value = it }
+                .onSuccess {
+                    _viewState.value = it
+                    contentInteractViewModelDelegate.userInteraction =
+                        it.data?.asInteractionRecommendation()
+                }
                 .onFailure {
                     _viewState.value = it.toUiState()
                     logger.e(it)
@@ -60,39 +74,47 @@ internal class MediaDescriptionViewModel @Inject constructor(
         return UiState(
             isLoading = false,
             error = null,
-            data = MediaDescriptionUi.AudioDescriptionUi(
-                audio = this,
-                userInteraction = UserInteractionRecommendation(
-                    rating = this.rating,
-                    isBookmarked = this.isBookmarked
-                )
-            )
+            data = MediaDescriptionUi.AudioDescriptionUi(audio = this)
         )
+    }
+
+    private fun MediaDescriptionUi.asInteractionRecommendation(): UserInteractionRecommendation {
+        return when (this) {
+            is MediaDescriptionUi.AudioDescriptionUi -> {
+                UserInteractionRecommendation(
+                    contentId = audio.id,
+                    rating = audio.rating,
+                    isBookmarked = audio.isBookmarked
+                )
+            }
+            is MediaDescriptionUi.VideoDescriptionUi -> {
+                UserInteractionRecommendation(
+                    contentId = video.id,
+                    rating = video.rating,
+                    isBookmarked = video.isBookmarked
+                )
+            }
+        }
     }
 
     private fun Video.toUiState(): UiState<MediaDescriptionUi> {
         return UiState(
             isLoading = false,
             error = null,
-            data = MediaDescriptionUi.VideoDescriptionUi(
-                video = this,
-                userInteraction = UserInteractionRecommendation(
-                    rating = this.rating,
-                    isBookmarked = this.isBookmarked
-                )
-            )
+            data = MediaDescriptionUi.VideoDescriptionUi(video = this)
         )
     }
 
     fun onUserInteract(mediaDescriptionUserInteract: MediaDescriptionUserInteract) {
         when (mediaDescriptionUserInteract) {
-            MediaDescriptionUserInteract.OnPlayMedia -> TODO()
             MediaDescriptionUserInteract.Retry -> {
                 loadData()
             }
-            MediaDescriptionUserInteract.ToggleBookmarkState -> TODO()
-            MediaDescriptionUserInteract.ToggleDislikeState -> TODO()
-            MediaDescriptionUserInteract.ToggleLikeState -> TODO()
         }
+    }
+
+    override fun onCleared() {
+        contentInteractViewModelDelegate.onCleared()
+        super.onCleared()
     }
 }

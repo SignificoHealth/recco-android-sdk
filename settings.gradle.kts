@@ -64,4 +64,5 @@ include(
     "internal:feature:onboarding",
     "internal:feature:bookmark",
     "internal:feature:media",
+    "internal:feature:rating"
 )

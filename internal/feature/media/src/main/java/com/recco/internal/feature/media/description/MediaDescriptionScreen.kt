@@ -40,6 +40,7 @@ import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.ContentType
+import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.ASPECT_RATIO_4_3
 import com.recco.internal.core.ui.components.AppAsyncImage
@@ -54,6 +55,7 @@ import com.recco.internal.core.ui.extensions.isEndReached
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
+import com.recco.internal.feature.rating.delegates.ContentUserInteract
 
 @Composable
 internal fun MediaDescriptionRoute(
@@ -65,11 +67,16 @@ internal fun MediaDescriptionRoute(
         initialValue = UiState()
     )
 
+    val contentInteractionState by viewModel.interactionViewState
+        .collectAsStateWithLifecycle(null)
+
     MediaDescriptionScreen(
         navigateUp = navigateUp,
         navigateToMediaPlayer = navigateToMediaPlayer,
         uiState = uiState,
-        onUserInteract = viewModel::onUserInteract
+        userInteractionState = contentInteractionState,
+        onUserInteract = viewModel::onUserInteract,
+        onContentUserInteract = viewModel::onContentUserInteract
     )
 }
 
@@ -78,7 +85,9 @@ private fun MediaDescriptionScreen(
     navigateUp: () -> Unit,
     navigateToMediaPlayer: (ContentId, ContentType) -> Unit,
     uiState: UiState<MediaDescriptionUi>,
+    userInteractionState: UserInteractionRecommendation?,
     onUserInteract: (MediaDescriptionUserInteract) -> Unit,
+    onContentUserInteract: (ContentUserInteract) -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
     val scrollState = rememberScrollState()
@@ -120,20 +129,28 @@ private fun MediaDescriptionScreen(
             },
             isFloatingFooter = true,
             footerContent = {
-                UserInteractionRecommendationCard(
-                    modifier = Modifier.padding(bottom = AppSpacing.dp_24),
-                    isScrollEndReached = scrollState.isEndReached(),
-                    userInteraction = it.userInteraction,
-                    toggleBookmarkState = {
-                        onUserInteract(MediaDescriptionUserInteract.ToggleBookmarkState)
-                    },
-                    toggleLikeState = {
-                        onUserInteract(MediaDescriptionUserInteract.ToggleLikeState)
-                    },
-                    toggleDislikeState = {
-                        onUserInteract(MediaDescriptionUserInteract.ToggleDislikeState)
-                    }
-                )
+                userInteractionState?.let {
+                    UserInteractionRecommendationCard(
+                        modifier = Modifier.padding(bottom = AppSpacing.dp_24),
+                        isScrollEndReached = scrollState.isEndReached(),
+                        userInteraction = it,
+                        toggleBookmarkState = {
+                            onContentUserInteract(
+                                ContentUserInteract.ToggleBookmarkState(it.contentId)
+                            )
+                        },
+                        toggleLikeState = {
+                            onContentUserInteract(
+                                ContentUserInteract.ToggleLikeState(it.contentId)
+                            )
+                        },
+                        toggleDislikeState = {
+                            onContentUserInteract(
+                                ContentUserInteract.ToggleDislikeState(it.contentId)
+                            )
+                        }
+                    )
+                }
             },
             retry = {
                 onUserInteract(MediaDescriptionUserInteract.Retry)
@@ -275,8 +292,10 @@ fun VideoDescriptionScreenPreview(
         MediaDescriptionScreen(
             navigateUp = {},
             uiState = uiState,
+            userInteractionState = null,
             navigateToMediaPlayer = { _, _ -> },
-            onUserInteract = {}
+            onUserInteract = {},
+            onContentUserInteract = {}
         )
     }
 }

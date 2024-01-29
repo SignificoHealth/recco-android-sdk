@@ -22,18 +22,6 @@ internal fun RecommendationRepository.stubForSuccessWithLikedAndBookmarkedArticl
     stubRepositoryForSuccess(createArticle(rating = Rating.LIKE))
 }
 
-internal fun RecommendationRepository.stubForSuccessWithDislikedArticle() {
-    stubRepositoryForSuccess(createArticle(rating = Rating.DISLIKE))
-}
-
-internal fun RecommendationRepository.stubForSuccessWithNonRatedArticle() {
-    stubRepositoryForSuccess(createArticle())
-}
-
-internal fun RecommendationRepository.stubForSuccessWithNonBookmarkedArticle() {
-    stubRepositoryForSuccess(createArticle(isBookmarked = false))
-}
-
 internal fun RecommendationRepository.stubForInitialFailure() {
     stub {
         onBlocking { it.getArticle(any()) } doThrow staticThrowableForTesting
@@ -47,19 +35,6 @@ internal fun RecommendationRepository.stubForToggleRatingFailure() {
         onBlocking { it.getArticle(any()) } doReturn createArticle(rating = Rating.LIKE)
         onBlocking {
             it.setRecommendationRating(
-                any(),
-                any()
-            )
-        } doThrow staticThrowableForTesting
-    }
-}
-
-internal fun RecommendationRepository.stubForToggleBookmarkFailure() {
-    stub {
-        onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
-        onBlocking { it.getArticle(any()) } doReturn createArticle(rating = Rating.LIKE)
-        onBlocking {
-            it.setBookmarkRecommendation(
                 any(),
                 any()
             )

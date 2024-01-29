@@ -6,8 +6,8 @@ import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.Status
+import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.feature.media.description.MediaDescriptionUi
 
 internal class MediaDescriptionUiPreviewProvider :
@@ -16,17 +16,11 @@ internal class MediaDescriptionUiPreviewProvider :
         get() = sequenceOf(
             UiState(
                 isLoading = false,
-                data = MediaDescriptionUi.AudioDescriptionUi(
-                    audio = AUDIO,
-                    userInteraction = USER_INTERACTION
-                )
+                data = MediaDescriptionUi.AudioDescriptionUi(audio = AUDIO)
             ),
             UiState(
                 isLoading = false,
-                data = MediaDescriptionUi.VideoDescriptionUi(
-                    video = VIDEO,
-                    userInteraction = USER_INTERACTION
-                )
+                data = MediaDescriptionUi.VideoDescriptionUi(video = VIDEO)
             ),
         )
 
@@ -75,6 +69,7 @@ internal class MediaDescriptionUiPreviewProvider :
         )
 
         private val USER_INTERACTION = UserInteractionRecommendation(
+            contentId = ContentId("1", "2"),
             rating = Rating.DISLIKE,
             isBookmarked = false,
             isBookmarkLoading = false,

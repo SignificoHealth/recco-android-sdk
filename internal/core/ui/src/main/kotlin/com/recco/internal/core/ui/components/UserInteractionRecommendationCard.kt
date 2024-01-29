@@ -26,18 +26,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.recco.internal.core.model.recommendation.Rating
+import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.preview.UserInteractionRecommendationPreviewProvider
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
-
-data class UserInteractionRecommendation(
-    val rating: Rating,
-    val isBookmarked: Boolean = false,
-    val isBookmarkLoading: Boolean = false,
-    val isLikeLoading: Boolean = false,
-    val isDislikeLoading: Boolean = false
-)
 
 @Composable
 fun UserInteractionRecommendationCard(
