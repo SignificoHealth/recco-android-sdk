@@ -75,3 +75,11 @@ private fun RecommendationRepository.stubRepositoryForSuccess(article: Article) 
         onBlocking { it.setRecommendationRating(any(), any()) } doReturn Unit
     }
 }
+
+private fun RecommendationRepository.stubRepositoryForSuccess(id: ContentId) {
+    stub {
+        onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
+        onBlocking { it.setBookmarkRecommendation(any(), any()) } doReturn Unit
+        onBlocking { it.setRecommendationRating(any(), any()) } doReturn Unit
+    }
+}
