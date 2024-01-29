@@ -70,6 +70,7 @@ internal fun FullMediaPlayerRoute(
         navigateUp = navigateUp,
         uiState = uiState,
         onUserInteract = {
+            // TODO Saúl, implement user interact behavior
         }
     )
 }
