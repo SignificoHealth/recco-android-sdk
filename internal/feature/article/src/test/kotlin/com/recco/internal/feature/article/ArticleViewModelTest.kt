@@ -66,22 +66,6 @@ class ArticleViewModelTest {
     }
 
 //    @Test
-//    fun `onFailure emits exceptions while logging them if ToggleDislikeState`() = runTest {
-//        // When
-//        repository.stubForToggleRatingFailure()
-//        val events = onViewModelInteraction(3, ArticleUserInteract.ToggleDislikeState)
-//
-//        // Then
-//        events.fastForEach {
-//            assertThat(events.first()).isEqualTo(expectedUiStateWithError)
-//        }
-//
-//        verifyBlocking(logger, times(1)) {
-//            e(staticThrowableForTesting, null, null)
-//        }
-//    }
-
-//    @Test
 //    fun `onFailure emits exceptions while logging them if ToggleBookmarkState`() = runTest {
 //        // When
 //        repository.stubForToggleBookmarkFailure()

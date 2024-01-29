@@ -23,11 +23,11 @@ class ContentInteractViewModelDelegate @Inject constructor(
 ) {
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)
-
     private val _viewState = MutableStateFlow<UserInteractionRecommendation?>(null)
     val viewState = _viewState.asStateFlow()
 
     var userInteraction: UserInteractionRecommendation?
+        get() = _viewState.value
         set(value) {
             _viewState.value = value
 
@@ -35,11 +35,8 @@ class ContentInteractViewModelDelegate @Inject constructor(
                 value?.contentId?.let {
                     recommendationRepository.setRecommendationAsViewed(it)
                 }
-
             }
         }
-        get() = _viewState.value
-
 
     fun onContentUserInteract(userInteract: ContentUserInteract) {
         when (userInteract) {
@@ -103,7 +100,9 @@ class ContentInteractViewModelDelegate @Inject constructor(
                 )
             }
 
-            val userInteraction = checkNotNull(this@ContentInteractViewModelDelegate.userInteraction)
+            val userInteraction = checkNotNull(
+                this@ContentInteractViewModelDelegate.userInteraction
+            )
 
             val isOppositeAction =
                 userInteraction.rating == Rating.DISLIKE && newRating == Rating.LIKE ||
