@@ -9,6 +9,7 @@ import com.recco.internal.core.model.recommendation.UserInteractionRecommendatio
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.feature.article.navigation.idArg
+import com.recco.internal.feature.rating.delegates.ContentUserInteract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

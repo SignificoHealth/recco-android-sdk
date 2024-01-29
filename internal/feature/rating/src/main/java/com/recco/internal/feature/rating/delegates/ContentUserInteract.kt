@@ -1,4 +1,4 @@
-package com.recco.internal.feature.article
+package com.recco.internal.feature.rating.delegates
 
 import com.recco.internal.core.model.recommendation.ContentId
 

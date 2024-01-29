@@ -1,4 +1,4 @@
-package com.recco.internal.feature.article
+package com.recco.internal.feature.rating.delegates
 
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.recommendation.ContentId
@@ -7,7 +7,6 @@ import com.recco.internal.core.model.recommendation.UserInteractionRecommendatio
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.ui.pipelines.globalViewEvents
 import com.recco.internal.core.ui.pipelines.showErrorToast
-import com.recco.internal.feature.rating.delegates.ContentUserInteract
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

@@ -68,6 +68,7 @@ import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.article.preview.ArticleUIPreviewProvider
 import com.recco.internal.feature.article.preview.ContentUserInteractionPreviewProvider
+import com.recco.internal.feature.rating.delegates.ContentUserInteract
 import androidx.compose.runtime.LaunchedEffect as LaunchedEffect1
 
 @Composable

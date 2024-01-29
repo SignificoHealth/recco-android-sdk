@@ -65,3 +65,4 @@ include(
     "internal:feature:bookmark",
     "internal:feature:media",
 )
+include(":internal:feature:rating")
