@@ -4,7 +4,9 @@ import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.ContentType
+import com.recco.internal.core.model.recommendation.TrackItem
 import com.recco.internal.core.ui.components.UserInteractionRecommendation
+import com.recco.internal.feature.media.asTrackItem
 
 sealed class MediaDescriptionUi(
     val contentId: ContentId,
@@ -37,5 +39,11 @@ sealed class MediaDescriptionUi(
             this is AudioDescriptionUi -> ContentType.AUDIO
             this is VideoDescriptionUi -> ContentType.VIDEO
             else -> error("Non supported ContentType: $this, for MediaDescriptionUi")
+        }
+
+    val trackItem: TrackItem
+        get() = when(this) {
+            is AudioDescriptionUi -> audio.asTrackItem()
+            is VideoDescriptionUi -> video.asTrackItem()
         }
 }

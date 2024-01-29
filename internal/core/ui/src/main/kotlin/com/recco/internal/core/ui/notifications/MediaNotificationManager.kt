@@ -28,7 +28,6 @@ const val NOTIFICATION_LARGE_ICON_SIZE = 144 // px
 class MediaNotificationManager(
     private val context: Context,
     sessionToken: SessionToken,
-    private val player: Player,
 ) {
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)

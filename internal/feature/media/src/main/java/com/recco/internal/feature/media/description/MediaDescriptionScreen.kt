@@ -223,7 +223,7 @@ private fun VideoDescriptionContent(video: Video) {
 
         RecommendationTypeRow(
             contentType = ContentType.VIDEO,
-            lengthInSeconds = video.length
+            lengthInSeconds = video.lengthInSeconds
         )
 
         Spacer(Modifier.height(AppSpacing.dp_24))

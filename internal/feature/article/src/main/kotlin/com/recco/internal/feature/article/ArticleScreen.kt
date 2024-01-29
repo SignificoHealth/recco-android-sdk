@@ -45,8 +45,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
 import com.ireward.htmlcompose.HtmlText
-import com.recco.internal.core.media.AudioPlayerState
-import com.recco.internal.core.media.asTrackItem
+import com.recco.internal.core.media.MediaPlayerState
+import com.recco.internal.core.media.mapper.asTrackItem
 import com.recco.internal.core.media.rememberAudioPlayerState
 import com.recco.internal.core.model.recommendation.Article
 import com.recco.internal.core.model.recommendation.ContentType
@@ -156,7 +156,7 @@ private fun ArticleScreen(
 private fun ArticleContent(
     linkClicked: (String) -> Unit,
     article: Article,
-    audioPlayerState: AudioPlayerState? = null
+    audioPlayerState: MediaPlayerState? = null
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Card(
@@ -226,7 +226,7 @@ private fun ArticleContent(
 
 @Composable
 private fun AudioPlayer(
-    playerState: AudioPlayerState
+    playerState: MediaPlayerState
 ) {
     Box(
         modifier = Modifier

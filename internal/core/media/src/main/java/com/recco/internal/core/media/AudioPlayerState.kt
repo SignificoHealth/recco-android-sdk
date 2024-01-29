@@ -1,6 +1,5 @@
 @file:UnstableApi package com.recco.internal.core.media
 
-import android.app.PendingIntent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -19,26 +18,14 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import com.recco.internal.core.model.recommendation.TrackItem
 import com.recco.internal.core.ui.notifications.MediaNotificationManager
+import com.recco.internal.core.ui.notifications.rememberPendingIntent
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
-
-class AudioPlayerState(
-    val isPlaying: Boolean,
-    val currentPosition: Long,
-    val play: () -> Unit,
-    val pause: () -> Unit,
-    val release: () -> Unit,
-    val seekTo: (Long) -> Unit,
-    val trackDuration: Long?,
-) {
-    val isReady: Boolean
-        get() = trackDuration != null
-}
 
 @Composable
 fun rememberAudioPlayerState(
     trackItem: TrackItem,
-): AudioPlayerState {
+): MediaPlayerState {
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
     val isInPreviewMode = LocalInspectionMode.current
@@ -54,27 +41,21 @@ fun rememberAudioPlayerState(
         }
     }
 
-    val sessionActivityPendingIntent = remember(context) {
-        PendingIntent.getActivity(
-            context,
-            0,
-            context.packageManager.getLaunchIntentForPackage(context.packageName),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
+    val pendingIntent = rememberPendingIntent()
+    val mediaSession = remember(exoPlayer, pendingIntent) {
+        if (exoPlayer != null) {
+            pendingIntent?.let {
+                MediaSession.Builder(context, exoPlayer)
+                    .setId(trackItem.id)
+                    .setSessionActivity(pendingIntent)
+                    .build()
+            }
+        } else null
     }
 
-    val mediaSession = remember(exoPlayer, sessionActivityPendingIntent) {
-        if (exoPlayer == null) null else MediaSession.Builder(context, exoPlayer)
-            .setId(trackItem.id)
-            .setSessionActivity(sessionActivityPendingIntent)
-            .build()
-    }
-
-    val notificationManager = remember(mediaSession, sessionActivityPendingIntent) {
+    val notificationManager = remember(mediaSession, pendingIntent) {
         if (mediaSession != null) {
-            MediaNotificationManager(
-                context, mediaSession.token, exoPlayer!!
-            )
+            MediaNotificationManager(context, mediaSession.token)
         } else {
             null
         }
@@ -83,25 +64,16 @@ fun rememberAudioPlayerState(
     val player = remember {
         AudioPlayer(
             context = context,
-            onIsPlayingChange = {
-                isPlaying = it
-            },
             exoPlayer = exoPlayer,
-            mediaSession = mediaSession,
-            mediaNotificationManager = notificationManager,
-            onPlayerReady = { duration ->
-                trackDuration = duration
-            },
-            onPositionChange = { newPosition ->
-                currentPosition = newPosition
-            }
+            onIsPlayingChange = { isPlaying = it },
+            onPlayerReady = { trackDuration = it },
+            onPositionChange = { currentPosition = it },
+            mediaNotificationManager = notificationManager
         )
     }
 
     DisposableEffect(key1 = player) {
-        onDispose {
-            player.release()
-        }
+        onDispose { player.release() }
     }
 
     DisposableEffect(LocalLifecycleOwner.current) {
@@ -134,7 +106,7 @@ fun rememberAudioPlayerState(
         player.load(trackItem)
     }
 
-    return AudioPlayerState(
+    return MediaPlayerState(
         isPlaying = isPlaying,
         currentPosition = currentPosition,
         play = { player.play() },

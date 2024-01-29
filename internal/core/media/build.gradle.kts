@@ -20,5 +20,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     api(libs.androidx.activity.compose)
     api(libs.androidx.compose.ui.util)
+    api(libs.coil.compose)
 
 }
