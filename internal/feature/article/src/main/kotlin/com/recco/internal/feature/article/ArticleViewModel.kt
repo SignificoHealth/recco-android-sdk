@@ -33,11 +33,6 @@ internal class ArticleViewModel @Inject constructor(
         initialLoadSubscribe()
     }
 
-    override fun onCleared() {
-        contentInteractViewModelDelegate.onCleared()
-        super.onCleared()
-    }
-
     fun onContentUserInteract(userInteract: ContentUserInteract) {
         contentInteractViewModelDelegate.onContentUserInteract(userInteract)
     }
@@ -59,15 +54,17 @@ internal class ArticleViewModel @Inject constructor(
                     )
 
                     _viewState.emit(
-                        UiState(
-                            isLoading = false,
-                            data = ArticleUI(article = article)
-                        )
+                        UiState(isLoading = false, data = ArticleUI(article))
                     )
                 }.onFailure {
                     _viewState.emit(UiState(error = it, isLoading = false))
                     logger.e(it)
                 }
         }
+    }
+
+    override fun onCleared() {
+        contentInteractViewModelDelegate.onCleared()
+        super.onCleared()
     }
 }
