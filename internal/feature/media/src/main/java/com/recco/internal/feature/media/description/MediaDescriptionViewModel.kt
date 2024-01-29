@@ -112,4 +112,9 @@ internal class MediaDescriptionViewModel @Inject constructor(
             }
         }
     }
+
+    override fun onCleared() {
+        contentInteractViewModelDelegate.onCleared()
+        super.onCleared()
+    }
 }
