@@ -8,7 +8,6 @@ import com.recco.internal.core.model.recommendation.UserInteractionRecommendatio
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.test.CoroutineTestExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
@@ -32,7 +31,25 @@ class ContentInteractViewModelDelegateTest {
     }
 
     @Test
-    fun `bookmarked content is updated according to the opposite logic provided`() = runTest(UnconfinedTestDispatcher()) {
+    fun `bookmarked content is updated according to the opposite logic provided`() = runTest {
+        val viewModelDelegate = createViewModelDelegate(
+            startWith = reccomendationAs(isBookmarked = true)
+        )
+
+        repository.stubRepositoryForSuccess(id)
+
+        viewModelDelegate.onContentUserInteract(
+            ContentUserInteract.ToggleBookmarkState(id)
+        )
+
+        advanceUntilIdle()
+
+        assertThat(viewModelDelegate.userInteraction)
+            .isEqualTo(reccomendationAs(isBookmarked = false))
+    }
+
+    @Test
+    fun `non bookmarked content is updated according to the opposite logic provided`() = runTest {
         val viewModelDelegate = createViewModelDelegate(
             startWith = reccomendationAs(isBookmarked = false)
         )
@@ -47,6 +64,38 @@ class ContentInteractViewModelDelegateTest {
 
         assertThat(viewModelDelegate.userInteraction)
             .isEqualTo(reccomendationAs(isBookmarked = true))
+    }
+
+    @Test
+    fun `liked content turns into non rated if liked again`() = runTest {
+        val startState = reccomendationAs(
+            isDislikeLoading = false,
+            isLikeLoading = true,
+            rating = Rating.LIKE,
+        )
+
+        val viewModelDelegate = createViewModelDelegate(
+            startWith = startState        )
+
+        repository.stubRepositoryForSuccess(id)
+
+        viewModelDelegate.onContentUserInteract(
+            ContentUserInteract.ToggleLikeState(id)
+        )
+
+        assertThat(viewModelDelegate.userInteraction)
+            .isEqualTo(startState)
+
+        advanceUntilIdle()
+
+        assertThat(viewModelDelegate.userInteraction)
+            .isEqualTo(
+                reccomendationAs(
+                    isDislikeLoading = false,
+                    isLikeLoading = false,
+                    rating = Rating.NOT_RATED,
+                )
+            )
     }
 
     private fun createViewModelDelegate(startWith: UserInteractionRecommendation): ContentInteractViewModelDelegate {

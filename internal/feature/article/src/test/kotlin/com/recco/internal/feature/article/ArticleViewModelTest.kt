@@ -123,66 +123,6 @@ class ArticleViewModelTest {
     }
 
 //    @Test
-//    fun `non bookmarked article is updated according to the opposite logic provided`() = runTest {
-//        // Given
-//        val expectedArticle =
-//            createArticleUiGivenContent(isBookmarked = false)
-//        val expectedUiState = expectedUiStateWithData(expectedArticle).copy(
-//            data = expectedArticle.copy(
-//                userInteraction = genericUserInteraction.copy(
-//                    rating = Rating.NOT_RATED,
-//                    isBookmarkLoading = false,
-//                    isBookmarked = true
-//                )
-//            )
-//        )
-//
-//        // When
-//        repository.stubForSuccessWithNonBookmarkedArticle()
-//        val events = onViewModelInteraction(2, ArticleUserInteract.ToggleBookmarkState)
-//
-//        // Then
-//        assertThat(events.first()).isEqualTo(expectedUiState)
-//    }
-
-//    @Test
-//    fun `liked article turns into non rated if liked again`() = runTest {
-//        // Given
-//        val expectedArticle =
-//            createArticleUiGivenContent(rating = Rating.LIKE)
-//        val likedUiState = expectedUiStateWithData(expectedArticle).copy(
-//            data = expectedArticle.copy(
-//                userInteraction = genericUserInteraction.copy(
-//                    isDislikeLoading = false,
-//                    isLikeLoading = true,
-//                    rating = Rating.LIKE
-//                )
-//            )
-//        )
-//        val expectedUiState = expectedUiStateWithData(expectedArticle).copy(
-//            data = expectedArticle.copy(
-//                userInteraction = genericUserInteraction.copy(
-//                    isDislikeLoading = false,
-//                    isLikeLoading = false,
-//                    rating = Rating.NOT_RATED
-//                )
-//            )
-//        )
-//
-//        // When
-//        repository.stubForSuccessWithLikedAndBookmarkedArticle()
-//        val events = onViewModelInteraction(2, ArticleUserInteract.ToggleLikeState)
-//
-//        // Then
-//        events.forEachIndexed { index, uiState ->
-//            when (index) {
-//                0 -> assert(uiState == likedUiState)
-//                1 -> assert(uiState == expectedUiState)
-//            }
-//        }
-//    }
-
-//    @Test
 //    fun `disliked article turns into non rated if disliked again`() = runTest {
 //        // Given
 //        val expectedArticle =
