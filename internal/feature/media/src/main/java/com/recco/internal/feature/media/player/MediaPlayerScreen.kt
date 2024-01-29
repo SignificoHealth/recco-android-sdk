@@ -66,7 +66,7 @@ internal fun FullMediaPlayerRoute(
         initialValue = UiState()
     )
 
-    FullMediaPlayerScreen(
+    MediaPlayerScreen(
         navigateUp = navigateUp,
         uiState = uiState,
         onUserInteract = {
@@ -75,7 +75,7 @@ internal fun FullMediaPlayerRoute(
 }
 
 @Composable
-private fun FullMediaPlayerScreen(
+private fun MediaPlayerScreen(
     navigateUp: () -> Unit,
     uiState: UiState<MediaDescriptionUi>,
     onUserInteract: (MediaPlayerUserInteract) -> Unit,
@@ -324,7 +324,7 @@ private fun MediaScreenPreview(
     uiState: UiState<MediaDescriptionUi>
 ) {
     AppTheme {
-        FullMediaPlayerScreen(
+        MediaPlayerScreen(
             navigateUp = {},
             uiState = uiState,
             onUserInteract = {}
