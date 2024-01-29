@@ -98,6 +98,141 @@ class ContentInteractViewModelDelegateTest {
             )
     }
 
+    @Test
+    fun `disliked article turns into non rated if disliked again`() = runTest {
+        val startState = reccomendationAs(
+            isDislikeLoading = true,
+            isLikeLoading = false,
+            rating = Rating.DISLIKE,
+        )
+
+        val viewModelDelegate = createViewModelDelegate(
+            startWith = startState
+        )
+
+        repository.stubRepositoryForSuccess(id)
+
+        viewModelDelegate.onContentUserInteract(
+            ContentUserInteract.ToggleDislikeState(id)
+        )
+
+        assertThat(viewModelDelegate.userInteraction)
+            .isEqualTo(startState)
+
+        advanceUntilIdle()
+
+        assertThat(viewModelDelegate.userInteraction)
+            .isEqualTo(
+                reccomendationAs(
+                    isDislikeLoading = false,
+                    isLikeLoading = false,
+                    rating = Rating.NOT_RATED,
+                )
+            )
+    }
+
+    @Test
+    fun `liked article turns into disliked if disliked`() = runTest {
+        val startState = reccomendationAs(
+            isDislikeLoading = true,
+            isLikeLoading = false,
+            rating = Rating.LIKE,
+        )
+
+        val viewModelDelegate = createViewModelDelegate(
+            startWith = startState
+        )
+
+        repository.stubRepositoryForSuccess(id)
+
+        viewModelDelegate.onContentUserInteract(
+            ContentUserInteract.ToggleDislikeState(id)
+        )
+
+        assertThat(viewModelDelegate.userInteraction)
+            .isEqualTo(startState)
+
+        advanceUntilIdle()
+
+        assertThat(viewModelDelegate.userInteraction)
+            .isEqualTo(
+                reccomendationAs(
+                    isDislikeLoading = false,
+                    isLikeLoading = false,
+                    rating = Rating.DISLIKE,
+                )
+            )
+    }
+
+    @Test
+    fun `nonrated article turns into liked if liked`() = runTest {
+        val startState = reccomendationAs(
+            isDislikeLoading = false,
+            isLikeLoading = true,
+            rating = Rating.NOT_RATED,
+        )
+
+        val viewModelDelegate = createViewModelDelegate(
+            startWith = startState
+        )
+
+        repository.stubRepositoryForSuccess(id)
+
+        viewModelDelegate.onContentUserInteract(
+            ContentUserInteract.ToggleLikeState(id)
+        )
+
+        assertThat(viewModelDelegate.userInteraction)
+            .isEqualTo(startState)
+
+        advanceUntilIdle()
+
+        assertThat(viewModelDelegate.userInteraction)
+            .isEqualTo(
+                reccomendationAs(
+                    isDislikeLoading = false,
+                    isLikeLoading = false,
+                    rating = Rating.LIKE,
+                )
+            )
+    }
+
+    @Test
+    fun `non rated article turns into disliked if disliked`() = runTest {
+        val startState = reccomendationAs(
+            isDislikeLoading = true,
+            isLikeLoading = false,
+            rating = Rating.NOT_RATED,
+        )
+
+        val viewModelDelegate = createViewModelDelegate(
+            startWith = startState
+        )
+
+        repository.stubRepositoryForSuccess(id)
+
+        viewModelDelegate.onContentUserInteract(
+            ContentUserInteract.ToggleDislikeState(id)
+        )
+
+        assertThat(viewModelDelegate.userInteraction)
+            .isEqualTo(startState)
+
+        advanceUntilIdle()
+
+        assertThat(viewModelDelegate.userInteraction)
+            .isEqualTo(
+                reccomendationAs(
+                    isDislikeLoading = false,
+                    isLikeLoading = false,
+                    rating = Rating.DISLIKE,
+                )
+            )
+    }
+
+
+
+
     private fun createViewModelDelegate(startWith: UserInteractionRecommendation): ContentInteractViewModelDelegate {
         return ContentInteractViewModelDelegate(
             repository,
