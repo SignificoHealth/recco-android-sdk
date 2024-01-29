@@ -55,7 +55,7 @@ fun RecommendationTypeRow(
 
         if (contentTypeString != null) {
             val contentTypeText = stringResource(id = contentTypeString)
-            val minSuffixText = stringResource(id = R.string.recco_questionnaire_numeric_label_min)
+            val minSuffixText = stringResource(id = R.string.recco_unit_min)
             val contentTypeDurationText = buildString {
                 append(contentTypeText)
 

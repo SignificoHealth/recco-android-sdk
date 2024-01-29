@@ -45,7 +45,7 @@
     <string name="recco_questionnaire_numeric_label_in">in.</string>
     <string name="recco_questionnaire_numeric_label_kg">kg</string>
     <string name="recco_questionnaire_numeric_label_lb">lb.</string>
-    <string name="recco_questionnaire_numeric_label_min">Min.</string>
+    <string name="recco_unit_min">Min.</string>
     <string name="recco_questionnaire_numeric_label_st">st.</string>
     <string name="recco_questionnaire_outro_body">Du hast alle Fragen zu<xliff:g id="section_name">%1$s</xliff:g>beantwortet und damit noch bessere Empfehlungen für dich generiert. Schau sie dir gleich an!</string>
     <string name="recco_questionnaire_outro_title">Super gemacht!</string>

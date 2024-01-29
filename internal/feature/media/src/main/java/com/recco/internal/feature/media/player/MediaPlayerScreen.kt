@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
 import com.recco.internal.core.media.MediaPlayerViewState
 import com.recco.internal.core.media.rememberMediaPlayerStateWithLifecycle
+import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppScreenStateAware
@@ -121,7 +123,7 @@ private fun MediaPlayerScreen(
                 )
             },
             backgroundColor = Color.Transparent,
-            actions = { },
+            actions = { }, // No actions on this screen
         )
     }
 }
@@ -160,7 +162,10 @@ fun MediaPlayerContent(
 
     when (mediaDescriptionUi) {
         is MediaDescriptionUi.AudioDescriptionUi -> {
-            AudioPlayerContent(playerState = playerState)
+            AudioPlayerContent(
+                playerState = playerState,
+                mediaDescriptionUi.audio
+            )
         }
         is MediaDescriptionUi.VideoDescriptionUi -> {
             VideoPlayerContent(playerState = playerState)
@@ -191,7 +196,6 @@ private fun VideoPlayerContent(
                     playerState.playerView?.hideController()
                 }
             )
-
         }
     }
 }
@@ -199,17 +203,19 @@ private fun VideoPlayerContent(
 @Composable
 private fun AudioPlayerContent(
     playerState: MediaPlayerViewState,
+    audio: Audio,
 ) {
     Box {
         var areControlsShown by remember { mutableStateOf(false) }
-        val scope = rememberCoroutineScope()
+        val coroutineScope = rememberCoroutineScope()
 
         LaunchedEffect(playerState.playerView) {
-            scope.launch {
+            coroutineScope.launch {
                 playerState.playerView?.setControllerVisibilityListener(
                     PlayerView.ControllerVisibilityListener { visibility ->
                         areControlsShown = visibility == View.VISIBLE
-                    })
+                    }
+                )
             }
         }
 
@@ -223,10 +229,8 @@ private fun AudioPlayerContent(
             enter = fadeIn(),
             exit = fadeOut()
         ) {
-            AudioHeader()
+            AudioHeader(audio)
         }
-
-        val coroutineScope = rememberCoroutineScope()
 
         PlayButton(
             modifier = Modifier.align(Alignment.Center),
@@ -240,8 +244,6 @@ private fun AudioPlayerContent(
                 coroutineScope.launch {
                     playerState.playerView?.showController()
                 }
-
-
             }
         )
     }
@@ -262,6 +264,8 @@ private fun MediaPlayer(
             )
         }
     } else {
+        // PlayerView does not work well on compose previews.
+        // Show a whole size dark box instead.
         Box(modifier = modifier
             .fillMaxSize()
             .background(Color.DarkGray)
@@ -270,22 +274,32 @@ private fun MediaPlayer(
 }
 
 @Composable
-private fun AudioHeader() {
+private fun AudioHeader(audio: Audio) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(AppSpacing.dp_16),
         modifier = Modifier.fillMaxWidth()
     ) {
+        val minSuffix = stringResource(id = R.string.recco_unit_min)
+        val podcastString = stringResource(id = R.string.recco_reccomendation_type_podcast)
 
         Spacer(modifier = Modifier.height(AppTopBarDefaults.Height))
 
         Text(
-            text = "Sleeping like a baby",
+            text = audio.headline,
             style = AppTheme.typography.h1.copy(color = Color.White),
         )
 
+        val audioDurationLabel = remember {
+            val minutesLength = audio.lengthInSeconds?.div(60)
+            buildString {
+                append(podcastString)
+                append("• 1-${minutesLength} $minSuffix").takeIf { minutesLength != null }
+            }
+        }
+
         Text(
-            text = "Audio • 1-5min",
+            text = audioDurationLabel,
             style = AppTheme.typography.labelSmall.copy(color = Color.White),
         )
     }
