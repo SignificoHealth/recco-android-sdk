@@ -16,17 +16,11 @@ internal class MediaDescriptionUiPreviewProvider :
         get() = sequenceOf(
             UiState(
                 isLoading = false,
-                data = MediaDescriptionUi.AudioDescriptionUi(
-                    audio = AUDIO,
-                    userInteraction = USER_INTERACTION
-                )
+                data = MediaDescriptionUi.AudioDescriptionUi(audio = AUDIO)
             ),
             UiState(
                 isLoading = false,
-                data = MediaDescriptionUi.VideoDescriptionUi(
-                    video = VIDEO,
-                    userInteraction = USER_INTERACTION
-                )
+                data = MediaDescriptionUi.VideoDescriptionUi(video = VIDEO)
             ),
         )
 

@@ -7,6 +7,7 @@ import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.test.CoroutineTestExtension
+import com.recco.internal.feature.rating.delegates.ContentUserInteract
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest

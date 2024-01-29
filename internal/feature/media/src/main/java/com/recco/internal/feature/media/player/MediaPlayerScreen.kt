@@ -57,8 +57,10 @@ import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.media.description.MediaDescriptionUi
+import com.recco.internal.feature.media.description.MediaDescriptionUserInteract
 import com.recco.internal.feature.media.description.MediaDescriptionViewModel
 import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
+import com.recco.internal.feature.rating.delegates.ContentUserInteract
 import kotlinx.coroutines.launch
 
 @Composable
@@ -70,12 +72,15 @@ internal fun FullMediaPlayerRoute(
         initialValue = UiState()
     )
 
+    val contentInteractionState by viewModel.interactionViewState
+        .collectAsStateWithLifecycle(null)
+
     MediaPlayerScreen(
         navigateUp = navigateUp,
         uiState = uiState,
-        onUserInteract = {
-            // TODO Saúl, implement user interact behavior
-        }
+        userInteractionState = contentInteractionState,
+        onUserInteract = viewModel::onUserInteract,
+        onContentUserInteract = viewModel::onContentUserInteract
     )
 }
 
@@ -83,7 +88,9 @@ internal fun FullMediaPlayerRoute(
 private fun MediaPlayerScreen(
     navigateUp: () -> Unit,
     uiState: UiState<MediaDescriptionUi>,
-    onUserInteract: (MediaPlayerUserInteract) -> Unit,
+    userInteractionState: UserInteractionRecommendation?,
+    onContentUserInteract: (ContentUserInteract) -> Unit,
+    onUserInteract: (MediaDescriptionUserInteract) -> Unit,
 ) {
     val playerState = uiState.data?.trackItem?.let { trackItem ->
         rememberMediaPlayerStateWithLifecycle(trackItem)
@@ -96,12 +103,30 @@ private fun MediaPlayerScreen(
     ) {
         AppScreenStateAware(
             uiState = uiState,
-            retry = { onUserInteract(MediaPlayerUserInteract.Retry) },
+            retry = { onUserInteract(MediaDescriptionUserInteract.Retry) },
             isFloatingFooter = true,
             footerContent = {
-                AnimatedUserInteractionReccomendationCard(
-                    playerState?.isPlaying == false
-                )
+                userInteractionState?.let {
+                    UserInteractionRecommendationCard(
+                        modifier = Modifier.padding(bottom = AppSpacing.dp_24),
+                        userInteraction = it,
+                        toggleBookmarkState = {
+                            onContentUserInteract(
+                                ContentUserInteract.ToggleBookmarkState(it.contentId)
+                            )
+                        },
+                        toggleLikeState = {
+                            onContentUserInteract(
+                                ContentUserInteract.ToggleLikeState(it.contentId)
+                            )
+                        },
+                        toggleDislikeState = {
+                            onContentUserInteract(
+                                ContentUserInteract.ToggleDislikeState(it.contentId)
+                            )
+                        }
+                    )
+                }
             }
 
         ) {
@@ -347,7 +372,11 @@ private fun MediaScreenPreview(
         MediaPlayerScreen(
             navigateUp = {},
             uiState = uiState,
-            onUserInteract = {}
+            userInteractionState = UserInteractionRecommendation(
+                contentId = ContentId("", ""), rating = Rating.DISLIKE
+            ),
+            onUserInteract = {},
+            onContentUserInteract = {}
         )
     }
 }
