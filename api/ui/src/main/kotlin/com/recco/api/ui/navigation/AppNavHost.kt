@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.User
 import com.recco.internal.feature.article.navigation.articleGraph
 import com.recco.internal.feature.article.navigation.navigateToArticle
@@ -41,7 +42,7 @@ internal fun AppNavHost(
             navigateToArticle = {
                 navController.navigateToArticle(it)
                 // TODO, just for the audio-video-feature development
-//                navController.navigateToMediaDescription(it, ContentType.AUDIO)
+                navController.navigateToMediaDescription(it, ContentType.AUDIO)
             },
             navigateToQuestionnaire = navController::navigateToTopicQuestionnaire,
             navigateToBookmarks = navController::navigateToBookmarks,

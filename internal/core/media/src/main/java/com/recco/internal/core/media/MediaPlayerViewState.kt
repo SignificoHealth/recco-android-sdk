@@ -2,12 +2,16 @@
 
 package com.recco.internal.core.media
 
+import android.Manifest
 import android.app.PendingIntent
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.LayerDrawable
 import android.view.View
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -19,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -55,6 +60,7 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
     var isNotificationShown by remember { mutableStateOf(false) }
     var isPlayingState by remember { mutableStateOf(false) }
     val sessionActivityPendingIntent = rememberPendingIntent()
+    var isNotificationsPermissionGranted by remember { mutableStateOf(false) }
 
     val mediaSession = rememberMediaSession(
         exoPlayer = exoPlayer,
@@ -67,6 +73,17 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
         sessionActivityPendingIntent = sessionActivityPendingIntent,
         trackItem = trackItem
     )
+
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        isNotificationsPermissionGranted = isGranted
+        exoPlayer?.play()
+        if (isGranted && exoPlayer != null) {
+            notificationManager?.showNotificationForPlayer(exoPlayer)
+            isNotificationShown = true
+        }
+    }
 
     LaunchedEffect(isPlayingState) {
         currentPosition = exoPlayer?.currentPosition?.coerceAtLeast(0) ?: 0
@@ -83,9 +100,17 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
                 super.onIsPlayingChanged(isPlaying)
                 isPlayingState = isPlaying
 
-                if (!isNotificationShown) {
-                    notificationManager?.showNotificationForPlayer(exoPlayer)
-                    isNotificationShown = true
+                if (isPlaying && !isNotificationShown) {
+                    if (ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        notificationManager?.showNotificationForPlayer(exoPlayer)
+                        isNotificationShown = true
+                    } else if (!isNotificationsPermissionGranted) {
+                        launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
                 }
             }
 
@@ -113,6 +138,7 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
         }
         onDispose {
             exoPlayer?.release()
+            mediaSession?.release()
             notificationManager?.hideNotification()
             lifecycleOwner.lifecycle.apply {
                 removeObserver(observer)
@@ -124,7 +150,26 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
     return MediaPlayerViewState(
         isPlaying = isPlayingState,
         playerView = playerView ?: PlayerView(context).apply { visibility = View.GONE }, // Dummy view for preview
-        play = { exoPlayer?.play() },
+        play = {
+            if (!isPlayingState) {
+                if (ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    exoPlayer?.let {
+                        notificationManager?.showNotificationForPlayer(exoPlayer)
+                        isNotificationShown = true
+                        exoPlayer.play()
+                    }
+
+                } else if (!isNotificationsPermissionGranted) {
+                    launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                } else {
+                    exoPlayer?.play()
+                }
+            }
+        },
         pause = { exoPlayer?.pause() }
     )
 }
