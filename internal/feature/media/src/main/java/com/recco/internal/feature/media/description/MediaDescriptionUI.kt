@@ -5,7 +5,7 @@ import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.TrackItem
-import com.recco.internal.core.ui.components.UserInteractionRecommendation
+import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.feature.media.asTrackItem
 
 sealed class MediaDescriptionUi(

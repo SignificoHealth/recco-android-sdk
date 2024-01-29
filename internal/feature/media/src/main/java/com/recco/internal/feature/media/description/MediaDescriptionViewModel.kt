@@ -10,9 +10,9 @@ import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.ContentType.AUDIO
 import com.recco.internal.core.model.recommendation.ContentType.VIDEO
+import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.toUiState
 import com.recco.internal.feature.media.navigation.contentTypeArg
 import com.recco.internal.feature.media.navigation.idArg
@@ -63,6 +63,7 @@ internal class MediaDescriptionViewModel @Inject constructor(
             data = MediaDescriptionUi.AudioDescriptionUi(
                 audio = this,
                 userInteraction = UserInteractionRecommendation(
+                    contentId = id,
                     rating = this.rating,
                     isBookmarked = this.isBookmarked
                 )
@@ -77,6 +78,7 @@ internal class MediaDescriptionViewModel @Inject constructor(
             data = MediaDescriptionUi.VideoDescriptionUi(
                 video = this,
                 userInteraction = UserInteractionRecommendation(
+                    contentId = id,
                     rating = this.rating,
                     isBookmarked = this.isBookmarked
                 )

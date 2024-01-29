@@ -44,14 +44,15 @@ import androidx.media3.ui.PlayerView
 import com.recco.internal.core.media.MediaPlayerViewState
 import com.recco.internal.core.media.rememberMediaPlayerStateWithLifecycle
 import com.recco.internal.core.model.media.Audio
+import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
+import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.AppTopBarDefaults
 import com.recco.internal.core.ui.components.BackIconButton
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.core.ui.components.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
@@ -142,6 +143,7 @@ private fun AnimatedUserInteractionReccomendationCard(isVisible: Boolean) {
         UserInteractionRecommendationCard(
             modifier = Modifier.padding(bottom = AppSpacing.dp_24),
             userInteraction = UserInteractionRecommendation(
+                contentId = ContentId("1", "2"),
                 rating = Rating.DISLIKE,
                 isBookmarked = false,
                 isBookmarkLoading = false,

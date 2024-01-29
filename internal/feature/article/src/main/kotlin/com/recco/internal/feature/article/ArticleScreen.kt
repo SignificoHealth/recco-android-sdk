@@ -82,7 +82,8 @@ internal fun ArticleRoute(
         linkClicked = { context.openUrlInBrowser(it) },
         uiState = uiState,
         navigateUp = navigateUp,
-        onUserInteract = { viewModel.onUserInteract(it) }
+        onUserInteract = { viewModel.onUserInteract(it) },
+        onContentUserInteract = { viewModel.onContentUserInteract(it)}
     )
 }
 
@@ -91,6 +92,7 @@ private fun ArticleScreen(
     linkClicked: (String) -> Unit,
     uiState: UiState<ArticleUI>,
     navigateUp: () -> Unit,
+    onContentUserInteract: (ContentUserInteract) -> Unit,
     onUserInteract: (ArticleUserInteract) -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
@@ -137,9 +139,15 @@ private fun ArticleScreen(
                     modifier = Modifier.padding(bottom = AppSpacing.dp_24),
                     isScrollEndReached = scrollState.isEndReached(),
                     userInteraction = it.userInteraction,
-                    toggleBookmarkState = { onUserInteract(ArticleUserInteract.ToggleBookmarkState) },
-                    toggleLikeState = { onUserInteract(ArticleUserInteract.ToggleLikeState) },
-                    toggleDislikeState = { onUserInteract(ArticleUserInteract.ToggleDislikeState) }
+                    toggleBookmarkState = {
+                        onContentUserInteract(ContentUserInteract.ToggleBookmarkState(it.article.id))
+                    },
+                    toggleLikeState = {
+                        onContentUserInteract(ContentUserInteract.ToggleLikeState(it.article.id))
+                    },
+                    toggleDislikeState = {
+                        onContentUserInteract(ContentUserInteract.ToggleDislikeState(it.article.id))
+                    }
                 )
             }
         ) {
@@ -334,7 +342,12 @@ private fun Preview(
     @PreviewParameter(ArticleUIPreviewProvider::class) uiState: UiState<ArticleUI>
 ) {
     AppTheme {
-        ArticleScreen(linkClicked = {}, uiState = uiState, navigateUp = { }, onUserInteract = {})
+        ArticleScreen(
+            linkClicked = {},
+            uiState = uiState,
+            navigateUp = { }, onUserInteract = {},
+            onContentUserInteract = {}
+        )
     }
 }
 
@@ -344,6 +357,12 @@ private fun PreviewDark(
     @PreviewParameter(ArticleUIPreviewProvider::class) uiState: UiState<ArticleUI>
 ) {
     AppTheme(darkTheme = true) {
-        ArticleScreen(linkClicked = {}, uiState = uiState, navigateUp = { }, onUserInteract = {})
+        ArticleScreen(
+            linkClicked = {},
+            uiState = uiState,
+            navigateUp = { },
+            onUserInteract = {},
+            onContentUserInteract = {}
+        )
     }
 }

@@ -5,16 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.recommendation.ContentId
-import com.recco.internal.core.model.recommendation.Rating
+import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.core.ui.components.UserInteractionRecommendation
-import com.recco.internal.core.ui.pipelines.globalViewEvents
-import com.recco.internal.core.ui.pipelines.showErrorToast
 import com.recco.internal.feature.article.navigation.idArg
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +21,8 @@ import javax.inject.Inject
 internal class ArticleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val recommendationRepository: RecommendationRepository,
-    private val logger: Logger
+    private val logger: Logger,
+    private val contentInteractViewModelDelegate: ContentInteractViewModelDelegate
 ) : ViewModel() {
     private val articleId by lazy { checkNotNull(savedStateHandle.get<ContentId>(idArg)) }
     private val _viewState = MutableStateFlow(UiState<ArticleUI>())
@@ -30,19 +30,31 @@ internal class ArticleViewModel @Inject constructor(
 
     init {
         initialLoadSubscribe()
+
+        viewModelScope.launch {
+            contentInteractViewModelDelegate.viewState
+                .filterNotNull()
+                .collect { userInteraction ->
+                    _viewState.value.data?.let {articleUi ->
+                        _viewState.update {
+                            it.copy(
+                                data = articleUi.copy(
+                                    userInteraction = userInteraction
+                                )
+                            )
+                        }
+                    }
+                }
+        }
+    }
+
+    fun onContentUserInteract(userInteract: ContentUserInteract) {
+        contentInteractViewModelDelegate.onContentUserInteract(userInteract)
     }
 
     fun onUserInteract(userInteract: ArticleUserInteract) {
         when (userInteract) {
             ArticleUserInteract.Retry -> initialLoadSubscribe()
-            ArticleUserInteract.ToggleBookmarkState -> toggleBookmarkState()
-            ArticleUserInteract.ToggleLikeState -> {
-                toggleRatingState(isLikeLoading = true, newRating = Rating.LIKE)
-            }
-
-            ArticleUserInteract.ToggleDislikeState -> {
-                toggleRatingState(isDislikeLoading = true, newRating = Rating.DISLIKE)
-            }
         }
     }
 
@@ -50,16 +62,19 @@ internal class ArticleViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching { recommendationRepository.getArticle(articleId) }
                 .onSuccess { article ->
-                    recommendationRepository.setRecommendationAsViewed(articleId)
+                    contentInteractViewModelDelegate.userInteraction = UserInteractionRecommendation(
+                        contentId = articleId,
+                        rating = article.rating,
+                        isBookmarked = article.isBookmarked
+                    )
 
                     _viewState.emit(
                         UiState(
                             isLoading = false,
                             data = ArticleUI(
                                 article = article,
-                                userInteraction = UserInteractionRecommendation(
-                                    rating = article.rating,
-                                    isBookmarked = article.isBookmarked
+                                userInteraction = checkNotNull(
+                                    contentInteractViewModelDelegate.userInteraction
                                 )
                             )
                         )
@@ -68,101 +83,6 @@ internal class ArticleViewModel @Inject constructor(
                     _viewState.emit(UiState(error = it, isLoading = false))
                     logger.e(it)
                 }
-        }
-    }
-
-    private fun toggleBookmarkState() {
-        viewModelScope.launch {
-            val uiState = _viewState.value
-            val articleView = checkNotNull(uiState.data)
-            val article = articleView.article
-            val userInteraction = articleView.userInteraction
-
-            _viewState.emit(
-                uiState.copy(
-                    data = articleView.copy(
-                        userInteraction = userInteraction
-                    )
-                )
-            )
-
-            val newBookmarkedState = !userInteraction.isBookmarked
-            runCatching {
-                recommendationRepository.setBookmarkRecommendation(
-                    contentId = article.id,
-                    bookmarked = newBookmarkedState
-                )
-            }.onSuccess {
-                _viewState.emit(
-                    uiState.copy(
-                        data = articleView.copy(
-                            userInteraction = userInteraction.copy(
-                                isBookmarkLoading = false,
-                                isBookmarked = newBookmarkedState
-                            )
-                        )
-                    )
-                )
-            }.onFailure {
-                logger.e(it)
-                globalViewEvents.emit(showErrorToast(it))
-            }
-        }
-    }
-
-    private fun toggleRatingState(
-        isDislikeLoading: Boolean = false,
-        isLikeLoading: Boolean = false,
-        newRating: Rating
-    ) {
-        viewModelScope.launch {
-            val uiState = _viewState.value
-            val articleView = checkNotNull(uiState.data)
-            val article = articleView.article
-            val userInteraction = articleView.userInteraction
-
-            _viewState.emit(
-                uiState.copy(
-                    data = articleView.copy(
-                        userInteraction = userInteraction.copy(
-                            isDislikeLoading = isDislikeLoading,
-                            isLikeLoading = isLikeLoading
-                        )
-                    )
-                )
-            )
-
-            val isOppositeAction =
-                userInteraction.rating == Rating.DISLIKE && newRating == Rating.LIKE ||
-                    userInteraction.rating == Rating.LIKE && newRating == Rating.DISLIKE
-            val newRatingState =
-                if (userInteraction.rating == Rating.NOT_RATED || isOppositeAction) {
-                    newRating
-                } else {
-                    Rating.NOT_RATED
-                }
-
-            runCatching {
-                recommendationRepository.setRecommendationRating(
-                    contentId = article.id,
-                    rating = newRatingState
-                )
-            }.onSuccess {
-                _viewState.emit(
-                    uiState.copy(
-                        data = articleView.copy(
-                            userInteraction = userInteraction.copy(
-                                isDislikeLoading = false,
-                                isLikeLoading = false,
-                                rating = newRatingState
-                            )
-                        )
-                    )
-                )
-            }.onFailure {
-                logger.e(it)
-                globalViewEvents.emit(showErrorToast(it))
-            }
         }
     }
 }

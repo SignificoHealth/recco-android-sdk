@@ -1,14 +1,16 @@
 package com.recco.internal.feature.article
 
+import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.Status
-import com.recco.internal.core.ui.components.UserInteractionRecommendation
+import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.preview.ArticlePreviewProvider
 
 /**
  * UserInteractionRecommendation
  */
 internal val genericUserInteraction = UserInteractionRecommendation(
+    contentId = ContentId("1", "2"),
     rating = Rating.LIKE,
     isBookmarked = true
 )
