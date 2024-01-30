@@ -75,7 +75,7 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
         trackItem = trackItem
     )
 
-    val launcher = rememberLauncherForActivityResult(
+    val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         isNotificationsPermissionGranted = isGranted
@@ -154,7 +154,7 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
                     }
 
                 } else if (!isNotificationsPermissionGranted) {
-                    launcher.askForNotificationPermission()
+                    permissionLauncher.askForNotificationPermission()
                 } else {
                     exoPlayer?.play()
                 }
