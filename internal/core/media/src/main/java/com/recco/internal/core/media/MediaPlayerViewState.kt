@@ -2,12 +2,15 @@
 
 package com.recco.internal.core.media
 
+import android.Manifest
 import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.LayerDrawable
 import android.view.View
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -32,12 +35,15 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import com.recco.internal.core.model.media.MediaType
 import com.recco.internal.core.model.recommendation.TrackItem
+import com.recco.internal.core.ui.extensions.hasPermission
 import com.recco.internal.core.ui.notifications.MediaNotificationManager
+import com.recco.internal.core.ui.notifications.askForNotificationPermission
 import com.recco.internal.core.ui.notifications.rememberPendingIntent
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
 class MediaPlayerViewState(
+    val areControlsShown: Boolean,
     val isPlaying: Boolean,
     val playerView: PlayerView?,
     val play: () -> Unit,
@@ -52,9 +58,10 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
     val exoPlayer: ExoPlayer? = rememberExoPlayer(trackItem)
     val playerView = rememberPlayerView(exoPlayer, trackItem)
     val lifecycleObserver = rememberPlayerLifecycleObserver(playerView, exoPlayer, trackItem.mediaType)
-    var isNotificationShown by remember { mutableStateOf(false) }
     var isPlayingState by remember { mutableStateOf(false) }
     val sessionActivityPendingIntent = rememberPendingIntent()
+    var isNotificationsPermissionGranted by remember { mutableStateOf(false) }
+    var areControlsShown by remember { mutableStateOf(false) }
 
     val mediaSession = rememberMediaSession(
         exoPlayer = exoPlayer,
@@ -67,6 +74,24 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
         sessionActivityPendingIntent = sessionActivityPendingIntent,
         trackItem = trackItem
     )
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        isNotificationsPermissionGranted = isGranted
+        exoPlayer?.play()
+        if (isGranted && exoPlayer != null) {
+            notificationManager?.showNotificationForPlayer(exoPlayer)
+        }
+    }
+
+    LaunchedEffect(key1 = playerView) {
+        playerView?.setControllerVisibilityListener(
+            PlayerView.ControllerVisibilityListener { visibility ->
+                areControlsShown = visibility == View.VISIBLE
+            }
+        )
+    }
 
     LaunchedEffect(isPlayingState) {
         currentPosition = exoPlayer?.currentPosition?.coerceAtLeast(0) ?: 0
@@ -82,17 +107,11 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 super.onIsPlayingChanged(isPlaying)
                 isPlayingState = isPlaying
-
-                if (!isNotificationShown) {
-                    notificationManager?.showNotificationForPlayer(exoPlayer)
-                    isNotificationShown = true
-                }
             }
 
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == ExoPlayer.STATE_ENDED) {
                     notificationManager?.hideNotification()
-                    isNotificationShown = false
                 }
             }
         })
@@ -113,6 +132,7 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
         }
         onDispose {
             exoPlayer?.release()
+            mediaSession?.release()
             notificationManager?.hideNotification()
             lifecycleOwner.lifecycle.apply {
                 removeObserver(observer)
@@ -123,8 +143,23 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
 
     return MediaPlayerViewState(
         isPlaying = isPlayingState,
+        areControlsShown = areControlsShown,
         playerView = playerView ?: PlayerView(context).apply { visibility = View.GONE }, // Dummy view for preview
-        play = { exoPlayer?.play() },
+        play = {
+            if (!isPlayingState) {
+                if (context.hasPermission(Manifest.permission.POST_NOTIFICATIONS)) {
+                    exoPlayer?.let {
+                        notificationManager?.showNotificationForPlayer(exoPlayer)
+                        exoPlayer.play()
+                    }
+
+                } else if (!isNotificationsPermissionGranted && trackItem.mediaType == MediaType.AUDIO) {
+                    permissionLauncher.askForNotificationPermission()
+                } else {
+                    exoPlayer?.play()
+                }
+            }
+        },
         pause = { exoPlayer?.pause() }
     )
 }
