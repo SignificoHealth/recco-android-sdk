@@ -147,13 +147,13 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
         playerView = playerView ?: PlayerView(context).apply { visibility = View.GONE }, // Dummy view for preview
         play = {
             if (!isPlayingState) {
-                if (context.hasPermission(Manifest.permission.POST_NOTIFICATIONS)                ) {
+                if (context.hasPermission(Manifest.permission.POST_NOTIFICATIONS)) {
                     exoPlayer?.let {
                         notificationManager?.showNotificationForPlayer(exoPlayer)
                         exoPlayer.play()
                     }
 
-                } else if (!isNotificationsPermissionGranted) {
+                } else if (!isNotificationsPermissionGranted && trackItem.mediaType == MediaType.AUDIO) {
                     permissionLauncher.askForNotificationPermission()
                 } else {
                     exoPlayer?.play()
