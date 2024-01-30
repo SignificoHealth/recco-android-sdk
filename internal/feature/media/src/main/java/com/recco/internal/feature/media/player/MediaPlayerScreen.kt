@@ -1,6 +1,5 @@
 @file:UnstableApi package com.recco.internal.feature.media.player
 
-import android.view.View
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -20,12 +19,9 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,7 +36,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.ui.PlayerView
 import com.recco.internal.core.media.MediaPlayerViewState
 import com.recco.internal.core.media.rememberMediaPlayerStateWithLifecycle
 import com.recco.internal.core.model.media.Audio
@@ -107,24 +102,10 @@ private fun MediaPlayerScreen(
             isFloatingFooter = true,
             footerContent = {
                 userInteractionState?.let {
-                    UserInteractionRecommendationCard(
-                        modifier = Modifier.padding(bottom = AppSpacing.dp_24),
-                        userInteraction = it,
-                        toggleBookmarkState = {
-                            onContentUserInteract(
-                                ContentUserInteract.ToggleBookmarkState(it.contentId)
-                            )
-                        },
-                        toggleLikeState = {
-                            onContentUserInteract(
-                                ContentUserInteract.ToggleLikeState(it.contentId)
-                            )
-                        },
-                        toggleDislikeState = {
-                            onContentUserInteract(
-                                ContentUserInteract.ToggleDislikeState(it.contentId)
-                            )
-                        }
+                    AnimatedUserInteractionRecomendationCard(
+                        userInteractionRecommendation = it,
+                        onContentUserInteract = onContentUserInteract,
+                        isVisible = playerState?.areControlsShown == false
                     )
                 }
             }
@@ -156,7 +137,13 @@ private fun MediaPlayerScreen(
 }
 
 @Composable
-private fun AnimatedUserInteractionReccomendationCard(isVisible: Boolean) {
+private fun AnimatedUserInteractionRecomendationCard(
+    isVisible: Boolean,
+    userInteractionRecommendation: UserInteractionRecommendation,
+    onContentUserInteract: (ContentUserInteract) -> Unit
+) {
+    val contentId = userInteractionRecommendation.contentId
+
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInVertically(
@@ -167,17 +154,22 @@ private fun AnimatedUserInteractionReccomendationCard(isVisible: Boolean) {
     ) {
         UserInteractionRecommendationCard(
             modifier = Modifier.padding(bottom = AppSpacing.dp_24),
-            userInteraction = UserInteractionRecommendation(
-                contentId = ContentId("1", "2"),
-                rating = Rating.DISLIKE,
-                isBookmarked = false,
-                isBookmarkLoading = false,
-                isLikeLoading = false,
-                isDislikeLoading = false
-            ),
-            toggleBookmarkState = { TODO() },
-            toggleLikeState = { TODO() },
-            toggleDislikeState = { TODO() }
+            userInteraction = userInteractionRecommendation,
+            toggleBookmarkState = {
+                onContentUserInteract(
+                    ContentUserInteract.ToggleBookmarkState(contentId)
+                )
+            },
+            toggleLikeState = {
+                onContentUserInteract(
+                    ContentUserInteract.ToggleLikeState(contentId)
+                )
+            },
+            toggleDislikeState = {
+                onContentUserInteract(
+                    ContentUserInteract.ToggleDislikeState(contentId)
+                )
+            }
         )
     }
 }
@@ -234,18 +226,7 @@ private fun AudioPlayerContent(
     audio: Audio,
 ) {
     Box {
-        var areControlsShown by remember { mutableStateOf(false) }
         val coroutineScope = rememberCoroutineScope()
-
-        LaunchedEffect(playerState.playerView) {
-            coroutineScope.launch {
-                playerState.playerView?.setControllerVisibilityListener(
-                    PlayerView.ControllerVisibilityListener { visibility ->
-                        areControlsShown = visibility == View.VISIBLE
-                    }
-                )
-            }
-        }
 
         MediaPlayer(
             playerState = playerState,
@@ -253,7 +234,7 @@ private fun AudioPlayerContent(
         )
 
         AnimatedVisibility(
-            visible = areControlsShown || !playerState.isPlaying,
+            visible = playerState.areControlsShown || !playerState.isPlaying,
             enter = fadeIn(),
             exit = fadeOut()
         ) {
