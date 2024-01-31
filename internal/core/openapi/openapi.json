@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080",
+      "url": "https://recco-api.significo.dev",
       "description": "Generated server url"
     }
   ],
@@ -1516,6 +1516,7 @@
         "required": [
           "bookmarked",
           "category",
+          "duration",
           "headline",
           "id",
           "rating",
@@ -1543,7 +1544,11 @@
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "exercise",
+              "meditation"
+            ]
           },
           "disclaimer": {
             "type": "string"
@@ -1560,7 +1565,7 @@
           "videoUrl": {
             "type": "string"
           },
-          "length": {
+          "duration": {
             "type": "integer",
             "description": "The estimated duration in seconds to read this article",
             "format": "int32"
@@ -1618,7 +1623,7 @@
           "imageAlt": {
             "type": "string"
           },
-          "length": {
+          "duration": {
             "type": "integer",
             "description": "The estimated duration in seconds to consume this content",
             "format": "int32"
@@ -1634,10 +1639,12 @@
           "audioUrl",
           "bookmarked",
           "category",
+          "duration",
           "headline",
           "id",
           "rating",
-          "status"
+          "status",
+          "transcription"
         ],
         "type": "object",
         "properties": {
@@ -1660,7 +1667,12 @@
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "exercise",
+              "meditation",
+              "relaxation"
+            ]
           },
           "dynamicImageResizingUrl": {
             "type": "string"
@@ -1671,10 +1683,13 @@
           "audioUrl": {
             "type": "string"
           },
-          "length": {
+          "duration": {
             "type": "integer",
             "description": "The estimated duration in seconds to read this article",
             "format": "int32"
+          },
+          "transcription": {
+            "type": "boolean"
           }
         }
       },
@@ -1721,7 +1736,7 @@
           "articleBodyHtml": {
             "type": "string"
           },
-          "length": {
+          "duration": {
             "type": "integer",
             "description": "The estimated duration in seconds to read this article",
             "format": "int32"

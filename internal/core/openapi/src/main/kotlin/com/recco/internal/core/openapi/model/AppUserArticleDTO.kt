@@ -33,7 +33,7 @@ import com.squareup.moshi.JsonClass
  * @param imageAlt 
  * @param audioUrl 
  * @param articleBodyHtml 
- * @param length The estimated duration in seconds to read this article
+ * @param duration The estimated duration in seconds to read this article
  */
 @JsonClass(generateAdapter = true)
 data class AppUserArticleDTO(
@@ -72,6 +72,6 @@ data class AppUserArticleDTO(
     val articleBodyHtml: kotlin.String? = null,
 
     /* The estimated duration in seconds to read this article */
-    @Json(name = "length")
-    val length: kotlin.Int? = null
+    @Json(name = "duration")
+    val duration: kotlin.Int? = null
 )

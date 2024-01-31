@@ -29,12 +29,12 @@ import com.squareup.moshi.JsonClass
  * @param headline 
  * @param category 
  * @param videoUrl 
+ * @param duration The estimated duration in seconds to read this article
  * @param description 
  * @param disclaimer 
  * @param warning 
  * @param dynamicImageResizingUrl 
  * @param imageAlt 
- * @param length The estimated duration in seconds to read this article
  */
 @JsonClass(generateAdapter = true)
 data class AppUserVideoDTO(
@@ -55,10 +55,14 @@ data class AppUserVideoDTO(
     val headline: kotlin.String,
 
     @Json(name = "category")
-    val category: kotlin.String,
+    val category: AppUserVideoDTO.Category,
 
     @Json(name = "videoUrl")
     val videoUrl: kotlin.String,
+
+    /* The estimated duration in seconds to read this article */
+    @Json(name = "duration")
+    val duration: kotlin.Int,
 
     @Json(name = "description")
     val description: kotlin.String? = null,
@@ -73,9 +77,17 @@ data class AppUserVideoDTO(
     val dynamicImageResizingUrl: kotlin.String? = null,
 
     @Json(name = "imageAlt")
-    val imageAlt: kotlin.String? = null,
+    val imageAlt: kotlin.String? = null
+) {
+    /**
+     * 
+     *
+     * Values: EXERCISE,MEDITATION
+     */
+    @JsonClass(generateAdapter = false)
+    enum class Category(val value: kotlin.String) {
+        @Json(name = "exercise") EXERCISE("exercise"),
+        @Json(name = "meditation") MEDITATION("meditation");
+    }
+}
 
-    /* The estimated duration in seconds to read this article */
-    @Json(name = "length")
-    val length: kotlin.Int? = null
-)

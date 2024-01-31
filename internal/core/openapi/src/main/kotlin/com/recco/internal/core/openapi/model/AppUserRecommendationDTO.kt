@@ -31,7 +31,7 @@ import com.squareup.moshi.JsonClass
  * @param headline 
  * @param imageUrl 
  * @param imageAlt 
- * @param length The estimated duration in seconds to consume this content
+ * @param duration The estimated duration in seconds to consume this content
  * @param dynamicImageResizingUrl Responsive image url. Supports transformation via query params. Allowed query params key=values width=number, height=number, quality=1..100, format=auto|jgp|png|webp|tiff, fit=cover|contain|inside|outside
  */
 @JsonClass(generateAdapter = true)
@@ -62,8 +62,8 @@ data class AppUserRecommendationDTO(
     val imageAlt: kotlin.String? = null,
 
     /* The estimated duration in seconds to consume this content */
-    @Json(name = "length")
-    val length: kotlin.Int? = null,
+    @Json(name = "duration")
+    val duration: kotlin.Int? = null,
 
     /* Responsive image url. Supports transformation via query params. Allowed query params key=values width=number, height=number, quality=1..100, format=auto|jgp|png|webp|tiff, fit=cover|contain|inside|outside */
     @Json(name = "dynamicImageResizingUrl")
