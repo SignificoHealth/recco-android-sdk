@@ -245,39 +245,8 @@ private fun VideoDescriptionContent(video: Video) {
 
         Spacer(Modifier.height(AppSpacing.dp_24))
 
-        video.disclaimer?.let {
-            VideoDisclaimer(it)
-            Spacer(Modifier.height(AppSpacing.dp_16))
-        }
-
         Text(
             text = video.description ?: "",
-            style = AppTheme.typography.body1
-        )
-    }
-}
-
-@Composable
-private fun VideoDisclaimer(disclaimer: String) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_16),
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = AppTheme.colors.accent20,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .padding(AppSpacing.dp_16)
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.recco_ic_information_circle),
-            tint = AppTheme.colors.accent,
-            contentDescription = null
-        )
-
-        Text(
-            text = disclaimer,
             style = AppTheme.typography.body1
         )
     }
