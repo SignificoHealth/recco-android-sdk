@@ -11,6 +11,7 @@ data class Audio(
     val isBookmarked: Boolean,
     val audioUrl: String,
     val headline: String,
+    val hasTranscription: Boolean,
     val description: String? = null,
     val imageUrl: String? = null,
     val imageAlt: String? = null,

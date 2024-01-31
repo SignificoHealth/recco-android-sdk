@@ -10,10 +10,11 @@ fun AppUserAudioDTO.asEntity(): Audio {
         status = status.asEntity(),
         description = description,
         isBookmarked = bookmarked,
+        hasTranscription = transcription,
         audioUrl = audioUrl,
         headline = headline,
         imageUrl = dynamicImageResizingUrl,
         imageAlt = imageAlt,
-        lengthInSeconds = length
+        lengthInSeconds = duration
     )
 }

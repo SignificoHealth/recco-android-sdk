@@ -1,11 +1,8 @@
 package com.recco.internal.feature.media.description
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -20,14 +17,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -203,26 +198,28 @@ private fun AudioDescriptionContent(audio: Audio) {
 
         Spacer(Modifier.height(AppSpacing.dp_24))
 
-        Divider(
-            color = AppTheme.colors.accent,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(2.dp)
-        )
+        if (audio.hasTranscription && audio.description != null) {
+            Divider(
+                color = AppTheme.colors.accent,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp)
+            )
 
-        Spacer(Modifier.height(AppSpacing.dp_24))
+            Spacer(Modifier.height(AppSpacing.dp_24))
 
-        Text(
-            text = stringResource(id = R.string.recco_transcription),
-            style = AppTheme.typography.h4.copy(color = AppTheme.colors.accent)
-        )
+            Text(
+                text = stringResource(id = R.string.recco_transcription),
+                style = AppTheme.typography.h4.copy(color = AppTheme.colors.accent)
+            )
 
-        Spacer(Modifier.height(AppSpacing.dp_24))
+            Spacer(Modifier.height(AppSpacing.dp_24))
 
-        Text(
-            text = audio.description ?: "",
-            style = AppTheme.typography.body3.copy(fontWeight = FontWeight.Normal)
-        )
+            Text(
+                text = audio.description ?: "",
+                style = AppTheme.typography.body3.copy(fontWeight = FontWeight.Normal)
+            )
+        }
     }
 }
 
