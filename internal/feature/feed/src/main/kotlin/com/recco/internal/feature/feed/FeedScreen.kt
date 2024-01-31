@@ -148,6 +148,7 @@ private fun FeedScreen(
                 navigateToArticle = navigateToArticle,
                 navigateToBookmarks = navigateToBookmarks,
                 navigateToQuestionnaire = navigateToQuestionnaire,
+                navigateToMediaDescription = navigateToMediaDescription,
                 onLockAnimationFinished = {
                     onUserInteract(FeedUserInteract.RefreshUnlockedFeedSection)
                 }
@@ -162,6 +163,7 @@ private fun FeedContent(
     navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
     navigateToBookmarks: () -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
     onLockAnimationFinished: () -> Unit
 ) {
     Column(
@@ -191,7 +193,8 @@ private fun FeedContent(
                             feedSectionToUnlock = feedUI.feedSectionToUnlock,
                             navigateToArticle = navigateToArticle,
                             onLockAnimationFinished = onLockAnimationFinished,
-                            navigateToQuestionnaire = navigateToQuestionnaire
+                            navigateToQuestionnaire = navigateToQuestionnaire,
+                            navigateToMediaDescription = navigateToMediaDescription
                         )
                     }
                     Spacer(Modifier.height(AppSpacing.dp_40))
@@ -259,6 +262,7 @@ private fun FeedSection(
     feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock?,
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
     onLockAnimationFinished: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -308,7 +312,8 @@ private fun FeedSection(
                     openDialog = openDialog,
                     topicDialog = topicDialog,
                     contentIdDialog = contentIdDialog,
-                    navigateToArticle = navigateToArticle
+                    navigateToArticle = navigateToArticle,
+                    navigateToMediaDescription = navigateToMediaDescription
                 )
             }
         }
@@ -389,7 +394,8 @@ private fun UnlockedItems(
     openDialog: MutableState<Boolean>,
     topicDialog: MutableState<Topic?>,
     contentIdDialog: MutableState<ContentId?>,
-    navigateToArticle: (ContentId) -> Unit
+    navigateToArticle: (ContentId) -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit
 ) {
     val recommendations =
         (section.recommendations as FlowDataState.Success<List<Recommendation>>).data
@@ -406,8 +412,32 @@ private fun UnlockedItems(
             key = { item -> item.id.itemId }
         ) { recommendation ->
             when (recommendation.type) {
-                ARTICLE -> {
-                    AppRecommendationCard(recommendation, navigateToArticle)
+                ARTICLE, AUDIO, VIDEO -> {
+                    AppRecommendationCard(
+                        recommendation = recommendation,
+                        onClick = { contentId ->
+                            when (recommendation.type) {
+                                ARTICLE -> {
+                                    navigateToArticle(contentId)
+                                }
+                                AUDIO -> {
+                                    navigateToMediaDescription(
+                                        contentId,
+                                        AUDIO
+                                    )
+                                }
+                                VIDEO -> {
+                                    navigateToMediaDescription(
+                                        contentId,
+                                        VIDEO
+                                    )
+                                }
+                                else -> {
+                                    error("AppRecommendationCard can't navigate with a ${recommendation.type}")
+                                }
+                            }
+                        },
+                    )
                 }
 
                 QUESTIONNAIRE -> {
@@ -417,9 +447,6 @@ private fun UnlockedItems(
                         contentIdDialog.value = recommendation.id
                     }
                 }
-
-                AUDIO, VIDEO ->
-                    throw UnsupportedOperationException("${recommendation.type} Not supported ATM")
             }
         }
     }
