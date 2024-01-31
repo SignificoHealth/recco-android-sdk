@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -12,7 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.theme.AppSpacing
@@ -20,13 +24,16 @@ import com.recco.internal.core.ui.theme.AppTheme
 
 @Composable
 fun RecommendationTypeRow(
+    modifier: Modifier = Modifier,
+    iconSize: Dp = 24.dp,
+    textStyle: TextStyle = AppTheme.typography.labelSmall,
     contentType: ContentType,
     lengthInSeconds: Int?,
-    modifier: Modifier = Modifier
+    iconSpacing: Dp = AppSpacing.dp_8,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8),
+        horizontalArrangement = Arrangement.spacedBy(iconSpacing),
         modifier = modifier
     ) {
         val (iconDrawable, contentTypeString) = when (contentType) {
@@ -49,7 +56,8 @@ fun RecommendationTypeRow(
             Icon(
                 painter = painterResource(id = iconDrawable),
                 tint = AppTheme.colors.primary,
-                contentDescription = null
+                contentDescription = null,
+                modifier = Modifier.size(iconSize)
             )
         }
 
@@ -67,7 +75,7 @@ fun RecommendationTypeRow(
 
             Text(
                 text = contentTypeDurationText,
-                style = AppTheme.typography.labelSmall.copy(color = AppTheme.colors.primary)
+                style = textStyle.copy(color = AppTheme.colors.primary)
             )
         }
     }
@@ -80,7 +88,7 @@ fun RecommendationTypeRowPreview() {
         Surface {
             Column(
                 modifier = Modifier.padding(AppSpacing.dp_16),
-                verticalArrangement = Arrangement.spacedBy(AppSpacing.dp_16)
+                verticalArrangement = Arrangement.spacedBy(AppSpacing.dp_16),
             ) {
                 ContentType.entries.forEach {
                     RecommendationTypeRow(

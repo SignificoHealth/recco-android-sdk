@@ -19,7 +19,7 @@ class FeedPreviewProvider {
             recommendations = if (isRecommendationsLoading) {
                 FlowDataState.Loading
             } else {
-                FlowDataState.Success(List(recommendationsSize) { RecommendationPreviewProvider.data })
+                FlowDataState.Success(List(recommendationsSize) { RecommendationPreviewProvider.ARTICLE })
             },
             feedSection = FeedSection(
                 type = type,
