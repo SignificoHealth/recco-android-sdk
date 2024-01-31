@@ -22,6 +22,10 @@ internal class MediaDescriptionUiPreviewProvider :
                 isLoading = false,
                 data = MediaDescriptionUi.VideoDescriptionUi(video = VIDEO)
             ),
+            UiState(
+                isLoading = false,
+                data = MediaDescriptionUi.AudioDescriptionUi(audio = AUDIO_WITHOUT_TRANSCRIPTION)
+            ),
         )
 
     companion object {
@@ -45,8 +49,28 @@ internal class MediaDescriptionUiPreviewProvider :
                 "Exercitationem placeat possimus aliquam et pariatur nemo assumenda sit. " +
                 "Esse quod voluptatum et rerum a voluptatum odio. Dicta cumque aut excepturi.",
             imageAlt = null,
+            hasTranscription = true,
             lengthInSeconds = 7200
         )
+
+        private val AUDIO_WITHOUT_TRANSCRIPTION = Audio(
+            id = ContentId(
+                itemId = "corrumpit",
+                catalogId = "enim"
+            ),
+            rating = Rating.LIKE,
+            status = Status.NO_INTERACTION,
+            isBookmarked = false,
+            audioUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            headline = "Sleeping like a baby",
+            imageUrl = null,
+            description = null,
+            hasTranscription = false,
+            imageAlt = null,
+            lengthInSeconds = 7200
+        )
+
+
 
         private val VIDEO = Video(
             id = ContentId(

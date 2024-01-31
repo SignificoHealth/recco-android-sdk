@@ -13,7 +13,7 @@ fun AppUserVideoDTO.asEntity(): Video {
         headline = headline,
         imageUrl = dynamicImageResizingUrl,
         imageAlt = imageAlt,
-        lengthInSeconds = length,
+        lengthInSeconds = duration,
         description = description,
         disclaimer = disclaimer
     )
