@@ -19,7 +19,9 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -56,6 +58,7 @@ import com.recco.internal.feature.media.description.MediaDescriptionUserInteract
 import com.recco.internal.feature.media.description.MediaDescriptionViewModel
 import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
 import com.recco.internal.feature.rating.delegates.ContentUserInteract
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -142,35 +145,46 @@ private fun AnimatedUserInteractionRecomendationCard(
     userInteractionRecommendation: UserInteractionRecommendation,
     onContentUserInteract: (ContentUserInteract) -> Unit
 ) {
-    val contentId = userInteractionRecommendation.contentId
+    // Added check to prevent initial animation
+    val coroutineScope = rememberCoroutineScope()
+    val shouldAnimate = remember { mutableStateOf(false) }
 
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = slideInVertically(
-            initialOffsetY = { fullHeight -> fullHeight / 10 },
-            animationSpec = tween(durationMillis = 300)
-        ) + fadeIn(animationSpec = tween(durationMillis = 300)),
-        exit = fadeOut(animationSpec = tween(durationMillis = 300))
-    ) {
-        UserInteractionRecommendationCard(
-            modifier = Modifier.padding(bottom = AppSpacing.dp_24),
-            userInteraction = userInteractionRecommendation,
-            toggleBookmarkState = {
-                onContentUserInteract(
-                    ContentUserInteract.ToggleBookmarkState(contentId)
-                )
-            },
-            toggleLikeState = {
-                onContentUserInteract(
-                    ContentUserInteract.ToggleLikeState(contentId)
-                )
-            },
-            toggleDislikeState = {
-                onContentUserInteract(
-                    ContentUserInteract.ToggleDislikeState(contentId)
-                )
-            }
-        )
+    LaunchedEffect(key1 = isVisible) {
+        coroutineScope.launch {
+            delay(300) // Delay slightly longer than the animation duration
+            shouldAnimate.value = true
+        }
+    }
+
+    if (shouldAnimate.value) {
+        AnimatedVisibility(
+            visible = isVisible,
+            enter = slideInVertically(
+                initialOffsetY = { fullHeight -> fullHeight / 10 },
+                animationSpec = tween(durationMillis = 300)
+            ) + fadeIn(animationSpec = tween(durationMillis = 300)),
+            exit = fadeOut(animationSpec = tween(durationMillis = 300))
+        ) {
+            UserInteractionRecommendationCard(
+                modifier = Modifier.padding(bottom = AppSpacing.dp_24),
+                userInteraction = userInteractionRecommendation,
+                toggleBookmarkState = {
+                    onContentUserInteract(
+                        ContentUserInteract.ToggleBookmarkState(userInteractionRecommendation.contentId)
+                    )
+                },
+                toggleLikeState = {
+                    onContentUserInteract(
+                        ContentUserInteract.ToggleLikeState(userInteractionRecommendation.contentId)
+                    )
+                },
+                toggleDislikeState = {
+                    onContentUserInteract(
+                        ContentUserInteract.ToggleDislikeState(userInteractionRecommendation.contentId)
+                    )
+                }
+            )
+        }
     }
 }
 
