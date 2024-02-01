@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 class ContentInteractViewModelDelegate @Inject constructor(
     private val recommendationRepository: RecommendationRepository,
-    private val logger: Logger,
+    private val logger: Logger
 ) {
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)

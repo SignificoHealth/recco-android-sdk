@@ -20,7 +20,7 @@ fun PlayerSlider(
     colors: SliderColors = SliderDefaults.colors(
         thumbColor = AppTheme.colors.background,
         activeTrackColor = AppTheme.colors.primary,
-        inactiveTrackColor = AppTheme.colors.primary.copy(alpha = 0.2f),
+        inactiveTrackColor = AppTheme.colors.primary.copy(alpha = 0.2f)
     )
 ) {
     var sliderPosition by remember {
@@ -34,12 +34,11 @@ fun PlayerSlider(
         },
         onValueChangeFinished = {
             onSeekPosition((sliderPosition * 1000).toLong())
-
         },
-        valueRange = 0f..(audioDuration.coerceAtLeast(0) /1000).toFloat(),
+        valueRange = 0f..(audioDuration.coerceAtLeast(0) / 1000).toFloat(),
         steps = 0,
         modifier = modifier,
-        colors = colors,
+        colors = colors
     )
 }
 

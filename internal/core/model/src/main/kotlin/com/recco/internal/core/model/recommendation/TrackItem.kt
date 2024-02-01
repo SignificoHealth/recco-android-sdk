@@ -2,7 +2,7 @@ package com.recco.internal.core.model.recommendation
 
 import com.recco.internal.core.model.media.MediaType
 
-data class TrackItem (
+data class TrackItem(
     val id: String,
     val mediaUrl: String,
     val imageUrl: String?,

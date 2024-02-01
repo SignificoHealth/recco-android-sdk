@@ -17,7 +17,7 @@ fun NavGraphBuilder.feedGraph(
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     navigateToBookmarks: () -> Unit,
-    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit
 ) {
     navigation(
         route = FeedGraph,

@@ -21,7 +21,7 @@ private const val MediaDescriptionRoute = "media_description/{$contentTypeArg}/{
 
 fun NavGraphBuilder.mediaGraph(
     navigateUp: () -> Unit,
-    navigateToMediaPlayer: (ContentId, ContentType) -> Unit,
+    navigateToMediaPlayer: (ContentId, ContentType) -> Unit
 ) {
     navigation(
         route = MediaGraph,
