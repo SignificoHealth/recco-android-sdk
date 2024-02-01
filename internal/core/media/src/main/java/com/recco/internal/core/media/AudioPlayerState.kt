@@ -1,5 +1,3 @@
-@file:UnstableApi
-
 package com.recco.internal.core.media
 
 import android.Manifest
@@ -14,8 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import com.recco.internal.core.model.recommendation.TrackItem
@@ -32,7 +28,6 @@ fun rememberAudioPlayerState(
     trackItem: TrackItem
 ): MediaPlayerState {
     val context = LocalContext.current
-    val lifeCycleOwner = LocalLifecycleOwner.current
     val isInPreviewMode = LocalInspectionMode.current
     var currentPosition by remember { mutableLongStateOf(0L) }
     var trackDuration by remember { mutableLongStateOf(0L) }

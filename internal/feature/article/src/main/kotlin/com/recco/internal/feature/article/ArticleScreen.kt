@@ -46,7 +46,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
 import com.ireward.htmlcompose.HtmlText
 import com.recco.internal.core.media.MediaPlayerState
-import com.recco.internal.core.media.mapper.asTrackItem
+import com.recco.internal.core.media.mapper.asTrackItemOrNull
 import com.recco.internal.core.media.rememberAudioPlayerState
 import com.recco.internal.core.model.recommendation.Article
 import com.recco.internal.core.model.recommendation.ContentType
@@ -105,8 +105,9 @@ private fun ArticleScreen(
     contentInteractionState: UserInteractionRecommendation?
 ) {
     val scrollState = rememberScrollState()
-    val audioPlayerState = uiState.data?.takeIf { uiState.data?.article?.hasAudio == true }?.let { data ->
-        rememberAudioPlayerState(data.article.asTrackItem())
+
+    val audioPlayerState = uiState.data?.article?.asTrackItemOrNull()?.let {
+        rememberAudioPlayerState(it)
     }
 
     Scaffold(
