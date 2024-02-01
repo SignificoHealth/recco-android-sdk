@@ -44,23 +44,19 @@ fun rememberAudioPlayerState(
 
     val pendingIntent = rememberPendingIntent()
     val mediaSession = remember(exoPlayer, pendingIntent) {
-        if (exoPlayer != null) {
+        exoPlayer?.let {
             pendingIntent?.let {
                 MediaSession.Builder(context, exoPlayer)
                     .setId(trackItem.id)
                     .setSessionActivity(pendingIntent)
                     .build()
             }
-        } else {
-            null
         }
     }
 
     val notificationManager = remember(mediaSession, pendingIntent) {
-        if (mediaSession != null) {
+        mediaSession?.let {
             MediaNotificationManager(context, mediaSession.token)
-        } else {
-            null
         }
     }
 
