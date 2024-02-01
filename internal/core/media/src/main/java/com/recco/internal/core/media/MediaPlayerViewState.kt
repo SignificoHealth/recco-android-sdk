@@ -183,6 +183,24 @@ private fun rememberMediaNotificationManager(
     }
 }
 
+private fun ExoPlayer.prepareFor(
+    context: Context,
+    trackItem: TrackItem,
+) {
+    when (trackItem.mediaType) {
+        MediaType.AUDIO -> {
+            setMediaItem(trackItem.asMediaItem())
+        }
+        MediaType.VIDEO -> {
+            val factory = DefaultDataSource.Factory(context)
+            val source = HlsMediaSource.Factory(factory).createMediaSource(trackItem.asMediaItem())
+            setMediaSource(source)
+        }
+    }
+
+    prepare()
+}
+
 @Composable
 private fun rememberExoPlayer(
     trackItem: TrackItem
@@ -193,10 +211,7 @@ private fun rememberExoPlayer(
     return remember {
         if (!isInPreviewMode) {
             val player = ExoPlayer.Builder(context).build()
-            val factory = DefaultDataSource.Factory(context)
-            val source = HlsMediaSource.Factory(factory).createMediaSource(trackItem.asMediaItem())
-            player.setMediaSource(source)
-            player.prepare()
+            player.prepareFor(context, trackItem)
             player
         } else {
             null
