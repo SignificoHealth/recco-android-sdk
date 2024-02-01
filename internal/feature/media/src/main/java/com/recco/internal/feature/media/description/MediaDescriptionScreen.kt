@@ -1,11 +1,8 @@
 package com.recco.internal.feature.media.description
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -20,14 +17,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
+import com.ireward.htmlcompose.HtmlText
 import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.ContentId
@@ -219,8 +215,8 @@ private fun AudioDescriptionContent(audio: Audio) {
 
         Spacer(Modifier.height(AppSpacing.dp_24))
 
-        Text(
-            text = audio.description ?: "",
+        HtmlText(
+            text = audio.description?.replace("\n", "<br/>") ?: "",
             style = AppTheme.typography.body3.copy(fontWeight = FontWeight.Normal)
         )
     }
@@ -245,8 +241,8 @@ private fun VideoDescriptionContent(video: Video) {
 
         Spacer(Modifier.height(AppSpacing.dp_24))
 
-        Text(
-            text = video.description ?: "",
+        HtmlText(
+            text = video.description?.replace("\n", "<br/>") ?: "",
             style = AppTheme.typography.body1
         )
     }
