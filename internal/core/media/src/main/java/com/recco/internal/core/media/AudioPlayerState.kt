@@ -4,6 +4,7 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -79,6 +80,13 @@ fun rememberAudioPlayerState(
             onPositionChange = { currentPosition = it },
             mediaNotificationManager = notificationManager
         )
+    }
+
+    DisposableEffect(exoPlayer) {
+        onDispose {
+            mediaSession?.release()
+            player.release()
+        }
     }
 
     LifecycleEffect(onDestroy = {
