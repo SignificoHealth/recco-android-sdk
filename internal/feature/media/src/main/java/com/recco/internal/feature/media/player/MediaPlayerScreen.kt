@@ -151,7 +151,7 @@ private fun AnimatedUserInteractionRecomendationCard(
     val coroutineScope = rememberCoroutineScope()
     val shouldAnimate = remember { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = isVisible) {
+    LaunchedEffect(isVisible) {
         coroutineScope.launch {
             delay(300) // Delay slightly longer than the animation duration
             shouldAnimate.value = true

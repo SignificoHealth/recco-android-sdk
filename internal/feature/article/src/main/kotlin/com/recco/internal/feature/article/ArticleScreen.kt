@@ -80,7 +80,7 @@ internal fun ArticleRoute(
         initialValue = UiState()
     )
     val contentInteractionState by viewModel.interactionViewState
-        .collectAsStateWithLifecycle(null)
+        .collectAsStateWithLifecycle(initialValue = null)
 
     val context = LocalContext.current
 
@@ -89,8 +89,8 @@ internal fun ArticleRoute(
         uiState = uiState,
         contentInteractionState = contentInteractionState,
         navigateUp = navigateUp,
-        onUserInteract = { viewModel.onUserInteract(it) },
-        onContentUserInteract = { viewModel.onContentUserInteract(it) }
+        onUserInteract = viewModel::onUserInteract,
+        onContentUserInteract = viewModel::onContentUserInteract
     )
 }
 

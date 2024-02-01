@@ -65,22 +65,6 @@ class ArticleViewModelTest {
         }
     }
 
-//    @Test
-//    fun `onFailure emits exceptions while logging them if ToggleBookmarkState`() = runTest {
-//        // When
-//        repository.stubForToggleBookmarkFailure()
-//        val events = onViewModelInteraction(3, ArticleUserInteract.ToggleBookmarkState)
-//
-//        // Then
-//        events.fastForEach {
-//            assertThat(events.first()).isEqualTo(expectedUiStateWithError)
-//        }
-//
-//        verifyBlocking(logger, times(1)) {
-//            e(staticThrowableForTesting, null, null)
-//        }
-//    }
-
     @Test
     fun `initial state event emitted is Loading`() = runTest {
         // When

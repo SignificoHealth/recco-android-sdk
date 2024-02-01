@@ -5,7 +5,6 @@ plugins {
 
 android {
     namespace = "com.recco.internal.feature.media"
-
 }
 
 dependencies {
@@ -13,5 +12,4 @@ dependencies {
     implementation(project(":internal:feature:rating"))
     implementation(libs.exoplayer.media.session)
     implementation(libs.exoplayer.ui)
-    implementation(libs.exoplayer.core)
 }

@@ -4,6 +4,7 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -44,23 +45,19 @@ fun rememberAudioPlayerState(
 
     val pendingIntent = rememberPendingIntent()
     val mediaSession = remember(exoPlayer, pendingIntent) {
-        if (exoPlayer != null) {
+        exoPlayer?.let {
             pendingIntent?.let {
                 MediaSession.Builder(context, exoPlayer)
                     .setId(trackItem.id)
                     .setSessionActivity(pendingIntent)
                     .build()
             }
-        } else {
-            null
         }
     }
 
     val notificationManager = remember(mediaSession, pendingIntent) {
-        if (mediaSession != null) {
+        mediaSession?.let {
             MediaNotificationManager(context, mediaSession.token)
-        } else {
-            null
         }
     }
 
@@ -83,6 +80,13 @@ fun rememberAudioPlayerState(
             onPositionChange = { currentPosition = it },
             mediaNotificationManager = notificationManager
         )
+    }
+
+    DisposableEffect(exoPlayer) {
+        onDispose {
+            mediaSession?.release()
+            player.release()
+        }
     }
 
     LifecycleEffect(onDestroy = {
