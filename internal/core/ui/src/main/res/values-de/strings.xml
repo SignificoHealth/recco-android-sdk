@@ -50,4 +50,12 @@
     <string name="recco_questionnaire_outro_body">Du hast alle Fragen zu<xliff:g id="section_name">%1$s</xliff:g>beantwortet und damit noch bessere Empfehlungen für dich generiert. Schau sie dir gleich an!</string>
     <string name="recco_questionnaire_outro_title">Super gemacht!</string>
     <string name="recco_start">Los geht\'s!</string>
+    <string name="recco_media_channel_name">Medienbenachrichtigungen</string>
+    <string name="recco_media_channel_description">Benachrichtigungen zur Verwaltung von Video- und Audiowiedergaben</string>
+    <string name="recco_reccomendation_type_podcast">Podcast</string>
+    <string name= "recco_reccomendation_type_read">Lesen</string>
+    <string name="recco_reccomendation_type_video">Video</string>
+    <string name="recco_reccomendation_type_audio">Audio</string>
+    <string name="recco_play">Abspielen</string>
+    <string name="recco_transcription">Transkription</string>
 </resources>

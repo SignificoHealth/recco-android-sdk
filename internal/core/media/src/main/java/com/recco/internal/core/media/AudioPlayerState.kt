@@ -1,4 +1,6 @@
-@file:UnstableApi package com.recco.internal.core.media
+@file:UnstableApi
+
+package com.recco.internal.core.media
 
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -29,13 +31,13 @@ import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun rememberAudioPlayerState(
-    trackItem: TrackItem,
+    trackItem: TrackItem
 ): MediaPlayerState {
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
     val isInPreviewMode = LocalInspectionMode.current
     var currentPosition by remember { mutableLongStateOf(0L) }
-    var trackDuration by remember { mutableLongStateOf(0L)  }
+    var trackDuration by remember { mutableLongStateOf(0L) }
     var isPlaying by remember { mutableStateOf(false) }
     var isNotificationsPermissionGranted by remember { mutableStateOf(false) }
 
@@ -56,7 +58,9 @@ fun rememberAudioPlayerState(
                     .setSessionActivity(pendingIntent)
                     .build()
             }
-        } else null
+        } else {
+            null
+        }
     }
 
     val notificationManager = remember(mediaSession, pendingIntent) {
@@ -93,7 +97,7 @@ fun rememberAudioPlayerState(
     }
 
     DisposableEffect(LocalLifecycleOwner.current) {
-        val observer = object: DefaultLifecycleObserver {
+        val observer = object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 notificationManager?.hideNotification()
                 player.release()
@@ -112,7 +116,7 @@ fun rememberAudioPlayerState(
     LaunchedEffect(isPlaying) {
         currentPosition = player.currentPositionMs
 
-        while(isPlaying) {
+        while (isPlaying) {
             currentPosition = player.currentPositionMs
             delay(1.seconds)
         }
@@ -126,19 +130,16 @@ fun rememberAudioPlayerState(
         isPlaying = isPlaying,
         currentPosition = currentPosition,
         play = {
-            if (context.hasPermission(Manifest.permission.POST_NOTIFICATIONS)                ) {
+            if (context.hasPermission(Manifest.permission.POST_NOTIFICATIONS)) {
                 exoPlayer?.let {
                     notificationManager?.showNotificationForPlayer(exoPlayer)
                 }
 
                 player.play()
-
             } else if (!isNotificationsPermissionGranted) {
                 permissionLauncher.askForNotificationPermission()
-
             } else {
                 player.play()
-
             }
         },
         pause = { player.pause() },

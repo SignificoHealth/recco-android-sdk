@@ -4,5 +4,5 @@ enum class ContentType {
     ARTICLE,
     QUESTIONNAIRE,
     AUDIO,
-    VIDEO,
+    VIDEO
 }

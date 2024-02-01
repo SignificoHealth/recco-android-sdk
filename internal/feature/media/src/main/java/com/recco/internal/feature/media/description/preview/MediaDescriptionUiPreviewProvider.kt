@@ -8,24 +8,24 @@ import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.Status
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.UiState
-import com.recco.internal.feature.media.description.MediaDescriptionUi
+import com.recco.internal.feature.media.description.MediaDescriptionUI
 
 internal class MediaDescriptionUiPreviewProvider :
-    PreviewParameterProvider<UiState<MediaDescriptionUi>> {
-    override val values: Sequence<UiState<MediaDescriptionUi>>
+    PreviewParameterProvider<UiState<MediaDescriptionUI>> {
+    override val values: Sequence<UiState<MediaDescriptionUI>>
         get() = sequenceOf(
             UiState(
                 isLoading = false,
-                data = MediaDescriptionUi.AudioDescriptionUi(audio = AUDIO)
+                data = MediaDescriptionUI.AudioDescriptionUI(audio = AUDIO)
             ),
             UiState(
                 isLoading = false,
-                data = MediaDescriptionUi.VideoDescriptionUi(video = VIDEO)
+                data = MediaDescriptionUI.VideoDescriptionUI(video = VIDEO)
             ),
             UiState(
                 isLoading = false,
-                data = MediaDescriptionUi.AudioDescriptionUi(audio = AUDIO_WITHOUT_TRANSCRIPTION)
-            ),
+                data = MediaDescriptionUI.AudioDescriptionUI(audio = AUDIO_WITHOUT_TRANSCRIPTION)
+            )
         )
 
     companion object {
@@ -69,8 +69,6 @@ internal class MediaDescriptionUiPreviewProvider :
             imageAlt = null,
             lengthInSeconds = 7200
         )
-
-
 
         private val VIDEO = Video(
             id = ContentId(

@@ -24,7 +24,7 @@ import com.recco.internal.core.ui.theme.AppTheme
 @Composable
 fun LargePlayButton(
     modifier: Modifier = Modifier,
-    onPlayButtonClick: () -> Unit,
+    onPlayButtonClick: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -68,12 +68,12 @@ fun LargePlayButton(
 @Composable
 fun LargePlayButtonPreview() {
     AppTheme {
-        Box(modifier = Modifier
-            .background(color = Color.LightGray)
-            .padding(AppSpacing.dp_40)
+        Box(
+            modifier = Modifier
+                .background(color = Color.LightGray)
+                .padding(AppSpacing.dp_40)
         ) {
             LargePlayButton {
-
             }
         }
     }

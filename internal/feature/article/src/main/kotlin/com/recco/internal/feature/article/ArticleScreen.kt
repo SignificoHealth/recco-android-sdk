@@ -90,7 +90,7 @@ internal fun ArticleRoute(
         contentInteractionState = contentInteractionState,
         navigateUp = navigateUp,
         onUserInteract = { viewModel.onUserInteract(it) },
-        onContentUserInteract = { viewModel.onContentUserInteract(it)}
+        onContentUserInteract = { viewModel.onContentUserInteract(it) }
     )
 }
 
@@ -201,7 +201,8 @@ private fun ArticleContent(
                     Spacer(Modifier.height(AppSpacing.dp_16))
 
                     AudioPlayer(
-                        playerState = audioPlayerState)
+                        playerState = audioPlayerState
+                    )
 
                     Spacer(Modifier.height(AppSpacing.dp_32))
                 }
@@ -261,10 +262,11 @@ private fun AudioPlayer(
                         playerState.pause()
                     } else {
                         playerState.play()
-
                     }
                 },
-                painter = painterResource(id = if (playerState.isPlaying) R.drawable.recco_ic_pause else R.drawable.recco_ic_play),
+                painter = painterResource(
+                    id = if (playerState.isPlaying) R.drawable.recco_ic_pause else R.drawable.recco_ic_play
+                ),
                 tint = AppTheme.colors.primary,
                 contentDescription = null
             )
@@ -287,26 +289,26 @@ private fun AudioPlayer(
                 audioDurationMs = playerState.trackDuration ?: 0L,
                 currentPositionMs = playerState.currentPosition,
                 enabled = playerState.isReady,
-                onSeekPosition = { playerState.seekTo(it) },
+                onSeekPosition = { playerState.seekTo(it) }
             )
 
             playerState.trackDuration?.let { duration ->
                 Text(
                     text = duration.formatElapsedTime(),
-                    style = AppTheme.typography.labelSmall,
+                    style = AppTheme.typography.labelSmall
                 )
             }
         }
     }
 }
 
- @Composable
+@Composable
 fun AudioSlider(
-     modifier: Modifier,
-     audioDurationMs: Long,
-     currentPositionMs: Long,
-     enabled: Boolean,
-     onSeekPosition: (Long) -> Unit
+    modifier: Modifier,
+    audioDurationMs: Long,
+    currentPositionMs: Long,
+    enabled: Boolean,
+    onSeekPosition: (Long) -> Unit
 ) {
     // Convert milliseconds to seconds for Slider
     val currentPositionSeconds = currentPositionMs / 1000f
@@ -338,11 +340,10 @@ fun AudioSlider(
         colors = SliderDefaults.colors(
             thumbColor = AppTheme.colors.background,
             activeTrackColor = AppTheme.colors.primary,
-            inactiveTrackColor = AppTheme.colors.primary.copy(alpha = 0.2f),
+            inactiveTrackColor = AppTheme.colors.primary.copy(alpha = 0.2f)
         )
     )
 }
-
 
 @Preview
 @Composable
@@ -353,9 +354,10 @@ private fun Preview(
         ArticleScreen(
             linkClicked = {},
             uiState = uiState,
-            navigateUp = { }, onContentUserInteract = {},
+            navigateUp = { },
+            onContentUserInteract = {},
             onUserInteract = {},
-            contentInteractionState = null,
+            contentInteractionState = null
         )
     }
 }
@@ -370,9 +372,10 @@ private fun Preview(
         ArticleScreen(
             linkClicked = {},
             uiState = ArticleUIPreviewProvider().values.first(),
-            navigateUp = { }, onContentUserInteract = {},
+            navigateUp = { },
+            onContentUserInteract = {},
             onUserInteract = {},
-            contentInteractionState = userInteractionRecommendation,
+            contentInteractionState = userInteractionRecommendation
         )
     }
 }
@@ -380,7 +383,7 @@ private fun Preview(
 @Preview
 @Composable
 private fun PreviewDark(
-    @PreviewParameter(ArticleUIPreviewProvider::class) uiState: UiState<ArticleUI>,
+    @PreviewParameter(ArticleUIPreviewProvider::class) uiState: UiState<ArticleUI>
 ) {
     AppTheme(darkTheme = true) {
         ArticleScreen(

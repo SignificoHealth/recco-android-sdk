@@ -13,7 +13,6 @@ fun rememberPendingIntent(): PendingIntent? {
 
     return remember(context) {
         if (!isInPreviewMode) {
-
             PendingIntent.getActivity(
                 context,
                 0,

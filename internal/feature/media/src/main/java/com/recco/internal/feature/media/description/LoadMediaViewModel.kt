@@ -31,10 +31,10 @@ internal class LoadMediaViewModel @Inject constructor(
     private val contentInteractViewModelDelegate: ContentInteractViewModelDelegate,
     private val logger: Logger
 ) : ViewModel() {
-    private val _viewState = MutableStateFlow(UiState<MediaDescriptionUi>())
+    private val _viewState = MutableStateFlow(UiState<MediaDescriptionUI>())
     private val contentId by lazy { checkNotNull(savedStateHandle.get<ContentId>(idArg)) }
     private val contentType by lazy { checkNotNull(savedStateHandle.get<ContentType>(contentTypeArg)) }
-    val viewState: Flow<UiState<MediaDescriptionUi>> = _viewState
+    val viewState: Flow<UiState<MediaDescriptionUI>> = _viewState
 
     val interactionViewState: Flow<UserInteractionRecommendation?> =
         contentInteractViewModelDelegate.viewState
@@ -62,7 +62,7 @@ internal class LoadMediaViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadMedia(): UiState<MediaDescriptionUi> {
+    private suspend fun loadMedia(): UiState<MediaDescriptionUI> {
         return when (contentType) {
             AUDIO -> reccomendationRepository.getAudio(contentId).toUiState()
             VIDEO -> reccomendationRepository.getVideo(contentId).toUiState()
@@ -70,24 +70,24 @@ internal class LoadMediaViewModel @Inject constructor(
         }
     }
 
-    private fun Audio.toUiState(): UiState<MediaDescriptionUi> {
+    private fun Audio.toUiState(): UiState<MediaDescriptionUI> {
         return UiState(
             isLoading = false,
             error = null,
-            data = MediaDescriptionUi.AudioDescriptionUi(audio = this)
+            data = MediaDescriptionUI.AudioDescriptionUI(audio = this)
         )
     }
 
-    private fun MediaDescriptionUi.asInteractionRecommendation(): UserInteractionRecommendation {
+    private fun MediaDescriptionUI.asInteractionRecommendation(): UserInteractionRecommendation {
         return when (this) {
-            is MediaDescriptionUi.AudioDescriptionUi -> {
+            is MediaDescriptionUI.AudioDescriptionUI -> {
                 UserInteractionRecommendation(
                     contentId = audio.id,
                     rating = audio.rating,
                     isBookmarked = audio.isBookmarked
                 )
             }
-            is MediaDescriptionUi.VideoDescriptionUi -> {
+            is MediaDescriptionUI.VideoDescriptionUI -> {
                 UserInteractionRecommendation(
                     contentId = video.id,
                     rating = video.rating,
@@ -97,11 +97,11 @@ internal class LoadMediaViewModel @Inject constructor(
         }
     }
 
-    private fun Video.toUiState(): UiState<MediaDescriptionUi> {
+    private fun Video.toUiState(): UiState<MediaDescriptionUI> {
         return UiState(
             isLoading = false,
             error = null,
-            data = MediaDescriptionUi.VideoDescriptionUi(video = this)
+            data = MediaDescriptionUI.VideoDescriptionUI(video = this)
         )
     }
 

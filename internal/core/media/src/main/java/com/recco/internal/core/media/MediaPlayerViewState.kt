@@ -49,7 +49,7 @@ class MediaPlayerViewState(
     val isPlaying: Boolean,
     val playerView: PlayerView?,
     val play: () -> Unit,
-    val pause: () -> Unit,
+    val pause: () -> Unit
 )
 
 @Composable
@@ -120,7 +120,7 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
     }
 
     DisposableEffect(lifecycleOwner) {
-        val observer = object: DefaultLifecycleObserver {
+        val observer = object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 notificationManager?.hideNotification()
                 mediaSession?.release()
@@ -154,7 +154,6 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
                         notificationManager?.showNotificationForPlayer(exoPlayer)
                         exoPlayer.play()
                     }
-
                 } else if (!isNotificationsPermissionGranted && trackItem.mediaType == MediaType.AUDIO) {
                     permissionLauncher.askForNotificationPermission()
                 } else {
@@ -170,7 +169,7 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
 private fun rememberMediaNotificationManager(
     mediaSession: MediaSession?,
     sessionActivityPendingIntent: PendingIntent?,
-    trackItem: TrackItem,
+    trackItem: TrackItem
 ): MediaNotificationManager? {
     val context = LocalContext.current
 
@@ -185,7 +184,7 @@ private fun rememberMediaNotificationManager(
 
 private fun ExoPlayer.prepareFor(
     context: Context,
-    trackItem: TrackItem,
+    trackItem: TrackItem
 ) {
     when (trackItem.mediaType) {
         MediaType.AUDIO -> {
@@ -237,7 +236,9 @@ private fun rememberMediaSession(
                         .build()
                 }
             }
-        } else null
+        } else {
+            null
+        }
     }
 }
 
@@ -271,7 +272,7 @@ private fun rememberPlayerView(
 private fun rememberPlayerLifecycleObserver(
     player: PlayerView?,
     exoPlayer: ExoPlayer?,
-    mediaType: MediaType,
+    mediaType: MediaType
 ): LifecycleEventObserver {
     return remember(player) {
         LifecycleEventObserver { _, event ->
@@ -308,4 +309,3 @@ private fun loadArtworkWithCoil(context: Context, trackItem: TrackItem, playerVi
 
     ImageLoader(context).enqueue(request)
 }
-

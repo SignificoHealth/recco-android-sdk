@@ -7,7 +7,7 @@ class MediaPlayerState(
     val pause: () -> Unit,
     val release: () -> Unit,
     val seekTo: (Long) -> Unit,
-    val trackDuration: Long?,
+    val trackDuration: Long?
 ) {
     val isReady: Boolean
         get() = trackDuration != null

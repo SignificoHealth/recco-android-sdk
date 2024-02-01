@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 class ContentInteractViewModelDelegate @Inject constructor(
     private val recommendationRepository: RecommendationRepository,
-    private val logger: Logger,
+    private val logger: Logger
 ) {
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)
@@ -34,11 +34,9 @@ class ContentInteractViewModelDelegate @Inject constructor(
                 value?.contentId?.let {
                     recommendationRepository.setRecommendationAsViewed(it)
                 }
-
             }
         }
         get() = _viewState.value
-
 
     fun onContentUserInteract(userInteract: ContentUserInteract) {
         when (userInteract) {

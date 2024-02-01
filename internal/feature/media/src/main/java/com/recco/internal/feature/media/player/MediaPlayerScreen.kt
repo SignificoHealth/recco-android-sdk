@@ -1,4 +1,6 @@
-@file:UnstableApi package com.recco.internal.feature.media.player
+@file:UnstableApi
+
+package com.recco.internal.feature.media.player
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -54,7 +56,7 @@ import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.media.description.LoadMediaViewModel
-import com.recco.internal.feature.media.description.MediaDescriptionUi
+import com.recco.internal.feature.media.description.MediaDescriptionUI
 import com.recco.internal.feature.media.description.MediaDescriptionUserInteract
 import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
 import com.recco.internal.feature.rating.delegates.ContentUserInteract
@@ -85,10 +87,10 @@ internal fun FullMediaPlayerRoute(
 @Composable
 private fun MediaPlayerScreen(
     navigateUp: () -> Unit,
-    uiState: UiState<MediaDescriptionUi>,
+    uiState: UiState<MediaDescriptionUI>,
     userInteractionState: UserInteractionRecommendation?,
     onContentUserInteract: (ContentUserInteract) -> Unit,
-    onUserInteract: (MediaDescriptionUserInteract) -> Unit,
+    onUserInteract: (MediaDescriptionUserInteract) -> Unit
 ) {
     val playerState = uiState.data?.trackItem?.let { trackItem ->
         rememberMediaPlayerStateWithLifecycle(trackItem)
@@ -134,7 +136,7 @@ private fun MediaPlayerScreen(
                 )
             },
             backgroundColor = Color.Transparent,
-            actions = { }, // No actions on this screen
+            actions = { } // No actions on this screen
         )
     }
 }
@@ -191,17 +193,16 @@ private fun AnimatedUserInteractionRecomendationCard(
 @Composable
 fun MediaPlayerContent(
     playerState: MediaPlayerViewState,
-    mediaDescriptionUi: MediaDescriptionUi
+    mediaDescriptionUi: MediaDescriptionUI
 ) {
-
     when (mediaDescriptionUi) {
-        is MediaDescriptionUi.AudioDescriptionUi -> {
+        is MediaDescriptionUI.AudioDescriptionUI -> {
             AudioPlayerContent(
                 playerState = playerState,
                 mediaDescriptionUi.audio
             )
         }
-        is MediaDescriptionUi.VideoDescriptionUi -> {
+        is MediaDescriptionUI.VideoDescriptionUI -> {
             VideoPlayerContent(playerState = playerState)
         }
     }
@@ -209,7 +210,7 @@ fun MediaPlayerContent(
 
 @Composable
 private fun VideoPlayerContent(
-    playerState: MediaPlayerViewState,
+    playerState: MediaPlayerViewState
 ) {
     Box(modifier = Modifier.background(Color.Black)) {
         MediaPlayer(
@@ -221,7 +222,7 @@ private fun VideoPlayerContent(
             visible = !playerState.isPlaying,
             enter = fadeIn(),
             exit = fadeOut(),
-            modifier = Modifier.align(Alignment.Center),
+            modifier = Modifier.align(Alignment.Center)
         ) {
             PlayButton(
                 isPlaying = false,
@@ -237,7 +238,7 @@ private fun VideoPlayerContent(
 @Composable
 private fun AudioPlayerContent(
     playerState: MediaPlayerViewState,
-    audio: Audio,
+    audio: Audio
 ) {
     Box {
         val coroutineScope = rememberCoroutineScope()
@@ -289,9 +290,10 @@ private fun MediaPlayer(
     } else {
         // PlayerView does not work well on compose previews.
         // Show a whole size dark box instead.
-        Box(modifier = modifier
-            .fillMaxSize()
-            .background(Color.DarkGray)
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Color.DarkGray)
         )
     }
 }
@@ -319,13 +321,13 @@ private fun AudioHeader(audio: Audio) {
             val minutesLength = audio.lengthInSeconds?.div(60)
             buildString {
                 append(podcastString)
-                append("• 1-${minutesLength} $minSuffix").takeIf { minutesLength != null }
+                append("• 1-$minutesLength $minSuffix").takeIf { minutesLength != null }
             }
         }
 
         Text(
             text = audioDurationLabel,
-            style = AppTheme.typography.labelSmall.copy(color = Color.White),
+            style = AppTheme.typography.labelSmall.copy(color = Color.White)
         )
     }
 }
@@ -334,7 +336,7 @@ private fun AudioHeader(audio: Audio) {
 private fun PlayButton(
     isPlaying: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     FloatingActionButton(
         onClick = {
@@ -342,14 +344,15 @@ private fun PlayButton(
         },
         backgroundColor = AppTheme.colors.accent,
         modifier = modifier
-            .size(72.dp),
+            .size(72.dp)
     ) {
         Icon(
             painter = painterResource(
-                id = if (!isPlaying)
+                id = if (!isPlaying) {
                     R.drawable.recco_ic_play
-                else
+                } else {
                     R.drawable.recco_ic_pause
+                }
             ),
             tint = Color.White,
             contentDescription = null
@@ -361,14 +364,15 @@ private fun PlayButton(
 @Composable
 private fun MediaScreenPreview(
     @PreviewParameter(MediaDescriptionUiPreviewProvider::class)
-    uiState: UiState<MediaDescriptionUi>
+    uiState: UiState<MediaDescriptionUI>
 ) {
     AppTheme {
         MediaPlayerScreen(
             navigateUp = {},
             uiState = uiState,
             userInteractionState = UserInteractionRecommendation(
-                contentId = ContentId("", ""), rating = Rating.DISLIKE
+                contentId = ContentId("", ""),
+                rating = Rating.DISLIKE
             ),
             onUserInteract = {},
             onContentUserInteract = {}

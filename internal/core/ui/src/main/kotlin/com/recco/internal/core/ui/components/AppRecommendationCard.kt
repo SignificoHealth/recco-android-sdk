@@ -38,7 +38,7 @@ val widthRecommendationCard = 145.dp
 fun AppRecommendationCard(
     recommendation: Recommendation,
     onClick: (ContentId) -> Unit,
-    applyViewedOverlay: Boolean = true,
+    applyViewedOverlay: Boolean = true
 ) {
     Card(
         modifier = Modifier
@@ -87,7 +87,7 @@ fun AppRecommendationCard(
                     iconSpacing = 4.dp,
                     textStyle = AppTheme.typography.labelSmall.copy(
                         color = AppTheme.colors.primary.copy(alpha = 0.6f),
-                        fontSize = 10.sp,
+                        fontSize = 10.sp
                     ),
                     contentType = recommendation.type,
                     lengthInSeconds = recommendation.lengthInSeconds,

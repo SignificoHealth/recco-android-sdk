@@ -29,7 +29,7 @@ class RecommendationRepository @Inject constructor(
         ContentTypeDTO.ARTICLES,
         ContentTypeDTO.QUESTIONNAIRES,
         ContentTypeDTO.AUDIOS, // (TODO Backend giving 400s atm)
-        ContentTypeDTO.VIDEOS,
+        ContentTypeDTO.VIDEOS
     )
 
     private val sectionsPipelines = mapOf(
