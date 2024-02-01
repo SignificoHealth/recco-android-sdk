@@ -87,7 +87,7 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
         }
     }
 
-    LaunchedEffect(key1 = playerView) {
+    LaunchedEffect(playerView) {
         playerView?.setControllerVisibilityListener(
             PlayerView.ControllerVisibilityListener { visibility ->
                 areControlsShown = visibility == View.VISIBLE
@@ -104,7 +104,7 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
         }
     }
 
-    LaunchedEffect(key1 = exoPlayer) {
+    LaunchedEffect(exoPlayer) {
         exoPlayer?.addListener(object : Player.Listener {
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 super.onIsPlayingChanged(isPlaying)
@@ -277,9 +277,8 @@ private fun rememberPlayerLifecycleObserver(
     return remember(player) {
         LifecycleEventObserver { _, event ->
             when (event) {
-                Lifecycle.Event.ON_RESUME -> {
-                    player?.onResume()
-                }
+                Lifecycle.Event.ON_RESUME -> player?.onResume()
+                Lifecycle.Event.ON_DESTROY -> player?.player?.release()
                 Lifecycle.Event.ON_PAUSE -> {
                     player?.onPause()
 
@@ -288,10 +287,8 @@ private fun rememberPlayerLifecycleObserver(
                         ?.takeIf { mediaType == MediaType.VIDEO }
                         ?.pause()
                 }
-                Lifecycle.Event.ON_DESTROY -> player?.player?.release()
-                else -> {
-                    // Do Nothing
-                }
+
+                else -> {} // Do Nothing
             }
         }
     }
