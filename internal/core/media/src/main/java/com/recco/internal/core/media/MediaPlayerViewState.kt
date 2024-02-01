@@ -28,7 +28,9 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerView
 import coil.ImageLoader
@@ -191,7 +193,9 @@ private fun rememberExoPlayer(
     return remember {
         if (!isInPreviewMode) {
             val player = ExoPlayer.Builder(context).build()
-            player.setMediaItem(trackItem.asMediaItem())
+            val factory = DefaultDataSource.Factory(context)
+            val source = HlsMediaSource.Factory(factory).createMediaSource(trackItem.asMediaItem())
+            player.setMediaSource(source)
             player.prepare()
             player
         } else {
