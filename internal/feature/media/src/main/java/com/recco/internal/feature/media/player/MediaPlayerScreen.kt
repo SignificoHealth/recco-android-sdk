@@ -53,9 +53,9 @@ import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
+import com.recco.internal.feature.media.description.LoadMediaViewModel
 import com.recco.internal.feature.media.description.MediaDescriptionUi
 import com.recco.internal.feature.media.description.MediaDescriptionUserInteract
-import com.recco.internal.feature.media.description.MediaDescriptionViewModel
 import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
 import com.recco.internal.feature.rating.delegates.ContentUserInteract
 import kotlinx.coroutines.delay
@@ -64,7 +64,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun FullMediaPlayerRoute(
     navigateUp: () -> Unit,
-    viewModel: MediaDescriptionViewModel = hiltViewModel()
+    viewModel: LoadMediaViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
         initialValue = UiState()

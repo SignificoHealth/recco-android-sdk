@@ -47,8 +47,6 @@ fun rememberAudioPlayerState(
         }
     }
 
-
-
     val pendingIntent = rememberPendingIntent()
     val mediaSession = remember(exoPlayer, pendingIntent) {
         if (exoPlayer != null) {

@@ -266,7 +266,7 @@ private fun rememberPlayerLifecycleObserver(
                 Lifecycle.Event.ON_PAUSE -> {
                     player?.onPause()
 
-                    // We want to pause the exoPlayer only if video on background
+                    // We want to pause video on background, but not audio
                     exoPlayer
                         ?.takeIf { mediaType == MediaType.VIDEO }
                         ?.pause()

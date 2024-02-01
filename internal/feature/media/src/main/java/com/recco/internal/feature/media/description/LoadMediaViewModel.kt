@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class MediaDescriptionViewModel @Inject constructor(
+internal class LoadMediaViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val reccomendationRepository: RecommendationRepository,
     private val contentInteractViewModelDelegate: ContentInteractViewModelDelegate,
@@ -107,7 +107,8 @@ internal class MediaDescriptionViewModel @Inject constructor(
 
     fun onUserInteract(mediaDescriptionUserInteract: MediaDescriptionUserInteract) {
         when (mediaDescriptionUserInteract) {
-            MediaDescriptionUserInteract.Retry -> {
+            MediaDescriptionUserInteract.Retry,
+            MediaDescriptionUserInteract.InitialLoad -> {
                 loadData()
             }
         }

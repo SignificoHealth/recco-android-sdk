@@ -48,6 +48,7 @@ import com.recco.internal.core.ui.components.RecommendationTypeRow
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.extensions.isEndReached
+import com.recco.internal.core.ui.lifecycle.LifecycleEffect
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
@@ -56,7 +57,7 @@ import com.recco.internal.feature.rating.delegates.ContentUserInteract
 @Composable
 internal fun MediaDescriptionRoute(
     navigateUp: () -> Unit,
-    viewModel: MediaDescriptionViewModel = hiltViewModel(),
+    viewModel: LoadMediaViewModel = hiltViewModel(),
     navigateToMediaPlayer: (ContentId, ContentType) -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
@@ -65,6 +66,12 @@ internal fun MediaDescriptionRoute(
 
     val contentInteractionState by viewModel.interactionViewState
         .collectAsStateWithLifecycle(null)
+
+    LifecycleEffect(
+        onResume = {
+            viewModel.onUserInteract(MediaDescriptionUserInteract.InitialLoad)
+        }
+    )
 
     MediaDescriptionScreen(
         navigateUp = navigateUp,
