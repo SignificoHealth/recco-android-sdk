@@ -5,7 +5,6 @@ plugins {
 
 android {
     namespace = "com.recco.internal.feature.media"
-
 }
 
 dependencies {
