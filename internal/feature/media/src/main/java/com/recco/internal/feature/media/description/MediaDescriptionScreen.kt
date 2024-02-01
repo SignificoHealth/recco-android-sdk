@@ -58,7 +58,7 @@ import com.recco.internal.feature.rating.delegates.ContentUserInteract
 internal fun MediaDescriptionRoute(
     navigateUp: () -> Unit,
     viewModel: LoadMediaViewModel = hiltViewModel(),
-    navigateToMediaPlayer: (ContentId, ContentType) -> Unit,
+    navigateToMediaPlayer: (ContentId, ContentType) -> Unit
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
         initialValue = UiState()
@@ -87,7 +87,7 @@ internal fun MediaDescriptionRoute(
 private fun MediaDescriptionScreen(
     navigateUp: () -> Unit,
     navigateToMediaPlayer: (ContentId, ContentType) -> Unit,
-    uiState: UiState<MediaDescriptionUi>,
+    uiState: UiState<MediaDescriptionUI>,
     userInteractionState: UserInteractionRecommendation?,
     onUserInteract: (MediaDescriptionUserInteract) -> Unit,
     onContentUserInteract: (ContentUserInteract) -> Unit,
@@ -165,7 +165,7 @@ private fun MediaDescriptionScreen(
 }
 
 @Composable
-private fun CardDescriptionContent(mediaUi: MediaDescriptionUi) {
+private fun CardDescriptionContent(mediaUi: MediaDescriptionUI) {
     Column(modifier = Modifier.fillMaxSize()) {
         Card(
             modifier = Modifier
@@ -176,10 +176,10 @@ private fun CardDescriptionContent(mediaUi: MediaDescriptionUi) {
             backgroundColor = AppTheme.colors.background
         ) {
             when (mediaUi) {
-                is MediaDescriptionUi.AudioDescriptionUi -> {
+                is MediaDescriptionUI.AudioDescriptionUI -> {
                     AudioDescriptionContent(mediaUi.audio)
                 }
-                is MediaDescriptionUi.VideoDescriptionUi -> {
+                is MediaDescriptionUI.VideoDescriptionUI -> {
                     VideoDescriptionContent(mediaUi.video)
                 }
             }
@@ -260,8 +260,8 @@ private fun VideoDescriptionContent(video: Video) {
 @Preview
 @Composable
 fun VideoDescriptionScreenPreview(
-    @PreviewParameter(MediaDescriptionUiPreviewProvider::class) uiState: UiState<MediaDescriptionUi>) {
-
+    @PreviewParameter(MediaDescriptionUiPreviewProvider::class) uiState: UiState<MediaDescriptionUI>
+) {
     AppTheme {
         MediaDescriptionScreen(
             navigateUp = {},

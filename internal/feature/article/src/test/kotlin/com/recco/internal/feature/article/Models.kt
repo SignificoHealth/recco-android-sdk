@@ -26,7 +26,7 @@ internal fun createArticleUiGivenContent(
     status: Status = Status.NO_INTERACTION,
     isBookmarked: Boolean = true
 ) = ArticleUI(
-    article = createArticle(rating, status, isBookmarked),
+    article = createArticle(rating, status, isBookmarked)
 )
 
 internal fun createArticle(

@@ -1,4 +1,6 @@
-@file:OptIn(UnstableApi::class) package com.recco.internal.core.ui.notifications
+@file:OptIn(UnstableApi::class)
+
+package com.recco.internal.core.ui.notifications
 
 import android.app.PendingIntent
 import android.content.Context
@@ -27,7 +29,7 @@ const val NOTIFICATION_LARGE_ICON_SIZE = 144 // px
 
 class MediaNotificationManager(
     private val context: Context,
-    sessionToken: SessionToken,
+    sessionToken: SessionToken
 ) {
     private val serviceJob = SupervisorJob()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
@@ -57,7 +59,7 @@ class MediaNotificationManager(
         notificationManager.setPlayer(null)
     }
 
-    fun showNotificationForPlayer(player: Player){
+    fun showNotificationForPlayer(player: Player) {
         notificationManager.setPlayer(player)
     }
 
@@ -82,7 +84,6 @@ class MediaNotificationManager(
         ): Bitmap? {
             val iconUri = controller.get().mediaMetadata.artworkUri
             return if (currentIconUri != iconUri || currentBitmap == null) {
-
                 // Cache the bitmap for the current song so that successive calls to
                 // `getCurrentLargeIcon` don't cause the bitmap to be recreated.
                 currentIconUri = iconUri
@@ -102,9 +103,10 @@ class MediaNotificationManager(
             return withContext(Dispatchers.IO) {
                 context.imageLoader.execute(
                     ImageRequest.Builder(context)
-                    .data(uri)
-                    .size(NOTIFICATION_LARGE_ICON_SIZE)
-                    .build()).drawable?.toBitmap()
+                        .data(uri)
+                        .size(NOTIFICATION_LARGE_ICON_SIZE)
+                        .build()
+                ).drawable?.toBitmap()
             }
         }
     }

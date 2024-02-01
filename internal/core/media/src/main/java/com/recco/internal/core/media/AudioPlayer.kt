@@ -1,4 +1,6 @@
-@file:OptIn(UnstableApi::class) package com.recco.internal.core.media
+@file:OptIn(UnstableApi::class)
+
+package com.recco.internal.core.media
 
 import android.content.Context
 import androidx.annotation.OptIn
@@ -58,9 +60,15 @@ class AudioPlayer(
                     onIsPlayingChange?.invoke(isPlaying)
                 }
 
-                override fun onPositionDiscontinuity(oldPosition: Player.PositionInfo, newPosition: Player.PositionInfo, reason: Int) {
+                override fun onPositionDiscontinuity(
+                    oldPosition: Player.PositionInfo,
+                    newPosition: Player.PositionInfo,
+                    reason: Int
+                ) {
                     super.onPositionDiscontinuity(oldPosition, newPosition, reason)
-                    if (reason == Player.DISCONTINUITY_REASON_SEEK || reason == Player.DISCONTINUITY_REASON_SEEK_ADJUSTMENT) {
+                    if (reason == Player.DISCONTINUITY_REASON_SEEK ||
+                        reason == Player.DISCONTINUITY_REASON_SEEK_ADJUSTMENT
+                    ) {
                         onPositionChange?.invoke(newPosition.positionMs)
                     }
                 }
@@ -105,7 +113,6 @@ class AudioPlayer(
         exoPlayer?.setMediaSource(mediaSource)
         exoPlayer?.prepare()
     }
-
 
     fun seekTo(currentPosition: Long) {
         exoPlayer?.seekTo(currentPosition)

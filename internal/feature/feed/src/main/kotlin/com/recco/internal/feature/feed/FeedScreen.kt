@@ -436,7 +436,7 @@ private fun UnlockedItems(
                                     error("AppRecommendationCard can't navigate with a ${recommendation.type}")
                                 }
                             }
-                        },
+                        }
                     )
                 }
 
@@ -620,7 +620,7 @@ private fun Preview(
             navigateToArticle = {},
             navigateToBookmarks = {},
             navigateToQuestionnaire = { _, _, _ -> },
-            navigateToMediaDescription = { _, _, -> }
+            navigateToMediaDescription = { _, _ -> }
         )
     }
 }
@@ -639,7 +639,7 @@ private fun PreviewDark(
             navigateToArticle = {},
             navigateToBookmarks = {},
             navigateToQuestionnaire = { _, _, _ -> },
-            navigateToMediaDescription = { _, _, -> }
+            navigateToMediaDescription = { _, _ -> }
         )
     }
 }

@@ -29,7 +29,7 @@ fun RecommendationTypeRow(
     textStyle: TextStyle = AppTheme.typography.labelSmall,
     contentType: ContentType,
     lengthInSeconds: Int?,
-    iconSpacing: Dp = AppSpacing.dp_8,
+    iconSpacing: Dp = AppSpacing.dp_8
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -39,15 +39,15 @@ fun RecommendationTypeRow(
         val (iconDrawable, contentTypeString) = when (contentType) {
             ContentType.ARTICLE -> {
                 R.drawable.recco_ic_document to
-                R.string.recco_reccomendation_type_read
+                    R.string.recco_reccomendation_type_read
             }
             ContentType.AUDIO -> {
                 R.drawable.recco_ic_sound to
-                R.string.recco_reccomendation_type_podcast
+                    R.string.recco_reccomendation_type_podcast
             }
             ContentType.VIDEO -> {
                 R.drawable.recco_ic_video to
-                R.string.recco_reccomendation_type_video
+                    R.string.recco_reccomendation_type_video
             }
             else -> { null to null }
         }
@@ -88,11 +88,12 @@ fun RecommendationTypeRowPreview() {
         Surface {
             Column(
                 modifier = Modifier.padding(AppSpacing.dp_16),
-                verticalArrangement = Arrangement.spacedBy(AppSpacing.dp_16),
+                verticalArrangement = Arrangement.spacedBy(AppSpacing.dp_16)
             ) {
                 ContentType.entries.forEach {
                     RecommendationTypeRow(
-                        contentType = it, lengthInSeconds = (it.ordinal + 1) * 60
+                        contentType = it,
+                        lengthInSeconds = (it.ordinal + 1) * 60
                     )
                 }
             }

@@ -75,11 +75,12 @@ class ContentInteractViewModelDelegateTest {
         val startState = reccomendationAs(
             isDislikeLoading = false,
             isLikeLoading = true,
-            rating = Rating.LIKE,
+            rating = Rating.LIKE
         )
 
         val viewModelDelegate = createViewModelDelegate(
-            startWith = startState        )
+            startWith = startState
+        )
 
         repository.stubRepositoryForSuccess(id)
 
@@ -97,7 +98,7 @@ class ContentInteractViewModelDelegateTest {
                 reccomendationAs(
                     isDislikeLoading = false,
                     isLikeLoading = false,
-                    rating = Rating.NOT_RATED,
+                    rating = Rating.NOT_RATED
                 )
             )
     }
@@ -107,7 +108,7 @@ class ContentInteractViewModelDelegateTest {
         val startState = reccomendationAs(
             isDislikeLoading = true,
             isLikeLoading = false,
-            rating = Rating.DISLIKE,
+            rating = Rating.DISLIKE
         )
 
         val viewModelDelegate = createViewModelDelegate(
@@ -130,7 +131,7 @@ class ContentInteractViewModelDelegateTest {
                 reccomendationAs(
                     isDislikeLoading = false,
                     isLikeLoading = false,
-                    rating = Rating.NOT_RATED,
+                    rating = Rating.NOT_RATED
                 )
             )
     }
@@ -140,7 +141,7 @@ class ContentInteractViewModelDelegateTest {
         val startState = reccomendationAs(
             isDislikeLoading = true,
             isLikeLoading = false,
-            rating = Rating.LIKE,
+            rating = Rating.LIKE
         )
 
         val viewModelDelegate = createViewModelDelegate(
@@ -163,7 +164,7 @@ class ContentInteractViewModelDelegateTest {
                 reccomendationAs(
                     isDislikeLoading = false,
                     isLikeLoading = false,
-                    rating = Rating.DISLIKE,
+                    rating = Rating.DISLIKE
                 )
             )
     }
@@ -173,7 +174,7 @@ class ContentInteractViewModelDelegateTest {
         val startState = reccomendationAs(
             isDislikeLoading = false,
             isLikeLoading = true,
-            rating = Rating.NOT_RATED,
+            rating = Rating.NOT_RATED
         )
 
         val viewModelDelegate = createViewModelDelegate(
@@ -196,7 +197,7 @@ class ContentInteractViewModelDelegateTest {
                 reccomendationAs(
                     isDislikeLoading = false,
                     isLikeLoading = false,
-                    rating = Rating.LIKE,
+                    rating = Rating.LIKE
                 )
             )
     }
@@ -206,7 +207,7 @@ class ContentInteractViewModelDelegateTest {
         val startState = reccomendationAs(
             isDislikeLoading = true,
             isLikeLoading = false,
-            rating = Rating.NOT_RATED,
+            rating = Rating.NOT_RATED
         )
 
         val viewModelDelegate = createViewModelDelegate(
@@ -229,7 +230,7 @@ class ContentInteractViewModelDelegateTest {
                 reccomendationAs(
                     isDislikeLoading = false,
                     isLikeLoading = false,
-                    rating = Rating.DISLIKE,
+                    rating = Rating.DISLIKE
                 )
             )
     }
@@ -240,7 +241,7 @@ class ContentInteractViewModelDelegateTest {
             startWith = reccomendationAs(
                 isDislikeLoading = true,
                 isLikeLoading = false,
-                rating = Rating.NOT_RATED,
+                rating = Rating.NOT_RATED
             )
         )
 
@@ -263,7 +264,7 @@ class ContentInteractViewModelDelegateTest {
             startWith = reccomendationAs(
                 isDislikeLoading = true,
                 isLikeLoading = false,
-                rating = Rating.NOT_RATED,
+                rating = Rating.NOT_RATED
             )
         )
 
@@ -279,7 +280,6 @@ class ContentInteractViewModelDelegateTest {
             e(staticThrowableForTesting, null, null)
         }
     }
-
 
     private fun createViewModelDelegate(startWith: UserInteractionRecommendation): ContentInteractViewModelDelegate {
         return ContentInteractViewModelDelegate(
@@ -322,7 +322,6 @@ class ContentInteractViewModelDelegateTest {
         }
     }
 
-
     private fun reccomendationAs(
         id: ContentId = this.id,
         rating: Rating = Rating.DISLIKE,
@@ -340,7 +339,6 @@ class ContentInteractViewModelDelegateTest {
             isDislikeLoading = isDislikeLoading
         )
     }
-
 
 //    @Test
 //    fun `onFailure emits exceptions while logging them if ToggleLikeState`() = runTest {

@@ -1,10 +1,11 @@
-@file:UnstableApi package com.recco.internal.core.media
+@file:UnstableApi
+
+package com.recco.internal.core.media
 
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -14,13 +15,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import com.recco.internal.core.model.recommendation.TrackItem
 import com.recco.internal.core.ui.extensions.hasPermission
+import com.recco.internal.core.ui.lifecycle.LifecycleEffect
 import com.recco.internal.core.ui.notifications.MediaNotificationManager
 import com.recco.internal.core.ui.notifications.askForNotificationPermission
 import com.recco.internal.core.ui.notifications.rememberPendingIntent
@@ -29,13 +29,13 @@ import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun rememberAudioPlayerState(
-    trackItem: TrackItem,
+    trackItem: TrackItem
 ): MediaPlayerState {
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
     val isInPreviewMode = LocalInspectionMode.current
     var currentPosition by remember { mutableLongStateOf(0L) }
-    var trackDuration by remember { mutableLongStateOf(0L)  }
+    var trackDuration by remember { mutableLongStateOf(0L) }
     var isPlaying by remember { mutableStateOf(false) }
     var isNotificationsPermissionGranted by remember { mutableStateOf(false) }
 
@@ -56,7 +56,9 @@ fun rememberAudioPlayerState(
                     .setSessionActivity(pendingIntent)
                     .build()
             }
-        } else null
+        } else {
+            null
+        }
     }
 
     val notificationManager = remember(mediaSession, pendingIntent) {
@@ -88,31 +90,16 @@ fun rememberAudioPlayerState(
         )
     }
 
-    DisposableEffect(key1 = player) {
-        onDispose { player.release() }
-    }
-
-    DisposableEffect(LocalLifecycleOwner.current) {
-        val observer = object: DefaultLifecycleObserver {
-            override fun onDestroy(owner: LifecycleOwner) {
-                notificationManager?.hideNotification()
-                player.release()
-                super.onDestroy(owner)
-            }
-        }
-
-        lifeCycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            notificationManager?.hideNotification()
-            lifeCycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
+    LifecycleEffect(onDestroy = {
+        mediaSession?.release()
+        notificationManager?.hideNotification()
+        player.release()
+    })
 
     LaunchedEffect(isPlaying) {
         currentPosition = player.currentPositionMs
 
-        while(isPlaying) {
+        while (isPlaying) {
             currentPosition = player.currentPositionMs
             delay(1.seconds)
         }
@@ -126,19 +113,16 @@ fun rememberAudioPlayerState(
         isPlaying = isPlaying,
         currentPosition = currentPosition,
         play = {
-            if (context.hasPermission(Manifest.permission.POST_NOTIFICATIONS)                ) {
+            if (context.hasPermission(Manifest.permission.POST_NOTIFICATIONS)) {
                 exoPlayer?.let {
                     notificationManager?.showNotificationForPlayer(exoPlayer)
                 }
 
                 player.play()
-
             } else if (!isNotificationsPermissionGranted) {
                 permissionLauncher.askForNotificationPermission()
-
             } else {
                 player.play()
-
             }
         },
         pause = { player.pause() },

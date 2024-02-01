@@ -7,22 +7,22 @@ import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.TrackItem
 import com.recco.internal.feature.media.asTrackItem
 
-sealed class MediaDescriptionUi(
+sealed class MediaDescriptionUI(
     val contentId: ContentId,
     val imageUrl: String?,
-    val imageAlt: String?,
+    val imageAlt: String?
 ) {
-    data class VideoDescriptionUi(
-        val video: Video,
-    ): MediaDescriptionUi(
+    data class VideoDescriptionUI(
+        val video: Video
+    ) : MediaDescriptionUI(
         contentId = video.id,
         imageAlt = video.imageAlt,
         imageUrl = video.imageUrl
     )
 
-    data class AudioDescriptionUi(
-        val audio: Audio,
-    ): MediaDescriptionUi(
+    data class AudioDescriptionUI(
+        val audio: Audio
+    ) : MediaDescriptionUI(
         contentId = audio.id,
         imageAlt = audio.imageAlt,
         imageUrl = audio.imageUrl
@@ -30,14 +30,14 @@ sealed class MediaDescriptionUi(
 
     val contentType: ContentType
         get() = when {
-            this is AudioDescriptionUi -> ContentType.AUDIO
-            this is VideoDescriptionUi -> ContentType.VIDEO
+            this is AudioDescriptionUI -> ContentType.AUDIO
+            this is VideoDescriptionUI -> ContentType.VIDEO
             else -> error("Non supported ContentType: $this, for MediaDescriptionUi")
         }
 
     val trackItem: TrackItem
-        get() = when(this) {
-            is AudioDescriptionUi -> audio.asTrackItem()
-            is VideoDescriptionUi -> video.asTrackItem()
+        get() = when (this) {
+            is AudioDescriptionUI -> audio.asTrackItem()
+            is VideoDescriptionUI -> video.asTrackItem()
         }
 }
