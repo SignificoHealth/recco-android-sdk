@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
+import com.ireward.htmlcompose.HtmlText
 import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.ContentId
@@ -47,6 +48,7 @@ import com.recco.internal.core.ui.components.RecommendationTypeRow
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.extensions.isEndReached
+import com.recco.internal.core.ui.lifecycle.LifecycleEffect
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
@@ -55,7 +57,7 @@ import com.recco.internal.feature.rating.delegates.ContentUserInteract
 @Composable
 internal fun MediaDescriptionRoute(
     navigateUp: () -> Unit,
-    viewModel: MediaDescriptionViewModel = hiltViewModel(),
+    viewModel: LoadMediaViewModel = hiltViewModel(),
     navigateToMediaPlayer: (ContentId, ContentType) -> Unit,
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(
@@ -64,6 +66,12 @@ internal fun MediaDescriptionRoute(
 
     val contentInteractionState by viewModel.interactionViewState
         .collectAsStateWithLifecycle(null)
+
+    LifecycleEffect(
+        onResume = {
+            viewModel.onUserInteract(MediaDescriptionUserInteract.InitialLoad)
+        }
+    )
 
     MediaDescriptionScreen(
         navigateUp = navigateUp,
@@ -215,8 +223,8 @@ private fun AudioDescriptionContent(audio: Audio) {
 
             Spacer(Modifier.height(AppSpacing.dp_24))
 
-            Text(
-                text = audio.description ?: "",
+            HtmlText(
+                text = audio.description?.replace("\n", "<br/>") ?: "",
                 style = AppTheme.typography.body3.copy(fontWeight = FontWeight.Normal)
             )
         }
@@ -242,8 +250,8 @@ private fun VideoDescriptionContent(video: Video) {
 
         Spacer(Modifier.height(AppSpacing.dp_24))
 
-        Text(
-            text = video.description ?: "",
+        HtmlText(
+            text = video.description?.replace("\n", "<br/>") ?: "",
             style = AppTheme.typography.body1
         )
     }

@@ -28,7 +28,9 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerView
 import coil.ImageLoader
@@ -181,6 +183,24 @@ private fun rememberMediaNotificationManager(
     }
 }
 
+private fun ExoPlayer.prepareFor(
+    context: Context,
+    trackItem: TrackItem,
+) {
+    when (trackItem.mediaType) {
+        MediaType.AUDIO -> {
+            setMediaItem(trackItem.asMediaItem())
+        }
+        MediaType.VIDEO -> {
+            val factory = DefaultDataSource.Factory(context)
+            val source = HlsMediaSource.Factory(factory).createMediaSource(trackItem.asMediaItem())
+            setMediaSource(source)
+        }
+    }
+
+    prepare()
+}
+
 @Composable
 private fun rememberExoPlayer(
     trackItem: TrackItem
@@ -191,8 +211,7 @@ private fun rememberExoPlayer(
     return remember {
         if (!isInPreviewMode) {
             val player = ExoPlayer.Builder(context).build()
-            player.setMediaItem(trackItem.asMediaItem())
-            player.prepare()
+            player.prepareFor(context, trackItem)
             player
         } else {
             null
@@ -236,6 +255,7 @@ private fun rememberPlayerView(
                 player = exoPlayer
                 controllerAutoShow = false
                 defaultArtwork = null
+                setShowSubtitleButton(trackItem.mediaType == MediaType.VIDEO)
                 artworkDisplayMode = PlayerView.ARTWORK_DISPLAY_MODE_FILL
             }
 
@@ -262,7 +282,7 @@ private fun rememberPlayerLifecycleObserver(
                 Lifecycle.Event.ON_PAUSE -> {
                     player?.onPause()
 
-                    // We want to pause the exoPlayer only if video on background
+                    // We want to pause video on background, but not audio
                     exoPlayer
                         ?.takeIf { mediaType == MediaType.VIDEO }
                         ?.pause()
