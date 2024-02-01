@@ -417,29 +417,14 @@ private fun UnlockedItems(
                         recommendation = recommendation,
                         onClick = { contentId ->
                             when (recommendation.type) {
-                                ARTICLE -> {
-                                    navigateToArticle(contentId)
-                                }
-                                AUDIO -> {
-                                    navigateToMediaDescription(
-                                        contentId,
-                                        AUDIO
-                                    )
-                                }
-                                VIDEO -> {
-                                    navigateToMediaDescription(
-                                        contentId,
-                                        VIDEO
-                                    )
-                                }
-                                else -> {
-                                    error("AppRecommendationCard can't navigate with a ${recommendation.type}")
-                                }
+                                ARTICLE -> navigateToArticle(contentId)
+                                AUDIO -> navigateToMediaDescription(contentId, AUDIO)
+                                VIDEO -> navigateToMediaDescription(contentId, VIDEO)
+                                else ->  throw IllegalStateException()
                             }
                         }
                     )
                 }
-
                 QUESTIONNAIRE -> {
                     AppQuestionnaireCard(section.feedSection.topic!!) {
                         openDialog.value = true
