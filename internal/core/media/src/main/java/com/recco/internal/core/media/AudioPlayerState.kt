@@ -6,7 +6,6 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -16,13 +15,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import com.recco.internal.core.model.recommendation.TrackItem
 import com.recco.internal.core.ui.extensions.hasPermission
+import com.recco.internal.core.ui.lifecycle.LifecycleEffect
 import com.recco.internal.core.ui.notifications.MediaNotificationManager
 import com.recco.internal.core.ui.notifications.askForNotificationPermission
 import com.recco.internal.core.ui.notifications.rememberPendingIntent
@@ -92,26 +90,11 @@ fun rememberAudioPlayerState(
         )
     }
 
-    DisposableEffect(key1 = player) {
-        onDispose { player.release() }
-    }
-
-    DisposableEffect(LocalLifecycleOwner.current) {
-        val observer = object : DefaultLifecycleObserver {
-            override fun onDestroy(owner: LifecycleOwner) {
-                notificationManager?.hideNotification()
-                player.release()
-                super.onDestroy(owner)
-            }
-        }
-
-        lifeCycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            notificationManager?.hideNotification()
-            lifeCycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
+    LifecycleEffect(onDestroy = {
+        mediaSession?.release()
+        notificationManager?.hideNotification()
+        player.release()
+    })
 
     LaunchedEffect(isPlaying) {
         currentPosition = player.currentPositionMs
