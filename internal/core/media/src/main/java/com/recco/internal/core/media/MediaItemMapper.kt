@@ -1,11 +1,8 @@
 package com.recco.internal.core.media
 
 import android.net.Uri
-import androidx.media3.common.C
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaItem.SubtitleConfiguration
 import androidx.media3.common.MediaMetadata
-import androidx.media3.common.MimeTypes
 import com.recco.internal.core.model.media.MediaType
 import com.recco.internal.core.model.recommendation.TrackItem
 
@@ -20,23 +17,9 @@ fun TrackItem.asMediaItem(): MediaItem {
         }
         .build()
 
-    val trackUri = Uri.parse(mediaUrl)
-
     return MediaItem.Builder()
-        .setUri(trackUri)
+        .setUri(Uri.parse(mediaUrl))
         .setMediaId(id)
         .setMediaMetadata(mediaMetaData)
-        .apply {
-            if (mediaType == MediaType.VIDEO) {
-                setSubtitleConfigurations(
-                    listOf(
-                        SubtitleConfiguration.Builder(trackUri)
-                            .setMimeType(MimeTypes.APPLICATION_SUBRIP)
-                            .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
-                            .build()
-                    )
-                )
-            }
-        }
         .build()
 }

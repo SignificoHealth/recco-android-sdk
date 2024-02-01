@@ -255,6 +255,7 @@ private fun rememberPlayerView(
                 player = exoPlayer
                 controllerAutoShow = false
                 defaultArtwork = null
+                setShowSubtitleButton(trackItem.mediaType == MediaType.VIDEO)
                 artworkDisplayMode = PlayerView.ARTWORK_DISPLAY_MODE_FILL
             }
 
