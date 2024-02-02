@@ -2,6 +2,9 @@
 
 package com.recco.internal.feature.media.player
 
+import android.os.Handler
+import android.os.Looper
+import android.view.ViewGroup
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -30,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,6 +42,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.util.UnstableApi
 import com.recco.internal.core.media.MediaPlayerViewState
@@ -213,6 +219,7 @@ private fun VideoPlayerContent(
     playerState: MediaPlayerViewState
 ) {
     Box(modifier = Modifier.background(Color.Black)) {
+
         MediaPlayer(
             playerState = playerState,
             modifier = Modifier.align(Alignment.Center)

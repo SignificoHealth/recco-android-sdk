@@ -8,6 +8,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.LayerDrawable
+import android.view.SurfaceView
 import android.view.View
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,12 +33,14 @@ import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.session.MediaSession
+import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import coil.ImageLoader
 import coil.request.ImageRequest
 import com.recco.internal.core.model.media.MediaType
 import com.recco.internal.core.model.recommendation.TrackItem
 import com.recco.internal.core.ui.extensions.hasPermission
+import com.recco.internal.core.ui.lifecycle.LifecycleEffect
 import com.recco.internal.core.ui.notifications.MediaNotificationManager
 import com.recco.internal.core.ui.notifications.askForNotificationPermission
 import com.recco.internal.core.ui.notifications.rememberPendingIntent
@@ -118,6 +121,18 @@ fun rememberMediaPlayerStateWithLifecycle(trackItem: TrackItem): MediaPlayerView
             }
         })
     }
+
+    LifecycleEffect(onResume = {
+        exoPlayer?.videoComponent?.apply {
+            // Force video surface to reset its size when the app resumes
+            (playerView?.videoSurfaceView as? SurfaceView)?.let {
+                clearVideoSurface()
+                setVideoSurfaceView(it)
+            }
+
+        }
+
+    })
 
     DisposableEffect(lifecycleOwner) {
         val observer = object : DefaultLifecycleObserver {
