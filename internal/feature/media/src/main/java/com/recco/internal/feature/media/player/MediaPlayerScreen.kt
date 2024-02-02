@@ -43,18 +43,17 @@ import androidx.media3.common.util.UnstableApi
 import com.recco.internal.core.media.MediaPlayerViewState
 import com.recco.internal.core.media.rememberMediaPlayerStateWithLifecycle
 import com.recco.internal.core.model.media.Audio
+import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.R
-import com.recco.internal.core.ui.components.AppScreenStateAware
-import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.AppTopBarDefaults
-import com.recco.internal.core.ui.components.BackIconButton
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
+import com.recco.internal.feature.media.asTrackItem
 import com.recco.internal.feature.media.description.LoadMediaViewModel
 import com.recco.internal.feature.media.description.MediaDescriptionUI
 import com.recco.internal.feature.media.description.MediaDescriptionUserInteract
@@ -92,52 +91,59 @@ private fun MediaPlayerScreen(
     onContentUserInteract: (ContentUserInteract) -> Unit,
     onUserInteract: (MediaDescriptionUserInteract) -> Unit
 ) {
-    val playerState = uiState.data?.trackItem?.let { trackItem ->
-        rememberMediaPlayerStateWithLifecycle(trackItem)
-    }
+//    val playerState = uiState.data?.trackItem?.let { trackItem ->
+//        rememberMediaPlayerStateWithLifecycle(trackItem)
+//    }
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
+//            .fillMaxSize()
             .background(AppTheme.colors.background)
     ) {
-        AppScreenStateAware(
-            uiState = uiState,
-            retry = { onUserInteract(MediaDescriptionUserInteract.Retry) },
-            isFloatingFooter = true,
-            footerContent = {
-                userInteractionState?.let {
-                    AnimatedUserInteractionRecomendationCard(
-                        userInteractionRecommendation = it,
-                        onContentUserInteract = onContentUserInteract,
-                        isVisible = playerState?.areControlsShown == false
-                    )
-                }
-            }
-
-        ) {
-            playerState?.let { state ->
-                uiState.data?.let { mediaDescriptionUi ->
-                    MediaPlayerContent(
-                        playerState = state,
-                        mediaDescriptionUi = mediaDescriptionUi
-                    )
-                }
-            }
-        }
-
-        AppTopBar(
-            title = null,
-            elevation = 0.dp,
-            navigationIcon = {
-                BackIconButton(
-                    onClick = navigateUp,
-                    iconTint = Color.White
+            uiState.data?.let { mediaDescriptionUi ->
+                MediaPlayerContent(
+                    mediaDescriptionUi = mediaDescriptionUi
                 )
-            },
-            backgroundColor = Color.Transparent,
-            actions = { } // No actions on this screen
-        )
+            }
+
+
+//        AppScreenStateAware(
+//            uiState = uiState,
+//            retry = { onUserInteract(MediaDescriptionUserInteract.Retry) },
+//            isFloatingFooter = true,
+//            footerContent = {
+//                userInteractionState?.let {
+//                    AnimatedUserInteractionRecomendationCard(
+//                        userInteractionRecommendation = it,
+//                        onContentUserInteract = onContentUserInteract,
+//                        isVisible = playerState?.areControlsShown == false
+//                    )
+//                }
+//            }
+//
+//        ) {
+//            playerState?.let { state ->
+//                uiState.data?.let { mediaDescriptionUi ->
+//                    MediaPlayerContent(
+//                        playerState = state,
+//                        mediaDescriptionUi = mediaDescriptionUi
+//                    )
+//                }
+//            }
+//        }
+//
+//        AppTopBar(
+//            title = null,
+//            elevation = 0.dp,
+//            navigationIcon = {
+//                BackIconButton(
+//                    onClick = navigateUp,
+//                    iconTint = Color.White
+//                )
+//            },
+//            backgroundColor = Color.Transparent,
+//            actions = { } // No actions on this screen
+//        )
     }
 }
 
@@ -192,26 +198,26 @@ private fun AnimatedUserInteractionRecomendationCard(
 
 @Composable
 fun MediaPlayerContent(
-    playerState: MediaPlayerViewState,
     mediaDescriptionUi: MediaDescriptionUI
 ) {
     when (mediaDescriptionUi) {
         is MediaDescriptionUI.AudioDescriptionUI -> {
             AudioPlayerContent(
-                playerState = playerState,
                 mediaDescriptionUi.audio
             )
         }
         is MediaDescriptionUI.VideoDescriptionUI -> {
-            VideoPlayerContent(playerState = playerState)
+            VideoPlayerContent(mediaDescriptionUi.video)
         }
     }
 }
 
 @Composable
 private fun VideoPlayerContent(
-    playerState: MediaPlayerViewState
+    playerState: Video
 ) {
+    val playerState = rememberMediaPlayerStateWithLifecycle(playerState.asTrackItem())
+
     Box(modifier = Modifier.background(Color.Black)) {
         MediaPlayer(
             playerState = playerState,
@@ -237,9 +243,10 @@ private fun VideoPlayerContent(
 
 @Composable
 private fun AudioPlayerContent(
-    playerState: MediaPlayerViewState,
     audio: Audio
 ) {
+    val playerState = rememberMediaPlayerStateWithLifecycle(audio.asTrackItem())
+
     Box {
         val coroutineScope = rememberCoroutineScope()
 

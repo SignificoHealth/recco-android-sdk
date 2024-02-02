@@ -29,6 +29,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
+import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.session.MediaSession
@@ -209,8 +210,23 @@ private fun rememberExoPlayer(
 
     return remember {
         if (!isInPreviewMode) {
-            val player = ExoPlayer.Builder(context).build()
+            val player = ExoPlayer.Builder(context)
+                .apply {
+                    setLoadControl(
+                        DefaultLoadControl.Builder()
+                            .setBufferDurationsMs(
+                                5_000,
+                                5_000,
+                                2_000,
+                                2_000
+                            ).setPrioritizeTimeOverSizeThresholds(false)
+                            .build()
+                    )
+                }
+
+                .build()
             player.prepareFor(context, trackItem)
+
             player
         } else {
             null
@@ -251,7 +267,7 @@ private fun rememberPlayerView(
     val isInPreviewMode = LocalInspectionMode.current
 
     return if (!isInPreviewMode) {
-        remember(trackItem) {
+        remember {
             val playerView = PlayerView(context).apply {
                 player = exoPlayer
                 controllerAutoShow = false
