@@ -420,7 +420,7 @@ private fun UnlockedItems(
                                 ARTICLE -> navigateToArticle(contentId)
                                 AUDIO -> navigateToMediaDescription(contentId, AUDIO)
                                 VIDEO -> navigateToMediaDescription(contentId, VIDEO)
-                                else ->  throw IllegalStateException()
+                                else -> throw IllegalStateException()
                             }
                         }
                     )
