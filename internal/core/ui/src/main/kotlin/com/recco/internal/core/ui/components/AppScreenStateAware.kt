@@ -38,7 +38,7 @@ import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.extensions.noRippleClickable
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
-import java.lang.Float.min
+import kotlin.math.min
 
 data class UiState<T>(
     val isLoading: Boolean = true,
@@ -147,12 +147,12 @@ fun <T> AppScreenStateAware(
     } else {
         Box(
             modifier = Modifier
-                .fillMaxSize()
+//                .fillMaxSize()
                 .padding(top = contentPadding.calculateTopPadding())
         ) {
             backgroundContent?.invoke()
 
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column { // (modifier = zModifier.fillMaxSize()) {
                 headerContent?.let {
                     HeaderContent(
                         isFirstLoading = isFirstLoading.value,
@@ -337,7 +337,7 @@ private fun <T> AppScreenStateAwareContent(
             else -> {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
+//                        .fillMaxSize()
                         .pullRefresh(pullRefreshState)
                 ) {
                     LaunchedEffect(Unit) {
@@ -345,11 +345,13 @@ private fun <T> AppScreenStateAwareContent(
                         isPullRefreshEnabled.value = true
                     }
 
-                    Column(modifier = Modifier.fillMaxSize()) {
+                    Column(
+//                        modifier = Modifier.fillMaxSize()
+                    ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .weight(1f)
+//                                .weight(1f)
                                 .let {
                                     if (scrollState != null) {
                                         it.verticalScroll(scrollState)

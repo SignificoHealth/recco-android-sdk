@@ -48,7 +48,10 @@ import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.R
+import com.recco.internal.core.ui.components.AppScreenStateAware
+import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.AppTopBarDefaults
+import com.recco.internal.core.ui.components.BackIconButton
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
@@ -100,18 +103,18 @@ private fun MediaPlayerScreen(
 //            .fillMaxSize()
             .background(AppTheme.colors.background)
     ) {
-            uiState.data?.let { mediaDescriptionUi ->
-                MediaPlayerContent(
-                    mediaDescriptionUi = mediaDescriptionUi
-                )
-            }
+//            uiState.data?.let { mediaDescriptionUi ->
+//                MediaPlayerContent(
+//                    mediaDescriptionUi = mediaDescriptionUi
+//                )
+//            }
 
 
-//        AppScreenStateAware(
-//            uiState = uiState,
-//            retry = { onUserInteract(MediaDescriptionUserInteract.Retry) },
-//            isFloatingFooter = true,
-//            footerContent = {
+        AppScreenStateAware(
+            uiState = uiState,
+            retry = { onUserInteract(MediaDescriptionUserInteract.Retry) },
+            isFloatingFooter = true,
+            footerContent = {
 //                userInteractionState?.let {
 //                    AnimatedUserInteractionRecomendationCard(
 //                        userInteractionRecommendation = it,
@@ -119,9 +122,14 @@ private fun MediaPlayerScreen(
 //                        isVisible = playerState?.areControlsShown == false
 //                    )
 //                }
-//            }
-//
-//        ) {
+            }
+
+        ) {
+            uiState.data?.let { mediaDescriptionUi ->
+                MediaPlayerContent(
+                    mediaDescriptionUi = mediaDescriptionUi
+                )
+            }
 //            playerState?.let { state ->
 //                uiState.data?.let { mediaDescriptionUi ->
 //                    MediaPlayerContent(
@@ -130,23 +138,23 @@ private fun MediaPlayerScreen(
 //                    )
 //                }
 //            }
-//        }
-//
-//        AppTopBar(
-//            title = null,
-//            elevation = 0.dp,
-//            navigationIcon = {
-//                BackIconButton(
-//                    onClick = navigateUp,
-//                    iconTint = Color.White
-//                )
-//            },
-//            backgroundColor = Color.Transparent,
-//            actions = { } // No actions on this screen
-//        )
+        }
+
+        AppTopBar(
+            title = null,
+            elevation = 0.dp,
+            navigationIcon = {
+                BackIconButton(
+                    onClick = navigateUp,
+                    iconTint = Color.White
+                )
+            },
+            backgroundColor = Color.Transparent,
+            actions = { } // No actions on this screen
+        )
     }
 }
-
+//
 @Composable
 private fun AnimatedUserInteractionRecomendationCard(
     isVisible: Boolean,
