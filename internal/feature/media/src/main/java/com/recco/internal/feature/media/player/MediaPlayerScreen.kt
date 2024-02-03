@@ -45,6 +45,7 @@ import com.recco.internal.core.media.rememberMediaPlayerStateWithLifecycle
 import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.R
@@ -113,6 +114,7 @@ private fun MediaPlayerScreen(
         AppScreenStateAware(
             uiState = uiState,
             retry = { onUserInteract(MediaDescriptionUserInteract.Retry) },
+            shouldFillMaxSize = uiState.data?.contentType == ContentType.VIDEO,
             isFloatingFooter = true,
             footerContent = {
 //                userInteractionState?.let {

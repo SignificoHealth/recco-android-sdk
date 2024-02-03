@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.ui.navigation.ContentIdNavType
+import com.recco.internal.feature.media.description.MediaDescriptionRoute
 import com.recco.internal.feature.media.player.FullMediaPlayerRoute
 
 internal const val idArg = "id"
@@ -35,12 +36,10 @@ fun NavGraphBuilder.mediaGraph(
                 }
             )
         ) {
-//            MediaDescriptionRoute(
-//                navigateUp = navigateUp,
-//                navigateToMediaPlayer = navigateToMediaPlayer
-//            )
-            FullMediaPlayerRoute(navigateUp)
-
+            MediaDescriptionRoute(
+                navigateUp = navigateUp,
+                navigateToMediaPlayer = navigateToMediaPlayer
+            )
         }
         composable(
             route = MediaPlayerRoute,
