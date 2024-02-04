@@ -92,18 +92,18 @@ private fun MediaPlayerScreen(
     onContentUserInteract: (ContentUserInteract) -> Unit,
     onUserInteract: (MediaDescriptionUserInteract) -> Unit
 ) {
-    val playerState = uiState.data?.trackItem?.let { trackItem ->
-        rememberMediaPlayerStateWithLifecycle(trackItem)
-    }
-
     Box(
         modifier = Modifier
-            .fillMaxSize()
             .background(AppTheme.colors.background)
     ) {
+        val playerState = uiState.data?.let {
+            rememberMediaPlayerStateWithLifecycle(it.trackItem)
+        }
+
         AppScreenStateAware(
             uiState = uiState,
             retry = { onUserInteract(MediaDescriptionUserInteract.Retry) },
+            shouldFillMaxSize = false,
             isFloatingFooter = true,
             footerContent = {
                 userInteractionState?.let {
@@ -114,12 +114,11 @@ private fun MediaPlayerScreen(
                     )
                 }
             }
-
         ) {
-            playerState?.let { state ->
-                uiState.data?.let { mediaDescriptionUi ->
+            uiState.data?.let { mediaDescriptionUi ->
+                playerState?.let { state ->
                     MediaPlayerContent(
-                        playerState = state,
+                        mediaPlayerViewState = state,
                         mediaDescriptionUi = mediaDescriptionUi
                     )
                 }
@@ -192,18 +191,18 @@ private fun AnimatedUserInteractionRecomendationCard(
 
 @Composable
 fun MediaPlayerContent(
-    playerState: MediaPlayerViewState,
-    mediaDescriptionUi: MediaDescriptionUI
+    mediaDescriptionUi: MediaDescriptionUI,
+    mediaPlayerViewState: MediaPlayerViewState
 ) {
     when (mediaDescriptionUi) {
         is MediaDescriptionUI.AudioDescriptionUI -> {
             AudioPlayerContent(
-                playerState = playerState,
-                mediaDescriptionUi.audio
+                mediaDescriptionUi.audio,
+                mediaPlayerViewState
             )
         }
         is MediaDescriptionUI.VideoDescriptionUI -> {
-            VideoPlayerContent(playerState = playerState)
+            VideoPlayerContent(mediaPlayerViewState)
         }
     }
 }
@@ -237,8 +236,8 @@ private fun VideoPlayerContent(
 
 @Composable
 private fun AudioPlayerContent(
-    playerState: MediaPlayerViewState,
-    audio: Audio
+    audio: Audio,
+    playerState: MediaPlayerViewState
 ) {
     Box {
         val coroutineScope = rememberCoroutineScope()
