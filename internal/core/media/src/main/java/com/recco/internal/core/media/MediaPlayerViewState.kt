@@ -215,15 +215,18 @@ private fun rememberExoPlayer(
                     setLoadControl(
                         DefaultLoadControl.Builder()
                             .setBufferDurationsMs(
+                                /* minBufferMs = */
                                 5_000,
+                                /* maxBufferMs = */
                                 5_000,
+                                /* bufferForPlaybackMs = */
                                 2_000,
+                                /* bufferForPlaybackAfterRebufferMs = */
                                 2_000
                             ).setPrioritizeTimeOverSizeThresholds(false)
                             .build()
                     )
                 }
-
                 .build()
             player.prepareFor(context, trackItem)
 
@@ -242,7 +245,7 @@ private fun rememberMediaSession(
 ): MediaSession? {
     val context = LocalContext.current
 
-    return remember(exoPlayer, sessionActivityPendingIntent) {
+    return remember {
         if (trackItem.mediaType == MediaType.AUDIO) {
             exoPlayer?.let { player ->
                 sessionActivityPendingIntent?.let { pendingIntent ->

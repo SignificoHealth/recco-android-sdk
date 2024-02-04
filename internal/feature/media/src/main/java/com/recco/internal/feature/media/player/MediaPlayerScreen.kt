@@ -43,9 +43,7 @@ import androidx.media3.common.util.UnstableApi
 import com.recco.internal.core.media.MediaPlayerViewState
 import com.recco.internal.core.media.rememberMediaPlayerStateWithLifecycle
 import com.recco.internal.core.model.media.Audio
-import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.ContentId
-import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.R
@@ -57,7 +55,6 @@ import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
-import com.recco.internal.feature.media.asTrackItem
 import com.recco.internal.feature.media.description.LoadMediaViewModel
 import com.recco.internal.feature.media.description.MediaDescriptionUI
 import com.recco.internal.feature.media.description.MediaDescriptionUserInteract
@@ -95,51 +92,37 @@ private fun MediaPlayerScreen(
     onContentUserInteract: (ContentUserInteract) -> Unit,
     onUserInteract: (MediaDescriptionUserInteract) -> Unit
 ) {
-//    val playerState = uiState.data?.trackItem?.let { trackItem ->
-//        rememberMediaPlayerStateWithLifecycle(trackItem)
-//    }
-
     Box(
         modifier = Modifier
-//            .fillMaxSize()
             .background(AppTheme.colors.background)
     ) {
-//            uiState.data?.let { mediaDescriptionUi ->
-//                MediaPlayerContent(
-//                    mediaDescriptionUi = mediaDescriptionUi
-//                )
-//            }
-
+        val playerState = uiState.data?.let {
+            rememberMediaPlayerStateWithLifecycle(it.trackItem)
+        }
 
         AppScreenStateAware(
             uiState = uiState,
             retry = { onUserInteract(MediaDescriptionUserInteract.Retry) },
-            shouldFillMaxSize = uiState.data?.contentType == ContentType.VIDEO,
+            shouldFillMaxSize = false,
             isFloatingFooter = true,
             footerContent = {
-//                userInteractionState?.let {
-//                    AnimatedUserInteractionRecomendationCard(
-//                        userInteractionRecommendation = it,
-//                        onContentUserInteract = onContentUserInteract,
-//                        isVisible = playerState?.areControlsShown == false
-//                    )
-//                }
+                userInteractionState?.let {
+                    AnimatedUserInteractionRecomendationCard(
+                        userInteractionRecommendation = it,
+                        onContentUserInteract = onContentUserInteract,
+                        isVisible = playerState?.areControlsShown == false
+                    )
+                }
             }
-
         ) {
             uiState.data?.let { mediaDescriptionUi ->
-                MediaPlayerContent(
-                    mediaDescriptionUi = mediaDescriptionUi
-                )
+                playerState?.let { state ->
+                    MediaPlayerContent(
+                        mediaPlayerViewState = state,
+                        mediaDescriptionUi = mediaDescriptionUi
+                    )
+                }
             }
-//            playerState?.let { state ->
-//                uiState.data?.let { mediaDescriptionUi ->
-//                    MediaPlayerContent(
-//                        playerState = state,
-//                        mediaDescriptionUi = mediaDescriptionUi
-//                    )
-//                }
-//            }
         }
 
         AppTopBar(
@@ -156,7 +139,7 @@ private fun MediaPlayerScreen(
         )
     }
 }
-//
+
 @Composable
 private fun AnimatedUserInteractionRecomendationCard(
     isVisible: Boolean,
@@ -208,26 +191,26 @@ private fun AnimatedUserInteractionRecomendationCard(
 
 @Composable
 fun MediaPlayerContent(
-    mediaDescriptionUi: MediaDescriptionUI
+    mediaDescriptionUi: MediaDescriptionUI,
+    mediaPlayerViewState: MediaPlayerViewState
 ) {
     when (mediaDescriptionUi) {
         is MediaDescriptionUI.AudioDescriptionUI -> {
             AudioPlayerContent(
-                mediaDescriptionUi.audio
+                mediaDescriptionUi.audio,
+                mediaPlayerViewState
             )
         }
         is MediaDescriptionUI.VideoDescriptionUI -> {
-            VideoPlayerContent(mediaDescriptionUi.video)
+            VideoPlayerContent(mediaPlayerViewState)
         }
     }
 }
 
 @Composable
 private fun VideoPlayerContent(
-    playerState: Video
+    playerState: MediaPlayerViewState
 ) {
-    val playerState = rememberMediaPlayerStateWithLifecycle(playerState.asTrackItem())
-
     Box(modifier = Modifier.background(Color.Black)) {
         MediaPlayer(
             playerState = playerState,
@@ -253,10 +236,9 @@ private fun VideoPlayerContent(
 
 @Composable
 private fun AudioPlayerContent(
-    audio: Audio
+    audio: Audio,
+    playerState: MediaPlayerViewState
 ) {
-    val playerState = rememberMediaPlayerStateWithLifecycle(audio.asTrackItem())
-
     Box {
         val coroutineScope = rememberCoroutineScope()
 
