@@ -52,6 +52,7 @@ internal fun AppNavHost(
         )
         bookmarkGraph(
             navigateToArticle = navController::navigateToArticle,
+            navigateToMediaDescription = navController::navigateToMediaDescription,
             navigateUp = navController::navigateUp
         )
         mediaGraph(

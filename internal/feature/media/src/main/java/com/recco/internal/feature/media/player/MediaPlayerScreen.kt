@@ -53,7 +53,6 @@ import com.recco.internal.core.ui.components.AppTopBarDefaults
 import com.recco.internal.core.ui.components.BackIconButton
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
-import com.recco.internal.core.ui.extensions.applyIf
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.media.description.LoadMediaViewModel
