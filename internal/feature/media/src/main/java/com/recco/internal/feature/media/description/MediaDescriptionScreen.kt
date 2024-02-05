@@ -225,7 +225,10 @@ private fun AudioDescriptionContent(audio: Audio) {
 
             HtmlText(
                 text = audio.description?.replace("\n", "<br/>") ?: "",
-                style = AppTheme.typography.body3.copy(fontWeight = FontWeight.Normal)
+                style = AppTheme.typography.body3.copy(
+                    fontWeight = FontWeight.Normal,
+                    color = AppTheme.colors.primary
+                )
             )
         }
     }
