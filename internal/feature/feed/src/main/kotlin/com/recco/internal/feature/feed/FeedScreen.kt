@@ -408,8 +408,10 @@ private fun UnlockedItems(
         )
     ) {
         items(
-            items = recommendations,
-            key = { item -> item.id.itemId }
+            items = recommendations
+            //  TODO On videos, BE is sending duplicated keys sometimes making keys to fail
+            //    so disable keys for now, check to enabling them.
+            // key = { item -> item.id.itemId }
         ) { recommendation ->
             when (recommendation.type) {
                 ARTICLE, AUDIO, VIDEO -> {
