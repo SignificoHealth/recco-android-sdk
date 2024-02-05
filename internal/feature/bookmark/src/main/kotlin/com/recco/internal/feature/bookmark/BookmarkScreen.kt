@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.insets.ui.Scaffold
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppRecommendationCard
 import com.recco.internal.core.ui.components.AppScreenStateAware
@@ -41,6 +42,7 @@ import com.recco.internal.core.ui.theme.AppTheme
 internal fun BookmarkRoute(
     navigateToArticle: (ContentId) -> Unit,
     navigateUp: () -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
     viewModel: BookmarkViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle()
@@ -48,6 +50,7 @@ internal fun BookmarkRoute(
         uiState = uiState,
         onUserInteract = { viewModel.onUserInteract(it) },
         navigateToArticle = navigateToArticle,
+        navigateToMediaDescription = navigateToMediaDescription,
         navigateUp = navigateUp
     )
 }
@@ -58,6 +61,7 @@ private fun BookmarkScreen(
     onUserInteract: (BookmarkUserInteract) -> Unit,
     navigateUp: () -> Unit,
     navigateToArticle: (ContentId) -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
     Scaffold(
@@ -103,7 +107,8 @@ private fun BookmarkScreen(
         ) { data ->
             BookmarksContent(
                 feedUI = data,
-                navigateToArticle = navigateToArticle
+                navigateToArticle = navigateToArticle,
+                navigateToMediaDescription = navigateToMediaDescription
             )
         }
     }
@@ -112,7 +117,8 @@ private fun BookmarkScreen(
 @Composable
 private fun BookmarksContent(
     feedUI: BookmarkUI,
-    navigateToArticle: (ContentId) -> Unit
+    navigateToArticle: (ContentId) -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -129,7 +135,14 @@ private fun BookmarksContent(
             columns = GridCells.Fixed(3)
         ) {
             items(feedUI.recommendations) { recommendation ->
-                AppRecommendationCard(recommendation, navigateToArticle, applyViewedOverlay = false)
+                AppRecommendationCard(recommendation, applyViewedOverlay = false, onClick = {
+                    when (recommendation.type) {
+                        ContentType.ARTICLE -> navigateToArticle(it)
+                        ContentType.AUDIO -> navigateToMediaDescription(it, ContentType.AUDIO)
+                        ContentType.VIDEO -> navigateToMediaDescription(it, ContentType.VIDEO)
+                        else -> throw IllegalStateException()
+                    }
+                })
             }
         }
     }
@@ -145,7 +158,8 @@ private fun Preview(
             uiState = uiState,
             onUserInteract = {},
             navigateToArticle = {},
-            navigateUp = {}
+            navigateUp = {},
+            navigateToMediaDescription = { _, _ -> }
         )
     }
 }
@@ -160,7 +174,8 @@ private fun PreviewDark(
             uiState = uiState,
             onUserInteract = {},
             navigateToArticle = {},
-            navigateUp = {}
+            navigateUp = {},
+            navigateToMediaDescription = { _, _ -> }
         )
     }
 }
