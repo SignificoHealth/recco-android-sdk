@@ -339,31 +339,4 @@ class ContentInteractViewModelDelegateTest {
             isDislikeLoading = isDislikeLoading
         )
     }
-
-//    @Test
-//    fun `onFailure emits exceptions while logging them if ToggleLikeState`() = runTest {
-//        // When
-//        repository.stubForToggleRatingFailure()
-//        val events = onViewModelInteraction(3, ArticleUserInteract.ToggleLikeState)
-//
-//        // Then
-//        events.fastForEach {
-//            Truth.assertThat(events.first()).isEqualTo(expectedUiStateWithError)
-//        }
-//
-//        verifyBlocking(logger, times(1)) {
-//            e(staticThrowableForTesting, null, null)
-//        }
-//    }
-
-//    private fun TestScope.onViewModelInteraction(
-//        eventsToDrop: Int,
-//        vararg userInteractions: ContentUserInteract
-//    ) = ContentInteractViewModelDelegate(repository, logger).run {
-//        onContentUserInteract(
-//            viewState = viewState,
-//            eventsToDrop = eventsToDrop,
-//            runInteractions = { userInteractions.forEach { onUserInteract(it) } }
-//        )
-//    }
 }
