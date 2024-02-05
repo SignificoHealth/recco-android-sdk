@@ -37,7 +37,7 @@ class ContentInteractViewModelDelegateTest {
     @Test
     fun `bookmarked content is updated according to the opposite logic provided`() = runTest {
         val viewModelDelegate = createViewModelDelegate(
-            startWith = reccomendationAs(isBookmarked = true)
+            startWith = recommendationAs(isBookmarked = true)
         )
 
         repository.stubRepositoryForSuccess(id)
@@ -49,13 +49,13 @@ class ContentInteractViewModelDelegateTest {
         advanceUntilIdle()
 
         assertThat(viewModelDelegate.userInteraction)
-            .isEqualTo(reccomendationAs(isBookmarked = false))
+            .isEqualTo(recommendationAs(isBookmarked = false))
     }
 
     @Test
     fun `non bookmarked content is updated according to the opposite logic provided`() = runTest {
         val viewModelDelegate = createViewModelDelegate(
-            startWith = reccomendationAs(isBookmarked = false)
+            startWith = recommendationAs(isBookmarked = false)
         )
 
         repository.stubRepositoryForSuccess(id)
@@ -67,12 +67,12 @@ class ContentInteractViewModelDelegateTest {
         advanceUntilIdle()
 
         assertThat(viewModelDelegate.userInteraction)
-            .isEqualTo(reccomendationAs(isBookmarked = true))
+            .isEqualTo(recommendationAs(isBookmarked = true))
     }
 
     @Test
     fun `liked content turns into non rated if liked again`() = runTest {
-        val startState = reccomendationAs(
+        val startState = recommendationAs(
             isDislikeLoading = false,
             isLikeLoading = true,
             rating = Rating.LIKE
@@ -95,7 +95,7 @@ class ContentInteractViewModelDelegateTest {
 
         assertThat(viewModelDelegate.userInteraction)
             .isEqualTo(
-                reccomendationAs(
+                recommendationAs(
                     isDislikeLoading = false,
                     isLikeLoading = false,
                     rating = Rating.NOT_RATED
@@ -105,7 +105,7 @@ class ContentInteractViewModelDelegateTest {
 
     @Test
     fun `disliked article turns into non rated if disliked again`() = runTest {
-        val startState = reccomendationAs(
+        val startState = recommendationAs(
             isDislikeLoading = true,
             isLikeLoading = false,
             rating = Rating.DISLIKE
@@ -128,7 +128,7 @@ class ContentInteractViewModelDelegateTest {
 
         assertThat(viewModelDelegate.userInteraction)
             .isEqualTo(
-                reccomendationAs(
+                recommendationAs(
                     isDislikeLoading = false,
                     isLikeLoading = false,
                     rating = Rating.NOT_RATED
@@ -138,7 +138,7 @@ class ContentInteractViewModelDelegateTest {
 
     @Test
     fun `liked article turns into disliked if disliked`() = runTest {
-        val startState = reccomendationAs(
+        val startState = recommendationAs(
             isDislikeLoading = true,
             isLikeLoading = false,
             rating = Rating.LIKE
@@ -161,7 +161,7 @@ class ContentInteractViewModelDelegateTest {
 
         assertThat(viewModelDelegate.userInteraction)
             .isEqualTo(
-                reccomendationAs(
+                recommendationAs(
                     isDislikeLoading = false,
                     isLikeLoading = false,
                     rating = Rating.DISLIKE
@@ -171,7 +171,7 @@ class ContentInteractViewModelDelegateTest {
 
     @Test
     fun `nonrated article turns into liked if liked`() = runTest {
-        val startState = reccomendationAs(
+        val startState = recommendationAs(
             isDislikeLoading = false,
             isLikeLoading = true,
             rating = Rating.NOT_RATED
@@ -194,7 +194,7 @@ class ContentInteractViewModelDelegateTest {
 
         assertThat(viewModelDelegate.userInteraction)
             .isEqualTo(
-                reccomendationAs(
+                recommendationAs(
                     isDislikeLoading = false,
                     isLikeLoading = false,
                     rating = Rating.LIKE
@@ -204,7 +204,7 @@ class ContentInteractViewModelDelegateTest {
 
     @Test
     fun `non rated article turns into disliked if disliked`() = runTest {
-        val startState = reccomendationAs(
+        val startState = recommendationAs(
             isDislikeLoading = true,
             isLikeLoading = false,
             rating = Rating.NOT_RATED
@@ -227,7 +227,7 @@ class ContentInteractViewModelDelegateTest {
 
         assertThat(viewModelDelegate.userInteraction)
             .isEqualTo(
-                reccomendationAs(
+                recommendationAs(
                     isDislikeLoading = false,
                     isLikeLoading = false,
                     rating = Rating.DISLIKE
@@ -238,7 +238,7 @@ class ContentInteractViewModelDelegateTest {
     @Test
     fun `onFailure emits exceptions while logging them if ToggleDislikeState`() = runTest {
         val viewModelDelegate = createViewModelDelegate(
-            startWith = reccomendationAs(
+            startWith = recommendationAs(
                 isDislikeLoading = true,
                 isLikeLoading = false,
                 rating = Rating.NOT_RATED
@@ -261,7 +261,7 @@ class ContentInteractViewModelDelegateTest {
     @Test
     fun `onFailure emits exceptions while logging them if ToggleBookmarkState`() = runTest {
         val viewModelDelegate = createViewModelDelegate(
-            startWith = reccomendationAs(
+            startWith = recommendationAs(
                 isDislikeLoading = true,
                 isLikeLoading = false,
                 rating = Rating.NOT_RATED
@@ -322,7 +322,7 @@ class ContentInteractViewModelDelegateTest {
         }
     }
 
-    private fun reccomendationAs(
+    private fun recommendationAs(
         id: ContentId = this.id,
         rating: Rating = Rating.DISLIKE,
         isBookmarked: Boolean = false,
