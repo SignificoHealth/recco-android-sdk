@@ -53,6 +53,7 @@ import com.recco.internal.core.ui.components.AppTopBarDefaults
 import com.recco.internal.core.ui.components.BackIconButton
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
+import com.recco.internal.core.ui.extensions.applyIf
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.media.description.LoadMediaViewModel
@@ -244,7 +245,9 @@ private fun AudioPlayerContent(
 
         MediaPlayer(
             playerState = playerState,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier
+                .align(Alignment.Center)
+                .background(AppTheme.colors.staticDark)
         )
 
         AnimatedVisibility(
@@ -255,20 +258,20 @@ private fun AudioPlayerContent(
             AudioHeader(audio)
         }
 
-        PlayButton(
-            modifier = Modifier.align(Alignment.Center),
-            isPlaying = playerState.isPlaying,
-            onClick = {
-                if (!playerState.isPlaying) {
+        AnimatedVisibility(
+            visible = !playerState.isPlaying,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier.align(Alignment.Center)
+        ) {
+            PlayButton(
+                isPlaying = false,
+                onClick = {
                     playerState.play()
-                } else {
-                    playerState.pause()
+                    playerState.playerView?.hideController()
                 }
-                coroutineScope.launch {
-                    playerState.playerView?.showController()
-                }
-            }
-        )
+            )
+        }
     }
 }
 

@@ -252,14 +252,14 @@ private fun VideoDescriptionContent(video: Video) {
 
         HtmlText(
             text = video.description?.replace("\n", "<br/>") ?: "",
-            style = AppTheme.typography.body1
+            style = AppTheme.typography.body1.copy(color = AppTheme.colors.primary)
         )
     }
 }
 
 @Preview
 @Composable
-fun VideoDescriptionScreenPreview(
+fun MediaDescriptionScreenPreview(
     @PreviewParameter(MediaDescriptionUiPreviewProvider::class) uiState: UiState<MediaDescriptionUI>
 ) {
     AppTheme {
@@ -273,3 +273,21 @@ fun VideoDescriptionScreenPreview(
         )
     }
 }
+
+@Preview
+@Composable
+fun MediaDescriptionScreenPreviewDark(
+    @PreviewParameter(MediaDescriptionUiPreviewProvider::class) uiState: UiState<MediaDescriptionUI>
+) {
+    AppTheme(darkTheme = true) {
+        MediaDescriptionScreen(
+            navigateUp = {},
+            uiState = uiState,
+            userInteractionState = null,
+            navigateToMediaPlayer = { _, _ -> },
+            onUserInteract = {},
+            onContentUserInteract = {}
+        )
+    }
+}
+
