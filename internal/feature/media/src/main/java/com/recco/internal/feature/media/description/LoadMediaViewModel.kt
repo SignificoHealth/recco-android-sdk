@@ -11,6 +11,7 @@ import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.ContentType.AUDIO
 import com.recco.internal.core.model.recommendation.ContentType.VIDEO
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
+import com.recco.internal.core.persistence.ReccoPreferences
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.toUiState
@@ -21,6 +22,7 @@ import com.recco.internal.feature.rating.delegates.ContentUserInteract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +31,7 @@ internal class LoadMediaViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val reccomendationRepository: RecommendationRepository,
     private val contentInteractViewModelDelegate: ContentInteractViewModelDelegate,
+    private val preferences: ReccoPreferences,
     private val logger: Logger
 ) : ViewModel() {
     private val _viewState = MutableStateFlow(UiState<MediaDescriptionUI>())
@@ -65,7 +68,10 @@ internal class LoadMediaViewModel @Inject constructor(
     private suspend fun loadMedia(): UiState<MediaDescriptionUI> {
         return when (contentType) {
             AUDIO -> reccomendationRepository.getAudio(contentId).toUiState()
-            VIDEO -> reccomendationRepository.getVideo(contentId).toUiState()
+            VIDEO -> {
+                val shouldShowWarningDialog = preferences.shouldShowVideoWarningDialog
+                reccomendationRepository.getVideo(contentId).toUiState(shouldShowWarningDialog)
+            }
             else -> error("Attempted to load $contentType in MediaDescriptionViewModel")
         }
     }
@@ -97,11 +103,14 @@ internal class LoadMediaViewModel @Inject constructor(
         }
     }
 
-    private fun Video.toUiState(): UiState<MediaDescriptionUI> {
+    private fun Video.toUiState(shouldShowWarningDialog: Boolean): UiState<MediaDescriptionUI> {
         return UiState(
             isLoading = false,
             error = null,
-            data = MediaDescriptionUI.VideoDescriptionUI(video = this)
+            data = MediaDescriptionUI.VideoDescriptionUI(
+                video = this,
+                shouldShowWarningDialog = shouldShowWarningDialog
+            )
         )
     }
 
@@ -110,6 +119,18 @@ internal class LoadMediaViewModel @Inject constructor(
             MediaDescriptionUserInteract.Retry,
             MediaDescriptionUserInteract.InitialLoad -> {
                 loadData()
+            }
+
+            is MediaDescriptionUserInteract.DontShowWarningDialogChecked -> {
+                if (mediaDescriptionUserInteract.isChecked) {
+                    preferences.shouldShowVideoWarningDialog = false
+
+                    (_viewState.value.data as? MediaDescriptionUI.VideoDescriptionUI)?.let { videoUi ->
+                        _viewState.update {
+                            it.copy(data = videoUi.copy(shouldShowWarningDialog = false))
+                        }
+                    }
+                }
             }
         }
     }

@@ -58,4 +58,8 @@
     <string name="recco_reccomendation_type_audio">Audio</string>
     <string name="recco_play">Abspielen</string>
     <string name="recco_transcription">Transkription</string>
+    <string name="recco_dismiss">Zurückweisen</string>
+    <string name="recco_warning">Warnung</string>
+    <string name="recco_warning_message">Wenn Sie Kurzatmigkeit oder eine hohe Herzfrequenz verspüren, hören Sie auf und rufen Sie Ihren Arzt an.</string>
+    <string name="recco_warning_dismiss">Diese Warnung nicht mehr anzeigen</string>
 </resources>

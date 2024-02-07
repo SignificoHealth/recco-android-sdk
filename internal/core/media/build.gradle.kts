@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":api:model"))
     implementation(project(":internal:core:model"))
     implementation(project(":internal:core:ui"))
+    implementation(project(":internal:core:persistence"))
     implementation(libs.exoplayer.media.session)
     implementation(libs.exoplayer.ui)
     implementation(libs.exoplayer.core)

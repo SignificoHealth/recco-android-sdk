@@ -59,4 +59,8 @@
     <string name="recco_reccomendation_type_audio">Audio</string>
     <string name="recco_play">Play</string>
     <string name="recco_transcription">Transcription</string>
+    <string name="recco_dismiss">Dismiss</string>
+    <string name="recco_warning">Warning</string>
+    <string name="recco_warning_message">If you experience shortness of breath or high heartrate, stop and call your doctor.</string>
+    <string name="recco_warning_dismiss">Don’t show this warning again</string>
 </resources>

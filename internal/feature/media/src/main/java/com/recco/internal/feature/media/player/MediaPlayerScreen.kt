@@ -11,21 +11,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Checkbox
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,6 +51,7 @@ import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.R
+import com.recco.internal.core.ui.components.AppAlertDialog
 import com.recco.internal.core.ui.components.AppScreenStateAware
 import com.recco.internal.core.ui.components.AppTopBar
 import com.recco.internal.core.ui.components.AppTopBarDefaults
@@ -119,7 +124,8 @@ private fun MediaPlayerScreen(
                 playerState?.let { state ->
                     MediaPlayerContent(
                         mediaPlayerViewState = state,
-                        mediaDescriptionUi = mediaDescriptionUi
+                        mediaDescriptionUi = mediaDescriptionUi,
+                        onUserInteract = onUserInteract
                     )
                 }
             }
@@ -190,9 +196,10 @@ private fun AnimatedUserInteractionRecomendationCard(
 }
 
 @Composable
-fun MediaPlayerContent(
+internal fun MediaPlayerContent(
     mediaDescriptionUi: MediaDescriptionUI,
-    mediaPlayerViewState: MediaPlayerViewState
+    mediaPlayerViewState: MediaPlayerViewState,
+    onUserInteract: (MediaDescriptionUserInteract) -> Unit
 ) {
     when (mediaDescriptionUi) {
         is MediaDescriptionUI.AudioDescriptionUI -> {
@@ -202,15 +209,23 @@ fun MediaPlayerContent(
             )
         }
         is MediaDescriptionUI.VideoDescriptionUI -> {
-            VideoPlayerContent(mediaPlayerViewState)
+            VideoPlayerContent(
+                playerState = mediaPlayerViewState,
+                videoDescriptionUI = mediaDescriptionUi,
+                onUserInteract = onUserInteract
+            )
         }
     }
 }
 
 @Composable
 private fun VideoPlayerContent(
-    playerState: MediaPlayerViewState
+    playerState: MediaPlayerViewState,
+    videoDescriptionUI: MediaDescriptionUI.VideoDescriptionUI,
+    onUserInteract: (MediaDescriptionUserInteract) -> Unit
 ) {
+    var openWarningDialog = remember { mutableStateOf(false) }
+
     Box(modifier = Modifier.background(Color.Black)) {
         MediaPlayer(
             playerState = playerState,
@@ -226,12 +241,66 @@ private fun VideoPlayerContent(
             PlayButton(
                 isPlaying = false,
                 onClick = {
-                    playerState.play()
-                    playerState.playerView?.hideController()
+                    if (videoDescriptionUI.shouldShowWarningDialog) {
+                        openWarningDialog.value = true
+                    } else {
+                        playerState.play()
+                        playerState.playerView?.hideController()
+                    }
                 }
             )
         }
+
+        VideoWarningDialog(openWarningDialog, onUserInteract)
     }
+}
+
+@Composable
+private fun VideoWarningDialog(
+    openWarningDialog: MutableState<Boolean>,
+    onUserInteract: (MediaDescriptionUserInteract) -> Unit
+) {
+    var isDontShowAnymoreChecked by remember { mutableStateOf(false) }
+
+    AppAlertDialog(
+        openDialog = openWarningDialog,
+        titleRes = R.string.recco_warning,
+        textButtonPrimaryRes = R.string.recco_dismiss,
+        content = {
+            Spacer(modifier = Modifier.height(AppSpacing.dp_16))
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.recco_warning_message),
+                style = AppTheme.typography.body3,
+            )
+
+            Spacer(modifier = Modifier.height(AppSpacing.dp_16))
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_8),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = AppSpacing.dp_16)
+            ) {
+                Checkbox(
+                    checked = isDontShowAnymoreChecked,
+                    onCheckedChange = { isChecked ->
+                        isDontShowAnymoreChecked = isChecked
+                        onUserInteract(MediaDescriptionUserInteract.DontShowWarningDialogChecked(isChecked))
+                    }
+                )
+
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.recco_warning_dismiss),
+                    style = AppTheme.typography.body2,
+                )
+            }
+        },
+        onClickPrimary = {}
+    )
 }
 
 @Composable
@@ -240,8 +309,6 @@ private fun AudioPlayerContent(
     playerState: MediaPlayerViewState
 ) {
     Box {
-        val coroutineScope = rememberCoroutineScope()
-
         MediaPlayer(
             playerState = playerState,
             modifier = Modifier
@@ -380,3 +447,21 @@ private fun MediaScreenPreview(
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun MediaScreenWithDialogPreview(
+    @PreviewParameter(MediaDescriptionUiPreviewProvider::class)
+    uiState: UiState<MediaDescriptionUI>
+) {
+    val openDialog = remember {
+        mutableStateOf(true)
+    }
+    AppTheme {
+        VideoWarningDialog(
+            openWarningDialog = openDialog,
+            onUserInteract = {}
+        )
+    }
+}
+
