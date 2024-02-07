@@ -1,8 +1,11 @@
 package com.recco.internal.feature.media.description
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -17,12 +20,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -253,9 +258,40 @@ private fun VideoDescriptionContent(video: Video) {
 
         Spacer(Modifier.height(AppSpacing.dp_24))
 
+        video.disclaimer?.let {
+            VideoDisclaimer(it)
+            Spacer(Modifier.height(AppSpacing.dp_16))
+        }
+
         HtmlText(
             text = video.description?.replace("\n", "<br/>") ?: "",
             style = AppTheme.typography.body1.copy(color = AppTheme.colors.primary)
+        )
+    }
+}
+
+@Composable
+private fun VideoDisclaimer(disclaimer: String) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(AppSpacing.dp_16),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                color = AppTheme.colors.accent20,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(AppSpacing.dp_16)
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.recco_ic_information_circle),
+            tint = AppTheme.colors.accent,
+            contentDescription = null
+        )
+
+        Text(
+            text = disclaimer,
+            style = AppTheme.typography.body1
         )
     }
 }
