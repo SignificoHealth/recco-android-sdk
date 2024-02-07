@@ -20,7 +20,11 @@ internal class MediaDescriptionUiPreviewProvider :
             ),
             UiState(
                 isLoading = false,
-                data = MediaDescriptionUI.VideoDescriptionUI(video = VIDEO)
+                data = MediaDescriptionUI.VideoDescriptionUI(video = VIDEO, shouldShowWarningDialog = true)
+            ),
+            UiState(
+                isLoading = false,
+                data = MediaDescriptionUI.VideoDescriptionUI(video = VIDEO, shouldShowWarningDialog = false)
             ),
             UiState(
                 isLoading = false,

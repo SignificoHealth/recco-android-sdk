@@ -67,7 +67,7 @@ fun RecommendationTypeRow(
             val contentTypeDurationText = buildString {
                 append(contentTypeText)
 
-                if (lengthInSeconds != null) {
+                if (lengthInSeconds?.takeIf { it > 0 } != null) {
                     val lengthInMinutes = (lengthInSeconds / 60)
                     append("  • $lengthInMinutes $minSuffixText").takeIf { lengthInSeconds != null }
                 }
@@ -90,10 +90,10 @@ fun RecommendationTypeRowPreview() {
                 modifier = Modifier.padding(AppSpacing.dp_16),
                 verticalArrangement = Arrangement.spacedBy(AppSpacing.dp_16)
             ) {
-                ContentType.entries.forEach {
+                ContentType.entries.forEachIndexed { i, c ->
                     RecommendationTypeRow(
-                        contentType = it,
-                        lengthInSeconds = (it.ordinal + 1) * 60
+                        contentType = c,
+                        lengthInSeconds = if (i % 2 == 0) (c.ordinal + 1) * 60 else null
                     )
                 }
             }

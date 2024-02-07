@@ -13,6 +13,7 @@ sealed class MediaDescriptionUI(
     val imageAlt: String?
 ) {
     data class VideoDescriptionUI(
+        val shouldShowWarningDialog: Boolean,
         val video: Video
     ) : MediaDescriptionUI(
         contentId = video.id,
