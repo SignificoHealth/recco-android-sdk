@@ -43,7 +43,7 @@ fun AppAlertDialog(
     @StringRes textButtonPrimaryRes: Int,
     onClickPrimary: () -> Unit,
     onDismiss: () -> Unit = {},
-    content: @Composable (ColumnScope.() -> Unit)? = null,
+    content: @Composable (ColumnScope.() -> Unit)? = null
 ) {
     if (openDialog.value) {
         Dialog(

@@ -272,7 +272,7 @@ private fun VideoWarningDialog(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.recco_warning_message),
-                style = AppTheme.typography.body3,
+                style = AppTheme.typography.body3
             )
 
             Spacer(modifier = Modifier.height(AppSpacing.dp_16))
@@ -295,7 +295,7 @@ private fun VideoWarningDialog(
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.recco_warning_dismiss),
-                    style = AppTheme.typography.body2,
+                    style = AppTheme.typography.body2
                 )
             }
         },
@@ -464,4 +464,3 @@ private fun MediaScreenWithDialogPreview(
         )
     }
 }
-

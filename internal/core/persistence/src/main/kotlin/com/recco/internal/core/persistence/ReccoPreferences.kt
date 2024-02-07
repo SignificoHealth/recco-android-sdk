@@ -24,5 +24,4 @@ class ReccoPreferences @Inject constructor(
     private companion object {
         private const val KEY_SHOW_VIDEO_WARNING_DIALOG = "key_show_video_warning_dialog"
     }
-
 }
