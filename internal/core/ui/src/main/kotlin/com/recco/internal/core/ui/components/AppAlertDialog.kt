@@ -99,6 +99,7 @@ fun AppAlertDialog(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 onClickPrimary()
+                                onDismiss.invoke()
                                 openDialog.value = false
                             },
                             textRes = textButtonPrimaryRes
@@ -112,6 +113,7 @@ fun AppAlertDialog(
                         .align(Alignment.TopEnd)
                         .padding(end = AppSpacing.dp_24)
                 ) {
+                    onDismiss.invoke()
                     openDialog.value = false
                 }
             }

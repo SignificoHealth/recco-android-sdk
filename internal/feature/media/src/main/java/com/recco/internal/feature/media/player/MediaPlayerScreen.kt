@@ -299,6 +299,9 @@ private fun VideoWarningDialog(
                 )
             }
         },
+        onDismiss = {
+            onUserInteract(MediaDescriptionUserInteract.OnWarningDialogDismiss)
+        },
         onClickPrimary = {}
     )
 }

@@ -132,6 +132,14 @@ internal class LoadMediaViewModel @Inject constructor(
                     }
                 }
             }
+
+            MediaDescriptionUserInteract.OnWarningDialogDismiss -> {
+                (_viewState.value.data as? MediaDescriptionUI.VideoDescriptionUI)?.let { videoUi ->
+                    _viewState.update {
+                        it.copy(data = videoUi.copy(shouldShowWarningDialog = false))
+                    }
+                }
+            }
         }
     }
 
