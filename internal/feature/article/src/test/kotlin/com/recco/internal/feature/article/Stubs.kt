@@ -34,10 +34,7 @@ internal fun RecommendationRepository.stubForToggleRatingFailure() {
         onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
         onBlocking { it.getArticle(any()) } doReturn createArticle(rating = Rating.LIKE)
         onBlocking {
-            it.setRecommendationRating(
-                any(),
-                any()
-            )
+            it.setRecommendationRating(any(), any(), any())
         } doThrow staticThrowableForTesting
     }
 }
@@ -46,7 +43,7 @@ private fun RecommendationRepository.stubRepositoryForSuccess(article: Article) 
     stub {
         onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
         onBlocking { it.getArticle(any()) } doReturn article
-        onBlocking { it.setBookmarkRecommendation(any(), any()) } doReturn Unit
-        onBlocking { it.setRecommendationRating(any(), any()) } doReturn Unit
+        onBlocking { it.setBookmarkRecommendation(any(), any(), any()) } doReturn Unit
+        onBlocking { it.setRecommendationRating(any(), any(), any()) } doReturn Unit
     }
 }

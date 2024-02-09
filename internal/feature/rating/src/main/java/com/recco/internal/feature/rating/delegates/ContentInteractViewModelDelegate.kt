@@ -2,6 +2,7 @@ package com.recco.internal.feature.rating.delegates
 
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.repository.RecommendationRepository
@@ -41,7 +42,7 @@ class ContentInteractViewModelDelegate @Inject constructor(
     fun onContentUserInteract(userInteract: ContentUserInteract) {
         when (userInteract) {
             is ContentUserInteract.ToggleBookmarkState -> {
-                toggleBookmarkState(userInteract.contentId)
+                toggleBookmarkState(userInteract.contentId, userInteract.contentType)
             }
             is ContentUserInteract.ToggleLikeState -> {
                 toggleRatingState(
@@ -60,7 +61,7 @@ class ContentInteractViewModelDelegate @Inject constructor(
         }
     }
 
-    private fun toggleBookmarkState(contentId: ContentId) {
+    private fun toggleBookmarkState(contentId: ContentId, contentType: ContentType) {
         scope.launch {
             val userInteraction = checkNotNull(userInteraction)
 
@@ -70,6 +71,7 @@ class ContentInteractViewModelDelegate @Inject constructor(
             runCatching {
                 recommendationRepository.setBookmarkRecommendation(
                     contentId = contentId,
+                    contentType = contentType,
                     bookmarked = newBookmarkedState
                 )
             }.onSuccess {
@@ -115,6 +117,7 @@ class ContentInteractViewModelDelegate @Inject constructor(
             runCatching {
                 recommendationRepository.setRecommendationRating(
                     contentId = contentId,
+                    contentType = userInteraction.contentType,
                     rating = newRatingState
                 )
             }.onSuccess {

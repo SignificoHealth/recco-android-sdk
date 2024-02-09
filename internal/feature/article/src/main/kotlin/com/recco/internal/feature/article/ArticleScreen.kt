@@ -148,13 +148,28 @@ private fun ArticleScreen(
                         isScrollEndReached = scrollState.isEndReached(),
                         userInteraction = contentInteraction,
                         toggleBookmarkState = {
-                            onContentUserInteract(ContentUserInteract.ToggleBookmarkState(it.article.id))
+                            onContentUserInteract(
+                                ContentUserInteract.ToggleBookmarkState(
+                                    it.article.id,
+                                    it.article.contentType
+                                )
+                            )
                         },
                         toggleLikeState = {
-                            onContentUserInteract(ContentUserInteract.ToggleLikeState(it.article.id))
+                            onContentUserInteract(
+                                ContentUserInteract.ToggleLikeState(
+                                    it.article.id,
+                                    it.article.contentType
+                                )
+                            )
                         },
                         toggleDislikeState = {
-                            onContentUserInteract(ContentUserInteract.ToggleDislikeState(it.article.id))
+                            onContentUserInteract(
+                                ContentUserInteract.ToggleDislikeState(
+                                    it.article.id,
+                                    it.article.contentType
+                                )
+                            )
                         }
                     )
                 }

@@ -70,6 +70,7 @@ class ContentInteractViewModelDelegate @Inject constructor(
             runCatching {
                 recommendationRepository.setBookmarkRecommendation(
                     contentId = contentId,
+                    contentType = userInteraction.contentType,
                     bookmarked = newBookmarkedState
                 )
             }.onSuccess {
@@ -117,6 +118,7 @@ class ContentInteractViewModelDelegate @Inject constructor(
             runCatching {
                 recommendationRepository.setRecommendationRating(
                     contentId = contentId,
+                    contentType = userInteraction.contentType,
                     rating = newRatingState
                 )
             }.onSuccess {

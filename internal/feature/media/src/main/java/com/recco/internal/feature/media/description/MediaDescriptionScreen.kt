@@ -144,17 +144,26 @@ private fun MediaDescriptionScreen(
                         userInteraction = it,
                         toggleBookmarkState = {
                             onContentUserInteract(
-                                ContentUserInteract.ToggleBookmarkState(it.contentId)
+                                ContentUserInteract.ToggleBookmarkState(
+                                    it.contentId,
+                                    it.contentType
+                                )
                             )
                         },
                         toggleLikeState = {
                             onContentUserInteract(
-                                ContentUserInteract.ToggleLikeState(it.contentId)
+                                ContentUserInteract.ToggleLikeState(
+                                    it.contentId,
+                                    it.contentType
+                                )
                             )
                         },
                         toggleDislikeState = {
                             onContentUserInteract(
-                                ContentUserInteract.ToggleDislikeState(it.contentId)
+                                ContentUserInteract.ToggleDislikeState(
+                                    it.contentId,
+                                    it.contentType
+                                )
                             )
                         }
                     )

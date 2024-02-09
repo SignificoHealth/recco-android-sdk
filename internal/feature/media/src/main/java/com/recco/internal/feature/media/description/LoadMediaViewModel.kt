@@ -90,6 +90,7 @@ internal class LoadMediaViewModel @Inject constructor(
                 UserInteractionRecommendation(
                     contentId = audio.id,
                     rating = audio.rating,
+                    contentType = AUDIO,
                     isBookmarked = audio.isBookmarked
                 )
             }
@@ -97,6 +98,7 @@ internal class LoadMediaViewModel @Inject constructor(
                 UserInteractionRecommendation(
                     contentId = video.id,
                     rating = video.rating,
+                    contentType = VIDEO,
                     isBookmarked = video.isBookmarked
                 )
             }

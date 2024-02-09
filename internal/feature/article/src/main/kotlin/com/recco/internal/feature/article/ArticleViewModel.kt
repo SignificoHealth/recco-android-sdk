@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.repository.RecommendationRepository
 import com.recco.internal.core.ui.components.UiState
@@ -49,6 +50,7 @@ internal class ArticleViewModel @Inject constructor(
                 .onSuccess { article ->
                     contentInteractViewModelDelegate.userInteraction = UserInteractionRecommendation(
                         contentId = articleId,
+                        contentType = ContentType.ARTICLE,
                         rating = article.rating,
                         isBookmarked = article.isBookmarked
                     )

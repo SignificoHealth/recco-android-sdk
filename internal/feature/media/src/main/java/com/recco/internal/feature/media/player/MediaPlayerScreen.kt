@@ -48,6 +48,7 @@ import com.recco.internal.core.media.MediaPlayerViewState
 import com.recco.internal.core.media.rememberMediaPlayerStateWithLifecycle
 import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.R
@@ -177,17 +178,27 @@ private fun AnimatedUserInteractionRecomendationCard(
                 userInteraction = userInteractionRecommendation,
                 toggleBookmarkState = {
                     onContentUserInteract(
-                        ContentUserInteract.ToggleBookmarkState(userInteractionRecommendation.contentId)
+                        ContentUserInteract.ToggleBookmarkState(
+                            userInteractionRecommendation.contentId,
+                            userInteractionRecommendation.contentType
+
+                        )
                     )
                 },
                 toggleLikeState = {
                     onContentUserInteract(
-                        ContentUserInteract.ToggleLikeState(userInteractionRecommendation.contentId)
+                        ContentUserInteract.ToggleLikeState(
+                            userInteractionRecommendation.contentId,
+                            userInteractionRecommendation.contentType
+                        )
                     )
                 },
                 toggleDislikeState = {
                     onContentUserInteract(
-                        ContentUserInteract.ToggleDislikeState(userInteractionRecommendation.contentId)
+                        ContentUserInteract.ToggleDislikeState(
+                            userInteractionRecommendation.contentId,
+                            userInteractionRecommendation.contentType
+                        )
                     )
                 }
             )
@@ -443,7 +454,8 @@ private fun MediaScreenPreview(
             uiState = uiState,
             userInteractionState = UserInteractionRecommendation(
                 contentId = ContentId("", ""),
-                rating = Rating.DISLIKE
+                rating = Rating.DISLIKE,
+                contentType = ContentType.AUDIO
             ),
             onUserInteract = {},
             onContentUserInteract = {}

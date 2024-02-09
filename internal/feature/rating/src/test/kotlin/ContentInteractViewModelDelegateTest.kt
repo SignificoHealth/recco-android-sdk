@@ -1,6 +1,7 @@
 import com.google.common.truth.Truth.assertThat
 import com.recco.internal.core.logger.Logger
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.repository.RecommendationRepository
@@ -40,10 +41,10 @@ class ContentInteractViewModelDelegateTest {
             startWith = recommendationAs(isBookmarked = true)
         )
 
-        repository.stubRepositoryForSuccess(id)
+        repository.stubRepositoryForSuccess()
 
         viewModelDelegate.onContentUserInteract(
-            ContentUserInteract.ToggleBookmarkState(id)
+            ContentUserInteract.ToggleBookmarkState(id, ContentType.ARTICLE)
         )
 
         advanceUntilIdle()
@@ -58,10 +59,10 @@ class ContentInteractViewModelDelegateTest {
             startWith = recommendationAs(isBookmarked = false)
         )
 
-        repository.stubRepositoryForSuccess(id)
+        repository.stubRepositoryForSuccess()
 
         viewModelDelegate.onContentUserInteract(
-            ContentUserInteract.ToggleBookmarkState(id)
+            ContentUserInteract.ToggleBookmarkState(id, ContentType.ARTICLE)
         )
 
         advanceUntilIdle()
@@ -82,10 +83,10 @@ class ContentInteractViewModelDelegateTest {
             startWith = startState
         )
 
-        repository.stubRepositoryForSuccess(id)
+        repository.stubRepositoryForSuccess()
 
         viewModelDelegate.onContentUserInteract(
-            ContentUserInteract.ToggleLikeState(id)
+            ContentUserInteract.ToggleLikeState(id, ContentType.ARTICLE)
         )
 
         assertThat(viewModelDelegate.userInteraction)
@@ -115,10 +116,10 @@ class ContentInteractViewModelDelegateTest {
             startWith = startState
         )
 
-        repository.stubRepositoryForSuccess(id)
+        repository.stubRepositoryForSuccess()
 
         viewModelDelegate.onContentUserInteract(
-            ContentUserInteract.ToggleDislikeState(id)
+            ContentUserInteract.ToggleDislikeState(id, ContentType.ARTICLE)
         )
 
         assertThat(viewModelDelegate.userInteraction)
@@ -148,10 +149,10 @@ class ContentInteractViewModelDelegateTest {
             startWith = startState
         )
 
-        repository.stubRepositoryForSuccess(id)
+        repository.stubRepositoryForSuccess()
 
         viewModelDelegate.onContentUserInteract(
-            ContentUserInteract.ToggleDislikeState(id)
+            ContentUserInteract.ToggleDislikeState(id, ContentType.ARTICLE)
         )
 
         assertThat(viewModelDelegate.userInteraction)
@@ -181,10 +182,10 @@ class ContentInteractViewModelDelegateTest {
             startWith = startState
         )
 
-        repository.stubRepositoryForSuccess(id)
+        repository.stubRepositoryForSuccess()
 
         viewModelDelegate.onContentUserInteract(
-            ContentUserInteract.ToggleLikeState(id)
+            ContentUserInteract.ToggleLikeState(id, ContentType.ARTICLE)
         )
 
         assertThat(viewModelDelegate.userInteraction)
@@ -214,10 +215,10 @@ class ContentInteractViewModelDelegateTest {
             startWith = startState
         )
 
-        repository.stubRepositoryForSuccess(id)
+        repository.stubRepositoryForSuccess()
 
         viewModelDelegate.onContentUserInteract(
-            ContentUserInteract.ToggleDislikeState(id)
+            ContentUserInteract.ToggleDislikeState(id, ContentType.ARTICLE)
         )
 
         assertThat(viewModelDelegate.userInteraction)
@@ -248,7 +249,7 @@ class ContentInteractViewModelDelegateTest {
         repository.stubForToggleRatingFailure()
 
         viewModelDelegate.onContentUserInteract(
-            ContentUserInteract.ToggleDislikeState(id)
+            ContentUserInteract.ToggleDislikeState(id, ContentType.ARTICLE)
         )
 
         advanceUntilIdle()
@@ -271,7 +272,7 @@ class ContentInteractViewModelDelegateTest {
         repository.stubForToggleBookmarkFailure()
 
         viewModelDelegate.onContentUserInteract(
-            ContentUserInteract.ToggleBookmarkState(id)
+            ContentUserInteract.ToggleBookmarkState(id, ContentType.ARTICLE)
         )
 
         advanceUntilIdle()
@@ -290,11 +291,12 @@ class ContentInteractViewModelDelegateTest {
         }
     }
 
-    internal fun RecommendationRepository.stubForToggleBookmarkFailure() {
+    private fun RecommendationRepository.stubForToggleBookmarkFailure() {
         stub {
             onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
             onBlocking {
                 it.setBookmarkRecommendation(
+                    any(),
                     any(),
                     any()
                 )
@@ -302,11 +304,11 @@ class ContentInteractViewModelDelegateTest {
         }
     }
 
-    private fun RecommendationRepository.stubRepositoryForSuccess(id: ContentId) {
+    private fun RecommendationRepository.stubRepositoryForSuccess() {
         stub {
             onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
-            onBlocking { it.setBookmarkRecommendation(any(), any()) } doReturn Unit
-            onBlocking { it.setRecommendationRating(any(), any()) } doReturn Unit
+            onBlocking { it.setBookmarkRecommendation(any(), any(), any()) } doReturn Unit
+            onBlocking { it.setRecommendationRating(any(), any(), any()) } doReturn Unit
         }
     }
 
@@ -314,10 +316,7 @@ class ContentInteractViewModelDelegateTest {
         stub {
             onBlocking { it.setRecommendationAsViewed(any()) } doReturn Unit
             onBlocking {
-                it.setRecommendationRating(
-                    any(),
-                    any()
-                )
+                it.setRecommendationRating(any(), any(), any())
             } doThrow staticThrowableForTesting
         }
     }
@@ -336,7 +335,8 @@ class ContentInteractViewModelDelegateTest {
             isBookmarked = isBookmarked,
             isBookmarkLoading = isBookmarkLoading,
             isLikeLoading = isLikeLoading,
-            isDislikeLoading = isDislikeLoading
+            isDislikeLoading = isDislikeLoading,
+            contentType = ContentType.ARTICLE
         )
     }
 }

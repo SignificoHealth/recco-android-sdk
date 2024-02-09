@@ -7,6 +7,7 @@ import com.recco.internal.core.model.media.Audio
 import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.Article
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.Status
 import com.recco.internal.core.network.http.unwrap
@@ -147,23 +148,27 @@ class RecommendationRepository @Inject constructor(
         api.getArticle(catalogId = contentId.catalogId)
             .unwrap().asEntity()
 
-    suspend fun setBookmarkRecommendation(contentId: ContentId, bookmarked: Boolean) {
+    suspend fun setBookmarkRecommendation(contentId: ContentId, contentType: ContentType, bookmarked: Boolean) {
         api.setBookmark(
             UpdateBookmarkDTO(
                 contentId = contentId.asDTO(),
                 bookmarked = bookmarked,
-                contentType = ContentTypeDTO.ARTICLES
+                contentType = contentType.asDTO()
             )
         )
         updateSections(contentId = contentId, bookmarked = bookmarked)
         reloadBookmarks()
     }
 
-    suspend fun setRecommendationRating(contentId: ContentId, rating: Rating) {
+    suspend fun setRecommendationRating(
+        contentId: ContentId,
+        contentType: ContentType,
+        rating: Rating
+    ) {
         api.setRating(
             UpdateRatingDTO(
                 contentId = contentId.asDTO(),
-                contentType = ContentTypeDTO.ARTICLES,
+                contentType = contentType.asDTO(),
                 rating = rating.asDTO()
             )
         )

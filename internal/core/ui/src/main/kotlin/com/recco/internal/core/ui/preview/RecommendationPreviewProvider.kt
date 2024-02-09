@@ -17,7 +17,7 @@ class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
             headline = "Breathing techniques",
             bookmarked = true,
             imageUrl = null,
-            type = ContentType.ARTICLE,
+            type = ContentType.ARTICLE
         )
 
         val AUDIO = Recommendation(
@@ -27,7 +27,7 @@ class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
             headline = "Catching up with your hobbies",
             bookmarked = true,
             imageUrl = null,
-            type = ContentType.AUDIO,
+            type = ContentType.AUDIO
         )
 
         val VIDEO = Recommendation(
@@ -37,7 +37,7 @@ class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
             headline = "Solving your emotions",
             bookmarked = true,
             imageUrl = null,
-            type = ContentType.VIDEO,
+            type = ContentType.VIDEO
         )
     }
 }

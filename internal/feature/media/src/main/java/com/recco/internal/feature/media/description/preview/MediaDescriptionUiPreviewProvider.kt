@@ -6,7 +6,6 @@ import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.Status
-import com.recco.internal.core.model.recommendation.UserInteractionRecommendation
 import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.feature.media.description.MediaDescriptionUI
 
@@ -92,15 +91,6 @@ internal class MediaDescriptionUiPreviewProvider :
                 "Consult with your doctor before engaging in heavy cardio exercise",
             imageAlt = null,
             lengthInSeconds = 600
-        )
-
-        private val USER_INTERACTION = UserInteractionRecommendation(
-            contentId = ContentId("1", "2"),
-            rating = Rating.DISLIKE,
-            isBookmarked = false,
-            isBookmarkLoading = false,
-            isLikeLoading = false,
-            isDislikeLoading = false
         )
     }
 }
