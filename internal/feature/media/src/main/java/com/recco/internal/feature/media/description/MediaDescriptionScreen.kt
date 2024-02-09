@@ -62,7 +62,7 @@ import com.recco.internal.feature.rating.delegates.ContentUserInteract
 @Composable
 internal fun MediaDescriptionRoute(
     navigateUp: () -> Unit,
-    viewModel: LoadMediaViewModel = hiltViewModel(),
+    viewModel: MediaViewModel = hiltViewModel(),
     navigateToMediaPlayer: (ContentId, ContentType) -> Unit
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle(

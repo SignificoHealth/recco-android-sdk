@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class LoadMediaViewModel @Inject constructor(
+internal class MediaViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val reccomendationRepository: RecommendationRepository,
     private val contentInteractViewModelDelegate: ContentInteractViewModelDelegate,
