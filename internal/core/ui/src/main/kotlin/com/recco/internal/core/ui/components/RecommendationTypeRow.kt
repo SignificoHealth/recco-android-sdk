@@ -28,7 +28,7 @@ fun RecommendationTypeRow(
     iconSize: Dp = 24.dp,
     textStyle: TextStyle = AppTheme.typography.labelSmall,
     contentType: ContentType,
-    lengthInSeconds: Int?,
+    lengthInSeconds: Int? = null,
     iconSpacing: Dp = AppSpacing.dp_8
 ) {
     Row(

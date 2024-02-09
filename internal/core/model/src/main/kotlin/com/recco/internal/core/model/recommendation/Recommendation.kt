@@ -9,5 +9,4 @@ data class Recommendation(
     val headline: String,
     val imageUrl: String? = null,
     val imageAlt: String? = null,
-    val lengthInSeconds: Int? = null
 )

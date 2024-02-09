@@ -16,7 +16,6 @@ internal fun AppUserRecommendationDTO.asEntity() = Recommendation(
     imageUrl = dynamicImageResizingUrl,
     bookmarked = bookmarked,
     imageAlt = imageAlt,
-    lengthInSeconds = duration,
     type = when (type) {
         ARTICLES -> ContentType.ARTICLE
         QUESTIONNAIRES -> ContentType.QUESTIONNAIRE

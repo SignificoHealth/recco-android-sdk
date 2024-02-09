@@ -90,7 +90,6 @@ fun AppRecommendationCard(
                         fontSize = 10.sp
                     ),
                     contentType = recommendation.type,
-                    lengthInSeconds = recommendation.lengthInSeconds,
                     modifier = Modifier.alpha(0.8f)
                 )
             }

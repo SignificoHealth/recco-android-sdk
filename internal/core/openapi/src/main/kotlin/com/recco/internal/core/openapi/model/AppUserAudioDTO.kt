@@ -27,7 +27,7 @@ import com.squareup.moshi.JsonClass
  * @param status 
  * @param bookmarked 
  * @param headline 
- * @param category 
+ * @param theme 
  * @param audioUrl 
  * @param duration The estimated duration in seconds to read this article
  * @param transcription 
@@ -53,8 +53,8 @@ data class AppUserAudioDTO(
     @Json(name = "headline")
     val headline: kotlin.String,
 
-    @Json(name = "category")
-    val category: AppUserAudioDTO.Category,
+    @Json(name = "theme")
+    val theme: AppUserAudioDTO.Theme,
 
     @Json(name = "audioUrl")
     val audioUrl: kotlin.String,
@@ -78,13 +78,12 @@ data class AppUserAudioDTO(
     /**
      * 
      *
-     * Values: EXERCISE,MEDITATION,RELAXATION
+     * Values: MEDITATION,RELAXATION_EXERCISE
      */
     @JsonClass(generateAdapter = false)
-    enum class Category(val value: kotlin.String) {
-        @Json(name = "exercise") EXERCISE("exercise"),
+    enum class Theme(val value: kotlin.String) {
         @Json(name = "meditation") MEDITATION("meditation"),
-        @Json(name = "relaxation") RELAXATION("relaxation");
+        @Json(name = "relaxation_exercise") RELAXATION_EXERCISE("relaxation_exercise");
     }
 }
 

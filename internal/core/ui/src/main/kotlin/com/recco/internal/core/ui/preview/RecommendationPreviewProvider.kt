@@ -18,7 +18,6 @@ class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
             bookmarked = true,
             imageUrl = null,
             type = ContentType.ARTICLE,
-            lengthInSeconds = 300
         )
 
         val AUDIO = Recommendation(
@@ -29,7 +28,6 @@ class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
             bookmarked = true,
             imageUrl = null,
             type = ContentType.AUDIO,
-            lengthInSeconds = 1200
         )
 
         val VIDEO = Recommendation(
@@ -40,7 +38,6 @@ class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
             bookmarked = true,
             imageUrl = null,
             type = ContentType.VIDEO,
-            lengthInSeconds = 300
         )
     }
 }

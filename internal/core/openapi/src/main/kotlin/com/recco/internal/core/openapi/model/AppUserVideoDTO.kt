@@ -27,7 +27,8 @@ import com.squareup.moshi.JsonClass
  * @param status 
  * @param bookmarked 
  * @param headline 
- * @param category 
+ * @param theme 
+ * @param orientation 
  * @param videoUrl 
  * @param duration The estimated duration in seconds to read this article
  * @param description 
@@ -54,8 +55,11 @@ data class AppUserVideoDTO(
     @Json(name = "headline")
     val headline: kotlin.String,
 
-    @Json(name = "category")
-    val category: AppUserVideoDTO.Category,
+    @Json(name = "theme")
+    val theme: AppUserVideoDTO.Theme,
+
+    @Json(name = "orientation")
+    val orientation: AppUserVideoDTO.Orientation,
 
     @Json(name = "videoUrl")
     val videoUrl: kotlin.String,
@@ -85,9 +89,19 @@ data class AppUserVideoDTO(
      * Values: EXERCISE,MEDITATION
      */
     @JsonClass(generateAdapter = false)
-    enum class Category(val value: kotlin.String) {
+    enum class Theme(val value: kotlin.String) {
         @Json(name = "exercise") EXERCISE("exercise"),
         @Json(name = "meditation") MEDITATION("meditation");
+    }
+    /**
+     * 
+     *
+     * Values: LANDSCAPE,PORTRAIT
+     */
+    @JsonClass(generateAdapter = false)
+    enum class Orientation(val value: kotlin.String) {
+        @Json(name = "landscape") LANDSCAPE("landscape"),
+        @Json(name = "portrait") PORTRAIT("portrait");
     }
 }
 
