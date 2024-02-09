@@ -27,6 +27,7 @@ import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -69,7 +70,6 @@ import com.recco.internal.core.ui.theme.AppTheme
 import com.recco.internal.feature.article.preview.ArticleUIPreviewProvider
 import com.recco.internal.feature.article.preview.ContentUserInteractionPreviewProvider
 import com.recco.internal.feature.rating.delegates.ContentUserInteract
-import androidx.compose.runtime.LaunchedEffect as LaunchedEffect1
 
 @Composable
 internal fun ArticleRoute(
@@ -333,7 +333,7 @@ fun AudioSlider(
     var isDragging by remember { mutableStateOf(false) }
 
     // Update slider only when not dragging
-    LaunchedEffect1(currentPositionMs) {
+    LaunchedEffect(currentPositionMs) {
         if (!isDragging) {
             sliderPosition = currentPositionSeconds
         }
