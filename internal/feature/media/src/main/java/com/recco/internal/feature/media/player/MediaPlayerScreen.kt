@@ -61,9 +61,9 @@ import com.recco.internal.core.ui.components.UiState
 import com.recco.internal.core.ui.components.UserInteractionRecommendationCard
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
-import com.recco.internal.feature.media.description.MediaViewModel
 import com.recco.internal.feature.media.description.MediaDescriptionUI
 import com.recco.internal.feature.media.description.MediaDescriptionUserInteract
+import com.recco.internal.feature.media.description.MediaViewModel
 import com.recco.internal.feature.media.description.preview.MediaDescriptionUiPreviewProvider
 import com.recco.internal.feature.rating.delegates.ContentUserInteract
 import kotlinx.coroutines.delay
