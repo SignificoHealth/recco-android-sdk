@@ -41,7 +41,6 @@ security = "1.1.0-alpha06"
 google-fonts = "1.5.3"
 spotless = "6.21.0"
 easylauncher = "6.2.0"
-exo-player = "1.2.0"
 
 junit-plugin = "1.9.3.0"
 junit = "5.9.3"
