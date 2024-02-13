@@ -30,10 +30,9 @@ sealed class MediaDescriptionUI(
     )
 
     val contentType: ContentType
-        get() = when {
-            this is AudioDescriptionUI -> ContentType.AUDIO
-            this is VideoDescriptionUI -> ContentType.VIDEO
-            else -> error("Non supported ContentType: $this, for MediaDescriptionUi")
+        get() = when (this) {
+            is AudioDescriptionUI -> ContentType.AUDIO
+            is VideoDescriptionUI -> ContentType.VIDEO
         }
 
     val trackItem: TrackItem

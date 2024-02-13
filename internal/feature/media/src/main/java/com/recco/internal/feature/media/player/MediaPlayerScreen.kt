@@ -388,7 +388,7 @@ private fun AudioHeader(audio: Audio) {
         modifier = Modifier.fillMaxWidth()
     ) {
         val minSuffix = stringResource(id = R.string.recco_unit_min)
-        val podcastString = stringResource(id = R.string.recco_reccomendation_type_podcast)
+        val podcastString = stringResource(id = R.string.recco_reccomendation_type_audio)
 
         Spacer(modifier = Modifier.height(AppTopBarDefaults.Height))
 
@@ -400,10 +400,13 @@ private fun AudioHeader(audio: Audio) {
         )
 
         val audioDurationLabel = remember {
-            val minutesLength = audio.lengthInSeconds?.div(60)
+            val minutesLength = audio.lengthInSeconds
+                ?.takeIf { it > 0 }
+                ?.div(60)
+
             buildString {
                 append(podcastString)
-                append("• 1-$minutesLength $minSuffix").takeIf { minutesLength != null }
+                minutesLength?.let { append("• 1-$minutesLength $minSuffix") }
             }
         }
 

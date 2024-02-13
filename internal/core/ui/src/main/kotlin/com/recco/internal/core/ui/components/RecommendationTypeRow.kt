@@ -43,7 +43,7 @@ fun RecommendationTypeRow(
             }
             ContentType.AUDIO -> {
                 R.drawable.recco_ic_sound to
-                    R.string.recco_reccomendation_type_podcast
+                    R.string.recco_reccomendation_type_audio
             }
             ContentType.VIDEO -> {
                 R.drawable.recco_ic_video to
@@ -69,7 +69,7 @@ fun RecommendationTypeRow(
 
                 if (lengthInSeconds?.takeIf { it > 0 } != null) {
                     val lengthInMinutes = (lengthInSeconds / 60)
-                    append("  • $lengthInMinutes $minSuffixText").takeIf { lengthInSeconds != null }
+                    append("  • $lengthInMinutes $minSuffixText")
                 }
             }
 
