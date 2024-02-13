@@ -28,14 +28,13 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerView
 import coil.ImageLoader
 import coil.request.ImageRequest
+import com.recco.internal.core.media.extensions.prepareFor
 import com.recco.internal.core.model.media.MediaType
 import com.recco.internal.core.model.recommendation.TrackItem
 import com.recco.internal.core.ui.extensions.hasPermission
@@ -183,24 +182,6 @@ private fun rememberMediaNotificationManager(
     }
 }
 
-private fun ExoPlayer.prepareFor(
-    context: Context,
-    trackItem: TrackItem
-) {
-    when (trackItem.mediaType) {
-        MediaType.AUDIO -> {
-            setMediaItem(trackItem.asMediaItem())
-        }
-        MediaType.VIDEO -> {
-            val factory = DefaultDataSource.Factory(context)
-            val source = HlsMediaSource.Factory(factory).createMediaSource(trackItem.asMediaItem())
-            setMediaSource(source)
-        }
-    }
-
-    prepare()
-}
-
 @Composable
 private fun rememberExoPlayer(
     trackItem: TrackItem
@@ -229,7 +210,6 @@ private fun rememberExoPlayer(
                 }
                 .build()
             player.prepareFor(context, trackItem)
-
             player
         } else {
             null

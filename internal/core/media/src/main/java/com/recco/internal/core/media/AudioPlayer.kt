@@ -8,9 +8,8 @@ import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import com.recco.internal.core.media.extensions.prepareFor
 import com.recco.internal.core.model.recommendation.TrackItem
 import com.recco.internal.core.ui.notifications.MediaNotificationManager
 
@@ -106,12 +105,7 @@ class AudioPlayer(
 
     fun load(trackItem: TrackItem) {
         this.trackItem = trackItem
-        val dataSourceFactory = DefaultDataSource.Factory(context)
-        val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(trackItem.asMediaItem())
-
-        exoPlayer?.setMediaSource(mediaSource)
-        exoPlayer?.prepare()
+        exoPlayer?.prepareFor(context, trackItem)
     }
 
     fun seekTo(currentPosition: Long) {
