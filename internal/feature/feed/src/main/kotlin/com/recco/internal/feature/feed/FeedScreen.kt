@@ -64,6 +64,10 @@ import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
 import com.recco.internal.core.model.recommendation.ContentId
 import com.recco.internal.core.model.recommendation.ContentType
+import com.recco.internal.core.model.recommendation.ContentType.ARTICLE
+import com.recco.internal.core.model.recommendation.ContentType.AUDIO
+import com.recco.internal.core.model.recommendation.ContentType.QUESTIONNAIRE
+import com.recco.internal.core.model.recommendation.ContentType.VIDEO
 import com.recco.internal.core.model.recommendation.Recommendation
 import com.recco.internal.core.ui.R
 import com.recco.internal.core.ui.components.AppAlertDialog
@@ -94,6 +98,7 @@ internal fun FeedRoute(
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     navigateToBookmarks: () -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
     viewModel: FeedViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.viewState.collectAsStateWithLifecycle()
@@ -102,7 +107,8 @@ internal fun FeedRoute(
         onUserInteract = { viewModel.onUserInteract(it) },
         navigateToQuestionnaire = navigateToQuestionnaire,
         navigateToBookmarks = navigateToBookmarks,
-        navigateToArticle = navigateToArticle
+        navigateToArticle = navigateToArticle,
+        navigateToMediaDescription = navigateToMediaDescription
     )
 }
 
@@ -112,6 +118,7 @@ private fun FeedScreen(
     onUserInteract: (FeedUserInteract) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
     navigateToBookmarks: () -> Unit,
     contentPadding: PaddingValues = WindowInsets.navigationBars.asPaddingValues()
 ) {
@@ -141,6 +148,7 @@ private fun FeedScreen(
                 navigateToArticle = navigateToArticle,
                 navigateToBookmarks = navigateToBookmarks,
                 navigateToQuestionnaire = navigateToQuestionnaire,
+                navigateToMediaDescription = navigateToMediaDescription,
                 onLockAnimationFinished = {
                     onUserInteract(FeedUserInteract.RefreshUnlockedFeedSection)
                 }
@@ -155,6 +163,7 @@ private fun FeedContent(
     navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
     navigateToArticle: (ContentId) -> Unit,
     navigateToBookmarks: () -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
     onLockAnimationFinished: () -> Unit
 ) {
     Column(
@@ -184,7 +193,8 @@ private fun FeedContent(
                             feedSectionToUnlock = feedUI.feedSectionToUnlock,
                             navigateToArticle = navigateToArticle,
                             onLockAnimationFinished = onLockAnimationFinished,
-                            navigateToQuestionnaire = navigateToQuestionnaire
+                            navigateToQuestionnaire = navigateToQuestionnaire,
+                            navigateToMediaDescription = navigateToMediaDescription
                         )
                     }
                     Spacer(Modifier.height(AppSpacing.dp_40))
@@ -252,6 +262,7 @@ private fun FeedSection(
     feedSectionToUnlock: GlobalViewEvent.FeedSectionToUnlock?,
     navigateToArticle: (ContentId) -> Unit,
     navigateToQuestionnaire: (Topic, FeedSectionType, ContentId?) -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit,
     onLockAnimationFinished: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -301,7 +312,8 @@ private fun FeedSection(
                     openDialog = openDialog,
                     topicDialog = topicDialog,
                     contentIdDialog = contentIdDialog,
-                    navigateToArticle = navigateToArticle
+                    navigateToArticle = navigateToArticle,
+                    navigateToMediaDescription = navigateToMediaDescription
                 )
             }
         }
@@ -382,7 +394,8 @@ private fun UnlockedItems(
     openDialog: MutableState<Boolean>,
     topicDialog: MutableState<Topic?>,
     contentIdDialog: MutableState<ContentId?>,
-    navigateToArticle: (ContentId) -> Unit
+    navigateToArticle: (ContentId) -> Unit,
+    navigateToMediaDescription: (ContentId, ContentType) -> Unit
 ) {
     val recommendations =
         (section.recommendations as FlowDataState.Success<List<Recommendation>>).data
@@ -395,15 +408,26 @@ private fun UnlockedItems(
         )
     ) {
         items(
-            items = recommendations,
-            key = { item -> item.id.itemId }
+            items = recommendations
+            //  TODO On videos, BE is sending duplicated keys sometimes making keys to fail
+            //    so disable keys for now, check to enabling them.
+            // key = { item -> item.id.itemId }
         ) { recommendation ->
             when (recommendation.type) {
-                ContentType.ARTICLE -> {
-                    AppRecommendationCard(recommendation, navigateToArticle)
+                ARTICLE, AUDIO, VIDEO -> {
+                    AppRecommendationCard(
+                        recommendation = recommendation,
+                        onClick = { contentId ->
+                            when (recommendation.type) {
+                                ARTICLE -> navigateToArticle(contentId)
+                                AUDIO -> navigateToMediaDescription(contentId, AUDIO)
+                                VIDEO -> navigateToMediaDescription(contentId, VIDEO)
+                                else -> throw IllegalStateException()
+                            }
+                        }
+                    )
                 }
-
-                ContentType.QUESTIONNAIRE -> {
+                QUESTIONNAIRE -> {
                     AppQuestionnaireCard(section.feedSection.topic!!) {
                         openDialog.value = true
                         topicDialog.value = section.feedSection.topic
@@ -432,7 +456,8 @@ private fun QuestionnaireStartDialog(
             ) {
                 TopicImage(
                     topic = topic,
-                    modifier = Modifier.size(237.dp)
+                    modifier = Modifier
+                        .size(237.dp)
                         .padding(top = AppSpacing.dp_16)
                 )
             }
@@ -581,7 +606,8 @@ private fun Preview(
             onUserInteract = {},
             navigateToArticle = {},
             navigateToBookmarks = {},
-            navigateToQuestionnaire = { _, _, _ -> }
+            navigateToQuestionnaire = { _, _, _ -> },
+            navigateToMediaDescription = { _, _ -> }
         )
     }
 }
@@ -599,7 +625,8 @@ private fun PreviewDark(
             onUserInteract = {},
             navigateToArticle = {},
             navigateToBookmarks = {},
-            navigateToQuestionnaire = { _, _, _ -> }
+            navigateToQuestionnaire = { _, _, _ -> },
+            navigateToMediaDescription = { _, _ -> }
         )
     }
 }

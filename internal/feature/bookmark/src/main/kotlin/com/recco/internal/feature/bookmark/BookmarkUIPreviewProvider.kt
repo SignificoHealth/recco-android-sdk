@@ -11,7 +11,7 @@ internal class BookmarkUIPreviewProvider : PreviewParameterProvider<UiState<Book
             UiState(
                 isLoading = false,
                 data = BookmarkUI(
-                    recommendations = List(10) { RecommendationPreviewProvider.data }
+                    recommendations = List(10) { RecommendationPreviewProvider.ARTICLE }
                 )
             ),
             UiState(isLoading = true),

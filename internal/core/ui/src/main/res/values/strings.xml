@@ -46,9 +46,20 @@
     <string name="recco_questionnaire_numeric_label_in">in.</string>
     <string name="recco_questionnaire_numeric_label_kg">kg.</string>
     <string name="recco_questionnaire_numeric_label_lb">lb.</string>
-    <string name="recco_questionnaire_numeric_label_min">min.</string>
+    <string name="recco_unit_min">min.</string>
     <string name="recco_questionnaire_numeric_label_st">st.</string>
     <string name="recco_questionnaire_outro_body">Keep going! The more questionnaires you complete, the more accurate your health score will be. \nThen, Recco can make personalized recommendations for you to make real health improvements.</string>
     <string name="recco_questionnaire_outro_title">Great! You finished the <xliff:g id="section_name">%1$s</xliff:g> section.</string>
     <string name="recco_start">Start</string>
+    <string name="recco_media_channel_name">Media Notifications</string>
+    <string name="recco_media_channel_description">Notifications for managing video and audio playbacks</string>
+    <string name="recco_reccomendation_type_read">Read</string>
+    <string name="recco_reccomendation_type_video">Video</string>
+    <string name="recco_reccomendation_type_audio">Audio</string>
+    <string name="recco_play">Play</string>
+    <string name="recco_transcription">Transcription</string>
+    <string name="recco_dismiss">Dismiss</string>
+    <string name="recco_warning">Warning</string>
+    <string name="recco_warning_message">If you experience shortness of breath or high heartrate, stop and call your doctor.</string>
+    <string name="recco_warning_dismiss">Don’t show this warning again</string>
 </resources>

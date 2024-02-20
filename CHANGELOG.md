@@ -2,6 +2,8 @@
 
 ## [1.?.?] - 2024-01-15- YYYY-MM-DD
 
+- Support audio, video, and articles with audio content. [SHAD-510](https://vilua.atlassian.net/browse/SHAD-510)
+
 ## [1.2.0] - 2023-12-12 - 2024-01-15
 
 ### Added

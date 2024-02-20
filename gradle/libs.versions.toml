@@ -24,7 +24,7 @@ androidx-test-runner = "1.5.2"
 androidx-test-rules = "1.5.0"
 coil = "2.4.0"
 compose-html = "1.0.3"
-exoplayer = "2.18.6"
+exoplayer = "1.2.0"
 hilt = "2.48.1"
 kotlin = "1.9.10"
 kotlinx-coroutines-android = "1.7.3"
@@ -98,10 +98,10 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
 compose-html = { group = "com.github.viluahealthcare", name = "compose-html", version.ref = "compose-html" }
 
-exoplayer-core = { group = "com.google.android.exoplayer", name = "exoplayer-core", version.ref = "exoplayer" }
-exoplayer-mediasession = { group = "com.google.android.exoplayer", name = "extension-mediasession", version.ref = "exoplayer" }
-exoplayer-okhttp = { group = "com.google.android.exoplayer", name = "extension-okhttp", version.ref = "exoplayer" }
-exoplayer-ui = { group = "com.google.android.exoplayer", name = "exoplayer-ui", version.ref = "exoplayer" }
+exoplayer-core = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "exoplayer" }
+exoplayer-media-session = { group = "androidx.media3", name = "media3-session", version.ref = "exoplayer" }
+exoplayer-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "exoplayer" }
+exoplayer-hls = { group = "androidx.media3", name = "media3-exoplayer-hls", version.ref = "exoplayer" }
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-gradle-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
