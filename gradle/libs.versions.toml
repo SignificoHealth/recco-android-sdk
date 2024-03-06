@@ -96,7 +96,7 @@ androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
-compose-html = { group = "com.github.viluahealthcare", name = "compose-html", version.ref = "compose-html" }
+compose-html = { group = "com.github.SignificoHealth", name = "compose-html", version.ref = "compose-html" }
 
 exoplayer-core = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "exoplayer" }
 exoplayer-media-session = { group = "androidx.media3", name = "media3-session", version.ref = "exoplayer" }
