@@ -1,6 +1,10 @@
 # Changelog
 
-## [1.?.?] - 2024-01-15- YYYY-MM-DD
+## [1.?.?] - 2024-03-07 - YYYY-MM-DD
+
+## [1.3.0] - 2024-01-15 - 2024-03-07
+
+- Support audio, video, and articles with audio content. [SHAD-510](https://vilua.atlassian.net/browse/SHAD-510)
 
 ## [1.2.0] - 2023-12-12 - 2024-01-15
 

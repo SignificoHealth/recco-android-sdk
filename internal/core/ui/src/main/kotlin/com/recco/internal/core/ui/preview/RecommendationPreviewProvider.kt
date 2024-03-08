@@ -7,19 +7,37 @@ import com.recco.internal.core.model.recommendation.Recommendation
 import com.recco.internal.core.model.recommendation.Status
 
 class RecommendationPreviewProvider : PreviewParameterProvider<Recommendation> {
-    override val values get() = sequenceOf(data)
+    override val values get() = sequenceOf(ARTICLE, AUDIO, VIDEO)
 
     companion object {
-        val data
-            get() = Recommendation(
-                id = ContentIdPreviewProvider.data,
-                rating = Rating.LIKE,
-                status = Status.VIEWED,
-                headline = "Some headline",
-                lead = "Some lead",
-                bookmarked = true,
-                imageUrl = null,
-                type = ContentType.ARTICLE
-            )
+        val ARTICLE = Recommendation(
+            id = ContentIdPreviewProvider.data,
+            rating = Rating.LIKE,
+            status = Status.VIEWED,
+            headline = "Breathing techniques",
+            bookmarked = true,
+            imageUrl = null,
+            type = ContentType.ARTICLE
+        )
+
+        val AUDIO = Recommendation(
+            id = ContentIdPreviewProvider.data,
+            rating = Rating.LIKE,
+            status = Status.VIEWED,
+            headline = "Catching up with your hobbies",
+            bookmarked = true,
+            imageUrl = null,
+            type = ContentType.AUDIO
+        )
+
+        val VIDEO = Recommendation(
+            id = ContentIdPreviewProvider.data,
+            rating = Rating.LIKE,
+            status = Status.VIEWED,
+            headline = "Solving your emotions",
+            bookmarked = true,
+            imageUrl = null,
+            type = ContentType.VIDEO
+        )
     }
 }

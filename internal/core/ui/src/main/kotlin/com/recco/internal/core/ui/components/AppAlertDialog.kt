@@ -42,7 +42,8 @@ fun AppAlertDialog(
     @StringRes descriptionRes: Int? = null,
     @StringRes textButtonPrimaryRes: Int,
     onClickPrimary: () -> Unit,
-    onDismiss: () -> Unit = {}
+    onDismiss: () -> Unit = {},
+    content: @Composable (ColumnScope.() -> Unit)? = null
 ) {
     if (openDialog.value) {
         Dialog(
@@ -91,11 +92,14 @@ fun AppAlertDialog(
                             )
                         }
 
+                        content?.invoke(this)
+
                         Spacer(Modifier.height(AppSpacing.dp_32))
                         AppPrimaryButton(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 onClickPrimary()
+                                onDismiss.invoke()
                                 openDialog.value = false
                             },
                             textRes = textButtonPrimaryRes
@@ -109,6 +113,7 @@ fun AppAlertDialog(
                         .align(Alignment.TopEnd)
                         .padding(end = AppSpacing.dp_24)
                 ) {
+                    onDismiss.invoke()
                     openDialog.value = false
                 }
             }

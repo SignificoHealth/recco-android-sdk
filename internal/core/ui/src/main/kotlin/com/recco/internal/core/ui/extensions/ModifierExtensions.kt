@@ -40,6 +40,14 @@ fun Modifier.viewedOverlay(color: Color) = then(
     }
 )
 
+fun Modifier.applyIf(predicate: Boolean, f: Modifier.() -> Modifier): Modifier {
+    return if (predicate) {
+        this.then(f())
+    } else {
+        this
+    }
+}
+
 /**
  * @param index Use for iterable items such as items in a row or column for a sequential effect.
  * @param delayMillis Avoid a non-smooth when the animation starts eagerly during first composition.

@@ -31,7 +31,9 @@ import com.squareup.moshi.JsonClass
  * @param imageUrl 
  * @param dynamicImageResizingUrl 
  * @param imageAlt 
+ * @param audioUrl 
  * @param articleBodyHtml 
+ * @param duration The estimated duration in seconds to read this article
  */
 @JsonClass(generateAdapter = true)
 data class AppUserArticleDTO(
@@ -63,6 +65,13 @@ data class AppUserArticleDTO(
     @Json(name = "imageAlt")
     val imageAlt: kotlin.String? = null,
 
+    @Json(name = "audioUrl")
+    val audioUrl: kotlin.String? = null,
+
     @Json(name = "articleBodyHtml")
-    val articleBodyHtml: kotlin.String? = null
+    val articleBodyHtml: kotlin.String? = null,
+
+    /* The estimated duration in seconds to read this article */
+    @Json(name = "duration")
+    val duration: kotlin.Int? = null
 )

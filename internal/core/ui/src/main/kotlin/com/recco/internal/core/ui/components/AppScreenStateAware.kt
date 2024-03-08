@@ -35,16 +35,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.recco.internal.core.ui.R
+import com.recco.internal.core.ui.extensions.applyIf
 import com.recco.internal.core.ui.extensions.noRippleClickable
 import com.recco.internal.core.ui.theme.AppSpacing
 import com.recco.internal.core.ui.theme.AppTheme
-import java.lang.Float.min
+import kotlin.math.min
 
 data class UiState<T>(
     val isLoading: Boolean = true,
     val error: Throwable? = null,
     val data: T? = null
 )
+
+fun <T> Throwable.toUiState(): UiState<T> {
+    return UiState(
+        isLoading = false,
+        error = this,
+        data = null
+    )
+}
 
 /**
  * Extracted from [SwipeRefresh] documentation:
@@ -70,6 +79,7 @@ fun <T> AppScreenStateAware(
     isEmpty: Boolean = false,
     retry: () -> Unit,
     refresh: (() -> Unit)? = null,
+    shouldFillMaxSize: Boolean = true,
     loadingHeaderContent: @Composable (() -> Unit)? = null,
     backgroundContent: @Composable (() -> Unit)? = null,
     animatedContentShapeContent: @Composable (() -> Unit)? = null,
@@ -109,7 +119,8 @@ fun <T> AppScreenStateAware(
                 enablePullToRefresh = enablePullToRefresh,
                 avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
                 footerContent = footerContent,
-                content = content
+                content = content,
+                shouldFillMaxSize = shouldFillMaxSize
             )
 
             headerContent?.let {
@@ -139,12 +150,12 @@ fun <T> AppScreenStateAware(
     } else {
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .applyIf(shouldFillMaxSize) { fillMaxSize() }
                 .padding(top = contentPadding.calculateTopPadding())
         ) {
             backgroundContent?.invoke()
 
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.applyIf(shouldFillMaxSize) { fillMaxSize() }) {
                 headerContent?.let {
                     HeaderContent(
                         isFirstLoading = isFirstLoading.value,
@@ -176,6 +187,7 @@ fun <T> AppScreenStateAware(
                     enablePullToRefresh = enablePullToRefresh,
                     avoidClickingWhenRefreshing = avoidClickingWhenRefreshing,
                     footerContent = footerContent,
+                    shouldFillMaxSize = shouldFillMaxSize,
                     content = content
                 )
             }
@@ -266,6 +278,7 @@ private fun <T> AppScreenStateAwareContent(
     uiState: UiState<T>,
     retry: () -> Unit,
     refresh: () -> Unit,
+    shouldFillMaxSize: Boolean,
     enablePullToRefresh: Boolean,
     avoidClickingWhenRefreshing: Boolean,
     loadingHeaderContent: @Composable (() -> Unit)? = null,
@@ -329,7 +342,7 @@ private fun <T> AppScreenStateAwareContent(
             else -> {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .applyIf(shouldFillMaxSize) { fillMaxSize() }
                         .pullRefresh(pullRefreshState)
                 ) {
                     LaunchedEffect(Unit) {
@@ -337,11 +350,13 @@ private fun <T> AppScreenStateAwareContent(
                         isPullRefreshEnabled.value = true
                     }
 
-                    Column(modifier = Modifier.fillMaxSize()) {
+                    Column(
+                        modifier = Modifier.applyIf(shouldFillMaxSize) { fillMaxSize() }
+                    ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .weight(1f)
+                                .applyIf(shouldFillMaxSize) { weight(1f) }
                                 .let {
                                     if (scrollState != null) {
                                         it.verticalScroll(scrollState)

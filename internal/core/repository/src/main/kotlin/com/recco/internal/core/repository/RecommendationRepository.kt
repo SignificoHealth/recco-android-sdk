@@ -3,8 +3,11 @@ package com.recco.internal.core.repository
 import com.recco.internal.core.model.FlowDataState
 import com.recco.internal.core.model.feed.FeedSectionType
 import com.recco.internal.core.model.feed.Topic
+import com.recco.internal.core.model.media.Audio
+import com.recco.internal.core.model.media.Video
 import com.recco.internal.core.model.recommendation.Article
 import com.recco.internal.core.model.recommendation.ContentId
+import com.recco.internal.core.model.recommendation.ContentType
 import com.recco.internal.core.model.recommendation.Rating
 import com.recco.internal.core.model.recommendation.Status
 import com.recco.internal.core.network.http.unwrap
@@ -23,55 +26,66 @@ import javax.inject.Inject
 class RecommendationRepository @Inject constructor(
     private val api: RecommendationApi
 ) {
-    private val supportedContentTypes = listOf(ContentTypeDTO.ARTICLES, ContentTypeDTO.QUESTIONNAIRES)
 
     private val sectionsPipelines = mapOf(
         FeedSectionType.PHYSICAL_ACTIVITY_RECOMMENDATIONS to PipelineStateAware {
-            api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_ACTIVITY, supportedContentTypes).unwrap()
+            api.getTailoredRecommendationsByTopic(TopicDTO.PHYSICAL_ACTIVITY, TAILORED_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.PHYSICAL_ACTIVITY_EXPLORE to PipelineStateAware {
-            api.exploreContentByTopic(TopicDTO.PHYSICAL_ACTIVITY).unwrap()
+            api.exploreContentByTopic(TopicDTO.PHYSICAL_ACTIVITY, REGULAR_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.NUTRITION_RECOMMENDATIONS to PipelineStateAware {
-            api.getTailoredRecommendationsByTopic(TopicDTO.NUTRITION, supportedContentTypes).unwrap()
+            api.getTailoredRecommendationsByTopic(TopicDTO.NUTRITION, TAILORED_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.NUTRITION_EXPLORE to PipelineStateAware {
-            api.exploreContentByTopic(TopicDTO.NUTRITION).unwrap()
+            api.exploreContentByTopic(TopicDTO.NUTRITION, REGULAR_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.MENTAL_WELLBEING_RECOMMENDATIONS to PipelineStateAware {
-            api.getTailoredRecommendationsByTopic(TopicDTO.MENTAL_WELLBEING, supportedContentTypes).unwrap()
+            api.getTailoredRecommendationsByTopic(TopicDTO.MENTAL_WELLBEING, TAILORED_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.MENTAL_WELLBEING_EXPLORE to PipelineStateAware {
-            api.exploreContentByTopic(TopicDTO.MENTAL_WELLBEING).unwrap()
+            api.exploreContentByTopic(TopicDTO.MENTAL_WELLBEING, REGULAR_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.SLEEP_RECOMMENDATIONS to PipelineStateAware {
-            api.getTailoredRecommendationsByTopic(TopicDTO.SLEEP, supportedContentTypes).unwrap()
+            api.getTailoredRecommendationsByTopic(TopicDTO.SLEEP, TAILORED_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.SLEEP_EXPLORE to PipelineStateAware {
-            api.exploreContentByTopic(TopicDTO.SLEEP).unwrap()
+            api.exploreContentByTopic(TopicDTO.SLEEP, REGULAR_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.PREFERRED_RECOMMENDATIONS to PipelineStateAware {
-            api.getUserPreferredRecommendations().unwrap()
+            api.getUserPreferredRecommendations(REGULAR_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.MOST_POPULAR to PipelineStateAware {
-            api.getMostPopularContent().unwrap()
+            api.getMostPopularContent(REGULAR_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.NEW_CONTENT to PipelineStateAware {
-            api.getNewestContent().unwrap()
+            api.getNewestContent(REGULAR_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         },
         FeedSectionType.STARTING_RECOMMENDATIONS to PipelineStateAware {
-            api.getStartingRecommendations().unwrap()
+            api.getStartingRecommendations(REGULAR_CONTENT_TYPES)
+                .unwrap()
                 .map(AppUserRecommendationDTO::asEntity)
         }
     )
@@ -134,23 +148,27 @@ class RecommendationRepository @Inject constructor(
         api.getArticle(catalogId = contentId.catalogId)
             .unwrap().asEntity()
 
-    suspend fun setBookmarkRecommendation(contentId: ContentId, bookmarked: Boolean) {
+    suspend fun setBookmarkRecommendation(contentId: ContentId, contentType: ContentType, bookmarked: Boolean) {
         api.setBookmark(
             UpdateBookmarkDTO(
                 contentId = contentId.asDTO(),
                 bookmarked = bookmarked,
-                contentType = ContentTypeDTO.ARTICLES
+                contentType = contentType.asDTO()
             )
         )
         updateSections(contentId = contentId, bookmarked = bookmarked)
         reloadBookmarks()
     }
 
-    suspend fun setRecommendationRating(contentId: ContentId, rating: Rating) {
+    suspend fun setRecommendationRating(
+        contentId: ContentId,
+        contentType: ContentType,
+        rating: Rating
+    ) {
         api.setRating(
             UpdateRatingDTO(
                 contentId = contentId.asDTO(),
-                contentType = ContentTypeDTO.ARTICLES,
+                contentType = contentType.asDTO(),
                 rating = rating.asDTO()
             )
         )
@@ -189,5 +207,23 @@ class RecommendationRepository @Inject constructor(
                     }
                 )
             }
+    }
+
+    suspend fun getAudio(contentId: ContentId): Audio {
+        return api.getAudio(catalogId = contentId.catalogId).unwrap().asEntity()
+    }
+
+    suspend fun getVideo(contentId: ContentId): Video {
+        return api.getVideo(catalogId = contentId.catalogId).unwrap().asEntity()
+    }
+
+    private companion object {
+        private val REGULAR_CONTENT_TYPES = listOf(
+            ContentTypeDTO.ARTICLES,
+            ContentTypeDTO.AUDIOS,
+            ContentTypeDTO.VIDEOS
+        )
+
+        private val TAILORED_CONTENT_TYPES = REGULAR_CONTENT_TYPES + ContentTypeDTO.QUESTIONNAIRES
     }
 }

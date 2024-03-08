@@ -15,6 +15,9 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.google.fonts)
+    implementation(libs.exoplayer.core)
+    implementation(libs.exoplayer.media.session)
+    implementation(libs.exoplayer.ui)
 
     api(libs.androidx.activity.compose)
 
