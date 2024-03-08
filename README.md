@@ -253,5 +253,5 @@ object : ReccoLogger {
 [Recco-Flutter]:https://github.com/SignificoHealth/recco-flutter-plugin
 [Recco-iOS]:https://github.com/SignificoHealth/recco-ios-sdk
 [Recco-Showcase]:./SHOWCASE.md
-[Recco-Download]:https://app.bitrise.io/app/2e7050f9-468b-45b6-8ab9-73124007335f/build/cf19a738-57b0-443c-be33-4ec2c2fa08e0/artifact/f9fdcedb94a77577/p/18552cc195b92e0ad67724ba9cad4f59
+[Recco-Download]:https://app.bitrise.io/app/2e7050f9-468b-45b6-8ab9-73124007335f/build/e6c43a62-e235-4e42-8239-68c7838e6698/artifact/96364a6e9dac8eed/p/737cacb7d2071376e7c9f816807c1430
 [Recco-QR]:./art/recco_qr.png
